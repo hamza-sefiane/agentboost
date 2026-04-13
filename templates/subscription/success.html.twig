@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Paiement réussi - AgentBoost{% endblock %}
+
+{% block body %}
+    <div style="text-align: center; margin-top: 50px;">
+        <h2 style="color: #2E8B57;">Merci !</h2>
+        <p>Votre abonnement à AgentBoost est actif. Vous avez maintenant accès à tous nos services immobiliers.</p>
+        <a href="{{ path('home') }}" style="display: inline-block; margin-top: 20px; padding: 10px 20px; background-color: #2E8B57; color: #fff; text-decoration: none; border-radius: 5px;">
+            Retour à l'accueil
+        </a>
+    </div>
+{% endblock %}

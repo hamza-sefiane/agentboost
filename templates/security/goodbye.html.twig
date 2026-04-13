@@ -1,0 +1,19 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}À bientôt – AgentBoost{% endblock %}
+
+{% block body %}
+<div class="container text-center" style="max-width:600px; margin-top:4rem;">
+    <h1 class="mb-3">Abonnement résilié</h1>
+
+    <p class="text-muted">
+        Vous conservez l’accès jusqu’à la fin de votre période en cours.
+    </p>
+
+    <div class="mt-4">
+        <a href="{{ path('app_login') }}" class="btn btn-primary">
+            Retour à l’accueil
+        </a>
+    </div>
+</div>
+{% endblock %}

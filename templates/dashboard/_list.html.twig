@@ -1,0 +1,35 @@
+{% if properties is empty %}
+    <p class="text-muted">Aucune estimation pour le moment.</p>
+{% else %}
+<table class="table table-striped mt-3">
+    <thead>
+        <tr>
+            <th>Type</th>
+            <th>postal Code</th>
+            <th>Ville</th>
+            <th>Surface</th>
+            <th>Pièces</th>
+            <th>Estimation</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for p in properties %}
+        <tr>
+            <td>{{ p.type }}</td>
+            <td>{{ p.postalCode }}</td>
+            <td>{{ p.city }}</td>
+            <td>{{ p.surface }} m²</td>
+            <td>{{ p.rooms }}</td>
+            <td><strong>{{ p.estimate }} €</strong></td>
+            <td>
+                <form method="post" action="{{ path('property_delete', {id: p.id}) }}"
+                      onsubmit="return confirm('Supprimer ?');">
+                    <button class="btn btn-sm btn-danger">✕</button>
+                </form>
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endif %}

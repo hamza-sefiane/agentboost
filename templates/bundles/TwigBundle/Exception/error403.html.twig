@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Activation en cours{% endblock %}
+
+{% block body %}
+<div class="container text-center" style="max-width: 600px; margin: 4rem auto;">
+    <h1>Activation en cours</h1>
+
+    <p class="mt-3">
+        Votre paiement est confirmé.<br>
+        L’accès à votre espace est en cours d’activation.
+    </p>
+
+    <p class="text-muted mt-2">
+        Cela prend généralement quelques secondes.
+    </p>
+
+    <a href="{{ path('dashboard') }}" class="btn btn-success mt-4">
+        Réessayer
+    </a>
+
+    <p class="text-muted mt-3" style="font-size: 0.9rem;">
+        Si l’accès n’est pas encore disponible, réessayez dans un instant.
+    </p>
+</div>
+{% endblock %}

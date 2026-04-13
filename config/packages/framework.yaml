@@ -2,11 +2,14 @@
 framework:
     secret: '%env(APP_SECRET)%'
 
-    # Note that the session will be started ONLY if you read or write from it.
+    # La session sera démarrée uniquement si nécessaire
     session: true
 
-    #esi: true
-    #fragments: true
+    # Router configuration pour supporter les attributs PHP 8
+    router:
+        utf8: true
+        resource: '%kernel.project_dir%/src/Controller/'
+        type: attribute
 
 when@test:
     framework:

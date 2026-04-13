@@ -1,0 +1,57 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block body %}
+
+{# ===================================================== #}
+{# FORMULAIRE ESTIMATION #}
+{# ===================================================== #}
+
+<h1 class="mb-4">Nouvelle estimation</h1>
+
+{% for message in app.flashes('error') %}
+    <div class="alert alert-danger">{{ message }}</div>
+{% endfor %}
+{% for message in app.flashes('success') %}
+    <div class="alert alert-success">{{ message }}</div>
+{% endfor %}
+
+<form method="post" class="row g-3 mb-5">
+    <div class="col-md-3">
+        <select name="type" class="form-control" required>
+            <option value="Appartement">Appartement</option>
+            <option value="Maison">Maison</option>
+            <option value="Terrain">Terrain</option>
+        </select>
+    </div>
+
+    <div class="col-md-3">
+        <input name="postal_code" class="form-control" placeholder="Code postal" required>
+    </div>
+
+    <div class="col-md-3">
+        <input name="city" class="form-control" placeholder="Ville" required>
+    </div>
+
+    <div class="col-md-2">
+        <input name="surface" type="number" class="form-control" placeholder="m²" required>
+    </div>
+
+    <div class="col-md-2">
+        <input name="rooms" type="number" class="form-control" placeholder="Pièces" required>
+    </div>
+
+    <div class="col-md-2">
+        <button class="btn btn-success w-100">
+            Estimer
+        </button>
+    </div>
+</form>
+
+<h2>Biens estimés</h2>
+
+{% include 'dashboard/_list.html.twig' with { properties: properties } %}
+
+</div>
+{% endblock %}

@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Paiement annulé – AgentBoost{% endblock %}
+
+{% block body %}
+<div class="container"
+     style="max-width: 600px; margin: 4rem auto; text-align: center;">
+
+    <h1 style="color: #b22222;">Paiement annulé</h1>
+
+    <p style="margin-top: 1.5rem;">
+        Le paiement a été interrompu.<br>
+        <strong>Aucun abonnement n’a été créé</strong>.
+    </p>
+
+    <p style="margin-top: 1rem; color: #666;">
+        Vous pouvez réessayer à tout moment.
+    </p>
+
+    <div style="margin-top: 2.5rem;">
+        <a href="{{ path('pricing') }}"
+           class="btn btn-success"
+           style="margin-right: 1rem;">
+            Voir les formules
+        </a>
+
+        {% if app.user %}
+            <a href="{{ path('dashboard') }}"
+               class="btn btn-outline-secondary">
+                Retour au dashboard
+            </a>
+        {% else %}
+            <a href="{{ path('home') }}"
+               class="btn btn-outline-secondary">
+                Retour à l’accueil
+            </a>
+        {% endif %}
+    </div>
+
+    <p style="margin-top: 3rem; font-size: 0.85rem; color: #999;">
+        Paiement sécurisé par Stripe
+    </p>
+</div>
+{% endblock %}

@@ -1,0 +1,108 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}S'inscrire{% endblock %}
+
+{% block stylesheets %}
+<style>
+body {
+    background: #f0f2f5;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+.register-container {
+    max-width: 400px;
+    margin: 80px auto;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    padding: 40px 30px;
+}
+h1 {
+    text-align: center;
+    margin-bottom: 30px;
+    color: #28a745;
+    font-size: 1.8rem;
+}
+label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #333;
+}
+input[type="email"],
+input[type="password"] {
+    width: 100%;
+    padding: 12px 15px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: border-color 0.3s;
+}
+input[type="email"]:focus,
+input[type="password"]:focus {
+    border-color: #28a745;
+    outline: none;
+}
+.btn-register {
+    width: 100%;
+    padding: 12px;
+    background-color: #28a745;
+    color: #fff;
+    font-weight: bold;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s;
+}
+.btn-register:hover {
+    background-color: #218838;
+}
+.flash-message {
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    font-size: 0.9rem;
+    color: #b71c1c;
+    border: 1px solid #b71c1c;
+    background: #ffe5e5;
+}
+.login-link {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 0.9rem;
+}
+.login-link a {
+    color: #28a745;
+    text-decoration: none;
+    font-weight: 600;
+}
+.login-link a:hover {
+    text-decoration: underline;
+}
+</style>
+{% endblock %}
+
+{% block body %}
+<div class="register-container">
+    <h1>Inscription</h1>
+
+    {% for message in app.flashes('error') %}
+        <div class="flash-message">{{ message }}</div>
+    {% endfor %}
+
+    <form method="POST" action="{{ path('app_register') }}">
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" required autofocus>
+
+        <label for="password">Mot de passe</label>
+        <input type="password" id="password" name="password" required>
+
+        <button type="submit" class="btn-register">S'inscrire</button>
+    </form>
+
+    <div class="login-link">
+        Déjà inscrit ? <a href="{{ path('app_login') }}">Se connecter</a>
+    </div>
+</div>
+{% endblock %}

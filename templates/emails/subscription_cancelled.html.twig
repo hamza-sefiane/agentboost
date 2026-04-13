@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+    <p>Bonjour {{ prenom }},</p>
+
+    <p>
+        Nous confirmons l’annulation de votre abonnement.
+    </p>
+
+    <p>
+        Vous conservez l’accès jusqu’au
+        <strong>{{ subscription_end_date|date('d/m/Y') }}</strong>.
+    </p>
+
+    <p>
+        Merci d’avoir utilisé AgentBoost.
+    </p>
+
+    <p>
+        — L’équipe AgentBoost
+    </p>
+</body>
+</html>

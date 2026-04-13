@@ -1,0 +1,55 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Validation de votre abonnement
+{% endblock %}
+
+{% block body %}
+	<div class="container" style="max-width: 600px; margin: 4rem auto; text-align: center;">
+
+		<h1>Validation en cours…</h1>
+
+		<p style="margin-top: 1.5rem;">
+			Votre paiement a été reçu.<br>
+			L’accès à votre dashboard est en cours d’activation.
+		</p>
+
+		<p style="margin-top: 1rem; color: #666;">
+			Cela peut prendre quelques secondes.
+		</p>
+
+		<div class="spinner-border text-success mt-4" role="status">
+			<span class="visually-hidden">Chargement…</span>
+		</div>
+
+		<div id="continue-wrapper" style="display:none; margin-top: 2.5rem;">
+			<a href="{{ path('dashboard') }}" class="btn btn-success btn-lg">
+				Accéder au dashboard
+			</a>
+		</div>
+
+		<p style="margin-top: 1.5rem; font-size: 0.9rem; color: #999;">
+			Si l’accès n’est pas encore actif, réessayez dans quelques secondes.
+		</p>
+	</div>
+	<script>
+		(async () => {
+for (let i = 0; i < 5; i++) {
+const res = await fetch('/api/subscription/sync', {method: 'POST'});
+const data = await res.json();
+
+if (data.ok) {
+window.location.href = '/dashboard';
+return;
+}
+
+await new Promise(r => setTimeout(r, 2000));
+}
+})();
+	</script>
+	<script>
+		// On laisse le temps au webhook + à la session Symfony
+setTimeout(() => {
+document.getElementById('continue-wrapper').style.display = 'block';
+}, 3000);
+	</script>
+{% endblock %}

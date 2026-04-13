@@ -1,0 +1,42 @@
+<ul class="list-group">
+
+    {# ÉTAPE 1 — ACTIVATION #}
+    <li class="list-group-item d-flex justify-content-between">
+        <span>Abonnement actif</span>
+        <span class="badge bg-success">✔</span>
+    </li>
+
+    {# ÉTAPE 2 — CHANGEMENT DE PLAN #}
+    {% if app.user.pendingPlan %}
+        <li class="list-group-item d-flex justify-content-between">
+            <span>
+                Passage en
+                <strong>
+                    {{ app.user.pendingPlan == 'yearly' ? 'annuel' : 'mensuel' }}
+                </strong>
+                au prochain renouvellement
+            </span>
+            <span class="badge bg-warning">⏳</span>
+        </li>
+    {% endif %}
+
+    {# ÉTAPE 3 — RÉSILIATION PROGRAMMÉE #}
+    {% if app.user.subscriptionStatus == 'grace' %}
+        <li class="list-group-item d-flex justify-content-between">
+            <span>
+                Résiliation programmée
+                le {{ app.user.nextBillingDate|date('d/m/Y') }}
+            </span>
+            <span class="badge bg-danger">⚠</span>
+        </li>
+    {% endif %}
+
+    {# ÉTAPE 4 — FIN D’ACCÈS #}
+    {% if app.user.subscriptionStatus == 'inactive' %}
+        <li class="list-group-item d-flex justify-content-between">
+            <span>Accès terminé</span>
+            <span class="badge bg-secondary">✖</span>
+        </li>
+    {% endif %}
+
+</ul>

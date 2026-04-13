@@ -685,7 +685,7 @@ namespace Symfony\Component\DependencyInjection\Loader\Configurator;
  *         enabled?: bool, // Default: false
  *     },
  *     json_streamer?: bool|array{ // JSON streamer configuration
- *         enabled?: bool, // Default: false
+ *         enabled?: bool, // Default: true
  *     },
  * }
  * @psalm-type DoctrineConfig = array{

@@ -1,0 +1,127 @@
+{% extends 'base.html.twig' %}
+{% block title %}Gérer mon abonnement{% endblock %}
+
+{% block body %}
+<div class="container my-5" style="max-width: 900px">
+
+    {# ================= HEADER ================= #}
+    <div class="mb-5 p-4 border rounded-3"
+         style="background:#f9fafb;border-left:5px solid #064663">
+        <h1 class="h4 mb-1 text-dark">Gestion de l’abonnement</h1>
+        <p class="text-muted mb-0">
+            Informations, changements de formule et résiliation.
+        </p>
+    </div>
+
+    {# ================= TIMELINE ================= #}
+    <section class="mb-5">
+        <h2 class="h6 text-secondary mb-3">Historique</h2>
+
+        <div class="border rounded-3 p-4 bg-white">
+            {% include 'subscription/_timeline.html.twig' %}
+        </div>
+    </section>
+
+    {# ================= STATUT ================= #}
+    <section class="mb-5">
+        <h2 class="h6 text-secondary mb-3">Statut actuel</h2>
+
+        <div class="p-4 rounded-3"
+             style="background:#f8f9fa;border:1px solid #e5e7eb">
+
+            {% if user.subscriptionStatus == 'active' %}
+                <p class="mb-1">
+                    <strong class="text-success">Abonnement actif</strong>
+                    — {{ user.currentPlan == 'yearly' ? 'Annuel' : 'Mensuel' }}
+                </p>
+                <small class="text-muted">
+                    Prochain renouvellement :
+                    {{ user.nextBillingDate|date('d/m/Y') }}
+                </small>
+
+            {% elseif user.subscriptionStatus == 'grace' %}
+                <p class="mb-1 text-warning">
+                    <strong>Résiliation programmée</strong>
+                </p>
+                <small class="text-muted">
+                    Accès jusqu’au {{ user.nextBillingDate|date('d/m/Y') }}
+                </small>
+
+            {% else %}
+                <p class="text-muted mb-0">
+                    Aucun abonnement actif
+                </p>
+            {% endif %}
+        </div>
+    </section>
+
+    {# ================= PENDING PLAN ================= #}
+    {% if user.pendingPlan %}
+        <section class="mb-5">
+            <div class="p-4 rounded-3 border"
+                 style="background:#fffaf0;border-color:#facc15">
+                <p class="mb-2">
+                    Changement prévu :
+                    <strong>
+                        {{ user.pendingPlan == 'yearly' ? 'Annuel' : 'Mensuel' }}
+                    </strong>
+                    à partir du {{ user.nextBillingDate|date('d/m/Y') }}
+                </p>
+
+                <form method="post"
+                      action="{{ path('subscription_cancel_pending_plan') }}">
+                    <button class="btn btn-sm btn-outline-secondary">
+                        Annuler le changement
+                    </button>
+                </form>
+            </div>
+        </section>
+    {% endif %}
+
+    {# ================= CHANGE PLAN ================= #}
+    {% if user.subscriptionStatus == 'active' and user.pendingPlan is null %}
+        <section class="mb-5">
+            <h2 class="h6 text-secondary mb-3">Changer de formule</h2>
+
+            <div class="border rounded-3 p-4 bg-white">
+                {% if user.currentPlan == 'yearly' %}
+                    <form method="post"
+                          action="{{ path('subscription_change_plan', { plan: 'monthly' }) }}">
+                        <button class="btn btn-outline-secondary">
+                            Passer en mensuel
+                        </button>
+                    </form>
+                {% else %}
+                    <form method="post"
+                          action="{{ path('subscription_change_plan', { plan: 'yearly' }) }}">
+                        <button class="btn btn-primary">
+                            Passer en annuel
+                        </button>
+                    </form>
+                {% endif %}
+            </div>
+        </section>
+    {% endif %}
+
+    {# ================= CANCEL ================= #}
+    {% if user.subscriptionStatus == 'active' and not user.isCancelAtPeriodEnd %}
+    <section class="mb-5">
+        <h2 class="h6 text-danger mb-3">Zone sensible</h2>
+
+        <div class="p-4 rounded-3"
+             style="background:#fff5f5;border:1px solid #fecaca">
+            <p class="mb-3 text-danger">
+                La résiliation est définitive à la fin de la période.
+            </p>
+
+            <form method="post"
+                  action="{{ path('subscription_cancel') }}">
+                <button class="btn btn-danger">
+                    Résilier mon abonnement
+                </button>
+            </form>
+        </div>
+    </section>
+{% endif %}
+</div>
+{% endblock %}

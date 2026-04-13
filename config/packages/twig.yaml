@@ -1,5 +1,8 @@
+# config/packages/twig.yaml
 twig:
     file_name_pattern: '*.twig'
+    globals:
+        STRIPE_PUBLIC_KEY: '%env(STRIPE_PUBLIC_KEY)%'
 
 when@test:
     twig:
