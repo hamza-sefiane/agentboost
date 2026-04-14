@@ -14,6 +14,29 @@ final class SubscriptionMailer
     ) {}
 
     /**
+     * 📧 Email de bienvenue à l’inscription
+     */
+    public function sendWelcomeEmail(
+        string $to,
+        string $prenom
+    ): void {
+        $html = $this->twig->render(
+            'emails/welcome.html.twig',
+            [
+                'prenom' => $prenom,
+            ]
+        );
+
+        $email = (new Email())
+            ->from('support@agentboost.app')
+            ->to($to)
+            ->subject('Bienvenue sur AgentBoost')
+            ->html($html);
+
+        $this->mailer->send($email);
+    }
+
+    /**
      * 📧 Email d’activation de l’abonnement
      * ➜ Envoyé UNE SEULE FOIS lors de la première activation
      */
@@ -33,7 +56,7 @@ final class SubscriptionMailer
         $email = (new Email())
             ->from('support@agentboost.app')
             ->to($to)
-            ->subject('Bienvenue sur AgentBoost 🎉')
+            ->subject('Votre abonnement AgentBoost est actif')
             ->html($html);
 
         $this->mailer->send($email);
@@ -48,7 +71,6 @@ final class SubscriptionMailer
         string $prenom,
         \DateTimeInterface $endDate
     ): void {
-        // 🔍 Log temporaire utile en dev (Mailpit / debug)
         file_put_contents(
             dirname(__DIR__, 2) . '/var/log/mail.log',
             sprintf(
