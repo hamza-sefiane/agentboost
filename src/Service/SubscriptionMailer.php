@@ -6,7 +6,7 @@ use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
 use Twig\Environment;
 
-final class SubscriptionMailer
+final class SubscriptionMailer implements SubscriptionMailerInterface
 {
     public function __construct(
         private MailerInterface $mailer,
