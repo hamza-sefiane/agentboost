@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Service\SubscriptionMailer;
 use Doctrine\ORM\EntityManagerInterface;
 use Stripe\Customer;
 use Stripe\Stripe;
@@ -20,7 +21,8 @@ final class RegistrationController extends AbstractController
         Request $request,
         EntityManagerInterface $em,
         UserPasswordHasherInterface $passwordHasher,
-        Security $security
+        Security $security,
+        SubscriptionMailer $mailer // ✅ AJOUT
     ): Response {
         // Déjà connecté → pricing
         if ($this->getUser()) {
@@ -57,7 +59,7 @@ final class RegistrationController extends AbstractController
             // 🔐 Initialisation Stripe
             Stripe::setApiKey($_ENV['STRIPE_SECRET_KEY']);
 
-            // 👤 Création du customer Stripe AVANT paiement
+            // 👤 Création du customer Stripe
             $customer = Customer::create([
                 'email' => $email,
             ]);
@@ -69,15 +71,20 @@ final class RegistrationController extends AbstractController
                 $passwordHasher->hashPassword($user, $password)
             );
             $user->setStripeCustomerId($customer->id);
-            // isActive reste FALSE / NULL → sera activé par le webhook
 
             $em->persist($user);
             $em->flush();
 
+            // 📧 EMAIL DE BIENVENUE (AJOUT PROPRE)
+            $mailer->sendWelcomeEmail(
+                $user->getEmail(),
+                'Utilisateur'
+            );
+
             // 🔓 Login automatique
             $security->login($user);
 
-            // 👉 Choix du plan
+            // 👉 Redirection vers choix du plan
             return $this->redirectToRoute('pricing');
         }
 
