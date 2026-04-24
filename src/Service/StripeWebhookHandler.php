@@ -4,6 +4,7 @@ namespace App\Service;
 
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
+use Psr\Log\LoggerInterface;
 use Stripe\Event;
 use Stripe\Invoice;
 use Stripe\Subscription;
@@ -14,11 +15,32 @@ final class StripeWebhookHandler
     public function __construct(
         private EntityManagerInterface $em,
         private SubscriptionMailerInterface $mailer,
-        private ParameterBagInterface $params
+        private ParameterBagInterface $params,
+        private LoggerInterface $logger
     ) {}
 
     public function handle(Event $event): void
     {
+        static $processedEvents = [];
+
+        $this->logger->info('Stripe event received', [
+            'id' => $event->id ?? null,
+            'type' => $event->type ?? null,
+        ]);
+
+        if (isset($event->id) && in_array($event->id, $processedEvents, true)) {
+            $this->logger->warning('Duplicate Stripe event ignored', [
+                'id' => $event->id,
+                'type' => $event->type ?? null,
+            ]);
+
+            return;
+        }
+
+        if (isset($event->id)) {
+            $processedEvents[] = $event->id;
+        }
+
         match ($event->type) {
             'invoice.payment_succeeded' => $this->handleInvoicePaid($event->data->object),
             'customer.subscription.updated' => $this->handleSubscriptionUpdated($event->data->object),
@@ -48,7 +70,6 @@ final class StripeWebhookHandler
 
         $wasInactive = !$user->isActive();
 
-        // Idempotence
         if (
             !$wasInactive &&
             $user->getStripeSubscriptionId() === $subscription->id &&
@@ -82,9 +103,7 @@ final class StripeWebhookHandler
             return;
         }
 
-        // Résiliation programmée
         if ($sub->cancel_at || $sub->cancel_at_period_end) {
-
             if ($user->isCancelAtPeriodEnd()) {
                 return;
             }
@@ -107,14 +126,12 @@ final class StripeWebhookHandler
             return;
         }
 
-        // Annulation résiliation
         if ($user->isCancelAtPeriodEnd()) {
             $user->activateSubscription(
                 (new \DateTimeImmutable())->setTimestamp((int) $sub->current_period_end)
             );
         }
 
-        // Upgrade / downgrade
         $this->syncPlanFromSubscription($user, $sub);
         $this->em->flush();
     }

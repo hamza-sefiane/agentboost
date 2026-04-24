@@ -8,6 +8,7 @@ use App\Service\StripeWebhookHandler;
 use App\Service\SubscriptionMailerInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\NullLogger;
 use Stripe\Event;
 use Stripe\Subscription;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
@@ -47,13 +48,19 @@ class StripeWebhookHandlerTest extends TestCase
 
         $params = $this->createMock(ParameterBagInterface::class);
 
-        $handler = new StripeWebhookHandler($entityManager, $mailer, $params);
+        $handler = new StripeWebhookHandler(
+            $entityManager,
+            $mailer,
+            $params,
+            new NullLogger()
+        );
 
         $subscription = Subscription::constructFrom([
             'customer' => 'cus_123',
         ]);
 
         $event = Event::constructFrom([
+            'id' => 'evt_test_deleted',
             'type' => 'customer.subscription.deleted',
             'data' => [
                 'object' => $subscription,
@@ -109,7 +116,12 @@ class StripeWebhookHandlerTest extends TestCase
 
         $params = $this->createMock(ParameterBagInterface::class);
 
-        $handler = new StripeWebhookHandler($entityManager, $mailer, $params);
+        $handler = new StripeWebhookHandler(
+            $entityManager,
+            $mailer,
+            $params,
+            new NullLogger()
+        );
 
         $periodEnd = time() + 3600;
 
@@ -121,6 +133,7 @@ class StripeWebhookHandlerTest extends TestCase
         ]);
 
         $event = Event::constructFrom([
+            'id' => 'evt_test_updated_grace',
             'type' => 'customer.subscription.updated',
             'data' => [
                 'object' => $subscription,
@@ -173,7 +186,12 @@ class StripeWebhookHandlerTest extends TestCase
 
         $params = $this->createMock(ParameterBagInterface::class);
 
-        $handler = new StripeWebhookHandler($entityManager, $mailer, $params);
+        $handler = new StripeWebhookHandler(
+            $entityManager,
+            $mailer,
+            $params,
+            new NullLogger()
+        );
 
         $subscription = Subscription::constructFrom([
             'customer' => 'cus_789',
@@ -183,6 +201,7 @@ class StripeWebhookHandlerTest extends TestCase
         ]);
 
         $event = Event::constructFrom([
+            'id' => 'evt_test_updated_already_cancelled',
             'type' => 'customer.subscription.updated',
             'data' => [
                 'object' => $subscription,
