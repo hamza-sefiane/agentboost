@@ -2,11 +2,13 @@
 
 namespace App\Tests\Unit;
 
+use App\Entity\StripeEvent;
 use App\Entity\User;
 use App\Repository\UserRepository;
 use App\Service\StripeWebhookHandler;
 use App\Service\SubscriptionMailerInterface;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\EntityRepository;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
 use Stripe\Event;
@@ -15,6 +17,38 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 class StripeWebhookHandlerTest extends TestCase
 {
+    private function createEntityManagerMock(
+        UserRepository $userRepository,
+        ?StripeEvent $existingStripeEvent = null,
+        bool $expectsFlush = true
+    ): EntityManagerInterface {
+        $stripeEventRepository = $this->createMock(EntityRepository::class);
+        $stripeEventRepository
+            ->method('findOneBy')
+            ->willReturn($existingStripeEvent);
+
+        $entityManager = $this->createMock(EntityManagerInterface::class);
+
+        $entityManager
+            ->method('getRepository')
+            ->willReturnCallback(function (string $class) use ($userRepository, $stripeEventRepository) {
+                return match ($class) {
+                    User::class => $userRepository,
+                    StripeEvent::class => $stripeEventRepository,
+                    default => throw new \RuntimeException('Unexpected repository: ' . $class),
+                };
+            });
+
+        $entityManager
+            ->expects($expectsFlush ? $this->once() : $this->never())
+            ->method('flush');
+
+        $entityManager
+            ->method('persist');
+
+        return $entityManager;
+    }
+
     public function testHandleSubscriptionDeletedDeactivatesUser(): void
     {
         $user = new User();
@@ -30,16 +64,7 @@ class StripeWebhookHandlerTest extends TestCase
             ->with(['stripeCustomerId' => 'cus_123'])
             ->willReturn($user);
 
-        $entityManager = $this->createMock(EntityManagerInterface::class);
-        $entityManager
-            ->expects($this->once())
-            ->method('getRepository')
-            ->with(User::class)
-            ->willReturn($repository);
-
-        $entityManager
-            ->expects($this->once())
-            ->method('flush');
+        $entityManager = $this->createEntityManagerMock($repository);
 
         $mailer = $this->createMock(SubscriptionMailerInterface::class);
         $mailer->expects($this->never())->method('sendActivationEmail');
@@ -48,12 +73,7 @@ class StripeWebhookHandlerTest extends TestCase
 
         $params = $this->createMock(ParameterBagInterface::class);
 
-        $handler = new StripeWebhookHandler(
-            $entityManager,
-            $mailer,
-            $params,
-            new NullLogger()
-        );
+        $handler = new StripeWebhookHandler($entityManager, $mailer, $params, new NullLogger());
 
         $subscription = Subscription::constructFrom([
             'customer' => 'cus_123',
@@ -62,9 +82,7 @@ class StripeWebhookHandlerTest extends TestCase
         $event = Event::constructFrom([
             'id' => 'evt_test_deleted',
             'type' => 'customer.subscription.deleted',
-            'data' => [
-                'object' => $subscription,
-            ],
+            'data' => ['object' => $subscription],
         ]);
 
         $handler->handle($event);
@@ -90,16 +108,7 @@ class StripeWebhookHandlerTest extends TestCase
             ->with(['stripeCustomerId' => 'cus_456'])
             ->willReturn($user);
 
-        $entityManager = $this->createMock(EntityManagerInterface::class);
-        $entityManager
-            ->expects($this->once())
-            ->method('getRepository')
-            ->with(User::class)
-            ->willReturn($repository);
-
-        $entityManager
-            ->expects($this->once())
-            ->method('flush');
+        $entityManager = $this->createEntityManagerMock($repository);
 
         $mailer = $this->createMock(SubscriptionMailerInterface::class);
         $mailer
@@ -116,12 +125,7 @@ class StripeWebhookHandlerTest extends TestCase
 
         $params = $this->createMock(ParameterBagInterface::class);
 
-        $handler = new StripeWebhookHandler(
-            $entityManager,
-            $mailer,
-            $params,
-            new NullLogger()
-        );
+        $handler = new StripeWebhookHandler($entityManager, $mailer, $params, new NullLogger());
 
         $periodEnd = time() + 3600;
 
@@ -135,9 +139,7 @@ class StripeWebhookHandlerTest extends TestCase
         $event = Event::constructFrom([
             'id' => 'evt_test_updated_grace',
             'type' => 'customer.subscription.updated',
-            'data' => [
-                'object' => $subscription,
-            ],
+            'data' => ['object' => $subscription],
         ]);
 
         $handler->handle($event);
@@ -168,16 +170,7 @@ class StripeWebhookHandlerTest extends TestCase
             ->with(['stripeCustomerId' => 'cus_789'])
             ->willReturn($user);
 
-        $entityManager = $this->createMock(EntityManagerInterface::class);
-        $entityManager
-            ->expects($this->once())
-            ->method('getRepository')
-            ->with(User::class)
-            ->willReturn($repository);
-
-        $entityManager
-            ->expects($this->never())
-            ->method('flush');
+        $entityManager = $this->createEntityManagerMock($repository, null, true);
 
         $mailer = $this->createMock(SubscriptionMailerInterface::class);
         $mailer->expects($this->never())->method('sendCancellationEmail');
@@ -186,12 +179,7 @@ class StripeWebhookHandlerTest extends TestCase
 
         $params = $this->createMock(ParameterBagInterface::class);
 
-        $handler = new StripeWebhookHandler(
-            $entityManager,
-            $mailer,
-            $params,
-            new NullLogger()
-        );
+        $handler = new StripeWebhookHandler($entityManager, $mailer, $params, new NullLogger());
 
         $subscription = Subscription::constructFrom([
             'customer' => 'cus_789',
@@ -203,9 +191,7 @@ class StripeWebhookHandlerTest extends TestCase
         $event = Event::constructFrom([
             'id' => 'evt_test_updated_already_cancelled',
             'type' => 'customer.subscription.updated',
-            'data' => [
-                'object' => $subscription,
-            ],
+            'data' => ['object' => $subscription],
         ]);
 
         $handler->handle($event);

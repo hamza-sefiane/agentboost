@@ -3,6 +3,7 @@
 namespace App\Service;
 
 use App\Entity\User;
+use App\Entity\StripeEvent;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use Stripe\Event;
@@ -21,24 +22,32 @@ final class StripeWebhookHandler
 
     public function handle(Event $event): void
     {
-        static $processedEvents = [];
+        $eventId = $event->id ?? null;
 
         $this->logger->info('Stripe event received', [
-            'id' => $event->id ?? null,
+            'id' => $eventId,
             'type' => $event->type ?? null,
         ]);
 
-        if (isset($event->id) && in_array($event->id, $processedEvents, true)) {
-            $this->logger->warning('Duplicate Stripe event ignored', [
-                'id' => $event->id,
-                'type' => $event->type ?? null,
-            ]);
+        // ✅ Idempotence DB (IMPORTANT)
+        if ($eventId) {
+            $existing = $this->em->getRepository(StripeEvent::class)
+                ->findOneBy(['eventId' => $eventId]);
 
-            return;
-        }
+            if ($existing) {
+                $this->logger->warning('Duplicate Stripe event ignored (DB)', [
+                    'id' => $eventId,
+                ]);
+                return;
+            }
 
-        if (isset($event->id)) {
-            $processedEvents[] = $event->id;
+            // On enregistre l’event brut
+            $stripeEvent = new StripeEvent();
+            $stripeEvent->setEventId($eventId);
+            $stripeEvent->setPayload($event->toArray());
+
+
+            $this->em->persist($stripeEvent);
         }
 
         match ($event->type) {
@@ -47,6 +56,8 @@ final class StripeWebhookHandler
             'customer.subscription.deleted' => $this->handleSubscriptionDeleted($event->data->object),
             default => null,
         };
+
+        $this->em->flush(); // flush global
     }
 
     private function handleInvoicePaid(Invoice $invoice): void
@@ -92,8 +103,6 @@ final class StripeWebhookHandler
                 $user->getCurrentPlan()
             );
         }
-
-        $this->em->flush();
     }
 
     private function handleSubscriptionUpdated(Subscription $sub): void
@@ -122,7 +131,6 @@ final class StripeWebhookHandler
                 $endDate
             );
 
-            $this->em->flush();
             return;
         }
 
@@ -133,7 +141,6 @@ final class StripeWebhookHandler
         }
 
         $this->syncPlanFromSubscription($user, $sub);
-        $this->em->flush();
     }
 
     private function handleSubscriptionDeleted(Subscription $sub): void
@@ -142,7 +149,6 @@ final class StripeWebhookHandler
 
         if ($user) {
             $user->deactivateSubscription();
-            $this->em->flush();
         }
     }
 
