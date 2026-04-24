@@ -11,7 +11,7 @@ final class Version00000000000000 extends AbstractMigration
 {
     public function getDescription(): string
     {
-        return 'Initial schema (manually aligned): users, subscriptions and properties';
+        return 'Initial schema manually aligned with users, properties and Stripe events';
     }
 
     public function up(Schema $schema): void
@@ -56,19 +56,38 @@ final class Version00000000000000 extends AbstractMigration
                 rooms INT NOT NULL,
                 estimate INT DEFAULT NULL,
                 ad_text LONGTEXT DEFAULT NULL,
+
                 INDEX IDX_PROPERTY_OWNER (owner_id),
+
                 PRIMARY KEY(id),
+
                 CONSTRAINT FK_PROPERTY_OWNER
                     FOREIGN KEY (owner_id)
                     REFERENCES `user` (id)
                     ON DELETE CASCADE
             ) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB
         ');
+
+        // =========================
+        // STRIPE EVENT
+        // =========================
+        $this->addSql('
+            CREATE TABLE stripe_event (
+                id INT AUTO_INCREMENT NOT NULL,
+                event_id VARCHAR(255) NOT NULL,
+                created_at DATETIME NOT NULL COMMENT \'(DC2Type:datetime_immutable)\',
+
+                UNIQUE INDEX UNIQ_STRIPE_EVENT_EVENT_ID (event_id),
+
+                PRIMARY KEY(id)
+            ) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB
+        ');
     }
 
     public function down(Schema $schema): void
     {
-        $this->addSql('DROP TABLE property');
-        $this->addSql('DROP TABLE `user`');
+        $this->addSql('DROP TABLE IF EXISTS stripe_event');
+        $this->addSql('DROP TABLE IF EXISTS property');
+        $this->addSql('DROP TABLE IF EXISTS `user`');
     }
 }
