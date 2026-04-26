@@ -2,8 +2,8 @@
 
 namespace App\Controller;
 
-use App\Entity\User;
 use App\Entity\Property;
+use App\Entity\User;
 use App\Service\PropertyEstimator;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -19,42 +19,49 @@ class PropertyController extends AbstractController
         PropertyEstimator $estimator,
         EntityManagerInterface $em
     ): Response {
-        /** @var User $user */
+        /** @var User|null $user */
         $user = $this->getUser();
 
-        if (!$user || !$user->isActive()) {
-            return $this->redirectToRoute('subscribe'); // Redirige vers la souscription si pas actif
+        if (!$user instanceof User || !$user->isActive()) {
+            return $this->redirectToRoute('subscribe');
         }
 
-        // Récupération des données du formulaire
+        $postalCode = preg_replace('/\D/', '', (string) $request->request->get('postalCode'));
+
+        if (strlen($postalCode) !== 5) {
+            $this->addFlash('error', 'Le code postal doit contenir exactement 5 chiffres.');
+
+            return $this->redirectToRoute('dashboard');
+        }
+
         $propertyData = [
-            'type' => $request->request->get('type'),
-            'city' => $request->request->get('city'),
-            'surface' => (float) $request->request->get('surface'),
+            'type' => (string) $request->request->get('type'),
+            'postalCode' => $postalCode,
+            'city' => (string) $request->request->get('city'),
+            'surface' => (int) $request->request->get('surface'),
             'rooms' => (int) $request->request->get('rooms'),
+            'parking' => $request->request->getBoolean('parking'),
         ];
 
-        // Estimation via le service PropertyEstimator
         $result = $estimator->estimate($propertyData);
 
-        // Création et sauvegarde de la propriété
         $property = new Property();
-        $property->setType($propertyData['type'])
-                 ->setCity($propertyData['city'])
-                 ->setSurface($propertyData['surface'])
-                 ->setRooms($propertyData['rooms'])
-                 ->setEstimate($result['estimate'] ?? 0)
-                 ->setAdText($result['adText'] ?? '')
-                 ->setOwner($user);
+        $property
+            ->setType($propertyData['type'])
+            ->setPostalCode($propertyData['postalCode'])
+            ->setCity($propertyData['city'])
+            ->setSurface($propertyData['surface'])
+            ->setRooms($propertyData['rooms'])
+            ->setParking($propertyData['parking'])
+            ->setEstimate($result['estimate'] ?? 0)
+            ->setAdText($result['adText'] ?? '')
+            ->setOwner($user);
 
         $em->persist($property);
         $em->flush();
 
-        return $this->render('dashboard/index.html.twig', [
-            'user' => $user,
-            'estimate' => $result['estimate'] ?? null,
-            'adText' => $result['adText'] ?? '',
-            'isActive' => $user->isActive(),
-        ]);
+        $this->addFlash('success', 'Estimation enregistrée.');
+
+        return $this->redirectToRoute('dashboard');
     }
 }

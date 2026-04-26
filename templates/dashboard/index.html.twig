@@ -4,30 +4,29 @@
 
 {% block body %}
 
-{# ===================================================== #}
-{# FORMULAIRE ESTIMATION #}
-{# ===================================================== #}
-
 <h1 class="mb-4">Nouvelle estimation</h1>
 
 {% for message in app.flashes('error') %}
     <div class="alert alert-danger">{{ message }}</div>
 {% endfor %}
+
 {% for message in app.flashes('success') %}
     <div class="alert alert-success">{{ message }}</div>
 {% endfor %}
 
-<form method="post" class="row g-3 mb-5">
+<form method="post" action="{{ path('dashboard') }}" class="row g-3 mb-5">
     <div class="col-md-3">
-        <select name="type" class="form-control" required>
+        <select name="type" id="property-type" class="form-control" required>
             <option value="Appartement">Appartement</option>
             <option value="Maison">Maison</option>
             <option value="Terrain">Terrain</option>
+            <option value="Parking">Parking</option>
         </select>
     </div>
 
     <div class="col-md-3">
-        <input name="postal_code" class="form-control" placeholder="Code postal" required>
+        <input name="postalCode" type="text" class="form-control" placeholder="Code postal"
+               maxlength="5" pattern="[0-9]{5}" inputmode="numeric" required>
     </div>
 
     <div class="col-md-3">
@@ -35,15 +34,22 @@
     </div>
 
     <div class="col-md-2">
-        <input name="surface" type="number" class="form-control" placeholder="m²" required>
+        <input name="surface" type="number" min="1" class="form-control" placeholder="m²" required>
+    </div>
+
+    <div class="col-md-2" id="rooms-wrapper">
+        <input name="rooms" id="rooms-input" type="number" min="1" class="form-control" placeholder="Pièces">
+    </div>
+
+    <div class="col-md-2" id="parking-wrapper">
+        <select name="parking" id="parking-input" class="form-control">
+            <option value="0">Sans parking</option>
+            <option value="1">Avec parking</option>
+        </select>
     </div>
 
     <div class="col-md-2">
-        <input name="rooms" type="number" class="form-control" placeholder="Pièces" required>
-    </div>
-
-    <div class="col-md-2">
-        <button class="btn btn-success w-100">
+        <button type="submit" class="btn btn-success w-100">
             Estimer
         </button>
     </div>
@@ -53,5 +59,33 @@
 
 {% include 'dashboard/_list.html.twig' with { properties: properties } %}
 
-</div>
+<script>
+const typeSelect = document.getElementById('property-type');
+const roomsWrapper = document.getElementById('rooms-wrapper');
+const roomsInput = document.getElementById('rooms-input');
+const parkingWrapper = document.getElementById('parking-wrapper');
+const parkingInput = document.getElementById('parking-input');
+
+function toggleFields() {
+    const isParking = typeSelect.value === 'Parking';
+
+    roomsWrapper.style.display = isParking ? 'none' : 'block';
+    parkingWrapper.style.display = isParking ? 'none' : 'block';
+
+    roomsInput.required = !isParking;
+    roomsInput.disabled = isParking;
+
+    parkingInput.required = !isParking;
+    parkingInput.disabled = isParking;
+
+    if (isParking) {
+        roomsInput.value = '';
+        parkingInput.value = '1';
+    }
+}
+
+typeSelect.addEventListener('change', toggleFields);
+toggleFields();
+</script>
+
 {% endblock %}

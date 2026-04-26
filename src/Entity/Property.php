@@ -13,7 +13,6 @@ class Property
     #[ORM\Column(type: 'integer')]
     private ?int $id = null;
 
-    // Appartement / Maison / Terrain
     #[ORM\Column(length: 50)]
     private string $type;
 
@@ -29,6 +28,9 @@ class Property
     #[ORM\Column(type: 'integer')]
     private int $rooms;
 
+    #[ORM\Column(type: 'boolean')]
+    private bool $parking = false;
+
     #[ORM\Column(type: 'integer', nullable: true)]
     private ?int $estimate = null;
 
@@ -38,10 +40,6 @@ class Property
     #[ORM\ManyToOne(targetEntity: User::class)]
     #[ORM\JoinColumn(nullable: false)]
     private User $owner;
-
-    // =====================
-    // Getters / Setters
-    // =====================
 
     public function getId(): ?int
     {
@@ -100,6 +98,17 @@ class Property
     public function setRooms(int $rooms): self
     {
         $this->rooms = $rooms;
+        return $this;
+    }
+
+    public function hasParking(): bool
+    {
+        return $this->parking;
+    }
+
+    public function setParking(bool $parking): self
+    {
+        $this->parking = $parking;
         return $this;
     }
 

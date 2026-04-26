@@ -25,3 +25,6 @@ services:
         factory: ['OpenAI', 'client']
         arguments:
             - '%env(OPENAI_API_KEY)%'
+
+    App\Service\AiClientInterface:
+        alias: App\Service\OpenAiClient

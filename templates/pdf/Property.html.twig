@@ -1,0 +1,24 @@
+<h1>Estimation immobilière</h1>
+
+<p><strong>Type :</strong> {{ property.type }}</p>
+<p><strong>Ville :</strong> {{ property.city }} ({{ property.postalCode }})</p>
+<p><strong>Surface :</strong> {{ property.surface }} m²</p>
+
+{% if property.type != 'Parking' %}
+<p><strong>Pièces :</strong> {{ property.rooms }}</p>
+<p><strong>Parking :</strong> {{ property.parking ? 'Oui' : 'Non' }}</p>
+{% endif %}
+
+<hr>
+
+<h2>Prix estimé</h2>
+<p style="font-size:20px;">
+    {{ property.estimate|number_format(0, ',', ' ') }} €
+</p>
+
+<hr>
+
+<h2>Annonce</h2>
+<p style="white-space: pre-line;">
+    {{ property.adText }}
+</p>

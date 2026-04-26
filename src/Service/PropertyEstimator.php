@@ -4,28 +4,14 @@ declare(strict_types=1);
 
 namespace App\Service;
 
-use OpenAI\Client;
 use RuntimeException;
 
 final class PropertyEstimator
 {
     public function __construct(
-        private readonly Client $openAiClient
+        private readonly AiClientInterface $aiClient
     ) {}
 
-    /**
-     * @param array{
-     *     type: string,
-     *     city: string,
-     *     surface: int,
-     *     rooms: int
-     * } $data
-     *
-     * @return array{
-     *     estimate: int|null,
-     *     adText: string
-     * }
-     */
     public function estimate(array $data): array
     {
         $validated = $this->validate($data);
@@ -38,57 +24,60 @@ final class PropertyEstimator
         }
 
         $estimate = $this->calculateEstimate($validated);
-        $adText   = $this->generateAdText($validated, $estimate);
 
         return [
             'estimate' => $estimate,
-            'adText' => $adText,
+            'adText' => $this->generateAdText($validated, $estimate),
         ];
     }
 
-    /**
-     * Validation métier minimale
-     */
     private function validate(array $data): ?array
     {
-        $type    = strtolower(trim($data['type'] ?? ''));
-        $city    = trim($data['city'] ?? '');
+        $type = strtolower(trim((string) ($data['type'] ?? '')));
+        $city = trim((string) ($data['city'] ?? ''));
+        $postalCode = preg_replace('/\D/', '', (string) ($data['postalCode'] ?? ''));
         $surface = (int) ($data['surface'] ?? 0);
-        $rooms   = (int) ($data['rooms'] ?? 0);
+        $rooms = (int) ($data['rooms'] ?? 0);
+        $parking = (bool) ($data['parking'] ?? false);
 
         if (
             $type === '' ||
             $city === '' ||
+            strlen($postalCode) !== 5 ||
             $surface <= 0 ||
-            $rooms <= 0
+            ($type !== 'parking' && $rooms <= 0)
         ) {
             return null;
         }
 
         return [
             'type' => $type,
-            'city' => $city,
+            'city' => ucfirst(strtolower($city)),
+            'postalCode' => $postalCode,
             'surface' => $surface,
-            'rooms' => $rooms,
+            'rooms' => $type === 'parking' ? 0 : $rooms,
+            'parking' => $type === 'parking' ? true : $parking,
         ];
     }
 
-    /**
-     * Estimation PUREMENT MÉTIER (sans IA)
-     */
     private function calculateEstimate(array $data): int
     {
         $pricePerM2 = match ($data['type']) {
             'appartement' => 4000,
-            'maison'      => 3500,
-            'terrain'     => 1500,
-            default       => 3000,
+            'maison' => 3500,
+            'terrain' => 1500,
+            'parking' => 1200,
+            default => 3000,
         };
 
         $estimate = $data['surface'] * $pricePerM2;
 
         if ($this->isLargeCity($data['city'])) {
-            $estimate *= 1.10; // +10 %
+            $estimate *= 1.10;
+        }
+
+        if ($data['parking'] && $data['type'] !== 'parking') {
+            $estimate += 15000;
         }
 
         return (int) round($estimate);
@@ -98,50 +87,54 @@ final class PropertyEstimator
     {
         return in_array(
             strtolower($city),
-            ['paris', 'lyon', 'marseille', 'toulouse', 'bordeaux', 'lille', 'nice'],
+            ['paris', 'lyon', 'marseille', 'toulouse', 'bordeaux', 'lille', 'nice', 'créteil', 'creteil'],
             true
         );
     }
 
-    /**
-     * IA = rédaction uniquement (encadrée)
-     */
     private function generateAdText(array $data, int $estimate): string
     {
+        $type = ucfirst($data['type']);
+        $rooms = $data['type'] === 'parking' ? 'Non applicable' : $data['rooms'] . ' pièces';
+        $parking = $data['parking'] ? 'Oui' : 'Non';
+        $price = number_format($estimate, 0, ',', ' ');
+
         $prompt = <<<PROMPT
-Rédige une annonce immobilière professionnelle en français.
+Tu es un rédacteur immobilier professionnel.
 
-Données réelles :
-- Type : {$data['type']}
-- Ville : {$data['city']}
+Rédige une annonce immobilière premium en français.
+
+Données exactes :
+- Type : {$type}
+- Ville : {$data['city']} ({$data['postalCode']})
 - Surface : {$data['surface']} m²
-- Pièces : {$data['rooms']}
-- Prix estimé : {$estimate} €
+- Pièces : {$rooms}
+- Parking : {$parking}
+- Prix estimé : {$price} €
 
-Contraintes STRICTES :
-- Ton professionnel et vendeur
-- Pas de promesses irréalistes
-- Pas de chiffres inventés
-- 5 lignes maximum
+Format obligatoire :
+1. Titre court et vendeur
+2. Accroche professionnelle
+3. Description claire
+4. Points forts en liste courte
+5. Appel à l'action
+
+Contraintes :
+- Ne pas inventer d’informations absentes
+- Ne pas promettre un rendement
+- Ne pas utiliser de superlatifs mensongers
+- Maximum 900 caractères
+- Ton professionnel, crédible, vendeur
 PROMPT;
 
         try {
-            $response = $this->openAiClient->chat()->create([
-                'model' => 'gpt-4o-mini',
-                'messages' => [
-                    ['role' => 'user', 'content' => $prompt],
-                ],
-                'temperature' => 0.3,
-            ]);
-
-            $content = trim($response->choices[0]->message->content ?? '');
+            $content = trim($this->aiClient->generate($prompt));
 
             if ($content === '') {
                 throw new RuntimeException('Empty AI response');
             }
 
             return $content;
-
         } catch (\Throwable) {
             return 'Annonce indisponible pour le moment.';
         }

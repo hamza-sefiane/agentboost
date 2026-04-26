@@ -6,6 +6,8 @@ use App\Entity\Property;
 use App\Entity\User;
 use App\Service\PropertyEstimator;
 use Doctrine\ORM\EntityManagerInterface;
+use Dompdf\Dompdf;
+use Dompdf\Options;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -27,22 +29,21 @@ final class DashboardController extends AbstractController
             return $this->redirectToRoute('app_login');
         }
 
-        // 🔑 CRUCIAL : on recharge l’utilisateur depuis la DB
         $this->em->refresh($user);
-
-        // 🔐 CONTRÔLE D’ACCÈS AU BON MOMENT
         $this->denyAccessUnlessGranted('ACCESS_DASHBOARD');
-
-        // ----------------------------------------
-        // À PARTIR D’ICI, L’ACCÈS EST GARANTI
-        // ----------------------------------------
 
         if ($request->isMethod('POST')) {
             $type = (string) $request->request->get('type', '');
-            $postalCode = (string) $request->request->get('postalCode', '');
-             $city = (string) $request->request->get('city', '');
+            $postalCode = preg_replace('/\D/', '', (string) $request->request->get('postalCode', ''));
+            $city = (string) $request->request->get('city', '');
             $surface = (int) $request->request->get('surface', 0);
             $rooms = (int) $request->request->get('rooms', 0);
+            $parking = $request->request->getBoolean('parking');
+
+            if (strtolower($type) === 'parking') {
+                $rooms = 0;
+                $parking = true;
+            }
 
             $data = [
                 'type' => $type,
@@ -50,6 +51,7 @@ final class DashboardController extends AbstractController
                 'city' => $city,
                 'surface' => $surface,
                 'rooms' => $rooms,
+                'parking' => $parking,
             ];
 
             $result = $estimator->estimate($data);
@@ -65,6 +67,7 @@ final class DashboardController extends AbstractController
                 ->setCity($city)
                 ->setSurface($surface)
                 ->setRooms($rooms)
+                ->setParking($parking)
                 ->setEstimate($result['estimate'])
                 ->setAdText($result['adText'] ?? null)
                 ->setOwner($user);
@@ -76,12 +79,70 @@ final class DashboardController extends AbstractController
             return $this->redirectToRoute('dashboard');
         }
 
-        $properties = $this->em->getRepository(Property::class)
-            ->findBy(['owner' => $user], ['id' => 'DESC']);
+        $typeFilter = (string) $request->query->get('type', '');
+        $cityFilter = trim((string) $request->query->get('city', ''));
+        $sort = (string) $request->query->get('sort', 'created_desc');
+
+        $qb = $this->em->getRepository(Property::class)
+            ->createQueryBuilder('p')
+            ->andWhere('p.owner = :owner')
+            ->setParameter('owner', $user);
+
+        if ($typeFilter !== '') {
+            $qb->andWhere('p.type = :type')
+                ->setParameter('type', $typeFilter);
+        }
+
+        if ($cityFilter !== '') {
+            $qb->andWhere('LOWER(p.city) LIKE :city')
+                ->setParameter('city', '%' . strtolower($cityFilter) . '%');
+        }
+
+        match ($sort) {
+            'estimate_asc' => $qb->orderBy('p.estimate', 'ASC'),
+            'estimate_desc' => $qb->orderBy('p.estimate', 'DESC'),
+            'surface_asc' => $qb->orderBy('p.surface', 'ASC'),
+            'surface_desc' => $qb->orderBy('p.surface', 'DESC'),
+            'city_asc' => $qb->orderBy('p.city', 'ASC'),
+            'city_desc' => $qb->orderBy('p.city', 'DESC'),
+            default => $qb->orderBy('p.id', 'DESC'),
+        };
 
         return $this->render('dashboard/index.html.twig', [
-            'properties' => $properties,
+            'properties' => $qb->getQuery()->getResult(),
+            'filters' => [
+                'type' => $typeFilter,
+                'city' => $cityFilter,
+                'sort' => $sort,
+            ],
         ]);
+    }
+
+    #[Route('/pdf/{id}', name: 'property_pdf', methods: ['GET'])]
+    public function pdf(Property $property): Response
+    {
+        $this->denyAccessUnlessGranted('OWNER', $property);
+
+        $html = $this->renderView('pdf/property.html.twig', [
+            'property' => $property,
+        ]);
+
+        $options = new Options();
+        $options->set('defaultFont', 'Arial');
+
+        $dompdf = new Dompdf($options);
+        $dompdf->loadHtml($html);
+        $dompdf->setPaper('A4');
+        $dompdf->render();
+
+        return new Response(
+            $dompdf->output(),
+            200,
+            [
+                'Content-Type' => 'application/pdf',
+                'Content-Disposition' => 'inline; filename="estimation-agentboost.pdf"',
+            ]
+        );
     }
 
     #[Route('/delete/{id}', name: 'property_delete', methods: ['POST'])]
