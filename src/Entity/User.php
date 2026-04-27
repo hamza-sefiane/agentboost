@@ -12,10 +12,6 @@ use Symfony\Component\Security\Core\User\UserInterface;
 #[UniqueEntity(fields: ['email'], message: 'Cet email est déjà utilisé.')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
-    // ======================================================
-    // CORE
-    // ======================================================
-
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -30,10 +26,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private string $password;
 
-    // ======================================================
-    // ABONNEMENT — SOURCE MÉTIER
-    // ======================================================
-
     #[ORM\Column(name: 'is_active', type: 'boolean')]
     private bool $active = false;
 
@@ -41,24 +33,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?\DateTimeImmutable $nextBillingDate = null;
 
     #[ORM\Column(name: 'subscription_status', length: 20)]
-    private string $subscriptionStatus = 'inactive'; // inactive | active | grace
+    private string $subscriptionStatus = 'inactive';
 
     #[ORM\Column(name: 'cancel_at_period_end', type: 'boolean')]
     private bool $cancelAtPeriodEnd = false;
 
-    // ======================================================
-    // PLAN (UI + MÉTIER)
-    // ======================================================
-
     #[ORM\Column(name: 'current_plan', length: 10)]
-    private string $currentPlan = 'monthly'; // monthly | yearly
+    private string $currentPlan = 'monthly';
 
     #[ORM\Column(name: 'pending_plan', length: 10, nullable: true)]
-    private ?string $pendingPlan = null; // monthly | yearly | null
-
-    // ======================================================
-    // STRIPE
-    // ======================================================
+    private ?string $pendingPlan = null;
 
     #[ORM\Column(name: 'stripe_customer_id', length: 255, nullable: true)]
     private ?string $stripeCustomerId = null;
@@ -66,19 +50,21 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(name: 'stripe_subscription_id', length: 255, nullable: true)]
     private ?string $stripeSubscriptionId = null;
 
-    // ======================================================
-    // IDENTITÉ / SÉCURITÉ
-    // ======================================================
+    #[ORM\Column(name: 'company_name', length: 255, nullable: true)]
+    private ?string $companyName = null;
 
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
+    #[ORM\Column(name: 'company_address', length: 255, nullable: true)]
+    private ?string $companyAddress = null;
 
-    public function getEmail(): string
-    {
-        return $this->email;
-    }
+    #[ORM\Column(name: 'company_phone', length: 50, nullable: true)]
+    private ?string $companyPhone = null;
+
+    #[ORM\Column(name: 'company_logo', length: 255, nullable: true)]
+    private ?string $companyLogo = null;
+
+    public function getId(): ?int { return $this->id; }
+
+    public function getEmail(): string { return $this->email; }
 
     public function setEmail(string $email): self
     {
@@ -86,10 +72,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getUserIdentifier(): string
-    {
-        return $this->email;
-    }
+    public function getUserIdentifier(): string { return $this->email; }
 
     public function getRoles(): array
     {
@@ -106,10 +89,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getPassword(): string
-    {
-        return $this->password;
-    }
+    public function getPassword(): string { return $this->password; }
 
     public function setPassword(string $password): self
     {
@@ -119,26 +99,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function eraseCredentials(): void {}
 
-    // ======================================================
-    // LOGIQUE MÉTIER — ABONNEMENT
-    // ======================================================
-
-    /**
-     * 🔑 SOURCE UNIQUE DE VÉRITÉ POUR L’ACCÈS
-     * 👉 Jamais Stripe ici, jamais d’exception
-     */
     public function isActive(): bool
     {
-        return
-            $this->active === true
+        return $this->active === true
             && $this->nextBillingDate !== null
             && $this->nextBillingDate > new \DateTimeImmutable();
     }
 
-    /**
-     * Stripe → invoice.payment_succeeded
-     * Activation / renouvellement
-     */
     public function activateSubscription(\DateTimeImmutable $periodEnd): void
     {
         $this->active = true;
@@ -146,16 +113,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->nextBillingDate = $periodEnd;
         $this->cancelAtPeriodEnd = false;
 
-        // 🔁 Si un downgrade était en attente, on l’applique maintenant
         if ($this->pendingPlan !== null) {
             $this->currentPlan = $this->pendingPlan;
             $this->pendingPlan = null;
         }
     }
 
-    /**
-     * Stripe → customer.subscription.deleted
-     */
     public function deactivateSubscription(): void
     {
         $this->active = false;
@@ -166,10 +129,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->pendingPlan = null;
     }
 
-    /**
-     * Stripe → customer.subscription.updated
-     * Résiliation programmée
-     */
     public function markCancellationAtPeriodEnd(\DateTimeImmutable $periodEnd): void
     {
         $this->cancelAtPeriodEnd = true;
@@ -177,48 +136,29 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->nextBillingDate = $periodEnd;
     }
 
-    // ======================================================
-    // PLAN
-    // ======================================================
-
-    public function getCurrentPlan(): string
-    {
-        return $this->currentPlan;
-    }
+    public function getCurrentPlan(): string { return $this->currentPlan; }
 
     public function setCurrentPlan(string $plan): self
     {
-        if (!in_array($plan, ['monthly', 'yearly'], true)) {
-            return $this;
+        if (in_array($plan, ['monthly', 'yearly'], true)) {
+            $this->currentPlan = $plan;
         }
 
-        $this->currentPlan = $plan;
         return $this;
     }
 
-    public function getPendingPlan(): ?string
-    {
-        return $this->pendingPlan;
-    }
+    public function getPendingPlan(): ?string { return $this->pendingPlan; }
 
     public function setPendingPlan(?string $plan): self
     {
-        if ($plan !== null && !in_array($plan, ['monthly', 'yearly'], true)) {
-            $plan = null;
-        }
+        $this->pendingPlan = $plan !== null && in_array($plan, ['monthly', 'yearly'], true)
+            ? $plan
+            : null;
 
-        $this->pendingPlan = $plan;
         return $this;
     }
 
-    // ======================================================
-    // STRIPE GETTERS / SETTERS
-    // ======================================================
-
-    public function getStripeCustomerId(): ?string
-    {
-        return $this->stripeCustomerId;
-    }
+    public function getStripeCustomerId(): ?string { return $this->stripeCustomerId; }
 
     public function setStripeCustomerId(?string $id): self
     {
@@ -226,10 +166,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getStripeSubscriptionId(): ?string
-    {
-        return $this->stripeSubscriptionId;
-    }
+    public function getStripeSubscriptionId(): ?string { return $this->stripeSubscriptionId; }
 
     public function setStripeSubscriptionId(?string $id): self
     {
@@ -237,18 +174,41 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getSubscriptionStatus(): string
+    public function getSubscriptionStatus(): string { return $this->subscriptionStatus; }
+
+    public function getNextBillingDate(): ?\DateTimeImmutable { return $this->nextBillingDate; }
+
+    public function isCancelAtPeriodEnd(): bool { return $this->cancelAtPeriodEnd; }
+
+    public function getCompanyName(): ?string { return $this->companyName; }
+
+    public function setCompanyName(?string $companyName): self
     {
-        return $this->subscriptionStatus;
+        $this->companyName = $companyName;
+        return $this;
     }
 
-    public function getNextBillingDate(): ?\DateTimeImmutable
+    public function getCompanyAddress(): ?string { return $this->companyAddress; }
+
+    public function setCompanyAddress(?string $companyAddress): self
     {
-        return $this->nextBillingDate;
+        $this->companyAddress = $companyAddress;
+        return $this;
     }
 
-    public function isCancelAtPeriodEnd(): bool
+    public function getCompanyPhone(): ?string { return $this->companyPhone; }
+
+    public function setCompanyPhone(?string $companyPhone): self
     {
-        return $this->cancelAtPeriodEnd;
+        $this->companyPhone = $companyPhone;
+        return $this;
+    }
+
+    public function getCompanyLogo(): ?string { return $this->companyLogo; }
+
+    public function setCompanyLogo(?string $companyLogo): self
+    {
+        $this->companyLogo = $companyLogo;
+        return $this;
     }
 }

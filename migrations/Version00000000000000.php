@@ -37,6 +37,11 @@ final class Version00000000000000 extends AbstractMigration
                 stripe_customer_id VARCHAR(255) DEFAULT NULL,
                 stripe_subscription_id VARCHAR(255) DEFAULT NULL,
 
+                company_name VARCHAR(255) DEFAULT NULL,
+                company_address VARCHAR(255) DEFAULT NULL,
+                company_phone VARCHAR(50) DEFAULT NULL,
+                company_logo VARCHAR(255) DEFAULT NULL,
+
                 UNIQUE INDEX UNIQ_USER_EMAIL (email),
                 PRIMARY KEY(id)
             ) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB
