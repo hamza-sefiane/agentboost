@@ -107,7 +107,7 @@
 				</div>
 
 				<div class="modal-body">
-					<textarea id="adContent" class="form-control" rows="8" style="white-space: pre-line;"></textarea>
+					<div id="adContent" style="white-space: pre-line;"></div>
 				</div>
 
 				<div class="modal-footer">
@@ -128,7 +128,7 @@
 
 function openAdModal(text) {
 currentAd = text;
-document.getElementById('adContent').value = text;
+document.getElementById('adContent').innerHTML = text;
 const modal = new bootstrap.Modal(document.getElementById('adModal'));
 modal.show();
 }

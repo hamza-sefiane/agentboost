@@ -116,7 +116,7 @@ final class PropertyEstimator
         $prompt = <<<PROMPT
 Tu es un rédacteur immobilier professionnel.
 
-Rédige une annonce immobilière premium en français.
+Rédige une annonce immobilière réaliste, factuelle et prête à publier en français.
 
 Données exactes :
 - Type : {$type}
@@ -126,19 +126,27 @@ Données exactes :
 - Parking : {$parking}
 - Prix estimé : {$price} €
 
-Format obligatoire :
-1. Titre court et vendeur
-2. Accroche professionnelle
-3. Description claire
-4. Points forts en liste courte
-5. Appel à l'action
+Format attendu : HTML simple uniquement.
+Utilise seulement ces balises :
+<h2>, <p>, <ul>, <li>, <strong>, <em>
 
-Contraintes :
-- Ne pas inventer d’informations absentes
-- Ne pas promettre un rendement
-- Ne pas utiliser de superlatifs mensongers
-- Maximum 900 caractères
-- Ton professionnel, crédible, vendeur
+Structure obligatoire :
+<h2>Titre factuel</h2>
+<p><strong>Accroche courte</strong></p>
+<p>Description claire du bien.</p>
+<ul>
+  <li>Point fort basé uniquement sur les données fournies</li>
+  <li>Point fort basé uniquement sur les données fournies</li>
+</ul>
+<p><em>Appel à l'action sobre.</em></p>
+
+Contraintes strictes :
+- Ne jamais inventer de caractéristiques absentes.
+- Ne pas parler de luxe, haut de gamme, standing, jardin, cuisine équipée, balcon, terrasse, vue, rénovation, calme, luminosité ou quartier recherché si ce n'est pas fourni.
+- Ne pas promettre un rendement.
+- Ne pas utiliser de markdown.
+- Ne pas utiliser ** ou #.
+- Maximum 700 caractères.
 PROMPT;
 
         try {
