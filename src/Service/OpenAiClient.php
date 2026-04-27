@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Service;
 
 use OpenAI\Client;
@@ -19,6 +18,6 @@ class OpenAiClient implements AiClientInterface
             'temperature' => 0.3,
         ]);
 
-        return trim($response->choices[0]->message->content ?? '');
+        return trim($response->choices[0]->message->content ?? '') ?: 'Annonce indisponible.';
     }
 }

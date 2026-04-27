@@ -67,25 +67,32 @@ const parkingWrapper = document.getElementById('parking-wrapper');
 const parkingInput = document.getElementById('parking-input');
 
 function toggleFields() {
-    const isParking = typeSelect.value === 'Parking';
+    const type = typeSelect.value;
+    const isParking = type === 'Parking';
+    const isTerrain = type === 'Terrain';
 
-    roomsWrapper.style.display = isParking ? 'none' : 'block';
-    parkingWrapper.style.display = isParking ? 'none' : 'block';
+    const hideRooms = isParking || isTerrain;
+    const hideParking = isParking || isTerrain;
 
-    roomsInput.required = !isParking;
-    roomsInput.disabled = isParking;
+    roomsWrapper.style.display = hideRooms ? 'none' : 'block';
+    parkingWrapper.style.display = hideParking ? 'none' : 'block';
 
-    parkingInput.required = !isParking;
-    parkingInput.disabled = isParking;
+    roomsInput.required = !hideRooms;
+    roomsInput.disabled = hideRooms;
 
-    if (isParking) {
+    parkingInput.required = !hideParking;
+    parkingInput.disabled = hideParking;
+
+    if (hideRooms) {
         roomsInput.value = '';
-        parkingInput.value = '1';
+    }
+
+    if (hideParking) {
+        parkingInput.value = '0';
     }
 }
 
 typeSelect.addEventListener('change', toggleFields);
 toggleFields();
 </script>
-
 {% endblock %}

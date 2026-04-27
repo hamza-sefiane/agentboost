@@ -45,7 +45,7 @@ final class PropertyEstimator
             $city === '' ||
             strlen($postalCode) !== 5 ||
             $surface <= 0 ||
-            ($type !== 'parking' && $rooms <= 0)
+            (in_array($type, ['appartement', 'maison'], true) && $rooms <= 0)
         ) {
             return null;
         }
@@ -55,8 +55,12 @@ final class PropertyEstimator
             'city' => ucfirst(strtolower($city)),
             'postalCode' => $postalCode,
             'surface' => $surface,
-            'rooms' => $type === 'parking' ? 0 : $rooms,
-            'parking' => $type === 'parking' ? true : $parking,
+            'rooms' => in_array($type, ['parking', 'terrain'], true) ? 0 : $rooms,
+            'parking' => match ($type) {
+                'parking' => true,
+                'terrain' => false,
+                default => $parking,
+            },
         ];
     }
 
@@ -76,7 +80,7 @@ final class PropertyEstimator
             $estimate *= 1.10;
         }
 
-        if ($data['parking'] && $data['type'] !== 'parking') {
+        if ($data['parking'] && !in_array($data['type'], ['parking', 'terrain'], true)) {
             $estimate += 15000;
         }
 
@@ -95,8 +99,18 @@ final class PropertyEstimator
     private function generateAdText(array $data, int $estimate): string
     {
         $type = ucfirst($data['type']);
-        $rooms = $data['type'] === 'parking' ? 'Non applicable' : $data['rooms'] . ' pièces';
-        $parking = $data['parking'] ? 'Oui' : 'Non';
+
+        $rooms = match ($data['type']) {
+            'parking', 'terrain' => 'Non applicable',
+            default => $data['rooms'] . ' pièces',
+        };
+
+        $parking = match ($data['type']) {
+            'parking' => 'Oui',
+            'terrain' => 'Non applicable',
+            default => $data['parking'] ? 'Oui' : 'Non',
+        };
+
         $price = number_format($estimate, 0, ',', ' ');
 
         $prompt = <<<PROMPT
