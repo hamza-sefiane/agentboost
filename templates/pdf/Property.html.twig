@@ -1,38 +1,90 @@
 <!DOCTYPE html>
 <html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <style>
-        body { font-family: Arial, sans-serif; color: #222; }
-        h1 { color: #064663; }
-        h2 { margin-top: 25px; color: #064663; }
-        .box { border: 1px solid #ddd; padding: 15px; margin-bottom: 20px; }
-        .price { font-size: 24px; font-weight: bold; color: #198754; }
-        .ad { line-height: 1.5; }
-    </style>
-</head>
-<body>
+	<head>
+		<meta charset="UTF-8">
+		<style>
+			body {
+				font-family: Arial, sans-serif;
+				color: #222;
+			}
+			h1 {
+				color: #064663;
+			}
+			h2 {
+				margin-top: 25px;
+				color: #064663;
+			}
+			.box {
+				border: 1px solid #ddd;
+				padding: 15px;
+				margin-bottom: 20px;
+			}
+			.price {
+				font-size: 24px;
+				font-weight: bold;
+				color: #198754;
+			}
+			.ad {
+				line-height: 1.5;
+			}
+		</style>
+	</head>
+	<body>
 
-<h1>Estimation immobilière</h1>
+		{% if app.user.companyLogo %}
+			<div style="text-align:center; margin-bottom:20px;">
+				<img src="{{ project_dir ~ '/public/uploads/logos/' ~ app.user.companyLogo }}">
+			</div>
+		{% endif %}
 
-<div class="box">
-    <p><strong>Type :</strong> {{ property.type }}</p>
-    <p><strong>Ville :</strong> {{ property.city }} ({{ property.postalCode }})</p>
-    <p><strong>Surface :</strong> {{ property.surface }} m²</p>
+		{% if app.user.companyName %}
+			<h2 style="text-align:center; margin:0;">
+				{{ app.user.companyName }}
+			</h2>
+		{% endif %}
 
-    {% if property.type not in ['Parking', 'Terrain'] %}
-        <p><strong>Pièces :</strong> {{ property.rooms }}</p>
-        <p><strong>Parking :</strong> {{ property.parking ? 'Oui' : 'Non' }}</p>
-    {% endif %}
-</div>
+		{% if app.user.companyPhone or app.user.companyAddress %}
+			<p style="text-align:center; font-size:12px; color:#666;">
+				{{ app.user.companyPhone }}<br>
+				{{ app.user.companyAddress }}
+			</p>
+		{% endif %}
 
-<h2>Prix estimé</h2>
-<p class="price">{{ property.estimate|number_format(0, ',', ' ') }} €</p>
+		<hr>
 
-<h2>Annonce générée</h2>
-<div class="ad">
-    {{ property.adText|raw }}
-</div>
+		<h1>Estimation immobilière</h1>
 
-</body>
+		<div class="box">
+			<p>
+				<strong>Type :</strong>
+				{{ property.type }}</p>
+			<p>
+				<strong>Ville :</strong>
+				{{ property.city }}
+				({{ property.postalCode }})</p>
+			<p>
+				<strong>Surface :</strong>
+				{{ property.surface }}
+				m²</p>
+
+			{% if property.type not in ['Parking', 'Terrain'] %}
+				<p>
+					<strong>Pièces :</strong>
+					{{ property.rooms }}</p>
+				<p>
+					<strong>Parking :</strong>
+					{{ property.parking ? 'Oui' : 'Non' }}</p>
+			{% endif %}
+		</div>
+
+		<h2>Prix estimé</h2>
+		<p class="price">{{ property.estimate|number_format(0, ',', ' ') }}
+			€</p>
+
+		<h2>Annonce générée</h2>
+		<div class="ad">
+			{{ property.adText|raw }}
+		</div>
+
+	</body>
 </html>

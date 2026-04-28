@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+	<h1>Mon entreprise</h1>
+
+	<form method="post" enctype="multipart/form-data">
+
+		<input name="company_name" class="form-control mb-2" placeholder="Nom" value="{{ user.companyName }}">
+
+		<input name="company_address" class="form-control mb-2" placeholder="Adresse" value="{{ user.companyAddress }}">
+
+		<input name="company_phone" class="form-control mb-2" placeholder="Téléphone" value="{{ user.companyPhone }}">
+
+		<input type="file" name="company_logo" class="form-control mb-3">
+
+		{% if user.companyLogo %}
+			<img src="/uploads/logos/{{ user.companyLogo }}" height="80">
+		{% endif %}
+
+		<button class="btn btn-success">Enregistrer</button>
+	</form>
+{% endblock %}

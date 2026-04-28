@@ -2,6 +2,13 @@
 {% block title %}Gérer mon abonnement{% endblock %}
 
 {% block body %}
+{% if app.flashes('danger') %}
+    {% for message in app.flashes('danger') %}
+        <div class="alert alert-danger mt-3">
+            {{ message }}
+        </div>
+    {% endfor %}
+{% endif %}
 <div class="container my-5" style="max-width: 900px">
 
     {# ================= HEADER ================= #}

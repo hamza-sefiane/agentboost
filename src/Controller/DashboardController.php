@@ -125,6 +125,7 @@ final class DashboardController extends AbstractController
 
         $html = $this->renderView('pdf/property.html.twig', [
             'property' => $property,
+            'project_dir' => $this->getParameter('kernel.project_dir'),
         ]);
 
         $options = new Options();
