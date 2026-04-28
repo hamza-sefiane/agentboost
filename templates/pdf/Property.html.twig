@@ -31,11 +31,11 @@
 	</head>
 	<body>
 
-		{% if app.user.companyLogo %}
-			<div style="text-align:center; margin-bottom:20px;">
-				<img src="{{ project_dir ~ '/public/uploads/logos/' ~ app.user.companyLogo }}">
-			</div>
-		{% endif %}
+		{% if logoDataUri %}
+    <div style="text-align:center; margin-bottom:20px;">
+        <img src="{{ logoDataUri }}" style="height:80px;">
+    </div>
+{% endif %}
 
 		{% if app.user.companyName %}
 			<h2 style="text-align:center; margin:0;">

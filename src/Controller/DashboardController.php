@@ -79,42 +79,11 @@ final class DashboardController extends AbstractController
             return $this->redirectToRoute('dashboard');
         }
 
-        $typeFilter = (string) $request->query->get('type', '');
-        $cityFilter = trim((string) $request->query->get('city', ''));
-        $sort = (string) $request->query->get('sort', 'created_desc');
-
-        $qb = $this->em->getRepository(Property::class)
-            ->createQueryBuilder('p')
-            ->andWhere('p.owner = :owner')
-            ->setParameter('owner', $user);
-
-        if ($typeFilter !== '') {
-            $qb->andWhere('p.type = :type')
-                ->setParameter('type', $typeFilter);
-        }
-
-        if ($cityFilter !== '') {
-            $qb->andWhere('LOWER(p.city) LIKE :city')
-                ->setParameter('city', '%' . strtolower($cityFilter) . '%');
-        }
-
-        match ($sort) {
-            'estimate_asc' => $qb->orderBy('p.estimate', 'ASC'),
-            'estimate_desc' => $qb->orderBy('p.estimate', 'DESC'),
-            'surface_asc' => $qb->orderBy('p.surface', 'ASC'),
-            'surface_desc' => $qb->orderBy('p.surface', 'DESC'),
-            'city_asc' => $qb->orderBy('p.city', 'ASC'),
-            'city_desc' => $qb->orderBy('p.city', 'DESC'),
-            default => $qb->orderBy('p.id', 'DESC'),
-        };
+        $properties = $this->em->getRepository(Property::class)
+            ->findBy(['owner' => $user], ['id' => 'DESC']);
 
         return $this->render('dashboard/index.html.twig', [
-            'properties' => $qb->getQuery()->getResult(),
-            'filters' => [
-                'type' => $typeFilter,
-                'city' => $cityFilter,
-                'sort' => $sort,
-            ],
+            'properties' => $properties,
         ]);
     }
 
@@ -123,9 +92,23 @@ final class DashboardController extends AbstractController
     {
         $this->denyAccessUnlessGranted('OWNER', $property);
 
+        $user = $this->getUser();
+        $logoDataUri = null;
+
+        if ($user instanceof User && $user->getCompanyLogo()) {
+            $logoPath = $this->getParameter('kernel.project_dir')
+                . '/public/uploads/logos/'
+                . $user->getCompanyLogo();
+
+            if (is_file($logoPath)) {
+                $mime = mime_content_type($logoPath);
+                $logoDataUri = 'data:' . $mime . ';base64,' . base64_encode(file_get_contents($logoPath));
+            }
+        }
+
         $html = $this->renderView('pdf/property.html.twig', [
             'property' => $property,
-            'project_dir' => $this->getParameter('kernel.project_dir'),
+            'logoDataUri' => $logoDataUri,
         ]);
 
         $options = new Options();
