@@ -26,6 +26,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private string $password;
 
+    #[ORM\Column(name: 'is_verified', type: 'boolean')]
+    private bool $isVerified = false;
+
     #[ORM\Column(name: 'is_active', type: 'boolean')]
     private bool $active = false;
 
@@ -99,6 +102,19 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function eraseCredentials(): void {}
 
+    // 🔐 EMAIL VERIFIED
+    public function isVerified(): bool
+    {
+        return $this->isVerified;
+    }
+
+    public function setIsVerified(bool $isVerified): self
+    {
+        $this->isVerified = $isVerified;
+        return $this;
+    }
+
+    // 💰 ABONNEMENT
     public function isActive(): bool
     {
         return $this->active === true
@@ -136,6 +152,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->nextBillingDate = $periodEnd;
     }
 
+    // PLAN
     public function getCurrentPlan(): string { return $this->currentPlan; }
 
     public function setCurrentPlan(string $plan): self
@@ -143,7 +160,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         if (in_array($plan, ['monthly', 'yearly'], true)) {
             $this->currentPlan = $plan;
         }
-
         return $this;
     }
 
@@ -158,6 +174,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+    // STRIPE
     public function getStripeCustomerId(): ?string { return $this->stripeCustomerId; }
 
     public function setStripeCustomerId(?string $id): self
@@ -180,6 +197,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function isCancelAtPeriodEnd(): bool { return $this->cancelAtPeriodEnd; }
 
+    // ENTREPRISE
     public function getCompanyName(): ?string { return $this->companyName; }
 
     public function setCompanyName(?string $companyName): self
