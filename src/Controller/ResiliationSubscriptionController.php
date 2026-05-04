@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use Stripe\Exception\ApiErrorException;
 use Stripe\Stripe;
 use Stripe\Subscription;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -28,7 +29,6 @@ final class ResiliationSubscriptionController extends AbstractController
         /** @var User $user */
         $user = $this->getUser();
 
-        // 🔒 Sécurité + idempotence
         if (
             !$user instanceof User ||
             !$user->getStripeSubscriptionId() ||
@@ -39,22 +39,27 @@ final class ResiliationSubscriptionController extends AbstractController
 
         Stripe::setApiKey($this->params->get('stripe.secret_key'));
 
-        // ❌ Résiliation programmée côté Stripe
-        Subscription::update(
-            $user->getStripeSubscriptionId(),
-            [
-                'cancel_at_period_end' => true,
-            ]
-        );
+        try {
+            Subscription::update(
+                $user->getStripeSubscriptionId(),
+                [
+                    'cancel_at_period_end' => true,
+                ],
+                [
+                    // 🔥 clé idempotente (évite double exécution)
+                    'idempotency_key' => 'cancel-sub-'.$user->getId(),
+                ]
+            );
+        } catch (ApiErrorException) {
+            $this->addFlash(
+                'error',
+                'Impossible de résilier l’abonnement. Réessayez.'
+            );
 
-        /**
-         * ⚠️ IMPORTANT
-         * - AUCUNE écriture BD ici
-         * - Le webhook :
-         *   - passera subscription_status = grace
-         *   - définira next_billing_date
-         *   - enverra l’email
-         */
+            return $this->redirectToRoute('subscription_manage');
+        }
+
+        // ⚠️ Toujours laisser le webhook gérer la DB
 
         $this->addFlash(
             'success',

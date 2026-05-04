@@ -32,29 +32,47 @@ final class AccountController extends AbstractController
             throw $this->createAccessDeniedException();
         }
 
+        // 🔥 CAS 1 : user avec abonnement actif
         if ($user->isActive()) {
-            try {
-                if ($user->getStripeSubscriptionId()) {
+
+            if ($user->getStripeSubscriptionId()) {
+                try {
                     $stripe = new StripeClient($stripeSecretKey);
 
-                    $stripe->subscriptions->update($user->getStripeSubscriptionId(), [
-                        'cancel_at_period_end' => true,
-                    ]);
+                    $stripe->subscriptions->update(
+                        $user->getStripeSubscriptionId(),
+                        [
+                            'cancel_at_period_end' => true,
+                        ],
+                        [
+                            // 🔥 clé idempotente
+                            'idempotency_key' => 'delete-account-'.$user->getId(),
+                        ]
+                    );
+                } catch (ApiErrorException) {
+                    $this->addFlash(
+                        'error',
+                        'Impossible de programmer la suppression. Réessayez.'
+                    );
+
+                    return $this->redirectToRoute('subscription_manage');
                 }
-            } catch (ApiErrorException) {
-                // Abonnement déjà annulé ou supprimé côté Stripe.
-                // On continue quand même la suppression côté application.
             }
 
+            // 🔥 On marque la suppression (DB)
             $user->markDeletionAtPeriodEnd($user->getNextBillingDate());
 
             $em->flush();
 
-            $this->addFlash('success', 'Votre compte sera supprimé automatiquement à la fin de votre abonnement.');
+            $this->addFlash(
+                'success',
+                'Votre compte sera supprimé automatiquement à la fin de votre abonnement.'
+            );
 
             return $this->redirectToRoute('subscription_manage');
         }
 
+        // 🔥 CAS 2 : pas d’abonnement → suppression immédiate
         $em->remove($user);
         $em->flush();
 
