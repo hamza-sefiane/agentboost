@@ -38,7 +38,7 @@ class Property
     private ?string $adText = null;
 
     #[ORM\ManyToOne(targetEntity: User::class)]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     private User $owner;
 
     public function getId(): ?int
@@ -54,6 +54,7 @@ class Property
     public function setType(string $type): self
     {
         $this->type = $type;
+
         return $this;
     }
 
@@ -65,6 +66,7 @@ class Property
     public function setCity(string $city): self
     {
         $this->city = $city;
+
         return $this;
     }
 
@@ -76,6 +78,7 @@ class Property
     public function setPostalCode(string $postalCode): self
     {
         $this->postalCode = $postalCode;
+
         return $this;
     }
 
@@ -87,6 +90,7 @@ class Property
     public function setSurface(int $surface): self
     {
         $this->surface = $surface;
+
         return $this;
     }
 
@@ -98,6 +102,7 @@ class Property
     public function setRooms(int $rooms): self
     {
         $this->rooms = $rooms;
+
         return $this;
     }
 
@@ -109,6 +114,7 @@ class Property
     public function setParking(bool $parking): self
     {
         $this->parking = $parking;
+
         return $this;
     }
 
@@ -120,6 +126,7 @@ class Property
     public function setEstimate(?int $estimate): self
     {
         $this->estimate = $estimate;
+
         return $this;
     }
 
@@ -131,6 +138,7 @@ class Property
     public function setAdText(?string $adText): self
     {
         $this->adText = $adText;
+
         return $this;
     }
 
@@ -142,6 +150,7 @@ class Property
     public function setOwner(User $owner): self
     {
         $this->owner = $owner;
+
         return $this;
     }
 }
