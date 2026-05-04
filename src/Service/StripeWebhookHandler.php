@@ -2,8 +2,8 @@
 
 namespace App\Service;
 
-use App\Entity\User;
 use App\Entity\StripeEvent;
+use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use Stripe\Event;
@@ -14,11 +14,12 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 final class StripeWebhookHandler
 {
     public function __construct(
-        private EntityManagerInterface $em,
-        private SubscriptionMailerInterface $mailer,
-        private ParameterBagInterface $params,
-        private LoggerInterface $logger
-    ) {}
+        private readonly EntityManagerInterface $em,
+        private readonly SubscriptionMailerInterface $mailer,
+        private readonly ParameterBagInterface $params,
+        private readonly LoggerInterface $logger,
+    ) {
+    }
 
     public function handle(Event $event): void
     {
@@ -29,23 +30,22 @@ final class StripeWebhookHandler
             'type' => $event->type ?? null,
         ]);
 
-        // ✅ Idempotence DB (IMPORTANT)
-        if ($eventId) {
-            $existing = $this->em->getRepository(StripeEvent::class)
+        if ($eventId !== null) {
+            $existing = $this->em
+                ->getRepository(StripeEvent::class)
                 ->findOneBy(['eventId' => $eventId]);
 
-            if ($existing) {
-                $this->logger->warning('Duplicate Stripe event ignored (DB)', [
+            if ($existing !== null) {
+                $this->logger->warning('Duplicate Stripe event ignored', [
                     'id' => $eventId,
                 ]);
+
                 return;
             }
 
-            // On enregistre l’event brut
             $stripeEvent = new StripeEvent();
             $stripeEvent->setEventId($eventId);
             $stripeEvent->setPayload($event->toArray());
-
 
             $this->em->persist($stripeEvent);
         }
@@ -57,7 +57,7 @@ final class StripeWebhookHandler
             default => null,
         };
 
-        $this->em->flush(); // flush global
+        $this->em->flush();
     }
 
     private function handleInvoicePaid(Invoice $invoice): void
@@ -67,12 +67,14 @@ final class StripeWebhookHandler
         }
 
         $user = $this->findUser((string) $invoice->customer);
+
         if (!$user) {
             return;
         }
 
         /** @var Subscription $subscription */
-        $subscription = Subscription::retrieve($invoice->subscription);
+        $subscription = Subscription::retrieve((string) $invoice->subscription);
+
         $periodEnd = $subscription->current_period_end ?? null;
 
         if (!$periodEnd) {
@@ -82,14 +84,15 @@ final class StripeWebhookHandler
         $wasInactive = !$user->isActive();
 
         if (
-            !$wasInactive &&
-            $user->getStripeSubscriptionId() === $subscription->id &&
-            $user->getNextBillingDate()?->getTimestamp() === (int) $periodEnd
+            !$wasInactive
+            && $user->getStripeSubscriptionId() === $subscription->id
+            && $user->getNextBillingDate()?->getTimestamp() === (int) $periodEnd
         ) {
             return;
         }
 
         $user->setStripeSubscriptionId($subscription->id);
+
         $user->activateSubscription(
             (new \DateTimeImmutable())->setTimestamp((int) $periodEnd)
         );
@@ -108,36 +111,43 @@ final class StripeWebhookHandler
     private function handleSubscriptionUpdated(Subscription $sub): void
     {
         $user = $this->findUser((string) $sub->customer);
+
         if (!$user) {
             return;
         }
 
         if ($sub->cancel_at || $sub->cancel_at_period_end) {
-            if ($user->isCancelAtPeriodEnd()) {
-                return;
-            }
-
             $endTimestamp = $sub->cancel_at ?? $sub->current_period_end;
+
             if (!$endTimestamp) {
                 return;
             }
 
             $endDate = (new \DateTimeImmutable())->setTimestamp((int) $endTimestamp);
-            $user->markCancellationAtPeriodEnd($endDate);
 
-            $this->mailer->sendCancellationEmail(
-                $user->getEmail(),
-                'Utilisateur',
-                $endDate
-            );
+            if (!$user->isCancelAtPeriodEnd()) {
+                $user->markCancellationAtPeriodEnd($endDate);
+
+                if (!$user->isDeleteAtPeriodEnd()) {
+                    $this->mailer->sendCancellationEmail(
+                        $user->getEmail(),
+                        'Utilisateur',
+                        $endDate
+                    );
+                }
+            }
 
             return;
         }
 
         if ($user->isCancelAtPeriodEnd()) {
-            $user->activateSubscription(
-                (new \DateTimeImmutable())->setTimestamp((int) $sub->current_period_end)
-            );
+            $periodEnd = $sub->current_period_end ?? null;
+
+            if ($periodEnd) {
+                $user->activateSubscription(
+                    (new \DateTimeImmutable())->setTimestamp((int) $periodEnd)
+                );
+            }
         }
 
         $this->syncPlanFromSubscription($user, $sub);
@@ -147,9 +157,17 @@ final class StripeWebhookHandler
     {
         $user = $this->findUser((string) $sub->customer);
 
-        if ($user) {
-            $user->deactivateSubscription();
+        if (!$user) {
+            return;
         }
+
+        if ($user->isDeleteAtPeriodEnd()) {
+            $this->em->remove($user);
+
+            return;
+        }
+
+        $user->deactivateSubscription();
     }
 
     private function findUser(string $stripeCustomerId): ?User
@@ -162,14 +180,19 @@ final class StripeWebhookHandler
     private function syncPlanFromSubscription(User $user, Subscription $subscription): void
     {
         $priceId = $subscription->items->data[0]->price->id ?? null;
+
         if (!$priceId) {
             return;
         }
 
         if ($priceId === $this->params->get('stripe.price_yearly')) {
-            $user->setCurrentPlan('yearly');
-        } elseif ($priceId === $this->params->get('stripe.price_monthly')) {
-            $user->setCurrentPlan('monthly');
+            $user->setCurrentPlan(User::PLAN_YEARLY);
+
+            return;
+        }
+
+        if ($priceId === $this->params->get('stripe.price_monthly')) {
+            $user->setCurrentPlan(User::PLAN_MONTHLY);
         }
     }
 }
