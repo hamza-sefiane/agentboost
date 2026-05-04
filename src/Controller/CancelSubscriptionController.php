@@ -28,11 +28,12 @@ final class CancelSubscriptionController extends AbstractController
         /** @var User $user */
         $user = $this->getUser();
 
-        // 🔒 Sécurité
+        // 🔒 Sécurité renforcée
         if (
             !$user instanceof User ||
             !$user->getStripeSubscriptionId() ||
-            !$user->isCancelAtPeriodEnd()
+            !$user->isCancelAtPeriodEnd() ||
+            $user->isDeleteAtPeriodEnd() // 🔥 empêche conflit suppression compte
         ) {
             return $this->redirectToRoute('subscription_manage');
         }
