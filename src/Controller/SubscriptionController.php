@@ -37,6 +37,10 @@ final class SubscriptionController extends AbstractController
         if (!$user instanceof User) {
             return new JsonResponse(['error' => 'Unauthorized'], 403);
         }
+        
+        if (!$user->isVerified()) {
+            return new JsonResponse(['error' => 'Email non vérifié'], 403);
+        }
 
         $priceId = match ($plan) {
             'monthly' => $priceMonthly,
