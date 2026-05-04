@@ -3,63 +3,60 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use Doctrine\ORM\EntityManagerInterface;
+use Stripe\Exception\ApiErrorException;
 use Stripe\Stripe;
 use Stripe\Subscription;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 #[IsGranted('ROLE_USER')]
 final class CancelSubscriptionController extends AbstractController
 {
     public function __construct(
-        private ParameterBagInterface $params
+        private ParameterBagInterface $params,
+        private EntityManagerInterface $em,
     ) {}
 
-    #[Route(
-        '/subscription/cancel-cancellation',
-        name: 'subscription_cancel_cancellation',
-        methods: ['POST']
-    )]
+    #[Route('/subscription/cancel-cancellation', name: 'subscription_cancel_cancellation', methods: ['POST'])]
     public function __invoke(): RedirectResponse
     {
-        /** @var User $user */
         $user = $this->getUser();
 
-        // 🔒 Sécurité renforcée
         if (
             !$user instanceof User ||
             !$user->getStripeSubscriptionId() ||
             !$user->isCancelAtPeriodEnd() ||
-            $user->isDeleteAtPeriodEnd() // 🔥 empêche conflit suppression compte
+            $user->isDeleteAtPeriodEnd() ||
+            !$user->getNextBillingDate()
         ) {
             return $this->redirectToRoute('subscription_manage');
         }
 
         Stripe::setApiKey($this->params->get('stripe.secret_key'));
 
-        // 🔁 Annule la résiliation programmée côté Stripe
-        Subscription::update(
-            $user->getStripeSubscriptionId(),
-            [
-                'cancel_at_period_end' => false,
-            ]
-        );
+        try {
+            Subscription::update(
+                $user->getStripeSubscriptionId(),
+                [
+                    'cancel_at_period_end' => false,
+                ]
+            );
+        } catch (ApiErrorException) {
+            $this->addFlash('error', 'Impossible d’annuler la résiliation. Réessayez ou contactez le support.');
 
-        /**
-         * ⚠️ IMPORTANT
-         * - On ne touche PAS la BD ici
-         * - Le webhook remettra:
-         *   - cancel_at_period_end = false
-         *   - subscription_status = active
-         */
+            return $this->redirectToRoute('subscription_manage');
+        }
 
-        $this->addFlash(
-            'success',
-            'La résiliation a été annulée. Votre abonnement reste actif.'
-        );
+        // Mise à jour immédiate côté app
+        $user->activateSubscription($user->getNextBillingDate());
+
+        $this->em->flush();
+
+        $this->addFlash('success', 'La résiliation a été annulée. Votre abonnement reste actif.');
 
         return $this->redirectToRoute('subscription_manage');
     }
