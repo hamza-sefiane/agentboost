@@ -3,12 +3,12 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Repository\UserRepository;
 use App\Security\EmailVerifier;
 use Doctrine\ORM\EntityManagerInterface;
 use Stripe\Customer;
 use Stripe\Stripe;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -22,7 +22,6 @@ final class RegistrationController extends AbstractController
         Request $request,
         EntityManagerInterface $em,
         UserPasswordHasherInterface $passwordHasher,
-        Security $security,
         EmailVerifier $emailVerifier
     ): Response {
         if ($this->getUser()) {
@@ -34,14 +33,12 @@ final class RegistrationController extends AbstractController
             $password = (string) $request->request->get('password');
 
             if (!filter_var($email, FILTER_VALIDATE_EMAIL) || strlen($password) < 8) {
-                $this->addFlash('error', 'Email invalide ou mot de passe trop court (8 caractères minimum).');
-
+                $this->addFlash('error', 'Email invalide ou mot de passe trop court.');
                 return $this->redirectToRoute('app_register');
             }
 
             if ($em->getRepository(User::class)->findOneBy(['email' => $email])) {
                 $this->addFlash('error', 'Un compte existe déjà avec cet email.');
-
                 return $this->redirectToRoute('app_register');
             }
 
@@ -62,9 +59,7 @@ final class RegistrationController extends AbstractController
 
             $emailVerifier->sendEmailConfirmation('app_verify_email', $user);
 
-            $security->login($user);
-
-            $this->addFlash('success', 'Compte créé. Vérifiez votre email avant de choisir un abonnement.');
+            $this->addFlash('success', 'Compte créé. Vérifiez votre email.');
 
             return $this->redirectToRoute('app_check_email');
         }
@@ -75,27 +70,26 @@ final class RegistrationController extends AbstractController
     #[Route('/check-email', name: 'app_check_email', methods: ['GET'])]
     public function checkEmail(): Response
     {
-        $user = $this->getUser();
-
-        if (!$user instanceof User) {
-            return $this->redirectToRoute('app_login');
-        }
-
-        if ($user->isVerified()) {
-            return $this->redirectToRoute('pricing');
-        }
-
         return $this->render('registration/check_email.html.twig');
     }
 
     #[Route('/verify/email', name: 'app_verify_email', methods: ['GET'])]
     public function verifyEmail(
         Request $request,
+        UserRepository $userRepository,
         EmailVerifier $emailVerifier
     ): Response {
-        $user = $this->getUser();
+        $id = $request->query->get('id');
+
+        if (!$id) {
+            $this->addFlash('error', 'Lien de vérification invalide.');
+            return $this->redirectToRoute('app_login');
+        }
+
+        $user = $userRepository->find($id);
 
         if (!$user instanceof User) {
+            $this->addFlash('error', 'Utilisateur introuvable.');
             return $this->redirectToRoute('app_login');
         }
 
@@ -103,12 +97,11 @@ final class RegistrationController extends AbstractController
             $emailVerifier->handleEmailConfirmation($request, $user);
         } catch (VerifyEmailExceptionInterface $exception) {
             $this->addFlash('error', $exception->getReason());
-
             return $this->redirectToRoute('app_check_email');
         }
 
-        $this->addFlash('success', 'Email vérifié. Vous pouvez maintenant choisir un abonnement.');
+        $this->addFlash('success', 'Email vérifié. Connectez-vous pour choisir un abonnement.');
 
-        return $this->redirectToRoute('pricing');
+        return $this->redirectToRoute('app_login');
     }
 }
