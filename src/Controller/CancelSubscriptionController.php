@@ -43,20 +43,30 @@ final class CancelSubscriptionController extends AbstractController
                 $user->getStripeSubscriptionId(),
                 [
                     'cancel_at_period_end' => false,
+                ],
+                [
+                    // 🔥 clé idempotente
+                    'idempotency_key' => 'cancel-cancellation-'.$user->getId(),
                 ]
             );
         } catch (ApiErrorException) {
-            $this->addFlash('error', 'Impossible d’annuler la résiliation. Réessayez ou contactez le support.');
+            $this->addFlash(
+                'error',
+                'Impossible d’annuler la résiliation. Réessayez ou contactez le support.'
+            );
 
             return $this->redirectToRoute('subscription_manage');
         }
 
-        // Mise à jour immédiate côté app
+        // 🔥 Update immédiat UX (mais Stripe reste source de vérité)
         $user->activateSubscription($user->getNextBillingDate());
 
         $this->em->flush();
 
-        $this->addFlash('success', 'La résiliation a été annulée. Votre abonnement reste actif.');
+        $this->addFlash(
+            'success',
+            'La résiliation a été annulée. Votre abonnement reste actif.'
+        );
 
         return $this->redirectToRoute('subscription_manage');
     }
