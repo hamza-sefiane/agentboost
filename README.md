@@ -1,71 +1,55 @@
-# AgentBoost
+# AgentBoost – Documentation Technique
 
-AgentBoost est une plateforme SaaS destinée aux agents immobiliers pour automatiser et optimiser leur travail quotidien.  
-L’objectif est de centraliser les outils essentiels (gestion, estimation, rédaction assistée) dans une application accessible par abonnement.
+AgentBoost est une plateforme SaaS dédiée aux agents immobiliers, automatisant la gestion des abonnements et la suppression d’utilisateurs en fin de période.
 
----
+## Gestion des Abonnements via Stripe
 
-## 🎯 Objectif du projet
+### Souscription
+1. L’utilisateur souscrit via Stripe Checkout.
+2. Après paiement, Stripe envoie les webhooks : `invoice.payment_succeeded` et `customer.subscription.created`. L’application active l’abonnement avec `$user->activateSubscription($periodEnd)`.
 
-AgentBoost vise à aider les agents immobiliers à :
+### Résiliation d’Abonnement
+1. L’utilisateur clique sur "Résilier" (Route : POST /subscription/cancel).
+2. On appelle Stripe : `Subscription::update($id, ['cancel_at_period_end' => true])`.
+3. Pas de modification immédiate en base. 4. Stripe enverra un webhook `customer.subscription.updated`. 5. L’application marque la résiliation en fin de période : `$user->markCancellationAtPeriodEnd($date)`.
 
-- Gagner du temps sur les tâches répétitives
-- Structurer leur activité commerciale
-- Améliorer la qualité de leurs contenus professionnels
-- Accéder à des outils métiers depuis un tableau de bord unique
+### Annulation de la Résiliation
+1. L’utilisateur annule la résiliation (Route : POST /subscription/cancel-cancellation).
+2. On appelle Stripe : `Subscription::update($id, ['cancel_at_period_end' => false])`.
+3. Webhook `customer.subscription.updated` reçu. 4. L’abonnement est réactivé côté application : `$user->activateSubscription($periodEnd)`.
 
----
+## Suppression d’Utilisateur
 
-## 🧩 Fonctionnalités actuelles
+### Demande de suppression
+1. L’utilisateur demande la suppression (Route : POST /account/delete).
+2. On résilie via Stripe en fin de période : `cancel_at_period_end = true`.
+3. L’application marque l’utilisateur pour suppression : `$user->markDeletionAtPeriodEnd($date)`.
 
-### Utilisateurs
-- Inscription et authentification sécurisée
-- Gestion des rôles
-- Accès conditionnel aux fonctionnalités selon l’abonnement
+### Annulation de la Suppression
+1. L’utilisateur annule la suppression (Route : POST /account/delete/cancel). 2. L’application annule le marquage : `$user->unmarkDeletionAtPeriodEnd()`.
 
-### Abonnement & paiement
-- Souscription via Stripe
-- Gestion des abonnements récurrents (mensuel / annuel)
-- Accès utilisateur automatiquement lié à l’état de l’abonnement
+### Suppression Automatique (CRON)
+1. Une commande exécute périodiquement `php bin/console app:delete-expired-users`.
+2. Si la date est atteinte et l’utilisateur marqué, il est supprimé : `$em->remove($user)`.
 
-### Tableau de bord
-- Accès réservé aux utilisateurs abonnés
-- Affichage de l’état de l’abonnement
-- Information claire en cas de résiliation (période de grâce)
+## Webhooks Stripe (Source de Vérité)
+- `invoice.payment_succeeded` : Active l’abonnement.
+- `customer.subscription.updated` : Met à jour les statuts.
+- `customer.subscription.deleted` : Désactive ou supprime si suppression programmée.
 
----
+## Sécurité et Idempotence
+- Chaque event Stripe est stocké (éviter les doublons).
+- On logge les erreurs mais on retourne toujours HTTP 200 pour éviter les retries infinis.
 
-## 🚀 Fonctionnalités prévues
+## Commandes Utiles
+- `php bin/console app:delete-expired-users` : Suppression programmée.
+- `php bin/console debug:router` : Liste des routes.
+- `php bin/console doctrine:schema:update --force` : Met à jour la base.
 
-- Estimation automatisée de biens immobiliers
-- Gestion des prospects et clients
-- Assistance à la rédaction (emails, annonces, documents)
-- Intégration de l’IA (OpenAI)
-- Tableaux de bord analytiques
+## Conclusion
+L’architecture est alignée aux bonnes pratiques SaaS :
+- Stripe = Source de vérité
+- Webhooks = Synchronisation
+- Commandes = Actions critiques
 
----
-
-## 🛠️ Stack technique (aperçu)
-
-- **Backend** : Symfony 7.x (PHP)
-- **Base de données** : MySQL
-- **Paiement** : Stripe
-- **Templates** : Twig
-- **Frontend** : HTML / CSS simple
-
----
-
-## 📚 Documentation technique
-
-La **documentation technique détaillée** du projet  
-(architecture, Stripe, webhooks, logique métier, décisions techniques)  
-est disponible dans le fichier :
-
-👉 **README_TECH.md**
-
----
-
-## ⚠️ Accès au dépôt
-
-Ce projet est privé.  
-Le code source n’est pas destiné à être déployé ou utilisé sans autorisation.
+Base solide, prête à être améliorée.
