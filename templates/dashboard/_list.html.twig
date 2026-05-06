@@ -1,171 +1,182 @@
 {% if properties is empty %}
-	<div class="text-center py-5 text-muted">
-		<h5>Aucune estimation pour le moment</h5>
-		<small>Commence par estimer un bien 👆</small>
-	</div>
+    <div class="text-center py-5 text-muted">
+        <h5>Aucune estimation pour le moment</h5>
+        <small>Commence par estimer un bien 👆</small>
+    </div>
 {% else %}
 
-	{% set properties = properties|sort((a, b) => b.estimate <=> a.estimate) %}
+    {% set properties = properties|sort((a, b) => b.estimate <=> a.estimate) %}
 
-	<div class="table-responsive">
-		<table class="table align-middle shadow-sm rounded overflow-hidden">
-			<thead class="table-dark">
-				<tr>
-					<th>Bien</th>
-					<th>Localisation</th>
-					<th>Surface</th>
-					<th>Infos</th>
-					<th>Prix</th>
-					<th class="text-center">Annonce</th>
-					<th></th>
-				</tr>
-			</thead>
+    <div class="table-responsive">
+        <table class="table align-middle shadow-sm rounded overflow-hidden">
+            <thead class="table-dark">
+                <tr>
+                    <th>Bien</th>
+                    <th>Localisation</th>
+                    <th>Surface</th>
+                    <th>Infos</th>
+                    <th>Prix</th>
+                    <th class="text-center">Annonce</th>
+                    <th></th>
+                </tr>
+            </thead>
 
-			<tbody>
-				{% for p in properties %}
-					<tr
-						class="bg-white">
+            <tbody>
+                {% for p in properties %}
+                    <tr class="bg-white">
+                        <td>
+                            <span class="badge bg-primary">
+                                {{ p.type }}
+                            </span>
+                        </td>
 
-						<!-- TYPE -->
-						<td>
-							<span class="badge bg-primary">
-								{{ p.type }}
-							</span>
-						</td>
+                        <td>
+                            <strong>{{ p.city|capitalize }}</strong><br>
+                            <small class="text-muted">{{ p.postalCode }}</small>
+                        </td>
 
-						<!-- LOCALISATION -->
-						<td>
-							<strong>{{ p.city|capitalize }}</strong><br>
-							<small class="text-muted">{{ p.postalCode }}</small>
-						</td>
+                        <td>
+                            {{ p.surface }} m²
+                        </td>
 
-						<!-- SURFACE -->
-						<td>{{ p.surface }}
-							m²</td>
+                        <td>
+                            {% if p.type == 'Parking' %}
+                                <span class="text-muted">Parking</span>
+                            {% else %}
+                                {{ p.rooms }} pièces<br>
+                                <small class="text-muted">
+                                    Parking :
+                                    {{ p.parking ? 'Oui' : 'Non' }}
+                                </small>
+                            {% endif %}
+                        </td>
 
-						<!-- INFOS -->
-						<td>
-							{% if p.type == 'Parking' %}
-								<span class="text-muted">Parking</span>
-							{% else %}
-								{{ p.rooms }}
-								pièces<br>
-								<small class="text-muted">
-									Parking :
-									{{ p.parking ? 'Oui' : 'Non' }}
-								</small>
-							{% endif %}
-						</td>
+                        <td>
+                            <strong class="text-success fs-6">
+                                {{ p.estimate|number_format(0, ',', ' ') }} €
+                            </strong>
+                        </td>
 
-						<!-- PRIX -->
-						<td>
-							<strong class="text-success fs-6">
-								{{ p.estimate|number_format(0, ',', ' ') }}
-								€
-							</strong>
-						</td>
+                        <td class="text-center">
+                            <form method="post"
+                                  action="{{ path('property_generate_ad', { id: p.id }) }}"
+                                  class="d-inline">
+                                <button type="submit" class="btn btn-sm btn-primary">
+                                    Générer IA
+                                </button>
+                            </form>
 
-						<!-- ACTIONS IA -->
-						<td class="text-center">
-							<button class="btn btn-sm btn-outline-primary" onclick="openAdModal(`{{ p.adText|e('js') }}`)">
-								Voir
-							</button>
+                            {% if p.adText %}
+                                <button type="button"
+                                        class="btn btn-sm btn-outline-primary"
+                                        onclick="openAdModal(`{{ p.adText|e('js') }}`)">
+                                    Voir
+                                </button>
 
-							<button class="btn btn-sm btn-outline-secondary" onclick="copyAd(`{{ p.adText|e('js') }}`)">
-								Copier
-							</button>
+                                <button type="button"
+                                        class="btn btn-sm btn-outline-secondary"
+                                        onclick="copyAd(`{{ p.adText|e('js') }}`)">
+                                    Copier
+                                </button>
 
-							<button class="btn btn-sm btn-outline-dark" onclick="copyLeboncoin(`{{ p.adText|e('js') }}`)">
-								Leboncoin
-							</button>
-							<a href="{{ path('property_pdf', {id: p.id}) }}" target="_blank" class="btn btn-sm btn-outline-success">
-								PDF
-							</a>
-						</td>
+                                <button type="button"
+                                        class="btn btn-sm btn-outline-dark"
+                                        onclick="copyLeboncoin(`{{ p.adText|e('js') }}`)">
+                                    Leboncoin
+                                </button>
 
-						<!-- DELETE -->
-						<td>
-							<form method="post" action="{{ path('property_delete', {id: p.id}) }}" onsubmit="return confirm('Supprimer ?');">
-								<button class="btn btn-sm btn-danger">✕</button>
-							</form>
-						</td>
+                                <a href="{{ path('property_pdf', { id: p.id }) }}"
+                                   target="_blank"
+                                   class="btn btn-sm btn-outline-success">
+                                    PDF
+                                </a>
+                            {% else %}
+                                <small class="d-block text-muted mt-1">
+                                    Aucune annonce
+                                </small>
+                            {% endif %}
+                        </td>
 
-					</tr>
-				{% endfor %}
-			</tbody>
-		</table>
-	</div>
+                        <td>
+                            <form method="post"
+                                  action="{{ path('property_delete', { id: p.id }) }}"
+                                  onsubmit="return confirm('Supprimer ?');">
+                                <button type="submit" class="btn btn-sm btn-danger">✕</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 
-	<!-- MODAL -->
-	<div class="modal fade" id="adModal" tabindex="-1">
-		<div class="modal-dialog modal-lg modal-dialog-centered">
-			<div class="modal-content shadow">
+    <div class="modal fade" id="adModal" tabindex="-1">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content shadow">
+                <div class="modal-header">
+                    <h5 class="modal-title">Annonce générée</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
 
-				<div class="modal-header">
-					<h5 class="modal-title">Annonce générée</h5>
-					<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-				</div>
+                <div class="modal-body">
+                    <div id="adContent" style="white-space: pre-line;"></div>
+                </div>
 
-				<div class="modal-body">
-					<div id="adContent" style="white-space: pre-line;"></div>
-				</div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success" onclick="copyFromModal()">
+                        Copier
+                    </button>
 
-				<div class="modal-footer">
-					<button class="btn btn-success" onclick="copyFromModal()">
-						Copier
-					</button>
-					<button class="btn btn-secondary" data-bs-dismiss="modal">
-						Fermer
-					</button>
-				</div>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        Fermer
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 
-			</div>
-		</div>
-	</div>
+    <script>
+        let currentAd = '';
 
-	<script>
-		let currentAd = '';
+        function openAdModal(text) {
+            currentAd = text;
+            document.getElementById('adContent').innerText = text;
+            const modal = new bootstrap.Modal(document.getElementById('adModal'));
+            modal.show();
+        }
 
-function openAdModal(text) {
-currentAd = text;
-document.getElementById('adContent').innerHTML = text;
-const modal = new bootstrap.Modal(document.getElementById('adModal'));
-modal.show();
-}
+        function copyAd(text) {
+            navigator.clipboard.writeText(text);
+            showToast('Annonce copiée');
+        }
 
-function copyAd(text) {
-navigator.clipboard.writeText(text);
-showToast('Annonce copiée');
-}
+        function copyFromModal() {
+            navigator.clipboard.writeText(currentAd);
+            showToast('Annonce copiée');
+        }
 
-function copyFromModal() {
-navigator.clipboard.writeText(currentAd);
-showToast('Annonce copiée');
-}
+        function copyLeboncoin(text) {
+            const formatted = text.replace(/\n/g, '\n\n').toUpperCase();
+            navigator.clipboard.writeText(formatted);
+            showToast('Format Leboncoin copié');
+        }
 
-function copyLeboncoin(text) {
-const formatted = text.replace(/\n/g, '\n\n') // espace pour lisibilité.toUpperCase(); // style plus impact
+        function showToast(message) {
+            const toast = document.createElement('div');
+            toast.innerText = message;
+            toast.style.position = 'fixed';
+            toast.style.bottom = '20px';
+            toast.style.right = '20px';
+            toast.style.background = '#198754';
+            toast.style.color = '#fff';
+            toast.style.padding = '10px 15px';
+            toast.style.borderRadius = '5px';
+            toast.style.zIndex = '9999';
 
-navigator.clipboard.writeText(formatted);
-showToast('Format Leboncoin copié');
-}
+            document.body.appendChild(toast);
 
-function showToast(message) {
-const toast = document.createElement('div');
-toast.innerText = message;
-toast.style.position = 'fixed';
-toast.style.bottom = '20px';
-toast.style.right = '20px';
-toast.style.background = '#198754';
-toast.style.color = '#fff';
-toast.style.padding = '10px 15px';
-toast.style.borderRadius = '5px';
-toast.style.zIndex = '9999';
-
-document.body.appendChild(toast);
-
-setTimeout(() => toast.remove(), 2000);
-}
-	</script>
+            setTimeout(() => toast.remove(), 2000);
+        }
+    </script>
 
 {% endif %}

@@ -47,6 +47,9 @@
             "./migrations/.gitignore"
         ]
     },
+    "endroid/qr-code-bundle": {
+        "version": "6.0.0"
+    },
     "php-http/discovery": {
         "version": "1.20",
         "recipe": {

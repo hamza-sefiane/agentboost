@@ -1,22 +1,78 @@
 {% extends 'base.html.twig' %}
 
+{% block title %}Mon entreprise{% endblock %}
+
 {% block body %}
-	<h1>Mon entreprise</h1>
+<div class="container py-5" style="max-width: 760px;">
+    <div class="mb-4">
+        <h1 class="h3 fw-bold mb-1">Informations agence</h1>
+        <p class="text-muted mb-0">
+            Personnalisez les informations affichées sur vos estimations et PDF.
+        </p>
+    </div>
 
-	<form method="post" enctype="multipart/form-data">
+    <div class="card border-0 shadow-sm rounded-4">
+        <div class="card-body p-4 p-md-5">
+            <form method="post" enctype="multipart/form-data">
+                <div class="mb-4 text-center">
+                    {% if user.companyLogo %}
+                        <img
+                            src="{{ asset('uploads/logos/' ~ user.companyLogo) }}"
+                            alt="Logo de l’agence"
+                            class="rounded-3 border bg-white p-2 shadow-sm"
+                            style="max-height: 120px; max-width: 180px; object-fit: contain;"
+                        >
+                    {% else %}
+                        <div class="mx-auto rounded-3 border bg-light d-flex align-items-center justify-content-center"
+                             style="height: 120px; width: 180px;">
+                            <span class="text-muted small">Aucun logo</span>
+                        </div>
+                    {% endif %}
+                </div>
 
-		<input name="company_name" class="form-control mb-2" placeholder="Nom" value="{{ user.companyName }}">
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Nom de l’agence</label>
+                    <input
+                        name="company_name"
+                        class="form-control form-control-lg"
+                        placeholder="Ex : AgentBoost Immobilier"
+                        value="{{ user.companyName }}"
+                    >
+                </div>
 
-		<input name="company_address" class="form-control mb-2" placeholder="Adresse" value="{{ user.companyAddress }}">
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Adresse</label>
+                    <input
+                        name="company_address"
+                        class="form-control form-control-lg"
+                        placeholder="Ex : 10 rue de Paris, 75000 Paris"
+                        value="{{ user.companyAddress }}"
+                    >
+                </div>
 
-		<input name="company_phone" class="form-control mb-2" placeholder="Téléphone" value="{{ user.companyPhone }}">
+                <div class="mb-4">
+                    <label class="form-label fw-semibold">Téléphone</label>
+                    <input
+                        name="company_phone"
+                        class="form-control form-control-lg"
+                        placeholder="Ex : 06 12 34 56 78"
+                        value="{{ user.companyPhone }}"
+                    >
+                </div>
 
-		<input type="file" name="company_logo" class="form-control mb-3">
+                <div class="mb-4">
+                    <label class="form-label fw-semibold">Logo</label>
+                    <input type="file" name="company_logo" class="form-control">
+                    <small class="text-muted">
+                        Formats recommandés : PNG ou JPG. Le logo sera utilisé dans vos PDF.
+                    </small>
+                </div>
 
-		{% if user.companyLogo %}
-			<img src="/uploads/logos/{{ user.companyLogo }}" height="80">
-		{% endif %}
-
-		<button class="btn btn-success">Enregistrer</button>
-	</form>
+                <button type="submit" class="btn btn-success btn-lg w-100">
+                    Enregistrer les informations
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
 {% endblock %}

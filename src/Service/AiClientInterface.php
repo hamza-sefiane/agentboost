@@ -6,5 +6,5 @@ namespace App\Service;
 
 interface AiClientInterface
 {
-    public function generate(string $prompt): string;
+    public function generateText(string $prompt): string;
 }

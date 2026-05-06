@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Property;
 use App\Entity\User;
+use App\Service\OpenAiPropertyAdGenerator;
 use App\Service\PropertyEstimator;
 use Doctrine\ORM\EntityManagerInterface;
 use Dompdf\Dompdf;
@@ -18,7 +19,8 @@ final class DashboardController extends AbstractController
 {
     public function __construct(
         private readonly EntityManagerInterface $em
-    ) {}
+    ) {
+    }
 
     #[Route('', name: 'dashboard', methods: ['GET', 'POST'])]
     public function index(Request $request, PropertyEstimator $estimator): Response
@@ -58,6 +60,7 @@ final class DashboardController extends AbstractController
 
             if (!isset($result['estimate']) || $result['estimate'] === null) {
                 $this->addFlash('error', 'Données invalides.');
+
                 return $this->redirectToRoute('dashboard');
             }
 
@@ -76,6 +79,7 @@ final class DashboardController extends AbstractController
             $this->em->flush();
 
             $this->addFlash('success', 'Estimation enregistrée.');
+
             return $this->redirectToRoute('dashboard');
         }
 
@@ -85,6 +89,31 @@ final class DashboardController extends AbstractController
         return $this->render('dashboard/index.html.twig', [
             'properties' => $properties,
         ]);
+    }
+
+    #[Route('/property/{id}/generate-ad', name: 'property_generate_ad', methods: ['POST'])]
+    public function generateAd(
+        Property $property,
+        OpenAiPropertyAdGenerator $adGenerator
+    ): Response {
+        $this->denyAccessUnlessGranted('OWNER', $property);
+
+        $user = $this->getUser();
+
+        if (!$user instanceof User || !$user->isActive()) {
+            return $this->redirectToRoute('pricing');
+        }
+
+        try {
+            $property->setAdText($adGenerator->generate($property));
+            $this->em->flush();
+
+            $this->addFlash('success', 'Annonce IA générée.');
+        } catch (\Throwable) {
+            $this->addFlash('error', 'Impossible de générer l’annonce IA pour le moment.');
+        }
+
+        return $this->redirectToRoute('dashboard');
     }
 
     #[Route('/pdf/{id}', name: 'property_pdf', methods: ['GET'])]
@@ -121,7 +150,7 @@ final class DashboardController extends AbstractController
 
         return new Response(
             $dompdf->output(),
-            200,
+            Response::HTTP_OK,
             [
                 'Content-Type' => 'application/pdf',
                 'Content-Disposition' => 'inline; filename="estimation-agentboost.pdf"',
@@ -138,6 +167,7 @@ final class DashboardController extends AbstractController
         $this->em->flush();
 
         $this->addFlash('success', 'Bien supprimé.');
+
         return $this->redirectToRoute('dashboard');
     }
 }
