@@ -4,13 +4,31 @@ declare(strict_types=1);
 
 namespace App\Service;
 
-use RuntimeException;
-
 final class PropertyEstimator
 {
-    public function __construct(
-        private readonly AiClientInterface $aiClient
-    ) {}
+    private const BASE_PRICE_BY_TYPE = [
+        'appartement' => 3900,
+        'maison' => 3400,
+        'terrain' => 450,
+        'parking' => 1200,
+    ];
+
+    private const POSTAL_PRICE_BY_PREFIX = [
+        '75' => 10500,
+        '92' => 7600,
+        '93' => 4300,
+        '94' => 5200,
+        '91' => 3900,
+        '77' => 3400,
+        '78' => 4300,
+        '95' => 3600,
+        '69' => 5200,
+        '13' => 4200,
+        '31' => 3900,
+        '33' => 4600,
+        '59' => 3300,
+        '06' => 5200,
+    ];
 
     public function estimate(array $data): array
     {
@@ -19,15 +37,13 @@ final class PropertyEstimator
         if ($validated === null) {
             return [
                 'estimate' => null,
-                'adText' => 'Données insuffisantes pour estimer le bien.',
+                'adText' => null,
             ];
         }
 
-        $estimate = $this->calculateEstimate($validated);
-
         return [
-            'estimate' => $estimate,
-            'adText' => $this->generateAdText($validated, $estimate),
+            'estimate' => $this->calculateEstimate($validated),
+            'adText' => null,
         ];
     }
 
@@ -41,18 +57,22 @@ final class PropertyEstimator
         $parking = (bool) ($data['parking'] ?? false);
 
         if (
-            $type === '' ||
-            $city === '' ||
-            strlen($postalCode) !== 5 ||
-            $surface <= 0 ||
-            (in_array($type, ['appartement', 'maison'], true) && $rooms <= 0)
+            $type === ''
+            || $city === ''
+            || strlen($postalCode) !== 5
+            || $surface <= 0
+            || !array_key_exists($type, self::BASE_PRICE_BY_TYPE)
         ) {
+            return null;
+        }
+
+        if (in_array($type, ['appartement', 'maison'], true) && $rooms <= 0) {
             return null;
         }
 
         return [
             'type' => $type,
-            'city' => ucfirst(strtolower($city)),
+            'city' => mb_convert_case($city, MB_CASE_TITLE, 'UTF-8'),
             'postalCode' => $postalCode,
             'surface' => $surface,
             'rooms' => in_array($type, ['parking', 'terrain'], true) ? 0 : $rooms,
@@ -66,99 +86,85 @@ final class PropertyEstimator
 
     private function calculateEstimate(array $data): int
     {
-        $pricePerM2 = match ($data['type']) {
-            'appartement' => 4000,
-            'maison' => 3500,
-            'terrain' => 1500,
-            'parking' => 1200,
-            default => 3000,
-        };
+        $pricePerM2 = $this->resolvePricePerM2($data);
 
         $estimate = $data['surface'] * $pricePerM2;
 
-        if ($this->isLargeCity($data['city'])) {
-            $estimate *= 1.10;
-        }
+        $estimate *= $this->typeCoefficient($data['type']);
+        $estimate *= $this->surfaceCoefficient($data['surface']);
+        $estimate *= $this->roomsCoefficient($data['type'], $data['rooms'], $data['surface']);
 
         if ($data['parking'] && !in_array($data['type'], ['parking', 'terrain'], true)) {
-            $estimate += 15000;
+            $estimate += $this->parkingValue($data['postalCode']);
         }
 
-        return (int) round($estimate);
+        return $this->roundToNearest((int) round($estimate), 5000);
     }
 
-    private function isLargeCity(string $city): bool
+    private function resolvePricePerM2(array $data): int
     {
-        return in_array(
-            strtolower($city),
-            ['paris', 'lyon', 'marseille', 'toulouse', 'bordeaux', 'lille', 'nice', 'créteil', 'creteil'],
-            true
-        );
+        $prefix = substr($data['postalCode'], 0, 2);
+
+        $localPrice = self::POSTAL_PRICE_BY_PREFIX[$prefix]
+            ?? self::BASE_PRICE_BY_TYPE[$data['type']];
+
+        return match ($data['type']) {
+            'maison' => (int) round($localPrice * 0.92),
+            'terrain' => (int) round($localPrice * 0.28),
+            'parking' => self::BASE_PRICE_BY_TYPE['parking'],
+            default => $localPrice,
+        };
     }
 
-    private function generateAdText(array $data, int $estimate): string
+    private function typeCoefficient(string $type): float
     {
-        $type = ucfirst($data['type']);
-
-        $rooms = match ($data['type']) {
-            'parking', 'terrain' => 'Non applicable',
-            default => $data['rooms'] . ' pièces',
+        return match ($type) {
+            'appartement' => 1.00,
+            'maison' => 1.06,
+            'terrain' => 1.00,
+            'parking' => 1.00,
+            default => 1.00,
         };
+    }
 
-        $parking = match ($data['type']) {
-            'parking' => 'Oui',
-            'terrain' => 'Non applicable',
-            default => $data['parking'] ? 'Oui' : 'Non',
+    private function surfaceCoefficient(int $surface): float
+    {
+        return match (true) {
+            $surface < 25 => 1.12,
+            $surface < 50 => 1.06,
+            $surface <= 120 => 1.00,
+            $surface <= 220 => 0.94,
+            default => 0.88,
         };
+    }
 
-        $price = number_format($estimate, 0, ',', ' ');
-
-        $prompt = <<<PROMPT
-Tu es un rédacteur immobilier professionnel.
-
-Rédige une annonce immobilière réaliste, factuelle et prête à publier en français.
-
-Données exactes :
-- Type : {$type}
-- Ville : {$data['city']} ({$data['postalCode']})
-- Surface : {$data['surface']} m²
-- Pièces : {$rooms}
-- Parking : {$parking}
-- Prix estimé : {$price} €
-
-Format attendu : HTML simple uniquement.
-Utilise seulement ces balises :
-<h2>, <p>, <ul>, <li>, <strong>, <em>
-
-Structure obligatoire :
-<h2>Titre factuel</h2>
-<p><strong>Accroche courte</strong></p>
-<p>Description claire du bien.</p>
-<ul>
-  <li>Point fort basé uniquement sur les données fournies</li>
-  <li>Point fort basé uniquement sur les données fournies</li>
-</ul>
-<p><em>Appel à l'action sobre.</em></p>
-
-Contraintes strictes :
-- Ne jamais inventer de caractéristiques absentes.
-- Ne pas parler de luxe, haut de gamme, standing, jardin, cuisine équipée, balcon, terrasse, vue, rénovation, calme, luminosité ou quartier recherché si ce n'est pas fourni.
-- Ne pas promettre un rendement.
-- Ne pas utiliser de markdown.
-- Ne pas utiliser ** ou #.
-- Maximum 700 caractères.
-PROMPT;
-
-        try {
-            $content = trim($this->aiClient->generateText($prompt));
-
-            if ($content === '') {
-                throw new RuntimeException('Empty AI response');
-            }
-
-            return $content;
-        } catch (\Throwable) {
-            return 'Annonce indisponible pour le moment.';
+    private function roomsCoefficient(string $type, int $rooms, int $surface): float
+    {
+        if (!in_array($type, ['appartement', 'maison'], true) || $rooms <= 0 || $surface <= 0) {
+            return 1.00;
         }
+
+        $surfacePerRoom = $surface / $rooms;
+
+        return match (true) {
+            $surfacePerRoom < 14 => 0.93,
+            $surfacePerRoom <= 35 => 1.00,
+            $surfacePerRoom <= 55 => 1.04,
+            default => 1.08,
+        };
+    }
+
+    private function parkingValue(string $postalCode): int
+    {
+        return match (substr($postalCode, 0, 2)) {
+            '75', '92' => 30000,
+            '93', '94', '91', '78', '95' => 18000,
+            default => 12000,
+        };
+    }
+
+    private function roundToNearest(int $value, int $step): int
+    {
+        return (int) (round($value / $step) * $step);
     }
 }

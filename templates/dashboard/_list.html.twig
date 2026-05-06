@@ -7,108 +7,159 @@
 
     {% set properties = properties|sort((a, b) => b.estimate <=> a.estimate) %}
 
-    <div class="table-responsive">
-        <table class="table align-middle shadow-sm rounded overflow-hidden">
-            <thead class="table-dark">
-                <tr>
-                    <th>Bien</th>
-                    <th>Localisation</th>
-                    <th>Surface</th>
-                    <th>Infos</th>
-                    <th>Prix</th>
-                    <th class="text-center">Annonce</th>
-                    <th></th>
-                </tr>
-            </thead>
+    <form method="post"
+          action="{{ path('property_bulk_delete') }}"
+          id="bulk-delete-form"
+          onsubmit="return confirmBulkDelete();">
 
-            <tbody>
-                {% for p in properties %}
-                    <tr class="bg-white">
-                        <td>
-                            <span class="badge bg-primary">
-                                {{ p.type }}
-                            </span>
-                        </td>
+        <input type="hidden" name="_token" value="{{ csrf_token('bulk_delete_properties') }}">
 
-                        <td>
-                            <strong>{{ p.city|capitalize }}</strong><br>
-                            <small class="text-muted">{{ p.postalCode }}</small>
-                        </td>
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <div class="text-muted small">
+                {{ properties|length }} estimation(s)
+            </div>
 
-                        <td>
-                            {{ p.surface }} m²
-                        </td>
+            <button type="submit" class="btn btn-sm btn-danger" id="bulk-delete-btn" disabled>
+                Supprimer la sélection
+            </button>
+        </div>
 
-                        <td>
-                            {% if p.type == 'Parking' %}
-                                <span class="text-muted">Parking</span>
-                            {% else %}
-                                {{ p.rooms }} pièces<br>
-                                <small class="text-muted">
-                                    Parking :
-                                    {{ p.parking ? 'Oui' : 'Non' }}
-                                </small>
-                            {% endif %}
-                        </td>
-
-                        <td>
-                            <strong class="text-success fs-6">
-                                {{ p.estimate|number_format(0, ',', ' ') }} €
-                            </strong>
-                        </td>
-
-                        <td class="text-center">
-                            <form method="post"
-                                  action="{{ path('property_generate_ad', { id: p.id }) }}"
-                                  class="d-inline">
-                                <button type="submit" class="btn btn-sm btn-primary">
-                                    Générer IA
-                                </button>
-                            </form>
-
-                            {% if p.adText %}
-                                <button type="button"
-                                        class="btn btn-sm btn-outline-primary"
-                                        onclick="openAdModal(`{{ p.adText|e('js') }}`)">
-                                    Voir
-                                </button>
-
-                                <button type="button"
-                                        class="btn btn-sm btn-outline-secondary"
-                                        onclick="copyAd(`{{ p.adText|e('js') }}`)">
-                                    Copier
-                                </button>
-
-                                <button type="button"
-                                        class="btn btn-sm btn-outline-dark"
-                                        onclick="copyLeboncoin(`{{ p.adText|e('js') }}`)">
-                                    Leboncoin
-                                </button>
-
-                                <a href="{{ path('property_pdf', { id: p.id }) }}"
-                                   target="_blank"
-                                   class="btn btn-sm btn-outline-success">
-                                    PDF
-                                </a>
-                            {% else %}
-                                <small class="d-block text-muted mt-1">
-                                    Aucune annonce
-                                </small>
-                            {% endif %}
-                        </td>
-
-                        <td>
-                            <form method="post"
-                                  action="{{ path('property_delete', { id: p.id }) }}"
-                                  onsubmit="return confirm('Supprimer ?');">
-                                <button type="submit" class="btn btn-sm btn-danger">✕</button>
-                            </form>
-                        </td>
+        <div class="table-responsive">
+            <table class="table align-middle shadow-sm rounded overflow-hidden">
+                <thead class="table-dark">
+                    <tr>
+                        <th style="width: 40px;">
+                            <input type="checkbox" id="select-all-properties">
+                        </th>
+                        <th>Bien</th>
+                        <th>Localisation</th>
+                        <th>Surface</th>
+                        <th>Infos</th>
+                        <th>Prix</th>
+                        <th class="text-center">Annonce</th>
+                        <th class="text-end">Action</th>
                     </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
+                </thead>
+
+                <tbody>
+                    {% for p in properties %}
+                        <tr class="bg-white">
+                            <td>
+                                <input
+                                    type="checkbox"
+                                    name="property_ids[]"
+                                    value="{{ p.id }}"
+                                    class="property-checkbox"
+                                >
+                            </td>
+
+                            <td>
+                                <span class="badge bg-primary">
+                                    {{ p.type }}
+                                </span>
+                            </td>
+
+                            <td>
+                                <strong>{{ p.city|capitalize }}</strong><br>
+                                <small class="text-muted">{{ p.postalCode }}</small>
+                            </td>
+
+                            <td class="text-nowrap">
+                                {{ p.surface }} m²
+                            </td>
+
+                            <td>
+                                {% if p.type == 'Parking' %}
+                                    <span class="text-muted">Parking</span>
+                                {% else %}
+                                    {{ p.rooms }} pièces<br>
+                                    <small class="text-muted">
+                                        Parking :
+                                        {{ p.parking ? 'Oui' : 'Non' }}
+                                    </small>
+                                {% endif %}
+                            </td>
+
+                            <td class="text-nowrap">
+                                <strong class="text-success fs-6">
+                                    {{ p.estimate|number_format(0, ',', ' ') }} €
+                                </strong>
+                            </td>
+
+                            <td class="text-center">
+                                <div class="d-flex flex-wrap gap-1 justify-content-center">
+                                    <button
+                                        type="submit"
+                                        form="generate-ad-form-{{ p.id }}"
+                                        class="btn btn-sm btn-primary"
+                                    >
+                                        Générer IA
+                                    </button>
+
+                                    {% if p.adText %}
+                                        <button type="button"
+                                                class="btn btn-sm btn-outline-primary"
+                                                onclick="openAdModal(`{{ p.adText|e('js') }}`)">
+                                            Voir
+                                        </button>
+
+                                        <button type="button"
+                                                class="btn btn-sm btn-outline-secondary"
+                                                onclick="copyAd(`{{ p.adText|e('js') }}`)">
+                                            Copier
+                                        </button>
+
+                                        <button type="button"
+                                                class="btn btn-sm btn-outline-dark"
+                                                onclick="copyLeboncoin(`{{ p.adText|e('js') }}`)">
+                                            Leboncoin
+                                        </button>
+
+                                        <a href="{{ path('property_pdf', { id: p.id }) }}"
+                                           target="_blank"
+                                           class="btn btn-sm btn-outline-success">
+                                            PDF
+                                        </a>
+                                    {% else %}
+                                        <small class="d-block text-muted w-100">
+                                            Aucune annonce
+                                        </small>
+                                    {% endif %}
+                                </div>
+                            </td>
+
+                            <td class="text-end">
+                                <button
+                                    type="submit"
+                                    form="delete-property-form-{{ p.id }}"
+                                    class="btn btn-sm btn-danger"
+                                    onclick="return confirm('Supprimer cette estimation ?');"
+                                >
+                                    ✕
+                                </button>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </form>
+
+    {% for p in properties %}
+        <form
+            id="generate-ad-form-{{ p.id }}"
+            method="post"
+            action="{{ path('property_generate_ad', { id: p.id }) }}"
+            class="d-none"
+        ></form>
+
+        <form
+            id="delete-property-form-{{ p.id }}"
+            method="post"
+            action="{{ path('property_delete', { id: p.id }) }}"
+            class="d-none"
+        ></form>
+    {% endfor %}
 
     <div class="modal fade" id="adModal" tabindex="-1">
         <div class="modal-dialog modal-lg modal-dialog-centered">
@@ -176,6 +227,39 @@
             document.body.appendChild(toast);
 
             setTimeout(() => toast.remove(), 2000);
+        }
+
+        const selectAll = document.getElementById('select-all-properties');
+        const checkboxes = document.querySelectorAll('.property-checkbox');
+        const bulkDeleteBtn = document.getElementById('bulk-delete-btn');
+
+        function updateBulkDeleteState() {
+            const checkedCount = document.querySelectorAll('.property-checkbox:checked').length;
+            bulkDeleteBtn.disabled = checkedCount === 0;
+        }
+
+        if (selectAll) {
+            selectAll.addEventListener('change', function () {
+                checkboxes.forEach((checkbox) => {
+                    checkbox.checked = selectAll.checked;
+                });
+
+                updateBulkDeleteState();
+            });
+        }
+
+        checkboxes.forEach((checkbox) => {
+            checkbox.addEventListener('change', updateBulkDeleteState);
+        });
+
+        function confirmBulkDelete() {
+            const checkedCount = document.querySelectorAll('.property-checkbox:checked').length;
+
+            if (checkedCount === 0) {
+                return false;
+            }
+
+            return confirm('Supprimer ' + checkedCount + ' estimation(s) ?');
         }
     </script>
 

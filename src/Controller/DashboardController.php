@@ -35,9 +35,9 @@ final class DashboardController extends AbstractController
         $this->denyAccessUnlessGranted('ACCESS_DASHBOARD');
 
         if ($request->isMethod('POST')) {
-            $type = (string) $request->request->get('type', '');
+            $type = trim((string) $request->request->get('type', ''));
             $postalCode = preg_replace('/\D/', '', (string) $request->request->get('postalCode', ''));
-            $city = (string) $request->request->get('city', '');
+            $city = trim((string) $request->request->get('city', ''));
             $surface = (int) $request->request->get('surface', 0);
             $rooms = (int) $request->request->get('rooms', 0);
             $parking = $request->request->getBoolean('parking');
@@ -169,6 +169,57 @@ final class DashboardController extends AbstractController
         $this->em->flush();
 
         $this->addFlash('success', 'Bien supprimé.');
+
+        return $this->redirectToRoute('dashboard');
+    }
+
+    #[Route('/delete-selected', name: 'property_bulk_delete', methods: ['POST'])]
+    public function bulkDelete(Request $request): Response
+    {
+        $user = $this->getUser();
+
+        if (!$user instanceof User) {
+            return $this->redirectToRoute('app_login');
+        }
+
+        if (!$this->isCsrfTokenValid(
+            'bulk_delete_properties',
+            (string) $request->request->get('_token')
+        )) {
+            throw $this->createAccessDeniedException('Token CSRF invalide.');
+        }
+
+        $ids = $request->request->all('property_ids');
+
+        if ($ids === []) {
+            $this->addFlash('error', 'Aucune estimation sélectionnée.');
+
+            return $this->redirectToRoute('dashboard');
+        }
+
+        $deletedCount = 0;
+
+        foreach ($ids as $id) {
+            $property = $this->em->getRepository(Property::class)->find((int) $id);
+
+            if (!$property instanceof Property) {
+                continue;
+            }
+
+            if ($property->getOwner() !== $user) {
+                continue;
+            }
+
+            $this->em->remove($property);
+            $deletedCount++;
+        }
+
+        $this->em->flush();
+
+        $this->addFlash(
+            'success',
+            sprintf('%d estimation(s) supprimée(s).', $deletedCount)
+        );
 
         return $this->redirectToRoute('dashboard');
     }
