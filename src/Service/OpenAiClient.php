@@ -8,7 +8,7 @@ class OpenAiClient implements AiClientInterface
 {
     public function __construct(private Client $client) {}
 
-    public function generate(string $prompt): string
+    public function generateText(string $prompt): string
     {
         $response = $this->client->chat()->create([
             'model' => 'gpt-4o-mini',

@@ -23,7 +23,7 @@ class PropertyController extends AbstractController
         $user = $this->getUser();
 
         if (!$user instanceof User || !$user->isActive()) {
-            return $this->redirectToRoute('subscribe');
+            return $this->redirectToRoute('pricing');
         }
 
         $postalCode = preg_replace('/\D/', '', (string) $request->request->get('postalCode'));

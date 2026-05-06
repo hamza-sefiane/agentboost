@@ -1,98 +1,101 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Dashboard{% endblock %}
+{% block title %}Dashboard
+{% endblock %}
 
 {% block body %}
 
-<h1 class="mb-4">Nouvelle estimation</h1>
+	<h1 class="mb-4">Nouvelle estimation</h1>
 
-{% for message in app.flashes('error') %}
-    <div class="alert alert-danger">{{ message }}</div>
-{% endfor %}
+	{% for message in app.flashes('error') %}
+		<div class="alert alert-danger">{{ message }}</div>
+	{% endfor %}
 
-{% for message in app.flashes('success') %}
-    <div class="alert alert-success">{{ message }}</div>
-{% endfor %}
+	{% for message in app.flashes('success') %}
+		<div class="alert alert-success">{{ message }}</div>
+	{% endfor %}
 
-<form method="post" action="{{ path('dashboard') }}" class="row g-3 mb-5">
-    <div class="col-md-3">
-        <select name="type" id="property-type" class="form-control" required>
-            <option value="Appartement">Appartement</option>
-            <option value="Maison">Maison</option>
-            <option value="Terrain">Terrain</option>
-            <option value="Parking">Parking</option>
-        </select>
-    </div>
+	<form method="post" action="{{ path('dashboard') }}" class="row g-3 mb-5">
+		<div class="col-md-3">
+			<select name="type" id="property-type" class="form-control" required>
+				<option value="Appartement">Appartement</option>
+				<option value="Maison">Maison</option>
+				<option value="Terrain">Terrain</option>
+				<option value="Parking">Parking</option>
+			</select>
+		</div>
 
-    <div class="col-md-3">
-        <input name="postalCode" type="text" class="form-control" placeholder="Code postal"
-               maxlength="5" pattern="[0-9]{5}" inputmode="numeric" required>
-    </div>
+		<div class="col-md-3">
+			<input name="postalCode" type="text" class="form-control" placeholder="Code postal" maxlength="5" pattern="[0-9]{5}" inputmode="numeric" required>
+		</div>
 
-    <div class="col-md-3">
-        <input name="city" class="form-control" placeholder="Ville" required>
-    </div>
+		<div class="col-md-3">
+			<input name="city" class="form-control" placeholder="Ville" required>
+		</div>
 
-    <div class="col-md-2">
-        <input name="surface" type="number" min="1" class="form-control" placeholder="m²" required>
-    </div>
+		<div class="col-md-2">
+			<input name="surface" type="number" min="1" class="form-control" placeholder="m²" required>
+		</div>
 
-    <div class="col-md-2" id="rooms-wrapper">
-        <input name="rooms" id="rooms-input" type="number" min="1" class="form-control" placeholder="Pièces">
-    </div>
+		<div class="col-md-2" id="rooms-wrapper">
+			<input name="rooms" id="rooms-input" type="number" min="1" class="form-control" placeholder="Pièces">
+		</div>
 
-    <div class="col-md-2" id="parking-wrapper">
-        <select name="parking" id="parking-input" class="form-control">
-            <option value="0">Sans parking</option>
-            <option value="1">Avec parking</option>
-        </select>
-    </div>
+		<div class="col-md-2" id="parking-wrapper">
+			<select name="parking" id="parking-input" class="form-control">
+				<option value="0">Sans parking</option>
+				<option value="1">Avec parking</option>
+			</select>
+		</div>
+		<div class="col-12">
+			<textarea name="extraDetails" class="form-control" rows="4" placeholder="Détails supplémentaires : balcon, vue dégagée, cuisine équipée, proche gare, lumineux..."></textarea>
+		</div>
 
-    <div class="col-md-2">
-        <button type="submit" class="btn btn-success w-100">
-            Estimer
-        </button>
-    </div>
-</form>
+		<div class="col-md-2">
+			<button type="submit" class="btn btn-success w-100">
+				Estimer
+			</button>
+		</div>
+	</form>
 
-<h2>Biens estimés</h2>
+	<h2>Biens estimés</h2>
 
-{% include 'dashboard/_list.html.twig' with { properties: properties } %}
+	{% include 'dashboard/_list.html.twig' with { properties: properties } %}
 
-<script>
-const typeSelect = document.getElementById('property-type');
+	<script>
+		const typeSelect = document.getElementById('property-type');
 const roomsWrapper = document.getElementById('rooms-wrapper');
 const roomsInput = document.getElementById('rooms-input');
 const parkingWrapper = document.getElementById('parking-wrapper');
 const parkingInput = document.getElementById('parking-input');
 
 function toggleFields() {
-    const type = typeSelect.value;
-    const isParking = type === 'Parking';
-    const isTerrain = type === 'Terrain';
+const type = typeSelect.value;
+const isParking = type === 'Parking';
+const isTerrain = type === 'Terrain';
 
-    const hideRooms = isParking || isTerrain;
-    const hideParking = isParking || isTerrain;
+const hideRooms = isParking || isTerrain;
+const hideParking = isParking || isTerrain;
 
-    roomsWrapper.style.display = hideRooms ? 'none' : 'block';
-    parkingWrapper.style.display = hideParking ? 'none' : 'block';
+roomsWrapper.style.display = hideRooms ? 'none' : 'block';
+parkingWrapper.style.display = hideParking ? 'none' : 'block';
 
-    roomsInput.required = !hideRooms;
-    roomsInput.disabled = hideRooms;
+roomsInput.required = ! hideRooms;
+roomsInput.disabled = hideRooms;
 
-    parkingInput.required = !hideParking;
-    parkingInput.disabled = hideParking;
+parkingInput.required = ! hideParking;
+parkingInput.disabled = hideParking;
 
-    if (hideRooms) {
-        roomsInput.value = '';
-    }
+if (hideRooms) {
+roomsInput.value = '';
+}
 
-    if (hideParking) {
-        parkingInput.value = '0';
-    }
+if (hideParking) {
+parkingInput.value = '0';
+}
 }
 
 typeSelect.addEventListener('change', toggleFields);
 toggleFields();
-</script>
+	</script>
 {% endblock %}
