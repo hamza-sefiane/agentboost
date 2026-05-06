@@ -37,6 +37,9 @@ class Property
     #[ORM\Column(type: 'text', nullable: true)]
     private ?string $adText = null;
 
+    #[ORM\Column(type: 'text', nullable: true)]
+    private ?string $extraDetails = null;
+
     #[ORM\ManyToOne(targetEntity: User::class)]
     #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     private User $owner;
@@ -53,7 +56,7 @@ class Property
 
     public function setType(string $type): self
     {
-        $this->type = $type;
+        $this->type = trim($type);
 
         return $this;
     }
@@ -65,7 +68,7 @@ class Property
 
     public function setCity(string $city): self
     {
-        $this->city = $city;
+        $this->city = trim($city);
 
         return $this;
     }
@@ -77,7 +80,7 @@ class Property
 
     public function setPostalCode(string $postalCode): self
     {
-        $this->postalCode = $postalCode;
+        $this->postalCode = trim($postalCode);
 
         return $this;
     }
@@ -89,7 +92,7 @@ class Property
 
     public function setSurface(int $surface): self
     {
-        $this->surface = $surface;
+        $this->surface = max(0, $surface);
 
         return $this;
     }
@@ -101,7 +104,7 @@ class Property
 
     public function setRooms(int $rooms): self
     {
-        $this->rooms = $rooms;
+        $this->rooms = max(0, $rooms);
 
         return $this;
     }
@@ -125,7 +128,7 @@ class Property
 
     public function setEstimate(?int $estimate): self
     {
-        $this->estimate = $estimate;
+        $this->estimate = $estimate !== null ? max(0, $estimate) : null;
 
         return $this;
     }
@@ -137,7 +140,19 @@ class Property
 
     public function setAdText(?string $adText): self
     {
-        $this->adText = $adText;
+        $this->adText = $adText !== null ? trim($adText) : null;
+
+        return $this;
+    }
+
+    public function getExtraDetails(): ?string
+    {
+        return $this->extraDetails;
+    }
+
+    public function setExtraDetails(?string $extraDetails): self
+    {
+        $this->extraDetails = $extraDetails !== null ? trim($extraDetails) : null;
 
         return $this;
     }

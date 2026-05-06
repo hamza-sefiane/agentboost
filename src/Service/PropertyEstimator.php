@@ -150,7 +150,7 @@ Contraintes strictes :
 PROMPT;
 
         try {
-            $content = trim($this->aiClient->generate($prompt));
+            $content = trim($this->aiClient->generateText($prompt));
 
             if ($content === '') {
                 throw new RuntimeException('Empty AI response');

@@ -41,6 +41,7 @@ final class DashboardController extends AbstractController
             $surface = (int) $request->request->get('surface', 0);
             $rooms = (int) $request->request->get('rooms', 0);
             $parking = $request->request->getBoolean('parking');
+            $extraDetails = trim((string) $request->request->get('extraDetails', ''));
 
             if (strtolower($type) === 'parking') {
                 $rooms = 0;
@@ -73,6 +74,7 @@ final class DashboardController extends AbstractController
                 ->setParking($parking)
                 ->setEstimate($result['estimate'])
                 ->setAdText($result['adText'] ?? null)
+                ->setExtraDetails($extraDetails !== '' ? $extraDetails : null)
                 ->setOwner($user);
 
             $this->em->persist($property);
