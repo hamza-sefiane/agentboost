@@ -13,21 +13,61 @@
 
 ## Comportement des webhooks Stripe
 - `customer.subscription.updated` : Met à jour l'état de résiliation ou annule la résiliation si nécessaire.
-- `customer.subscription.deleted` : Supprime l’utilisateur si la suppression était programmée.
+- `customer.subscription.deleted` : Peut déclencher une suppression utilisateur (fallback).
 
 ## Automatisation de la suppression
 - Commande : `php bin/console app:delete-expired-users`.
-- Cette commande supprime les utilisateurs dont l'abonnement est arrivé à terme et dont la suppression a été programmée.
+- Supprime les utilisateurs dont la période est expirée.
 
 ## Sécurité et cohérence
-- Aucun changement en base de données dans les contrôleurs ou webhooks concernant des suppressions. Les actions critiques sont toujours traitées par la commande dédiée.
+- Stripe est la source de vérité.
+- Les webhooks synchronisent l’état.
+- La suppression réelle est principalement faite via une commande (cron).
+- Le webhook peut agir en fallback.
 
-## Étapes pour tester (en mode test)
-1. Active un abonnement et simule une résiliation avec `/subscription/cancel`.
-2. Annule la résiliation via `/subscription/cancel-cancellation`.
-3. Programme la suppression de compte via `/account/delete`.
-4. Annule la suppression de compte via `/account/delete/cancel`.
-5. Lance la commande `php bin/console app:delete-expired-users` pour vérifier la suppression des comptes expirés.
+## Étapes pour tester (mode test)
+1. Souscrire via Stripe
+2. Résilier : `/subscription/cancel`
+3. Annuler résiliation : `/subscription/cancel-cancellation`
+4. Supprimer compte : `/account/delete`
+5. Annuler suppression : `/account/delete/cancel`
+6. Lancer : `php bin/console app:delete-expired-users`
 
-## Remarque finale
-Ce système assure que la gestion des abonnements est fiable. En mode production, assure-toi d’avoir des logs pour chaque suppression et d’éviter toute suppression irréversible directement via un webhook.
+---
+
+## 📊 Diagramme du flow abonnement & suppression
+
+```mermaid
+flowchart TD
+
+A[Utilisateur] -->|Souscription| B[Stripe Checkout]
+
+B -->|Paiement OK| C[Webhook: invoice.payment_succeeded]
+C --> D[activateSubscription()]
+D --> E[User actif]
+
+E -->|Clique résilier| F[POST /subscription/cancel]
+F --> G[Stripe: cancel_at_period_end = true]
+
+G --> H[Webhook: customer.subscription.updated]
+H --> I[markCancellationAtPeriodEnd()]
+I --> J[Etat: grace]
+
+J -->|Annuler résiliation| K[POST /subscription/cancel-cancellation]
+K --> L[Stripe: cancel_at_period_end = false]
+L --> M[Webhook: updated]
+M --> D
+
+J -->|Demande suppression compte| N[POST /account/delete]
+N --> O[markDeletionAtPeriodEnd()]
+
+O --> P[Attente fin période]
+
+P --> Q[CRON: delete-expired-users]
+Q --> R[Suppression User + data]
+
+H -->|Event final| S[Webhook: subscription.deleted]
+S -->|fallback| R
+
+```
+---
