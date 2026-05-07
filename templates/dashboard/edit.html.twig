@@ -1,0 +1,78 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier estimation{% endblock %}
+
+{% block body %}
+    <h1 class="mb-4">Modifier l’estimation</h1>
+
+    <form method="post" enctype="multipart/form-data" class="row g-3 mb-4">
+        <div class="col-md-3">
+            <select name="type" class="form-control" required>
+                {% for type in ['Appartement', 'Maison', 'Terrain', 'Parking'] %}
+                    <option value="{{ type }}" {{ property.type == type ? 'selected' : '' }}>
+                        {{ type }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="col-md-3">
+            <input name="postalCode" class="form-control" value="{{ property.postalCode }}" required>
+        </div>
+
+        <div class="col-md-3">
+            <input name="city" class="form-control" value="{{ property.city }}" required>
+        </div>
+
+        <div class="col-md-2">
+            <input name="surface" type="number" min="1" class="form-control" value="{{ property.surface }}" required>
+        </div>
+
+        <div class="col-md-2">
+            <input name="rooms" type="number" min="0" class="form-control" value="{{ property.rooms }}">
+        </div>
+
+        <div class="col-md-2">
+            <select name="parking" class="form-control">
+                <option value="0" {{ not property.parking ? 'selected' : '' }}>Sans parking</option>
+                <option value="1" {{ property.parking ? 'selected' : '' }}>Avec parking</option>
+            </select>
+        </div>
+
+        <div class="col-12">
+            <textarea name="extraDetails" class="form-control" rows="4">{{ property.extraDetails }}</textarea>
+        </div>
+
+        <div class="col-12">
+            <label class="form-label fw-semibold">Ajouter des photos</label>
+            <input type="file" name="photos[]" class="form-control" accept=".jpg,.jpeg,.png,.webp" multiple>
+            <small class="text-muted">Maximum 5 photos au total.</small>
+        </div>
+
+        <div class="col-12">
+            <button class="btn btn-success">Enregistrer</button>
+            <a href="{{ path('dashboard') }}" class="btn btn-secondary">Retour</a>
+        </div>
+    </form>
+
+    <h2 class="mb-3">Photos actuelles</h2>
+
+    <div class="d-flex flex-wrap gap-3">
+        {% for photo in property.photos %}
+            <div>
+                <img src="{{ asset('uploads/properties/' ~ photo.filename) }}"
+                     style="width: 140px; height: 100px; object-fit: cover; border-radius: 8px; border: 1px solid #ddd;">
+
+                <form method="post"
+                      action="{{ path('property_photo_delete', { id: photo.id }) }}"
+                      onsubmit="return confirm('Supprimer cette photo ?');"
+                      class="mt-2">
+                    <input type="hidden" name="_token" value="{{ csrf_token('delete_property_photo_' ~ photo.id) }}">
+                    <button class="btn btn-sm btn-danger w-100">Supprimer</button>
+                </form>
+            </div>
+        {% else %}
+            <p class="text-muted">Aucune photo.</p>
+        {% endfor %}
+    </div>
+{% endblock %}

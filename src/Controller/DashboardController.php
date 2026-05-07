@@ -46,57 +46,12 @@ final class DashboardController extends AbstractController
         $this->denyAccessUnlessGranted('ACCESS_DASHBOARD');
 
         if ($request->isMethod('POST')) {
-            $type = trim((string) $request->request->get('type', ''));
-            $postalCode = preg_replace('/\D/', '', (string) $request->request->get('postalCode', ''));
-            $city = trim((string) $request->request->get('city', ''));
-            $surface = (int) $request->request->get('surface', 0);
-            $rooms = (int) $request->request->get('rooms', 0);
-            $parking = $request->request->getBoolean('parking');
-            $extraDetails = trim((string) $request->request->get('extraDetails', ''));
+            $property = new Property();
 
-            if (strtolower($type) === 'parking') {
-                $rooms = 0;
-                $parking = true;
-            }
+            $response = $this->handlePropertyForm($property, $request, $estimator, $user);
 
-            $data = [
-                'type' => $type,
-                'postalCode' => $postalCode,
-                'city' => $city,
-                'surface' => $surface,
-                'rooms' => $rooms,
-                'parking' => $parking,
-            ];
-
-            $result = $estimator->estimate($data);
-
-            if (!isset($result['estimate']) || $result['estimate'] === null) {
-                $this->addFlash('error', 'Données invalides.');
-
-                return $this->redirectToRoute('dashboard');
-            }
-
-            $property = (new Property())
-                ->setType($type)
-                ->setPostalCode($postalCode)
-                ->setCity($city)
-                ->setSurface($surface)
-                ->setRooms($rooms)
-                ->setParking($parking)
-                ->setEstimate($result['estimate'])
-                ->setAdText($result['adText'] ?? null)
-                ->setExtraDetails($extraDetails !== '' ? $extraDetails : null)
-                ->setOwner($user);
-
-            $photos = $request->files->all('photos');
-            $photoErrors = $this->attachUploadedPhotos($property, $photos);
-
-            if ($photoErrors !== []) {
-                foreach ($photoErrors as $photoError) {
-                    $this->addFlash('error', $photoError);
-                }
-
-                return $this->redirectToRoute('dashboard');
+            if ($response instanceof Response) {
+                return $response;
             }
 
             $this->em->persist($property);
@@ -112,6 +67,39 @@ final class DashboardController extends AbstractController
 
         return $this->render('dashboard/index.html.twig', [
             'properties' => $properties,
+        ]);
+    }
+
+    #[Route('/property/{id}/edit', name: 'property_edit', methods: ['GET', 'POST'])]
+    public function edit(
+        Property $property,
+        Request $request,
+        PropertyEstimator $estimator
+    ): Response {
+        $this->denyAccessUnlessGranted('OWNER', $property);
+
+        $user = $this->getUser();
+
+        if (!$user instanceof User) {
+            return $this->redirectToRoute('app_login');
+        }
+
+        if ($request->isMethod('POST')) {
+            $response = $this->handlePropertyForm($property, $request, $estimator, $user, true);
+
+            if ($response instanceof Response) {
+                return $response;
+            }
+
+            $this->em->flush();
+
+            $this->addFlash('success', 'Estimation modifiée.');
+
+            return $this->redirectToRoute('dashboard');
+        }
+
+        return $this->render('dashboard/edit.html.twig', [
+            'property' => $property,
         ]);
     }
 
@@ -155,16 +143,18 @@ final class DashboardController extends AbstractController
 
             if (is_file($logoPath)) {
                 $mime = mime_content_type($logoPath);
-                $logoDataUri = 'data:' . $mime . ';base64,' . base64_encode(file_get_contents($logoPath));
+                $content = file_get_contents($logoPath);
+
+                if (is_string($mime) && $content !== false) {
+                    $logoDataUri = 'data:' . $mime . ';base64,' . base64_encode($content);
+                }
             }
         }
-
-        $photoDataUris = $this->getPhotoDataUris($property);
 
         $html = $this->renderView('pdf/property.html.twig', [
             'property' => $property,
             'logoDataUri' => $logoDataUri,
-            'photoDataUris' => $photoDataUris,
+            'photoDataUris' => $this->getPhotoDataUris($property),
         ]);
 
         $options = new Options();
@@ -185,6 +175,40 @@ final class DashboardController extends AbstractController
                 'Content-Disposition' => 'inline; filename="estimation-agentboost.pdf"',
             ]
         );
+    }
+
+    #[Route('/property-photo/{id}/delete', name: 'property_photo_delete', methods: ['POST'])]
+    public function deletePhoto(PropertyPhoto $photo, Request $request): Response
+    {
+        $property = $photo->getProperty();
+
+        if (!$property instanceof Property) {
+            throw $this->createNotFoundException();
+        }
+
+        $this->denyAccessUnlessGranted('OWNER', $property);
+
+        if (!$this->isCsrfTokenValid(
+            'delete_property_photo_' . $photo->getId(),
+            (string) $request->request->get('_token')
+        )) {
+            throw $this->createAccessDeniedException('Token CSRF invalide.');
+        }
+
+        $path = $this->getPropertyUploadDir() . DIRECTORY_SEPARATOR . $photo->getFilename();
+
+        if (is_file($path)) {
+            unlink($path);
+        }
+
+        $this->em->remove($photo);
+        $this->em->flush();
+
+        $this->addFlash('success', 'Photo supprimée.');
+
+        return $this->redirectToRoute('property_edit', [
+            'id' => $property->getId(),
+        ]);
     }
 
     #[Route('/delete/{id}', name: 'property_delete', methods: ['POST'])]
@@ -255,6 +279,78 @@ final class DashboardController extends AbstractController
         return $this->redirectToRoute('dashboard');
     }
 
+    private function handlePropertyForm(
+        Property $property,
+        Request $request,
+        PropertyEstimator $estimator,
+        User $user,
+        bool $isEdit = false
+    ): ?Response {
+        $type = trim((string) $request->request->get('type', ''));
+        $postalCode = preg_replace('/\D/', '', (string) $request->request->get('postalCode', ''));
+        $city = trim((string) $request->request->get('city', ''));
+        $surface = (int) $request->request->get('surface', 0);
+        $rooms = (int) $request->request->get('rooms', 0);
+        $parking = $request->request->getBoolean('parking');
+        $extraDetails = trim((string) $request->request->get('extraDetails', ''));
+
+        if (strtolower($type) === 'parking') {
+            $rooms = 0;
+            $parking = true;
+        }
+
+        $data = [
+            'type' => $type,
+            'postalCode' => $postalCode,
+            'city' => $city,
+            'surface' => $surface,
+            'rooms' => $rooms,
+            'parking' => $parking,
+        ];
+
+        $result = $estimator->estimate($data);
+
+        if (!isset($result['estimate']) || $result['estimate'] === null) {
+            $this->addFlash('error', 'Données invalides.');
+
+            return $this->redirectToRoute(
+                $isEdit ? 'property_edit' : 'dashboard',
+                $isEdit ? ['id' => $property->getId()] : []
+            );
+        }
+
+        $property
+            ->setType($type)
+            ->setPostalCode($postalCode)
+            ->setCity($city)
+            ->setSurface($surface)
+            ->setRooms($rooms)
+            ->setParking($parking)
+            ->setEstimate($result['estimate'])
+            ->setExtraDetails($extraDetails !== '' ? $extraDetails : null)
+            ->setOwner($user);
+
+        if (!$isEdit) {
+            $property->setAdText($result['adText'] ?? null);
+        }
+
+        $photos = $request->files->all('photos');
+        $photoErrors = $this->attachUploadedPhotos($property, $photos);
+
+        if ($photoErrors !== []) {
+            foreach ($photoErrors as $photoError) {
+                $this->addFlash('error', $photoError);
+            }
+
+            return $this->redirectToRoute(
+                $isEdit ? 'property_edit' : 'dashboard',
+                $isEdit ? ['id' => $property->getId()] : []
+            );
+        }
+
+        return null;
+    }
+
     /**
      * @param array<int, UploadedFile|null> $photos
      *
@@ -267,8 +363,17 @@ final class DashboardController extends AbstractController
             static fn ($photo): bool => $photo instanceof UploadedFile
         ));
 
-        if (count($validPhotos) > self::MAX_PHOTOS) {
-            return [sprintf('Maximum %d photos autorisées.', self::MAX_PHOTOS)];
+        $remainingSlots = self::MAX_PHOTOS - $property->getPhotos()->count();
+
+        if ($remainingSlots <= 0 && $validPhotos !== []) {
+            return [sprintf('Maximum %d photos autorisées par estimation.', self::MAX_PHOTOS)];
+        }
+
+        if (count($validPhotos) > $remainingSlots) {
+            return [sprintf(
+                'Vous pouvez encore ajouter %d photo(s) maximum.',
+                max(0, $remainingSlots)
+            )];
         }
 
         $uploadDir = $this->getPropertyUploadDir();
@@ -278,7 +383,7 @@ final class DashboardController extends AbstractController
         }
 
         $errors = [];
-        $position = 0;
+        $position = $property->getPhotos()->count();
 
         foreach ($validPhotos as $photo) {
             if (!$photo->isValid()) {
