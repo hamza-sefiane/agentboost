@@ -31,6 +31,7 @@
                         <th style="width: 40px;">
                             <input type="checkbox" id="select-all-properties">
                         </th>
+                        <th>Photo</th>
                         <th>Bien</th>
                         <th>Localisation</th>
                         <th>Surface</th>
@@ -54,9 +55,35 @@
                             </td>
 
                             <td>
+                                {% set firstPhoto = p.photos|first %}
+
+                                {% if firstPhoto %}
+                                    <img
+                                        src="{{ asset('uploads/properties/' ~ firstPhoto.filename) }}"
+                                        alt="Photo du bien"
+                                        style="width: 70px; height: 55px; object-fit: cover; border-radius: 8px; border: 1px solid #ddd;"
+                                    >
+                                {% else %}
+                                    <div
+                                        class="text-muted small d-flex align-items-center justify-content-center"
+                                        style="width: 70px; height: 55px; border-radius: 8px; border: 1px dashed #ccc; background: #f8f9fa;"
+                                    >
+                                        —
+                                    </div>
+                                {% endif %}
+                            </td>
+
+                            <td>
                                 <span class="badge bg-primary">
                                     {{ p.type }}
                                 </span>
+
+                                {% if p.photos|length > 0 %}
+                                    <br>
+                                    <small class="text-muted">
+                                        {{ p.photos|length }} photo(s)
+                                    </small>
+                                {% endif %}
                             </td>
 
                             <td>

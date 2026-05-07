@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\PropertyRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: PropertyRepository::class)]
@@ -44,6 +46,22 @@ class Property
     #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     private User $owner;
 
+    /**
+     * @var Collection<int, PropertyPhoto>
+     */
+    #[ORM\OneToMany(
+        targetEntity: PropertyPhoto::class,
+        mappedBy: 'property',
+        orphanRemoval: true,
+        cascade: ['persist', 'remove']
+    )]
+    private Collection $photos;
+
+    public function __construct()
+    {
+        $this->photos = new ArrayCollection();
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -57,7 +75,6 @@ class Property
     public function setType(string $type): self
     {
         $this->type = trim($type);
-
         return $this;
     }
 
@@ -69,7 +86,6 @@ class Property
     public function setCity(string $city): self
     {
         $this->city = trim($city);
-
         return $this;
     }
 
@@ -81,7 +97,6 @@ class Property
     public function setPostalCode(string $postalCode): self
     {
         $this->postalCode = trim($postalCode);
-
         return $this;
     }
 
@@ -93,7 +108,6 @@ class Property
     public function setSurface(int $surface): self
     {
         $this->surface = max(0, $surface);
-
         return $this;
     }
 
@@ -105,7 +119,6 @@ class Property
     public function setRooms(int $rooms): self
     {
         $this->rooms = max(0, $rooms);
-
         return $this;
     }
 
@@ -117,7 +130,6 @@ class Property
     public function setParking(bool $parking): self
     {
         $this->parking = $parking;
-
         return $this;
     }
 
@@ -129,7 +141,6 @@ class Property
     public function setEstimate(?int $estimate): self
     {
         $this->estimate = $estimate !== null ? max(0, $estimate) : null;
-
         return $this;
     }
 
@@ -141,7 +152,6 @@ class Property
     public function setAdText(?string $adText): self
     {
         $this->adText = $adText !== null ? trim($adText) : null;
-
         return $this;
     }
 
@@ -153,7 +163,6 @@ class Property
     public function setExtraDetails(?string $extraDetails): self
     {
         $this->extraDetails = $extraDetails !== null ? trim($extraDetails) : null;
-
         return $this;
     }
 
@@ -165,6 +174,34 @@ class Property
     public function setOwner(User $owner): self
     {
         $this->owner = $owner;
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, PropertyPhoto>
+     */
+    public function getPhotos(): Collection
+    {
+        return $this->photos;
+    }
+
+    public function addPhoto(PropertyPhoto $photo): self
+    {
+        if (!$this->photos->contains($photo)) {
+            $this->photos->add($photo);
+            $photo->setProperty($this);
+        }
+
+        return $this;
+    }
+
+    public function removePhoto(PropertyPhoto $photo): self
+    {
+        if ($this->photos->removeElement($photo)) {
+            if ($photo->getProperty() === $this) {
+                $photo->setProperty(null);
+            }
+        }
 
         return $this;
     }

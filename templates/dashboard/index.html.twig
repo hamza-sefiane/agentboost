@@ -1,7 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Dashboard
-{% endblock %}
+{% block title %}Dashboard{% endblock %}
 
 {% block body %}
 
@@ -15,7 +14,7 @@
 		<div class="alert alert-success">{{ message }}</div>
 	{% endfor %}
 
-	<form method="post" action="{{ path('dashboard') }}" class="row g-3 mb-5">
+	<form method="post" action="{{ path('dashboard') }}" enctype="multipart/form-data" class="row g-3 mb-5">
 		<div class="col-md-3">
 			<select name="type" id="property-type" class="form-control" required>
 				<option value="Appartement">Appartement</option>
@@ -47,8 +46,33 @@
 				<option value="1">Avec parking</option>
 			</select>
 		</div>
+
 		<div class="col-12">
-			<textarea name="extraDetails" class="form-control" rows="4" placeholder="Détails supplémentaires : balcon, vue dégagée, cuisine équipée, proche gare, lumineux..."></textarea>
+			<textarea
+				name="extraDetails"
+				class="form-control"
+				rows="4"
+				placeholder="Détails supplémentaires : balcon, vue dégagée, cuisine équipée, proche gare, lumineux..."
+			></textarea>
+		</div>
+
+		<div class="col-12">
+			<label class="form-label fw-semibold">Photos du bien</label>
+			<input
+				type="file"
+				name="photos[]"
+				id="photos-input"
+				class="form-control"
+				accept="image/jpeg,image/png,image/webp"
+				multiple
+			>
+			<small class="text-muted">
+				Formats acceptés : JPG, PNG, WEBP. Maximum 5 photos.
+			</small>
+		</div>
+
+		<div class="col-12">
+			<div id="photos-preview" class="d-flex flex-wrap gap-2 mt-2"></div>
 		</div>
 
 		<div class="col-md-2">
@@ -64,38 +88,71 @@
 
 	<script>
 		const typeSelect = document.getElementById('property-type');
-const roomsWrapper = document.getElementById('rooms-wrapper');
-const roomsInput = document.getElementById('rooms-input');
-const parkingWrapper = document.getElementById('parking-wrapper');
-const parkingInput = document.getElementById('parking-input');
+		const roomsWrapper = document.getElementById('rooms-wrapper');
+		const roomsInput = document.getElementById('rooms-input');
+		const parkingWrapper = document.getElementById('parking-wrapper');
+		const parkingInput = document.getElementById('parking-input');
+		const photosInput = document.getElementById('photos-input');
+		const photosPreview = document.getElementById('photos-preview');
 
-function toggleFields() {
-const type = typeSelect.value;
-const isParking = type === 'Parking';
-const isTerrain = type === 'Terrain';
+		function toggleFields() {
+			const type = typeSelect.value;
+			const isParking = type === 'Parking';
+			const isTerrain = type === 'Terrain';
 
-const hideRooms = isParking || isTerrain;
-const hideParking = isParking || isTerrain;
+			const hideRooms = isParking || isTerrain;
+			const hideParking = isParking || isTerrain;
 
-roomsWrapper.style.display = hideRooms ? 'none' : 'block';
-parkingWrapper.style.display = hideParking ? 'none' : 'block';
+			roomsWrapper.style.display = hideRooms ? 'none' : 'block';
+			parkingWrapper.style.display = hideParking ? 'none' : 'block';
 
-roomsInput.required = ! hideRooms;
-roomsInput.disabled = hideRooms;
+			roomsInput.required = !hideRooms;
+			roomsInput.disabled = hideRooms;
 
-parkingInput.required = ! hideParking;
-parkingInput.disabled = hideParking;
+			parkingInput.required = !hideParking;
+			parkingInput.disabled = hideParking;
 
-if (hideRooms) {
-roomsInput.value = '';
-}
+			if (hideRooms) {
+				roomsInput.value = '';
+			}
 
-if (hideParking) {
-parkingInput.value = '0';
-}
-}
+			if (hideParking) {
+				parkingInput.value = '0';
+			}
+		}
 
-typeSelect.addEventListener('change', toggleFields);
-toggleFields();
+		function previewPhotos() {
+			photosPreview.innerHTML = '';
+
+			const files = Array.from(photosInput.files).slice(0, 5);
+
+			files.forEach((file) => {
+				if (!file.type.startsWith('image/')) {
+					return;
+				}
+
+				const reader = new FileReader();
+
+				reader.onload = function (event) {
+					const img = document.createElement('img');
+					img.src = event.target.result;
+					img.alt = 'Prévisualisation';
+					img.style.width = '90px';
+					img.style.height = '70px';
+					img.style.objectFit = 'cover';
+					img.style.borderRadius = '8px';
+					img.style.border = '1px solid #ddd';
+
+					photosPreview.appendChild(img);
+				};
+
+				reader.readAsDataURL(file);
+			});
+		}
+
+		typeSelect.addEventListener('change', toggleFields);
+		photosInput.addEventListener('change', previewPhotos);
+
+		toggleFields();
 	</script>
 {% endblock %}

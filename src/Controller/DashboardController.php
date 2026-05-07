@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Property;
+use App\Entity\PropertyPhoto;
 use App\Entity\User;
 use App\Service\OpenAiPropertyAdGenerator;
 use App\Service\PropertyEstimator;
@@ -10,6 +11,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Dompdf\Dompdf;
 use Dompdf\Options;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -17,6 +19,14 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route('/dashboard')]
 final class DashboardController extends AbstractController
 {
+    private const MAX_PHOTOS = 5;
+
+    private const ALLOWED_IMAGE_MIME_TYPES = [
+        'image/jpeg',
+        'image/png',
+        'image/webp',
+    ];
+
     public function __construct(
         private readonly EntityManagerInterface $em
     ) {
@@ -76,6 +86,9 @@ final class DashboardController extends AbstractController
                 ->setAdText($result['adText'] ?? null)
                 ->setExtraDetails($extraDetails !== '' ? $extraDetails : null)
                 ->setOwner($user);
+
+            $photos = $request->files->all('photos');
+            $this->attachUploadedPhotos($property, $photos);
 
             $this->em->persist($property);
             $this->em->flush();
@@ -165,6 +178,8 @@ final class DashboardController extends AbstractController
     {
         $this->denyAccessUnlessGranted('OWNER', $property);
 
+        $this->deletePhysicalPhotos($property);
+
         $this->em->remove($property);
         $this->em->flush();
 
@@ -210,6 +225,8 @@ final class DashboardController extends AbstractController
                 continue;
             }
 
+            $this->deletePhysicalPhotos($property);
+
             $this->em->remove($property);
             $deletedCount++;
         }
@@ -222,5 +239,62 @@ final class DashboardController extends AbstractController
         );
 
         return $this->redirectToRoute('dashboard');
+    }
+
+    /**
+     * @param array<int, UploadedFile|null> $photos
+     */
+    private function attachUploadedPhotos(Property $property, array $photos): void
+    {
+        $uploadDir = $this->getPropertyUploadDir();
+
+        if (!is_dir($uploadDir)) {
+            mkdir($uploadDir, 0775, true);
+        }
+
+        $position = 0;
+
+        foreach (array_slice($photos, 0, self::MAX_PHOTOS) as $photo) {
+            if (!$photo instanceof UploadedFile) {
+                continue;
+            }
+
+            if (!$photo->isValid()) {
+                continue;
+            }
+
+            if (!in_array($photo->getMimeType(), self::ALLOWED_IMAGE_MIME_TYPES, true)) {
+                continue;
+            }
+
+            $extension = $photo->guessExtension() ?: 'jpg';
+            $filename = uniqid('property_', true) . '.' . $extension;
+
+            $photo->move($uploadDir, $filename);
+
+            $propertyPhoto = (new PropertyPhoto())
+                ->setFilename($filename)
+                ->setPosition($position++);
+
+            $property->addPhoto($propertyPhoto);
+        }
+    }
+
+    private function deletePhysicalPhotos(Property $property): void
+    {
+        $uploadDir = $this->getPropertyUploadDir();
+
+        foreach ($property->getPhotos() as $photo) {
+            $path = $uploadDir . DIRECTORY_SEPARATOR . $photo->getFilename();
+
+            if (is_file($path)) {
+                unlink($path);
+            }
+        }
+    }
+
+    private function getPropertyUploadDir(): string
+    {
+        return $this->getParameter('kernel.project_dir') . '/public/uploads/properties';
     }
 }
