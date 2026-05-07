@@ -20,6 +20,7 @@ use Symfony\Component\Routing\Attribute\Route;
 final class DashboardController extends AbstractController
 {
     private const MAX_PHOTOS = 5;
+    private const MAX_PHOTO_SIZE = 5 * 1024 * 1024;
 
     private const ALLOWED_IMAGE_MIME_TYPES = [
         'image/jpeg',
@@ -88,7 +89,15 @@ final class DashboardController extends AbstractController
                 ->setOwner($user);
 
             $photos = $request->files->all('photos');
-            $this->attachUploadedPhotos($property, $photos);
+            $photoErrors = $this->attachUploadedPhotos($property, $photos);
+
+            if ($photoErrors !== []) {
+                foreach ($photoErrors as $photoError) {
+                    $this->addFlash('error', $photoError);
+                }
+
+                return $this->redirectToRoute('dashboard');
+            }
 
             $this->em->persist($property);
             $this->em->flush();
@@ -150,13 +159,18 @@ final class DashboardController extends AbstractController
             }
         }
 
+        $photoDataUris = $this->getPhotoDataUris($property);
+
         $html = $this->renderView('pdf/property.html.twig', [
             'property' => $property,
             'logoDataUri' => $logoDataUri,
+            'photoDataUris' => $photoDataUris,
         ]);
 
         $options = new Options();
         $options->set('defaultFont', 'Arial');
+        $options->set('isRemoteEnabled', true);
+        $options->set('isHtml5ParserEnabled', true);
 
         $dompdf = new Dompdf($options);
         $dompdf->loadHtml($html);
@@ -243,27 +257,48 @@ final class DashboardController extends AbstractController
 
     /**
      * @param array<int, UploadedFile|null> $photos
+     *
+     * @return array<int, string>
      */
-    private function attachUploadedPhotos(Property $property, array $photos): void
+    private function attachUploadedPhotos(Property $property, array $photos): array
     {
+        $validPhotos = array_values(array_filter(
+            $photos,
+            static fn ($photo): bool => $photo instanceof UploadedFile
+        ));
+
+        if (count($validPhotos) > self::MAX_PHOTOS) {
+            return [sprintf('Maximum %d photos autorisées.', self::MAX_PHOTOS)];
+        }
+
         $uploadDir = $this->getPropertyUploadDir();
 
         if (!is_dir($uploadDir)) {
             mkdir($uploadDir, 0775, true);
         }
 
+        $errors = [];
         $position = 0;
 
-        foreach (array_slice($photos, 0, self::MAX_PHOTOS) as $photo) {
-            if (!$photo instanceof UploadedFile) {
-                continue;
-            }
-
+        foreach ($validPhotos as $photo) {
             if (!$photo->isValid()) {
+                $errors[] = sprintf('Le fichier "%s" est invalide.', $photo->getClientOriginalName());
                 continue;
             }
 
             if (!in_array($photo->getMimeType(), self::ALLOWED_IMAGE_MIME_TYPES, true)) {
+                $errors[] = sprintf(
+                    'Le fichier "%s" doit être une image JPG, PNG ou WEBP.',
+                    $photo->getClientOriginalName()
+                );
+                continue;
+            }
+
+            if ($photo->getSize() !== false && $photo->getSize() > self::MAX_PHOTO_SIZE) {
+                $errors[] = sprintf(
+                    'Le fichier "%s" dépasse la taille maximale de 5 Mo.',
+                    $photo->getClientOriginalName()
+                );
                 continue;
             }
 
@@ -278,6 +313,8 @@ final class DashboardController extends AbstractController
 
             $property->addPhoto($propertyPhoto);
         }
+
+        return $errors;
     }
 
     private function deletePhysicalPhotos(Property $property): void
@@ -291,6 +328,39 @@ final class DashboardController extends AbstractController
                 unlink($path);
             }
         }
+    }
+
+    /**
+     * @return array<int, string>
+     */
+    private function getPhotoDataUris(Property $property): array
+    {
+        $uploadDir = $this->getPropertyUploadDir();
+        $dataUris = [];
+
+        foreach ($property->getPhotos() as $photo) {
+            $path = $uploadDir . DIRECTORY_SEPARATOR . $photo->getFilename();
+
+            if (!is_file($path)) {
+                continue;
+            }
+
+            $mime = mime_content_type($path);
+
+            if (!is_string($mime) || !in_array($mime, self::ALLOWED_IMAGE_MIME_TYPES, true)) {
+                continue;
+            }
+
+            $content = file_get_contents($path);
+
+            if ($content === false) {
+                continue;
+            }
+
+            $dataUris[] = 'data:' . $mime . ';base64,' . base64_encode($content);
+        }
+
+        return $dataUris;
     }
 
     private function getPropertyUploadDir(): string

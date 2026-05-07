@@ -30,6 +30,7 @@
 				text-align: right;
 				margin-bottom: 80px;
 			}
+
 			.cover-logo img {
 				max-width: 180px;
 				max-height: 100px;
@@ -133,6 +134,53 @@
 			.section {
 				margin-bottom: 36px;
 				page-break-inside: avoid;
+			}
+
+			.photo-hero-wrapper {
+				width: 100%;
+				height: 300px;
+				border-radius: 16px;
+				border: 1px solid #e5e7eb;
+				overflow: hidden;
+				background: #f8fafc;
+				margin-bottom: 12px;
+			}
+
+			.photo-hero {
+				width: 100%;
+				height: 300px;
+				object-fit: cover;
+			}
+
+			.photo-table {
+				width: 100%;
+				border-collapse: separate;
+				border-spacing: 8px 0;
+				table-layout: fixed;
+			}
+
+			.photo-thumb-cell {
+				width: 25%;
+				height: 86px;
+				border-radius: 10px;
+				border: 1px solid #e5e7eb;
+				overflow: hidden;
+				background: #f8fafc;
+				text-align: center;
+				vertical-align: middle;
+			}
+
+			.photo-thumb {
+				width: 100%;
+				height: 86px;
+				object-fit: cover;
+			}
+
+			.gallery-count {
+				margin-top: 8px;
+				color: #64748b;
+				font-size: 11px;
+				text-align: right;
 			}
 
 			.details-table {
@@ -252,16 +300,6 @@
 				background: #ffffff;
 			}
 
-			.qr-fake {
-				width: 85px;
-				height: 85px;
-				background: #0f172a;
-				color: #ffffff;
-				font-size: 10px;
-				text-align: center;
-				padding-top: 30px;
-			}
-
 			.qr-text {
 				margin-top: 10px;
 				color: #64748b;
@@ -291,28 +329,23 @@
 			</div>
 
 			<div class="cover-subtitle">Rapport premium</div>
-
 			<div class="cover-title">Estimation immobilière</div>
 
 			<div class="cover-city">
-				{{ property.city|upper }}
-				—
-				{{ property.postalCode }}
+				{{ property.city|upper }} — {{ property.postalCode }}
 			</div>
 
 			<div class="cover-price-box">
 				<div class="cover-price-label">Valeur estimée</div>
 				<div class="cover-price">
-					{{ property.estimate|number_format(0, ',', ' ') }}
-					€
+					{{ property.estimate|number_format(0, ',', ' ') }} €
 				</div>
 			</div>
 
 			<div class="cover-footer">
 				<table class="cover-footer-table">
 					<tr>
-						<td>Généré le
-							{{ "now"|date('d/m/Y à H:i') }}</td>
+						<td>Généré le {{ "now"|date('d/m/Y à H:i') }}</td>
 						<td>{{ app.user.companyName ?: 'AgentBoost Immobilier' }}</td>
 					</tr>
 				</table>
@@ -336,6 +369,40 @@
 				</div>
 			</div>
 
+			{% if photoDataUris is defined and photoDataUris|length > 0 %}
+				<div class="section">
+					<div class="section-title">Galerie du bien</div>
+
+					<div class="photo-hero-wrapper">
+						<img
+							src="{{ photoDataUris[0] }}"
+							class="photo-hero"
+							alt="Photo principale du bien"
+						>
+					</div>
+
+					{% if photoDataUris|length > 1 %}
+						<table class="photo-table">
+							<tr>
+								{% for photoDataUri in photoDataUris|slice(1, 4) %}
+									<td class="photo-thumb-cell">
+										<img
+											src="{{ photoDataUri }}"
+											class="photo-thumb"
+											alt="Photo du bien"
+										>
+									</td>
+								{% endfor %}
+							</tr>
+						</table>
+					{% endif %}
+
+					<div class="gallery-count">
+						{{ photoDataUris|length }} photo(s) jointe(s)
+					</div>
+				</div>
+			{% endif %}
+
 			<div class="section">
 				<div class="section-title">Bien estimé</div>
 
@@ -346,13 +413,11 @@
 					</tr>
 					<tr>
 						<td class="details-label">Ville</td>
-						<td>{{ property.city|upper }}
-							({{ property.postalCode }})</td>
+						<td>{{ property.city|upper }} ({{ property.postalCode }})</td>
 					</tr>
 					<tr>
 						<td class="details-label">Surface</td>
-						<td>{{ property.surface }}
-							m²</td>
+						<td>{{ property.surface }} m²</td>
 					</tr>
 					<tr>
 						<td class="details-label">Nombre de pièces</td>
@@ -373,8 +438,7 @@
 						<td class="market-card">
 							<div class="market-title">Prix moyen</div>
 							<div class="market-value">
-								{{ (property.estimate / property.surface)|round(0, 'floor')|number_format(0, ',', ' ') }}
-								€/m²
+								{{ (property.estimate / property.surface)|round(0, 'floor')|number_format(0, ',', ' ') }} €/m²
 							</div>
 							<div class="market-sub">Estimation calculée automatiquement</div>
 						</td>
