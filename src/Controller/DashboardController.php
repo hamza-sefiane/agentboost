@@ -7,6 +7,7 @@ use App\Entity\PropertyPhoto;
 use App\Entity\User;
 use App\Service\OpenAiPropertyAdGenerator;
 use App\Service\PropertyEstimator;
+use App\Service\PropertySellingAdviceGenerator;
 use Doctrine\ORM\EntityManagerInterface;
 use Dompdf\Dompdf;
 use Dompdf\Options;
@@ -23,26 +24,20 @@ final class DashboardController extends AbstractController
     private const MAX_PHOTO_SIZE = 5 * 1024 * 1024;
 
     private const ALLOWED_IMAGE_MIME_TYPES = [
-        'image/jpeg',
-        'image/png',
-        'image/webp',
+        'image/jpeg' => 'jpg',
+        'image/png' => 'png',
+        'image/webp' => 'webp',
     ];
 
     public function __construct(
-        private readonly EntityManagerInterface $em
-    ) {
-    }
+        private readonly EntityManagerInterface $em,
+    ) {}
 
     #[Route('', name: 'dashboard', methods: ['GET', 'POST'])]
     public function index(Request $request, PropertyEstimator $estimator): Response
     {
-        $user = $this->getUser();
+        $user = $this->getAuthenticatedUser();
 
-        if (!$user instanceof User) {
-            return $this->redirectToRoute('app_login');
-        }
-
-        $this->em->refresh($user);
         $this->denyAccessUnlessGranted('ACCESS_DASHBOARD');
 
         if ($request->isMethod('POST')) {
@@ -62,8 +57,10 @@ final class DashboardController extends AbstractController
             return $this->redirectToRoute('dashboard');
         }
 
-        $properties = $this->em->getRepository(Property::class)
-            ->findBy(['owner' => $user], ['id' => 'DESC']);
+        $properties = $this->em->getRepository(Property::class)->findBy(
+            ['owner' => $user],
+            ['id' => 'DESC']
+        );
 
         return $this->render('dashboard/index.html.twig', [
             'properties' => $properties,
@@ -71,18 +68,11 @@ final class DashboardController extends AbstractController
     }
 
     #[Route('/property/{id}/edit', name: 'property_edit', methods: ['GET', 'POST'])]
-    public function edit(
-        Property $property,
-        Request $request,
-        PropertyEstimator $estimator
-    ): Response {
+    public function edit(Property $property, Request $request, PropertyEstimator $estimator): Response
+    {
         $this->denyAccessUnlessGranted('OWNER', $property);
 
-        $user = $this->getUser();
-
-        if (!$user instanceof User) {
-            return $this->redirectToRoute('app_login');
-        }
+        $user = $this->getAuthenticatedUser();
 
         if ($request->isMethod('POST')) {
             $response = $this->handlePropertyForm($property, $request, $estimator, $user, true);
@@ -106,13 +96,18 @@ final class DashboardController extends AbstractController
     #[Route('/property/{id}/generate-ad', name: 'property_generate_ad', methods: ['POST'])]
     public function generateAd(
         Property $property,
-        OpenAiPropertyAdGenerator $adGenerator
+        Request $request,
+        OpenAiPropertyAdGenerator $adGenerator,
     ): Response {
         $this->denyAccessUnlessGranted('OWNER', $property);
 
-        $user = $this->getUser();
+        if (!$this->isCsrfTokenValid('generate_ad_' . $property->getId(), (string) $request->request->get('_token'))) {
+            throw $this->createAccessDeniedException('Token CSRF invalide.');
+        }
 
-        if (!$user instanceof User || !$user->isActive()) {
+        $user = $this->getAuthenticatedUser();
+
+        if (!$user->isActive()) {
             return $this->redirectToRoute('pricing');
         }
 
@@ -129,38 +124,29 @@ final class DashboardController extends AbstractController
     }
 
     #[Route('/pdf/{id}', name: 'property_pdf', methods: ['GET'])]
-    public function pdf(Property $property): Response
-    {
+    public function pdf(
+        Property $property,
+        PropertySellingAdviceGenerator $adviceGenerator,
+    ): Response {
         $this->denyAccessUnlessGranted('OWNER', $property);
 
-        $user = $this->getUser();
-        $logoDataUri = null;
-
-        if ($user instanceof User && $user->getCompanyLogo()) {
-            $logoPath = $this->getParameter('kernel.project_dir')
-                . '/public/uploads/logos/'
-                . $user->getCompanyLogo();
-
-            if (is_file($logoPath)) {
-                $mime = mime_content_type($logoPath);
-                $content = file_get_contents($logoPath);
-
-                if (is_string($mime) && $content !== false) {
-                    $logoDataUri = 'data:' . $mime . ';base64,' . base64_encode($content);
-                }
-            }
-        }
+        $user = $this->getAuthenticatedUser();
 
         $html = $this->renderView('pdf/property.html.twig', [
             'property' => $property,
-            'logoDataUri' => $logoDataUri,
+            'logoDataUri' => $this->getLogoDataUri($user),
             'photoDataUris' => $this->getPhotoDataUris($property),
+            'sellingAdvices' => $adviceGenerator->generate($property),
+            'sellingStrategy' => $adviceGenerator->generateSellingStrategy($property),
+            'confidenceScore' => $adviceGenerator->generateConfidenceScore($property),
+            'estimatedSaleDelay' => $adviceGenerator->generateEstimatedSaleDelay($property),
         ]);
 
         $options = new Options();
-        $options->set('defaultFont', 'Arial');
-        $options->set('isRemoteEnabled', true);
+        $options->set('defaultFont', 'DejaVu Sans');
+        $options->set('isRemoteEnabled', false);
         $options->set('isHtml5ParserEnabled', true);
+        $options->set('dpi', 95);
 
         $dompdf = new Dompdf($options);
         $dompdf->loadHtml($html);
@@ -176,6 +162,45 @@ final class DashboardController extends AbstractController
             ]
         );
     }
+    #[Route('/pdf/{id}/premium', name: 'property_pdf_premium', methods: ['GET'])]
+    public function premiumPdf(
+        Property $property,
+        PropertySellingAdviceGenerator $adviceGenerator,
+    ): Response {
+        $this->denyAccessUnlessGranted('OWNER', $property);
+
+        $user = $this->getAuthenticatedUser();
+
+        $html = $this->renderView('pdf/property_premium.html.twig', [
+            'property' => $property,
+            'logoDataUri' => $this->getLogoDataUri($user),
+            'photoDataUris' => $this->getPhotoDataUris($property),
+            'sellingAdvices' => $adviceGenerator->generate($property),
+            'sellingStrategy' => $adviceGenerator->generateSellingStrategy($property),
+            'confidenceScore' => $adviceGenerator->generateConfidenceScore($property),
+            'estimatedSaleDelay' => $adviceGenerator->generateEstimatedSaleDelay($property),
+        ]);
+
+        $options = new Options();
+        $options->set('defaultFont', 'DejaVu Sans');
+        $options->set('isRemoteEnabled', false);
+        $options->set('isHtml5ParserEnabled', true);
+        $options->set('dpi', 95);
+
+        $dompdf = new Dompdf($options);
+        $dompdf->loadHtml($html);
+        $dompdf->setPaper('A4');
+        $dompdf->render();
+
+        return new Response(
+            $dompdf->output(),
+            Response::HTTP_OK,
+            [
+                'Content-Type' => 'application/pdf',
+                'Content-Disposition' => 'inline; filename="estimation-agentboost-premium.pdf"',
+            ]
+        );
+    }
 
     #[Route('/property-photo/{id}/delete', name: 'property_photo_delete', methods: ['POST'])]
     public function deletePhoto(PropertyPhoto $photo, Request $request): Response
@@ -188,18 +213,11 @@ final class DashboardController extends AbstractController
 
         $this->denyAccessUnlessGranted('OWNER', $property);
 
-        if (!$this->isCsrfTokenValid(
-            'delete_property_photo_' . $photo->getId(),
-            (string) $request->request->get('_token')
-        )) {
+        if (!$this->isCsrfTokenValid('delete_property_photo_' . $photo->getId(), (string) $request->request->get('_token'))) {
             throw $this->createAccessDeniedException('Token CSRF invalide.');
         }
 
-        $path = $this->getPropertyUploadDir() . DIRECTORY_SEPARATOR . $photo->getFilename();
-
-        if (is_file($path)) {
-            unlink($path);
-        }
+        $this->deleteFile($this->getPropertyUploadDir() . DIRECTORY_SEPARATOR . $photo->getFilename());
 
         $this->em->remove($photo);
         $this->em->flush();
@@ -212,9 +230,13 @@ final class DashboardController extends AbstractController
     }
 
     #[Route('/delete/{id}', name: 'property_delete', methods: ['POST'])]
-    public function delete(Property $property): Response
+    public function delete(Property $property, Request $request): Response
     {
         $this->denyAccessUnlessGranted('OWNER', $property);
+
+        if (!$this->isCsrfTokenValid('delete_property_' . $property->getId(), (string) $request->request->get('_token'))) {
+            throw $this->createAccessDeniedException('Token CSRF invalide.');
+        }
 
         $this->deletePhysicalPhotos($property);
 
@@ -229,20 +251,16 @@ final class DashboardController extends AbstractController
     #[Route('/delete-selected', name: 'property_bulk_delete', methods: ['POST'])]
     public function bulkDelete(Request $request): Response
     {
-        $user = $this->getUser();
+        $user = $this->getAuthenticatedUser();
 
-        if (!$user instanceof User) {
-            return $this->redirectToRoute('app_login');
-        }
-
-        if (!$this->isCsrfTokenValid(
-            'bulk_delete_properties',
-            (string) $request->request->get('_token')
-        )) {
+        if (!$this->isCsrfTokenValid('bulk_delete_properties', (string) $request->request->get('_token'))) {
             throw $this->createAccessDeniedException('Token CSRF invalide.');
         }
 
-        $ids = $request->request->all('property_ids');
+        $ids = array_values(array_unique(array_filter(
+            array_map('intval', $request->request->all('property_ids')),
+            static fn(int $id): bool => $id > 0,
+        )));
 
         if ($ids === []) {
             $this->addFlash('error', 'Aucune estimation sélectionnée.');
@@ -250,31 +268,22 @@ final class DashboardController extends AbstractController
             return $this->redirectToRoute('dashboard');
         }
 
+        $properties = $this->em->getRepository(Property::class)->findBy([
+            'id' => $ids,
+            'owner' => $user,
+        ]);
+
         $deletedCount = 0;
 
-        foreach ($ids as $id) {
-            $property = $this->em->getRepository(Property::class)->find((int) $id);
-
-            if (!$property instanceof Property) {
-                continue;
-            }
-
-            if ($property->getOwner() !== $user) {
-                continue;
-            }
-
+        foreach ($properties as $property) {
             $this->deletePhysicalPhotos($property);
-
             $this->em->remove($property);
             $deletedCount++;
         }
 
         $this->em->flush();
 
-        $this->addFlash(
-            'success',
-            sprintf('%d estimation(s) supprimée(s).', $deletedCount)
-        );
+        $this->addFlash('success', sprintf('%d estimation(s) supprimée(s).', $deletedCount));
 
         return $this->redirectToRoute('dashboard');
     }
@@ -284,39 +293,54 @@ final class DashboardController extends AbstractController
         Request $request,
         PropertyEstimator $estimator,
         User $user,
-        bool $isEdit = false
+        bool $isEdit = false,
     ): ?Response {
         $type = trim((string) $request->request->get('type', ''));
-        $postalCode = preg_replace('/\D/', '', (string) $request->request->get('postalCode', ''));
+        $postalCode = preg_replace('/\D/', '', (string) $request->request->get('postalCode', '')) ?? '';
         $city = trim((string) $request->request->get('city', ''));
-        $surface = (int) $request->request->get('surface', 0);
-        $rooms = (int) $request->request->get('rooms', 0);
+        $surface = max(0, (int) $request->request->get('surface', 0));
+        $rooms = max(0, (int) $request->request->get('rooms', 0));
         $parking = $request->request->getBoolean('parking');
         $extraDetails = trim((string) $request->request->get('extraDetails', ''));
 
-        if (strtolower($type) === 'parking') {
+        if (mb_strtolower($type) === 'parking') {
             $rooms = 0;
             $parking = true;
         }
 
-        $data = [
+        $result = $estimator->estimate([
             'type' => $type,
             'postalCode' => $postalCode,
             'city' => $city,
             'surface' => $surface,
             'rooms' => $rooms,
             'parking' => $parking,
-        ];
+        ]);
 
-        $result = $estimator->estimate($data);
-
-        if (!isset($result['estimate']) || $result['estimate'] === null) {
+        if (
+            !isset($result['estimate'])
+            || !is_numeric($result['estimate'])
+            || !isset($result['lowEstimate'])
+            || !is_numeric($result['lowEstimate'])
+            || !isset($result['highEstimate'])
+            || !is_numeric($result['highEstimate'])
+        ) {
             $this->addFlash('error', 'Données invalides.');
 
-            return $this->redirectToRoute(
-                $isEdit ? 'property_edit' : 'dashboard',
-                $isEdit ? ['id' => $property->getId()] : []
-            );
+            return $this->redirectToFormOrigin($property, $isEdit);
+        }
+
+        $photoErrors = $this->attachUploadedPhotos(
+            $property,
+            $request->files->all('photos'),
+        );
+
+        if ($photoErrors !== []) {
+            foreach ($photoErrors as $photoError) {
+                $this->addFlash('error', $photoError);
+            }
+
+            return $this->redirectToFormOrigin($property, $isEdit);
         }
 
         $property
@@ -326,26 +350,14 @@ final class DashboardController extends AbstractController
             ->setSurface($surface)
             ->setRooms($rooms)
             ->setParking($parking)
-            ->setEstimate($result['estimate'])
+            ->setEstimate((int) $result['estimate'])
+            ->setLowEstimate((int) $result['lowEstimate'])
+            ->setHighEstimate((int) $result['highEstimate'])
             ->setExtraDetails($extraDetails !== '' ? $extraDetails : null)
             ->setOwner($user);
 
         if (!$isEdit) {
-            $property->setAdText($result['adText'] ?? null);
-        }
-
-        $photos = $request->files->all('photos');
-        $photoErrors = $this->attachUploadedPhotos($property, $photos);
-
-        if ($photoErrors !== []) {
-            foreach ($photoErrors as $photoError) {
-                $this->addFlash('error', $photoError);
-            }
-
-            return $this->redirectToRoute(
-                $isEdit ? 'property_edit' : 'dashboard',
-                $isEdit ? ['id' => $property->getId()] : []
-            );
+            $property->setAdText(isset($result['adText']) && is_string($result['adText']) ? $result['adText'] : null);
         }
 
         return null;
@@ -360,57 +372,61 @@ final class DashboardController extends AbstractController
     {
         $validPhotos = array_values(array_filter(
             $photos,
-            static fn ($photo): bool => $photo instanceof UploadedFile
+            static fn(mixed $photo): bool => $photo instanceof UploadedFile,
         ));
+
+        if ($validPhotos === []) {
+            return [];
+        }
 
         $remainingSlots = self::MAX_PHOTOS - $property->getPhotos()->count();
 
-        if ($remainingSlots <= 0 && $validPhotos !== []) {
+        if ($remainingSlots <= 0) {
             return [sprintf('Maximum %d photos autorisées par estimation.', self::MAX_PHOTOS)];
         }
 
         if (count($validPhotos) > $remainingSlots) {
-            return [sprintf(
-                'Vous pouvez encore ajouter %d photo(s) maximum.',
-                max(0, $remainingSlots)
-            )];
+            return [sprintf('Vous pouvez encore ajouter %d photo(s) maximum.', $remainingSlots)];
         }
 
         $uploadDir = $this->getPropertyUploadDir();
 
-        if (!is_dir($uploadDir)) {
-            mkdir($uploadDir, 0775, true);
+        if (!is_dir($uploadDir) && !mkdir($uploadDir, 0775, true) && !is_dir($uploadDir)) {
+            return ['Impossible de préparer le dossier d’upload.'];
         }
 
         $errors = [];
         $position = $property->getPhotos()->count();
 
         foreach ($validPhotos as $photo) {
+            $originalName = $photo->getClientOriginalName();
+
             if (!$photo->isValid()) {
-                $errors[] = sprintf('Le fichier "%s" est invalide.', $photo->getClientOriginalName());
+                $errors[] = sprintf('Le fichier "%s" est invalide.', $originalName);
                 continue;
             }
 
-            if (!in_array($photo->getMimeType(), self::ALLOWED_IMAGE_MIME_TYPES, true)) {
-                $errors[] = sprintf(
-                    'Le fichier "%s" doit être une image JPG, PNG ou WEBP.',
-                    $photo->getClientOriginalName()
-                );
+            $mimeType = $photo->getMimeType();
+
+            if (!is_string($mimeType) || !array_key_exists($mimeType, self::ALLOWED_IMAGE_MIME_TYPES)) {
+                $errors[] = sprintf('Le fichier "%s" doit être une image JPG, PNG ou WEBP.', $originalName);
                 continue;
             }
 
-            if ($photo->getSize() !== false && $photo->getSize() > self::MAX_PHOTO_SIZE) {
-                $errors[] = sprintf(
-                    'Le fichier "%s" dépasse la taille maximale de 5 Mo.',
-                    $photo->getClientOriginalName()
-                );
+            $size = $photo->getSize();
+
+            if ($size !== false && $size > self::MAX_PHOTO_SIZE) {
+                $errors[] = sprintf('Le fichier "%s" dépasse la taille maximale de 5 Mo.', $originalName);
                 continue;
             }
 
-            $extension = $photo->guessExtension() ?: 'jpg';
-            $filename = uniqid('property_', true) . '.' . $extension;
-
-            $photo->move($uploadDir, $filename);
+            try {
+                $filename = bin2hex(random_bytes(16)) . '.' . self::ALLOWED_IMAGE_MIME_TYPES[$mimeType];
+                $photo->move($uploadDir, $filename);
+            } catch (\Throwable) {
+                $errors[] = sprintf('Impossible d’enregistrer le fichier "%s".', $originalName);
+                continue;
+            }
 
             $propertyPhoto = (new PropertyPhoto())
                 ->setFilename($filename)
@@ -422,17 +438,52 @@ final class DashboardController extends AbstractController
         return $errors;
     }
 
+    private function redirectToFormOrigin(Property $property, bool $isEdit): Response
+    {
+        return $this->redirectToRoute(
+            $isEdit ? 'property_edit' : 'dashboard',
+            $isEdit ? ['id' => $property->getId()] : [],
+        );
+    }
+
     private function deletePhysicalPhotos(Property $property): void
     {
         $uploadDir = $this->getPropertyUploadDir();
 
         foreach ($property->getPhotos() as $photo) {
-            $path = $uploadDir . DIRECTORY_SEPARATOR . $photo->getFilename();
-
-            if (is_file($path)) {
-                unlink($path);
-            }
+            $this->deleteFile($uploadDir . DIRECTORY_SEPARATOR . $photo->getFilename());
         }
+    }
+
+    private function deleteFile(string $path): void
+    {
+        if (is_file($path)) {
+            @unlink($path);
+        }
+    }
+
+    private function getLogoDataUri(User $user): ?string
+    {
+        $logo = $user->getCompanyLogo();
+
+        if (!$logo) {
+            return null;
+        }
+
+        $path = $this->getParameter('kernel.project_dir') . '/public/uploads/logos/' . $logo;
+
+        if (!is_file($path)) {
+            return null;
+        }
+
+        $mime = mime_content_type($path);
+        $content = file_get_contents($path);
+
+        if (!is_string($mime) || $content === false) {
+            return null;
+        }
+
+        return 'data:' . $mime . ';base64,' . base64_encode($content);
     }
 
     /**
@@ -452,7 +503,7 @@ final class DashboardController extends AbstractController
 
             $mime = mime_content_type($path);
 
-            if (!is_string($mime) || !in_array($mime, self::ALLOWED_IMAGE_MIME_TYPES, true)) {
+            if (!is_string($mime) || !array_key_exists($mime, self::ALLOWED_IMAGE_MIME_TYPES)) {
                 continue;
             }
 
@@ -471,5 +522,16 @@ final class DashboardController extends AbstractController
     private function getPropertyUploadDir(): string
     {
         return $this->getParameter('kernel.project_dir') . '/public/uploads/properties';
+    }
+
+    private function getAuthenticatedUser(): User
+    {
+        $user = $this->getUser();
+
+        if (!$user instanceof User) {
+            throw $this->createAccessDeniedException();
+        }
+
+        return $user;
     }
 }

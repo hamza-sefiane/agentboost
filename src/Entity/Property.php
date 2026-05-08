@@ -36,6 +36,12 @@ class Property
     #[ORM\Column(type: 'integer', nullable: true)]
     private ?int $estimate = null;
 
+    #[ORM\Column(type: 'integer', nullable: true)]
+    private ?int $lowEstimate = null;
+
+    #[ORM\Column(type: 'integer', nullable: true)]
+    private ?int $highEstimate = null;
+
     #[ORM\Column(type: 'text', nullable: true)]
     private ?string $adText = null;
 
@@ -75,6 +81,7 @@ class Property
     public function setType(string $type): self
     {
         $this->type = trim($type);
+
         return $this;
     }
 
@@ -86,6 +93,7 @@ class Property
     public function setCity(string $city): self
     {
         $this->city = trim($city);
+
         return $this;
     }
 
@@ -97,6 +105,7 @@ class Property
     public function setPostalCode(string $postalCode): self
     {
         $this->postalCode = trim($postalCode);
+
         return $this;
     }
 
@@ -108,6 +117,7 @@ class Property
     public function setSurface(int $surface): self
     {
         $this->surface = max(0, $surface);
+
         return $this;
     }
 
@@ -119,6 +129,7 @@ class Property
     public function setRooms(int $rooms): self
     {
         $this->rooms = max(0, $rooms);
+
         return $this;
     }
 
@@ -130,6 +141,7 @@ class Property
     public function setParking(bool $parking): self
     {
         $this->parking = $parking;
+
         return $this;
     }
 
@@ -141,6 +153,31 @@ class Property
     public function setEstimate(?int $estimate): self
     {
         $this->estimate = $estimate !== null ? max(0, $estimate) : null;
+
+        return $this;
+    }
+
+    public function getLowEstimate(): ?int
+    {
+        return $this->lowEstimate;
+    }
+
+    public function setLowEstimate(?int $lowEstimate): self
+    {
+        $this->lowEstimate = $lowEstimate !== null ? max(0, $lowEstimate) : null;
+
+        return $this;
+    }
+
+    public function getHighEstimate(): ?int
+    {
+        return $this->highEstimate;
+    }
+
+    public function setHighEstimate(?int $highEstimate): self
+    {
+        $this->highEstimate = $highEstimate !== null ? max(0, $highEstimate) : null;
+
         return $this;
     }
 
@@ -152,6 +189,7 @@ class Property
     public function setAdText(?string $adText): self
     {
         $this->adText = $adText !== null ? trim($adText) : null;
+
         return $this;
     }
 
@@ -163,6 +201,7 @@ class Property
     public function setExtraDetails(?string $extraDetails): self
     {
         $this->extraDetails = $extraDetails !== null ? trim($extraDetails) : null;
+
         return $this;
     }
 
@@ -174,6 +213,7 @@ class Property
     public function setOwner(User $owner): self
     {
         $this->owner = $owner;
+
         return $this;
     }
 
@@ -197,10 +237,8 @@ class Property
 
     public function removePhoto(PropertyPhoto $photo): self
     {
-        if ($this->photos->removeElement($photo)) {
-            if ($photo->getProperty() === $this) {
-                $photo->setProperty(null);
-            }
+        if ($this->photos->removeElement($photo) && $photo->getProperty() === $this) {
+            $photo->setProperty(null);
         }
 
         return $this;

@@ -37,12 +37,18 @@ final class PropertyEstimator
         if ($validated === null) {
             return [
                 'estimate' => null,
+                'lowEstimate' => null,
+                'highEstimate' => null,
                 'adText' => null,
             ];
         }
 
+        $estimate = $this->calculateEstimate($validated);
+
         return [
-            'estimate' => $this->calculateEstimate($validated),
+            'estimate' => $estimate,
+            'lowEstimate' => $this->calculateLowEstimate($estimate),
+            'highEstimate' => $this->calculateHighEstimate($estimate),
             'adText' => null,
         ];
     }
@@ -99,6 +105,16 @@ final class PropertyEstimator
         }
 
         return $this->roundToNearest((int) round($estimate), 5000);
+    }
+
+    private function calculateLowEstimate(int $estimate): int
+    {
+        return $this->roundToNearest((int) round($estimate * 0.96), 5000);
+    }
+
+    private function calculateHighEstimate(int $estimate): int
+    {
+        return $this->roundToNearest((int) round($estimate * 1.04), 5000);
     }
 
     private function resolvePricePerM2(array $data): int

@@ -1,0 +1,487 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: DejaVu Sans, sans-serif;
+    margin: 0;
+    padding: 0;
+    color: #111827;
+    background: #ffffff;
+    font-size: 11px;
+}
+
+img {
+    display: block;
+}
+
+.page-break {
+    page-break-after: always;
+}
+
+.page {
+    padding: 34px 42px;
+}
+
+/* COVER */
+
+.cover {
+    height: 100vh;
+    position: relative;
+    padding: 70px 60px;
+    background: #0f172a;
+    color: #ffffff;
+}
+
+.cover:before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.78);
+}
+
+.cover-logo,
+.cover-title,
+.cover-city,
+.cover-price-box,
+.cover-footer {
+    position: relative;
+    z-index: 2;
+}
+
+.cover-logo {
+    text-align: right;
+    margin-bottom: 90px;
+}
+
+.cover-logo img {
+    max-width: 180px;
+    max-height: 90px;
+}
+
+.cover-title {
+    font-size: 44px;
+    font-weight: bold;
+    line-height: 1.1;
+    margin-bottom: 24px;
+    text-transform: uppercase;
+}
+
+.cover-city {
+    font-size: 22px;
+    opacity: 0.92;
+    margin-bottom: 70px;
+}
+
+.cover-price-box {
+    width: 430px;
+    padding: 30px;
+    border-radius: 22px;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.14);
+}
+
+.cover-price-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    opacity: 0.75;
+    margin-bottom: 10px;
+}
+
+.cover-price {
+    font-size: 42px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.cover-range {
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px solid rgba(255,255,255,0.12);
+    font-size: 12px;
+    line-height: 1.5;
+    color: #cbd5e1;
+}
+
+.cover-range strong {
+    color: #ffffff;
+    font-size: 15px;
+}
+
+.cover-footer {
+    position: absolute;
+    bottom: 42px;
+    left: 60px;
+    right: 60px;
+    font-size: 11px;
+    opacity: 0.75;
+}
+
+.cover-footer-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.cover-footer-table td:last-child {
+    text-align: right;
+}
+
+/* HEADER */
+
+.header {
+    margin-bottom: 20px;
+}
+
+.company-label,
+.section-title {
+    font-size: 16px;
+    font-weight: bold;
+    color: #0f172a;
+    margin-bottom: 10px;
+    padding-bottom: 6px;
+    border-bottom: 2px solid #e2e8f0;
+}
+
+.company-name {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.company-info {
+    font-size: 10px;
+    color: #64748b;
+    line-height: 1.5;
+}
+
+/* GALLERY */
+
+.section {
+    margin-bottom: 16px;
+}
+
+.photo-hero-wrapper {
+    width: 100%;
+    height: 230px;
+    overflow: hidden;
+    border-radius: 18px;
+    background: #f8fafc;
+    margin-bottom: 10px;
+}
+
+.photo-hero {
+    width: 100%;
+    height: 230px;
+    object-fit: cover;
+}
+
+.photo-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 8px 0;
+    table-layout: fixed;
+}
+
+.photo-thumb-cell {
+    width: 25%;
+    height: 70px;
+    overflow: hidden;
+    border-radius: 12px;
+    background: #f8fafc;
+}
+
+.photo-thumb {
+    width: 100%;
+    height: 70px;
+    object-fit: cover;
+}
+
+.gallery-count {
+    margin-top: 5px;
+    text-align: right;
+    color: #64748b;
+    font-size: 9px;
+}
+
+/* ESTIMATE */
+
+.estimate-summary {
+    padding: 18px;
+    margin-bottom: 18px;
+    border-radius: 16px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+}
+
+.estimate-summary-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.estimate-main-label {
+    color: #64748b;
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 5px;
+}
+
+.estimate-main-value {
+    font-size: 32px;
+    font-weight: bold;
+    color: #0f172a;
+}
+
+.estimate-range-box {
+    text-align: right;
+    font-size: 11px;
+    line-height: 1.45;
+    color: #475569;
+}
+
+.estimate-range-box strong {
+    font-size: 14px;
+    color: #0f172a;
+}
+
+/* PROPERTY */
+
+.property-grid-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 10px;
+}
+
+.property-card {
+    width: 50%;
+    padding: 14px;
+    border-radius: 14px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+}
+
+.property-card-full {
+    width: 100%;
+}
+
+.property-card-label {
+    font-size: 8px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #64748b;
+    margin-bottom: 5px;
+}
+
+.property-card-value {
+    font-size: 20px;
+    font-weight: bold;
+    color: #0f172a;
+}
+
+/* MARKET */
+
+.market-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 10px 0;
+    table-layout: fixed;
+}
+
+.market-card {
+    width: 33.33%;
+    padding: 14px;
+    border-radius: 14px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    vertical-align: top;
+}
+
+.market-title {
+    font-size: 8px;
+    text-transform: uppercase;
+    color: #64748b;
+    margin-bottom: 6px;
+}
+
+.market-value {
+    font-size: 20px;
+    font-weight: bold;
+    color: #0f172a;
+    margin-bottom: 4px;
+}
+
+.market-sub {
+    font-size: 9px;
+    color: #64748b;
+    line-height: 1.4;
+}
+
+/* STRATEGY */
+
+.strategy-card {
+    background: #0f172a;
+    color: #ffffff;
+    border-radius: 18px;
+    padding: 20px;
+}
+
+.strategy-title {
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 12px;
+}
+
+.strategy-metrics {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 10px 0;
+    margin-bottom: 12px;
+}
+
+.strategy-metric {
+    width: 50%;
+    padding: 12px;
+    border-radius: 12px;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.12);
+}
+
+.strategy-metric-label {
+    font-size: 8px;
+    text-transform: uppercase;
+    color: #cbd5e1;
+    margin-bottom: 4px;
+}
+
+.strategy-metric-value {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.strategy-list {
+    margin: 0;
+    padding-left: 16px;
+    font-size: 10px;
+    line-height: 1.7;
+}
+
+/* ADVICE */
+
+.two-column-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 12px 0;
+    table-layout: fixed;
+    margin-top: 14px;
+}
+
+.two-column-cell {
+    width: 50%;
+    vertical-align: top;
+}
+
+.advice-box,
+.ad-box {
+    min-height: 210px;
+    padding: 14px;
+    border-radius: 16px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+}
+
+.advice-list {
+    margin: 0;
+    padding-left: 16px;
+    font-size: 10px;
+    line-height: 1.8;
+    color: #374151;
+}
+
+.advice-list li {
+    margin-bottom: 4px;
+}
+
+.ad-box {
+    border-left: 4px solid #0f172a;
+    white-space: pre-line;
+    font-size: 10px;
+    line-height: 1.8;
+    color: #374151;
+}
+
+/* SIGNATURE */
+
+.signature-table {
+    width: 100%;
+    margin-top: 18px;
+    border-collapse: collapse;
+    page-break-inside: avoid;
+}
+
+.signature-card {
+    width: 74%;
+    padding: 16px;
+    border-radius: 14px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+}
+
+.signature-label {
+    font-size: 8px;
+    text-transform: uppercase;
+    color: #64748b;
+    margin-bottom: 4px;
+}
+
+.signature-name {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 4px;
+}
+
+.signature-line {
+    width: 180px;
+    margin-top: 14px;
+    border-top: 1px solid #cbd5e1;
+}
+
+.qr-card {
+    width: 26%;
+    text-align: center;
+    vertical-align: middle;
+    padding-left: 12px;
+}
+
+.qr-box {
+    display: inline-block;
+    width: 82px;
+    height: 82px;
+    padding: 4px;
+    background: #ffffff;
+    border-radius: 12px;
+}
+
+.qr-box img {
+    width: 74px;
+    height: 74px;
+}
+
+.qr-text {
+    margin-top: 6px;
+    color: #64748b;
+    font-size: 8px;
+    line-height: 1.3;
+}
+
+/* FOOTER */
+
+.footer {
+    margin-top: 18px;
+    padding-top: 8px;
+    border-top: 1px solid #e2e8f0;
+    text-align: center;
+    font-size: 7px;
+    line-height: 1.4;
+    color: #94a3b8;
+}

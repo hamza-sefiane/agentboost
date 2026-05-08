@@ -1,512 +1,299 @@
 <!DOCTYPE html>
 <html lang="fr">
-	<head>
-		<meta charset="UTF-8">
-		<title>Estimation immobilière premium</title>
-
-		<style>
-			* {
-				box-sizing: border-box;
-			}
-
-			body {
-				font-family: DejaVu Sans, sans-serif;
-				margin: 0;
-				padding: 0;
-				color: #1f2937;
-				background: #ffffff;
-				font-size: 14px;
-			}
-
-			.cover {
-				height: 100vh;
-				position: relative;
-				padding: 70px 60px;
-				background: #0f172a;
-				color: white;
-			}
-
-			.cover-logo {
-				text-align: right;
-				margin-bottom: 80px;
-			}
-
-			.cover-logo img {
-				max-width: 180px;
-				max-height: 100px;
-			}
-
-			.cover-subtitle {
-				text-transform: uppercase;
-				letter-spacing: 4px;
-				font-size: 14px;
-				opacity: 0.75;
-				margin-bottom: 15px;
-			}
-
-			.cover-title {
-				font-size: 42px;
-				font-weight: bold;
-				line-height: 1.2;
-				margin-bottom: 25px;
-			}
-
-			.cover-city {
-				font-size: 22px;
-				opacity: 0.9;
-				margin-bottom: 70px;
-			}
-
-			.cover-price-box {
-				background: rgba(255, 255, 255, 0.08);
-				border: 1px solid rgba(255, 255, 255, 0.18);
-				border-radius: 18px;
-				padding: 30px;
-				width: 340px;
-			}
-
-			.cover-price-label {
-				text-transform: uppercase;
-				letter-spacing: 2px;
-				font-size: 12px;
-				opacity: 0.75;
-				margin-bottom: 12px;
-			}
-
-			.cover-price {
-				font-size: 40px;
-				font-weight: bold;
-			}
-
-			.cover-footer {
-				position: absolute;
-				bottom: 50px;
-				left: 60px;
-				right: 60px;
-				font-size: 13px;
-				opacity: 0.75;
-			}
-
-			.cover-footer-table {
-				width: 100%;
-				border-collapse: collapse;
-			}
-
-			.cover-footer-table td:last-child {
-				text-align: right;
-			}
-
-			.page-break {
-				page-break-after: always;
-			}
-
-			.page {
-				padding: 50px;
-			}
-
-			.header {
-				margin-bottom: 35px;
-			}
-
-			.company-label,
-			.section-title {
-				font-size: 20px;
-				font-weight: bold;
-				color: #0f172a;
-				margin-bottom: 18px;
-				border-bottom: 1px solid #e5e7eb;
-				padding-bottom: 10px;
-			}
-
-			.company-name {
-				font-size: 26px;
-				font-weight: bold;
-				color: #111827;
-				margin-bottom: 10px;
-			}
-
-			.company-info {
-				color: #6b7280;
-				font-size: 13px;
-				line-height: 1.8;
-			}
-
-			.section {
-				margin-bottom: 36px;
-				page-break-inside: avoid;
-			}
-
-			.photo-hero-wrapper {
-				width: 100%;
-				height: 300px;
-				border-radius: 16px;
-				border: 1px solid #e5e7eb;
-				overflow: hidden;
-				background: #f8fafc;
-				margin-bottom: 12px;
-			}
-
-			.photo-hero {
-				width: 100%;
-				height: 300px;
-				object-fit: cover;
-			}
-
-			.photo-table {
-				width: 100%;
-				border-collapse: separate;
-				border-spacing: 8px 0;
-				table-layout: fixed;
-			}
-
-			.photo-thumb-cell {
-				width: 25%;
-				height: 86px;
-				border-radius: 10px;
-				border: 1px solid #e5e7eb;
-				overflow: hidden;
-				background: #f8fafc;
-				text-align: center;
-				vertical-align: middle;
-			}
-
-			.photo-thumb {
-				width: 100%;
-				height: 86px;
-				object-fit: cover;
-			}
-
-			.gallery-count {
-				margin-top: 8px;
-				color: #64748b;
-				font-size: 11px;
-				text-align: right;
-			}
-
-			.details-table {
-				width: 100%;
-				border-collapse: collapse;
-			}
-
-			.details-table td {
-				padding: 13px 0;
-				border-bottom: 1px solid #f1f5f9;
-			}
-
-			.details-label {
-				width: 35%;
-				color: #64748b;
-				font-weight: bold;
-			}
-
-			.market-table {
-				width: 100%;
-				border-collapse: separate;
-				border-spacing: 12px 0;
-				page-break-inside: avoid;
-			}
-
-			.market-card {
-				width: 33.33%;
-				background: #f8fafc;
-				border: 1px solid #e5e7eb;
-				border-radius: 12px;
-				padding: 18px;
-				vertical-align: top;
-				page-break-inside: avoid;
-			}
-
-			.market-title {
-				font-size: 12px;
-				text-transform: uppercase;
-				color: #64748b;
-				margin-bottom: 10px;
-			}
-
-			.market-value {
-				font-size: 24px;
-				font-weight: bold;
-				color: #0f172a;
-				margin-bottom: 8px;
-			}
-
-			.market-sub {
-				color: #6b7280;
-				font-size: 12px;
-				line-height: 1.5;
-			}
-
-			.ad-box {
-				background: #f9fafb;
-				border-left: 5px solid #0f172a;
-				padding: 26px;
-				border-radius: 12px;
-				white-space: pre-line;
-				line-height: 1.8;
-				color: #374151;
-				font-size: 14px;
-			}
-
-			.signature-table {
-				width: 100%;
-				margin-top: 45px;
-				border-collapse: collapse;
-				page-break-inside: avoid;
-			}
-
-			.signature-card {
-				width: 65%;
-				background: #f8fafc;
-				border: 1px solid #e5e7eb;
-				border-radius: 12px;
-				padding: 22px;
-				vertical-align: top;
-			}
-
-			.signature-label {
-				color: #64748b;
-				font-size: 12px;
-				text-transform: uppercase;
-				letter-spacing: 1.5px;
-				margin-bottom: 12px;
-			}
-
-			.signature-name {
-				font-size: 22px;
-				font-weight: bold;
-				color: #111827;
-				margin-bottom: 4px;
-			}
-
-			.signature-line {
-				margin-top: 22px;
-				border-top: 1px solid #cbd5e1;
-				width: 220px;
-			}
-
-			.qr-card {
-				width: 35%;
-				text-align: center;
-				vertical-align: top;
-				padding-left: 25px;
-			}
-
-			.qr-box {
-				display: inline-block;
-				width: 105px;
-				height: 105px;
-				border: 2px solid #0f172a;
-				padding: 8px;
-				background: #ffffff;
-			}
-
-			.qr-text {
-				margin-top: 10px;
-				color: #64748b;
-				font-size: 11px;
-				line-height: 1.4;
-			}
-
-			.footer {
-				margin-top: 45px;
-				border-top: 1px solid #e5e7eb;
-				padding-top: 18px;
-				font-size: 12px;
-				color: #9ca3af;
-				text-align: center;
-				line-height: 1.6;
-			}
-		</style>
-	</head>
-
-	<body>
-
-		<div class="cover">
-			<div class="cover-logo">
-				{% if logoDataUri %}
-					<img src="{{ logoDataUri }}" alt="Logo">
-				{% endif %}
-			</div>
-
-			<div class="cover-subtitle">Rapport premium</div>
-			<div class="cover-title">Estimation immobilière</div>
-
-			<div class="cover-city">
-				{{ property.city|upper }} — {{ property.postalCode }}
-			</div>
-
-			<div class="cover-price-box">
-				<div class="cover-price-label">Valeur estimée</div>
-				<div class="cover-price">
-					{{ property.estimate|number_format(0, ',', ' ') }} €
-				</div>
-			</div>
-
-			<div class="cover-footer">
-				<table class="cover-footer-table">
-					<tr>
-						<td>Généré le {{ "now"|date('d/m/Y à H:i') }}</td>
-						<td>{{ app.user.companyName ?: 'AgentBoost Immobilier' }}</td>
-					</tr>
-				</table>
-			</div>
-		</div>
-
-		<div class="page-break"></div>
-
-		<div class="page">
-
-			<div class="header">
-				<div class="company-label">Agence immobilière</div>
-
-				<div class="company-name">
-					{{ app.user.companyName ?: 'AgentBoost Immobilier' }}
-				</div>
-
-				<div class="company-info">
-					{{ app.user.companyAddress ?: 'Adresse non renseignée' }}<br>
-					{{ app.user.companyPhone ?: 'Téléphone non renseigné' }}
-				</div>
-			</div>
-
-			{% if photoDataUris is defined and photoDataUris|length > 0 %}
-				<div class="section">
-					<div class="section-title">Galerie du bien</div>
-
-					<div class="photo-hero-wrapper">
-						<img
-							src="{{ photoDataUris[0] }}"
-							class="photo-hero"
-							alt="Photo principale du bien"
-						>
-					</div>
-
-					{% if photoDataUris|length > 1 %}
-						<table class="photo-table">
-							<tr>
-								{% for photoDataUri in photoDataUris|slice(1, 4) %}
-									<td class="photo-thumb-cell">
-										<img
-											src="{{ photoDataUri }}"
-											class="photo-thumb"
-											alt="Photo du bien"
-										>
-									</td>
-								{% endfor %}
-							</tr>
-						</table>
-					{% endif %}
-
-					<div class="gallery-count">
-						{{ photoDataUris|length }} photo(s) jointe(s)
-					</div>
-				</div>
-			{% endif %}
-
-			<div class="section">
-				<div class="section-title">Bien estimé</div>
-
-				<table class="details-table">
-					<tr>
-						<td class="details-label">Type de bien</td>
-						<td>{{ property.type }}</td>
-					</tr>
-					<tr>
-						<td class="details-label">Ville</td>
-						<td>{{ property.city|upper }} ({{ property.postalCode }})</td>
-					</tr>
-					<tr>
-						<td class="details-label">Surface</td>
-						<td>{{ property.surface }} m²</td>
-					</tr>
-					<tr>
-						<td class="details-label">Nombre de pièces</td>
-						<td>{{ property.rooms }}</td>
-					</tr>
-					<tr>
-						<td class="details-label">Parking</td>
-						<td>{{ property.parking ? 'Oui' : 'Non' }}</td>
-					</tr>
-				</table>
-			</div>
-
-			<div class="section">
-				<div class="section-title">Analyse du marché</div>
-
-				<table class="market-table">
-					<tr>
-						<td class="market-card">
-							<div class="market-title">Prix moyen</div>
-							<div class="market-value">
-								{{ (property.estimate / property.surface)|round(0, 'floor')|number_format(0, ',', ' ') }} €/m²
-							</div>
-							<div class="market-sub">Estimation calculée automatiquement</div>
-						</td>
-
-						<td class="market-card">
-							<div class="market-title">Tendance</div>
-							<div class="market-value">+4.2%</div>
-							<div class="market-sub">Marché dynamique sur le secteur</div>
-						</td>
-
-						<td class="market-card">
-							<div class="market-title">Attractivité</div>
-							<div class="market-value">Élevée</div>
-							<div class="market-sub">Forte demande locale</div>
-						</td>
-					</tr>
-				</table>
-			</div>
-
-			{% if property.adText %}
-				<div class="section">
-					<div class="section-title">
-						Annonce générée par intelligence artificielle
-					</div>
-
-					<div class="ad-box">
-						{{ property.adText }}
-					</div>
-				</div>
-			{% endif %}
-
-			<table class="signature-table">
-				<tr>
-					<td class="signature-card">
-						<div class="signature-label">Document généré par</div>
-
-						<div class="signature-name">
-							{{ app.user.companyName ?: 'AgentBoost Immobilier' }}
-						</div>
-
-						<div class="company-info">
-							{{ app.user.companyPhone ?: 'Téléphone non renseigné' }}
-						</div>
-
-						<div class="signature-line"></div>
-					</td>
-
-					<td class="qr-card">
-						{% set qrUrl = absolute_url(path('property_pdf', { id: property.id })) %}
-
-						<div class="qr-box">
-							<img src="{{ qr_code_data_uri(qrUrl) }}" alt="QR code estimation" style="width: 90px; height: 90px;">
-						</div>
-
-						<div class="qr-text">
-							Scanner pour ouvrir<br>
-							cette estimation
-						</div>
-					</td>
-				</tr>
-			</table>
-
-			<div class="footer">
-				Document confidentiel — Usage professionnel uniquement<br>
-				Référence estimation : AB-{{ property.id }}-{{ "now"|date('Ymd') }}
-			</div>
-
-		</div>
-
-	</body>
+<head>
+    <meta charset="UTF-8">
+    <title>Dossier d’estimation immobilière</title>
+
+    <style>
+        {{ source('pdf/property_pdf.css') }}
+    </style>
+</head>
+
+<body>
+
+<div class="cover">
+    <div class="cover-logo">
+        {% if logoDataUri %}
+            <img src="{{ logoDataUri }}" alt="Logo">
+        {% endif %}
+    </div>
+
+    <div class="cover-title">Dossier d’estimation immobilière</div>
+
+    <div class="cover-city">
+        {{ property.city|upper }} — {{ property.postalCode }}
+    </div>
+
+    <div class="cover-price-box">
+        <div class="cover-price-label">Valeur estimée</div>
+
+        <div class="cover-price">
+            {{ property.estimate|number_format(0, ',', ' ') }} €
+        </div>
+
+        {% if property.lowEstimate and property.highEstimate %}
+            <div class="cover-range">
+                Fourchette estimative<br>
+                <strong>
+                    {{ property.lowEstimate|number_format(0, ',', ' ') }} €
+                    —
+                    {{ property.highEstimate|number_format(0, ',', ' ') }} €
+                </strong>
+            </div>
+        {% endif %}
+    </div>
+
+    <div class="cover-footer">
+        <table class="cover-footer-table">
+            <tr>
+                <td>Généré le {{ "now"|date('d/m/Y à H:i') }}</td>
+                <td>{{ app.user.companyName ?: 'AgentBoost Immobilier' }}</td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+<div class="page-break"></div>
+
+<div class="page">
+
+    <div class="header">
+        <div class="company-label">Agence immobilière</div>
+
+        <div class="company-name">
+            {{ app.user.companyName ?: 'AgentBoost Immobilier' }}
+        </div>
+
+        <div class="company-info">
+            {{ app.user.companyAddress ?: 'Adresse non renseignée' }}<br>
+            {{ app.user.companyPhone ?: 'Téléphone non renseigné' }}
+        </div>
+    </div>
+
+    {% if photoDataUris is defined and photoDataUris|length > 0 %}
+        <div class="section">
+            <div class="section-title">Galerie du bien</div>
+
+            <div class="photo-hero-wrapper">
+                <img src="{{ photoDataUris[0] }}" class="photo-hero" alt="Photo principale du bien">
+            </div>
+
+            {% if photoDataUris|length > 1 %}
+                <table class="photo-table">
+                    <tr>
+                        {% for photoDataUri in photoDataUris|slice(1, 4) %}
+                            <td class="photo-thumb-cell">
+                                <img src="{{ photoDataUri }}" class="photo-thumb" alt="Photo du bien">
+                            </td>
+                        {% endfor %}
+                    </tr>
+                </table>
+            {% endif %}
+
+            <div class="gallery-count">
+                {{ photoDataUris|length }} photo(s) jointe(s)
+            </div>
+        </div>
+    {% endif %}
+
+    <div class="estimate-summary">
+        <table class="estimate-summary-table">
+            <tr>
+                <td>
+                    <div class="estimate-main-label">Estimation cible</div>
+                    <div class="estimate-main-value">
+                        {{ property.estimate|number_format(0, ',', ' ') }} €
+                    </div>
+                </td>
+
+                <td class="estimate-range-box">
+                    {% if property.lowEstimate and property.highEstimate %}
+                        Fourchette basse / haute<br>
+                        <strong>
+                            {{ property.lowEstimate|number_format(0, ',', ' ') }} €
+                            —
+                            {{ property.highEstimate|number_format(0, ',', ' ') }} €
+                        </strong>
+                    {% else %}
+                        Fourchette non disponible
+                    {% endif %}
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="section">
+        <div class="section-title">Bien estimé</div>
+
+        <table class="property-grid-table">
+            <tr>
+                <td class="property-card">
+                    <div class="property-card-label">Type</div>
+                    <div class="property-card-value">{{ property.type }}</div>
+                </td>
+
+                <td class="property-card">
+                    <div class="property-card-label">Surface</div>
+                    <div class="property-card-value">{{ property.surface }} m²</div>
+                </td>
+            </tr>
+
+            <tr>
+                <td class="property-card">
+                    <div class="property-card-label">Pièces</div>
+                    <div class="property-card-value">{{ property.rooms }}</div>
+                </td>
+
+                <td class="property-card">
+                    <div class="property-card-label">Parking</div>
+                    <div class="property-card-value">{{ property.parking ? 'Oui' : 'Non' }}</div>
+                </td>
+            </tr>
+
+            <tr>
+                <td colspan="2" class="property-card property-card-full">
+                    <div class="property-card-label">Localisation</div>
+                    <div class="property-card-value">
+                        {{ property.city|upper }} — {{ property.postalCode }}
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="section">
+        <div class="section-title">Synthèse de l’estimation</div>
+
+        <table class="market-table">
+            <tr>
+                <td class="market-card">
+                    <div class="market-title">Prix estimé au m²</div>
+                    <div class="market-value">
+                        {{ (property.estimate / property.surface)|round(0, 'floor')|number_format(0, ',', ' ') }} €/m²
+                    </div>
+                    <div class="market-sub">Calculé à partir de l’estimation cible</div>
+                </td>
+
+                <td class="market-card">
+                    <div class="market-title">Fiabilité</div>
+                    <div class="market-value">
+                        {{ confidenceScore|default(80) }} %
+                    </div>
+                    <div class="market-sub">Indice basé sur les informations renseignées</div>
+                </td>
+
+                <td class="market-card">
+                    <div class="market-title">Délai estimé</div>
+                    <div class="market-value">
+                        {{ estimatedSaleDelay|default('45 à 60 jours') }}
+                    </div>
+                    <div class="market-sub">Projection indicative de mise en vente</div>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="section no-break">
+        <div class="strategy-card">
+            <div class="strategy-title">Stratégie de mise en vente recommandée</div>
+
+            <table class="strategy-metrics">
+                <tr>
+                    <td class="strategy-metric">
+                        <div class="strategy-metric-label">Prix d’affichage conseillé</div>
+                        <div class="strategy-metric-value">
+                            {{ property.highEstimate ? property.highEstimate|number_format(0, ',', ' ') ~ ' €' : property.estimate|number_format(0, ',', ' ') ~ ' €' }}
+                        </div>
+                    </td>
+
+                    <td class="strategy-metric">
+                        <div class="strategy-metric-label">Seuil de négociation</div>
+                        <div class="strategy-metric-value">
+                            {{ property.lowEstimate ? property.lowEstimate|number_format(0, ',', ' ') ~ ' €' : property.estimate|number_format(0, ',', ' ') ~ ' €' }}
+                        </div>
+                    </td>
+                </tr>
+            </table>
+
+            {% if sellingStrategy is defined and sellingStrategy is not empty %}
+                <ul class="strategy-list">
+                    {% for item in sellingStrategy %}
+                        <li>{{ item }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </div>
+    </div>
+
+    <table class="two-column-table">
+        <tr>
+            {% if sellingAdvices is defined and sellingAdvices is not empty %}
+                <td class="two-column-cell">
+                    <div class="section">
+                        <div class="section-title">Conseils avant mise en vente</div>
+
+                        <div class="advice-box">
+                            <ul class="advice-list">
+                                {% for advice in sellingAdvices %}
+                                    <li>{{ advice }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                </td>
+            {% endif %}
+
+            {% if property.adText %}
+                <td class="two-column-cell">
+                    <div class="section">
+                        <div class="section-title">Annonce IA</div>
+
+                        <div class="ad-box">
+                            {{ property.adText }}
+                        </div>
+                    </div>
+                </td>
+            {% endif %}
+        </tr>
+    </table>
+
+    <table class="signature-table">
+        <tr>
+            <td class="signature-card">
+                <div class="signature-label">Document généré par</div>
+
+                <div class="signature-name">
+                    {{ app.user.companyName ?: 'AgentBoost Immobilier' }}
+                </div>
+
+                <div class="company-info">
+                    {{ app.user.companyPhone ?: 'Téléphone non renseigné' }}
+                </div>
+
+                <div class="signature-line"></div>
+            </td>
+
+            <td class="qr-card">
+                {% set qrUrl = absolute_url(path('property_pdf', { id: property.id })) %}
+
+                <div class="qr-box">
+                    <img src="{{ qr_code_data_uri(qrUrl) }}" alt="QR code estimation">
+                </div>
+
+                <div class="qr-text">
+                    Scanner pour ouvrir<br>
+                    cette estimation
+                </div>
+            </td>
+        </tr>
+    </table>
+
+    <div class="footer">
+        Cette estimation est fournie à titre indicatif sur la base des informations renseignées et ne constitue pas une valeur contractuelle.<br>
+        Document confidentiel — Usage professionnel uniquement — Référence : AB-{{ property.id }}-{{ "now"|date('Ymd') }}
+    </div>
+
+</div>
+
+</body>
 </html>

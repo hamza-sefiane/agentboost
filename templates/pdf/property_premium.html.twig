@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="fr">
+	<head>
+		<meta charset="UTF-8">
+		<title>Dossier d’estimation immobilière</title>
+
+		<style>
+			{{source('pdf/property_premium.css')}}</style>
+	</head>
+
+	<body>
+
+		<div class="cover">
+			<div class="cover-logo">
+				{% if logoDataUri %}
+					<img src="{{ logoDataUri }}" alt="Logo">
+				{% endif %}
+			</div>
+
+			<div class="cover-title">Dossier d’estimation immobilière</div>
+
+			<div class="cover-city">
+				{{ property.city|upper }}
+				—
+				{{ property.postalCode }}
+			</div>
+
+			<div class="cover-price-box">
+				<div class="cover-price-label">Valeur estimée</div>
+
+				<div class="cover-price">
+					{{ property.estimate|number_format(0, ',', ' ') }}
+					€
+				</div>
+
+				{% if property.lowEstimate and property.highEstimate %}
+					<div class="cover-range">
+						Fourchette estimative<br>
+						<strong>
+							{{ property.lowEstimate|number_format(0, ',', ' ') }}
+							€
+							                    —
+							{{ property.highEstimate|number_format(0, ',', ' ') }}
+							€
+						</strong>
+					</div>
+				{% endif %}
+			</div>
+
+			<div class="cover-footer">
+				<table class="cover-footer-table">
+					<tr>
+						<td>Généré le
+							{{ "now"|date('d/m/Y à H:i') }}</td>
+						<td>{{ app.user.companyName ?: 'AgentBoost Immobilier' }}</td>
+					</tr>
+				</table>
+			</div>
+		</div>
+
+		<div class="page">
+
+			<div class="header">
+				<div class="company-label">Agence immobilière</div>
+
+				<div class="company-name">
+					{{ app.user.companyName ?: 'AgentBoost Immobilier' }}
+				</div>
+
+				<div class="company-info">
+					{{ app.user.companyAddress ?: 'Adresse non renseignée' }}<br>
+					{{ app.user.companyPhone ?: 'Téléphone non renseigné' }}
+				</div>
+			</div>
+
+			{% if photoDataUris is defined and photoDataUris|length > 0 %}
+				<div class="section">
+					<div class="section-title">Galerie du bien</div>
+
+					<div class="photo-hero-wrapper">
+						<img src="{{ photoDataUris[0] }}" class="photo-hero" alt="Photo principale du bien">
+					</div>
+
+					{% if photoDataUris|length > 1 %}
+						<table class="photo-table">
+							<tr>
+								{% for photoDataUri in photoDataUris|slice(1, 4) %}
+									<td class="photo-thumb-cell">
+										<img src="{{ photoDataUri }}" class="photo-thumb" alt="Photo du bien">
+									</td>
+								{% endfor %}
+							</tr>
+						</table>
+					{% endif %}
+
+					<div class="gallery-count">
+						{{ photoDataUris|length }}
+						photo(s) jointe(s)
+					</div>
+				</div>
+			{% endif %}
+
+			<div class="estimate-summary">
+				<table class="estimate-summary-table">
+					<tr>
+						<td>
+							<div class="estimate-main-label">Estimation cible</div>
+							<div class="estimate-main-value">
+								{{ property.estimate|number_format(0, ',', ' ') }}
+								€
+							</div>
+						</td>
+
+						<td class="estimate-range-box">
+							{% if property.lowEstimate and property.highEstimate %}
+								Fourchette basse / haute<br>
+								<strong>
+									{{ property.lowEstimate|number_format(0, ',', ' ') }}
+									€
+									                            —
+									{{ property.highEstimate|number_format(0, ',', ' ') }}
+									€
+								</strong>
+							{% else %}
+								Fourchette non disponible
+							{% endif %}
+						</td>
+					</tr>
+				</table>
+			</div>
+
+			<div class="section">
+				<div class="section-title">Bien estimé</div>
+
+				<table class="property-grid-table">
+					<tr>
+						<td class="property-card">
+							<div class="property-card-label">Type</div>
+							<div class="property-card-value">{{ property.type }}</div>
+						</td>
+
+						<td class="property-card">
+							<div class="property-card-label">Surface</div>
+							<div class="property-card-value">{{ property.surface }}
+								m²</div>
+						</td>
+					</tr>
+
+					<tr>
+						<td class="property-card">
+							<div class="property-card-label">Pièces</div>
+							<div class="property-card-value">{{ property.rooms }}</div>
+						</td>
+
+						<td class="property-card">
+							<div class="property-card-label">Parking</div>
+							<div class="property-card-value">{{ property.parking ? 'Oui' : 'Non' }}</div>
+						</td>
+					</tr>
+
+					<tr>
+						<td colspan="2" class="property-card property-card-full">
+							<div class="property-card-label">Localisation</div>
+							<div class="property-card-value">
+								{{ property.city|upper }}
+								—
+								{{ property.postalCode }}
+							</div>
+						</td>
+					</tr>
+				</table>
+			</div>
+
+			<div class="section">
+				<div class="section-title">Synthèse de l’estimation</div>
+
+				<table class="market-table">
+					<tr>
+						<td class="market-card">
+							<div class="market-title">Prix estimé au m²</div>
+							<div class="market-value">
+								{{ (property.estimate / property.surface)|round(0, 'floor')|number_format(0, ',', ' ') }}
+								€/m²
+							</div>
+							<div class="market-sub">Calculé à partir de l’estimation cible</div>
+						</td>
+
+						<td class="market-card">
+							<div class="market-title">Fiabilité</div>
+							<div class="market-value">
+								{{ confidenceScore|default(80) }}
+								%
+							</div>
+							<div class="market-sub">Indice basé sur les informations renseignées</div>
+						</td>
+
+						<td class="market-card">
+							<div class="market-title">Délai estimé</div>
+							<div class="market-value">
+								{{ estimatedSaleDelay|default('45 à 60 jours') }}
+							</div>
+							<div class="market-sub">Projection indicative de mise en vente</div>
+						</td>
+					</tr>
+				</table>
+			</div>
+
+			<div class="section no-break">
+				<div class="strategy-card">
+					<div class="strategy-title">Stratégie de mise en vente recommandée</div>
+
+					<table class="strategy-metrics">
+						<tr>
+							<td class="strategy-metric">
+								<div class="strategy-metric-label">Prix d’affichage conseillé</div>
+								<div class="strategy-metric-value">
+									{{ property.highEstimate ? property.highEstimate|number_format(0, ',', ' ') ~ ' €' : property.estimate|number_format(0, ',', ' ') ~ ' €' }}
+								</div>
+							</td>
+
+							<td class="strategy-metric">
+								<div class="strategy-metric-label">Seuil de négociation</div>
+								<div class="strategy-metric-value">
+									{{ property.lowEstimate ? property.lowEstimate|number_format(0, ',', ' ') ~ ' €' : property.estimate|number_format(0, ',', ' ') ~ ' €' }}
+								</div>
+							</td>
+						</tr>
+					</table>
+
+					{% if sellingStrategy is defined and sellingStrategy is not empty %}
+						<ul class="strategy-list">
+							{% for item in sellingStrategy %}
+								<li>{{ item }}</li>
+							{% endfor %}
+						</ul>
+					{% endif %}
+				</div>
+			</div>
+
+			<table class="two-column-table">
+				<tr>
+					{% if sellingAdvices is defined and sellingAdvices is not empty %}
+						<td class="two-column-cell">
+							<div class="section">
+								<div class="section-title">Conseils avant mise en vente</div>
+
+								<div class="advice-box">
+									<ul class="advice-list">
+										{% for advice in sellingAdvices %}
+											<li>{{ advice }}</li>
+										{% endfor %}
+									</ul>
+								</div>
+							</div>
+						</td>
+					{% endif %}
+
+					{% if property.adText %}
+						<td class="two-column-cell">
+							<div class="section">
+								<div class="section-title">Annonce IA</div>
+
+								<div class="ad-box">
+									{{ property.adText }}
+								</div>
+							</div>
+						</td>
+					{% endif %}
+				</tr>
+			</table>
+
+			<table class="signature-table">
+				<tr>
+					<td class="signature-card">
+						<div class="signature-label">Document généré par</div>
+
+						<div class="signature-name">
+							{{ app.user.companyName ?: 'AgentBoost Immobilier' }}
+						</div>
+
+						<div class="company-info">
+							{{ app.user.companyPhone ?: 'Téléphone non renseigné' }}
+						</div>
+
+						<div class="signature-line"></div>
+					</td>
+
+					<td class="qr-card">
+						{% set qrUrl = absolute_url(path('property_pdf', { id: property.id })) %}
+
+						<div class="qr-box">
+							<img src="{{ qr_code_data_uri(qrUrl) }}" alt="QR code estimation">
+						</div>
+
+						<div class="qr-text">
+							Scanner pour ouvrir<br>
+							cette estimation
+						</div>
+					</td>
+				</tr>
+			</table>
+
+			<div class="footer">
+				Cette estimation est fournie à titre indicatif sur la base des informations renseignées et ne constitue pas une valeur contractuelle.<br>
+				Document confidentiel — Usage professionnel uniquement — Référence : AB-{{ property.id }}-{{ "now"|date('Ymd') }}
+			</div>
+
+		</div>
+
+	</body>
+</html>
