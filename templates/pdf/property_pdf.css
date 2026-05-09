@@ -1,14 +1,18 @@
+@page {
+    margin: 0;
+}
+
 * {
     box-sizing: border-box;
 }
 
 body {
-    font-family: DejaVu Sans, sans-serif;
     margin: 0;
-    padding: 0;
+    font-family: DejaVu Sans, sans-serif;
     color: #1f2937;
     background: #ffffff;
-    font-size: 11px;
+    font-size: 10px;
+    line-height: 1.35;
 }
 
 img {
@@ -23,18 +27,14 @@ img {
     page-break-inside: avoid;
 }
 
-.page {
-    padding: 24px 34px;
-}
-
-/* COVER */
+/* COVER SIMPLE */
 
 .cover {
     height: 100vh;
     position: relative;
-    padding: 55px;
+    padding: 60px 55px;
     background: #0f172a;
-    color: white;
+    color: #ffffff;
 }
 
 .cover-logo {
@@ -43,8 +43,8 @@ img {
 }
 
 .cover-logo img {
-    max-width: 170px;
-    max-height: 90px;
+    max-width: 160px;
+    max-height: 85px;
 }
 
 .cover-title {
@@ -62,7 +62,7 @@ img {
 }
 
 .cover-price-box {
-    width: 385px;
+    width: 380px;
     padding: 24px;
     border-radius: 16px;
     background: rgba(255, 255, 255, 0.08);
@@ -72,7 +72,7 @@ img {
 .cover-price-label {
     font-size: 10px;
     text-transform: uppercase;
-    letter-spacing: 2px;
+    letter-spacing: 1.8px;
     opacity: 0.75;
     margin-bottom: 8px;
 }
@@ -88,7 +88,7 @@ img {
     padding-top: 10px;
     border-top: 1px solid rgba(255, 255, 255, 0.15);
     font-size: 11px;
-    line-height: 1.45;
+    line-height: 1.4;
     color: #cbd5e1;
 }
 
@@ -102,7 +102,7 @@ img {
     bottom: 42px;
     left: 55px;
     right: 55px;
-    font-size: 11px;
+    font-size: 10px;
     opacity: 0.75;
 }
 
@@ -115,58 +115,59 @@ img {
     text-align: right;
 }
 
-/* HEADER */
+/* PAGE SIMPLE */
+
+.page {
+    padding: 22px 34px;
+}
 
 .header {
-    margin-bottom: 12px;
+    margin-bottom: 10px;
 }
 
 .company-label,
 .section-title {
-    font-size: 15px;
+    font-size: 14px;
     font-weight: bold;
     color: #0f172a;
-    margin-bottom: 7px;
-    padding-bottom: 5px;
+    margin-bottom: 6px;
+    padding-bottom: 4px;
     border-bottom: 1px solid #e5e7eb;
 }
 
 .company-name {
-    font-size: 20px;
+    font-size: 19px;
     font-weight: bold;
     color: #111827;
-    margin-bottom: 4px;
+    margin-bottom: 3px;
 }
 
 .company-info {
-    font-size: 10px;
     color: #6b7280;
-    line-height: 1.45;
+    font-size: 9px;
+    line-height: 1.25;
 }
-
-/* SECTIONS */
 
 .section {
-    margin-bottom: 11px;
+    margin-bottom: 8px;
 }
 
-/* GALLERY */
+/* GALLERY SIMPLE */
 
 .photo-hero-wrapper {
     width: 100%;
-    height: 230px;
+    height: 170px;
     overflow: hidden;
-    border-radius: 12px;
+    border-radius: 10px;
     border: 1px solid #e5e7eb;
     background: #f8fafc;
-    margin-bottom: 6px;
+    margin-bottom: 5px;
 }
 
 .photo-hero {
     width: 100%;
-    height: 230px;
+    height: 170px;
     object-fit: cover;
-    image-rendering: auto;
 }
 
 .photo-table {
@@ -178,35 +179,32 @@ img {
 
 .photo-thumb-cell {
     width: 25%;
-    height: 46px;
+    height: 38px;
     overflow: hidden;
-    border-radius: 7px;
+    border-radius: 6px;
     border: 1px solid #e5e7eb;
     background: #f8fafc;
-    text-align: center;
-    vertical-align: middle;
 }
 
 .photo-thumb {
     width: 100%;
-    height: 46px;
+    height: 38px;
     object-fit: cover;
-    image-rendering: auto;
 }
 
 .gallery-count {
-    margin-top: 3px;
+    margin-top: 2px;
     text-align: right;
     color: #64748b;
-    font-size: 8px;
+    font-size: 7.5px;
 }
 
 /* ESTIMATE */
 
 .estimate-summary {
-    padding: 10px;
-    margin-bottom: 10px;
-    border-radius: 10px;
+    padding: 8px;
+    margin-bottom: 8px;
+    border-radius: 9px;
     background: #f8fafc;
     border: 1px solid #e5e7eb;
 }
@@ -218,14 +216,14 @@ img {
 
 .estimate-main-label {
     color: #64748b;
-    font-size: 8px;
+    font-size: 7.5px;
     text-transform: uppercase;
-    letter-spacing: 1px;
-    margin-bottom: 4px;
+    letter-spacing: 0.8px;
+    margin-bottom: 3px;
 }
 
 .estimate-main-value {
-    font-size: 24px;
+    font-size: 22px;
     font-weight: bold;
     color: #0f172a;
 }
@@ -233,13 +231,13 @@ img {
 .estimate-range-box {
     text-align: right;
     color: #475569;
-    font-size: 10px;
-    line-height: 1.3;
+    font-size: 9px;
+    line-height: 1.2;
 }
 
 .estimate-range-box strong {
     color: #0f172a;
-    font-size: 12px;
+    font-size: 11px;
 }
 
 /* PROPERTY */
@@ -247,15 +245,15 @@ img {
 .property-grid-table {
     width: 100%;
     border-collapse: separate;
-    border-spacing: 8px;
+    border-spacing: 6px;
     table-layout: fixed;
 }
 
 .property-card {
     width: 50%;
     vertical-align: top;
-    padding: 9px;
-    border-radius: 9px;
+    padding: 7px;
+    border-radius: 8px;
     background: #f8fafc;
     border: 1px solid #e5e7eb;
 }
@@ -265,15 +263,15 @@ img {
 }
 
 .property-card-label {
-    font-size: 8px;
+    font-size: 7.5px;
     text-transform: uppercase;
-    letter-spacing: 1px;
+    letter-spacing: 0.8px;
     color: #64748b;
-    margin-bottom: 3px;
+    margin-bottom: 2px;
 }
 
 .property-card-value {
-    font-size: 17px;
+    font-size: 15px;
     font-weight: bold;
     color: #0f172a;
 }
@@ -283,106 +281,101 @@ img {
 .market-table {
     width: 100%;
     border-collapse: separate;
-    border-spacing: 7px 0;
+    border-spacing: 6px 0;
     table-layout: fixed;
 }
 
 .market-card {
     width: 33.33%;
-    padding: 8px;
+    padding: 7px;
     vertical-align: top;
-    border-radius: 9px;
+    border-radius: 8px;
     background: #f8fafc;
     border: 1px solid #e5e7eb;
 }
 
 .market-title {
-    font-size: 8px;
+    font-size: 7.5px;
     text-transform: uppercase;
     color: #64748b;
-    margin-bottom: 4px;
-    letter-spacing: 0.7px;
+    margin-bottom: 3px;
 }
 
 .market-value {
-    font-size: 17px;
+    font-size: 15px;
     font-weight: bold;
     color: #0f172a;
-    margin-bottom: 3px;
-    line-height: 1.15;
+    margin-bottom: 2px;
 }
 
 .market-sub {
     color: #6b7280;
-    font-size: 8.5px;
-    line-height: 1.25;
+    font-size: 7.5px;
+    line-height: 1.15;
 }
 
-/* STRATEGY */
+/* STRATEGY SIMPLE */
 
 .strategy-card {
     background: #0f172a;
     color: #ffffff;
-    border-radius: 12px;
-    padding: 16px;
+    border-radius: 10px;
+    padding: 10px;
 }
 
 .strategy-title {
-    font-size: 14px;
+    font-size: 13px;
     font-weight: bold;
-    margin-bottom: 8px;
+    margin-bottom: 6px;
 }
 
 .strategy-metrics {
     width: 100%;
     border-collapse: separate;
-    border-spacing: 7px 0;
-    margin-bottom: 8px;
+    border-spacing: 6px 0;
+    margin-bottom: 6px;
 }
 
 .strategy-metric {
     width: 50%;
-    padding: 9px;
+    padding: 7px;
     vertical-align: top;
-    border-radius: 8px;
+    border-radius: 7px;
     background: rgba(255, 255, 255, 0.08);
-    border: 1px solid rgba(255, 255, 255, 0.14);
 }
 
 .strategy-metric-label {
-    font-size: 8px;
+    font-size: 7.5px;
     text-transform: uppercase;
-    letter-spacing: 0.8px;
     color: #cbd5e1;
-    margin-bottom: 3px;
+    margin-bottom: 2px;
 }
 
 .strategy-metric-value {
-    font-size: 17px;
+    font-size: 15px;
     font-weight: bold;
-    color: #ffffff;
 }
 
 .strategy-list {
     margin: 0;
-    padding-left: 14px;
+    padding-left: 13px;
     color: #e5e7eb;
-    font-size: 10.5px;
-    line-height: 1.6;
+    font-size: 8.5px;
+    line-height: 1.25;
 }
 
 .strategy-list li {
-    margin-bottom: 2px;
+    margin-bottom: 1px;
 }
 
-/* ADVICE + AI */
+/* ADVICE SIMPLE */
 
 .two-column-table {
     width: 100%;
     table-layout: fixed;
     border-collapse: separate;
-    border-spacing: 10px 0;
-    margin-top: 10px;
+    border-spacing: 8px 0;
+    margin-top: 6px;
 }
 
 .two-column-cell {
@@ -392,70 +385,69 @@ img {
 
 .advice-box,
 .ad-box {
-    min-height: 210px;
-    padding: 14px;
-    border-radius: 10px;
+    min-height: 145px;
+    padding: 8px;
+    border-radius: 8px;
     background: #f8fafc;
     border: 1px solid #e5e7eb;
 }
 
 .advice-list {
     margin: 0;
-    padding-left: 14px;
+    padding-left: 13px;
     color: #374151;
-}
-
-.advice-list,
-.ad-box {
-    font-size: 10.5px;
-    line-height: 1.65;
+    font-size: 8.5px;
+    line-height: 1.25;
 }
 
 .advice-list li {
-    margin-bottom: 4px;
+    margin-bottom: 1px;
 }
 
 .ad-box {
     border-left: 3px solid #0f172a;
     white-space: pre-line;
     color: #374151;
+    font-size: 8.5px;
+    line-height: 1.25;
 }
 
-/* SIGNATURE */
+/* SIGNATURE SIMPLE */
 
 .signature-table {
     width: 100%;
-    margin-top: 18px;
+    margin-top: 10px;
     border-collapse: collapse;
+    page-break-inside: avoid;
 }
 
 .signature-card {
-    width: 68%;
-    padding: 12px;
+    width: 74%;
+    padding: 8px;
     vertical-align: top;
-    border-radius: 9px;
+    border-radius: 8px;
     background: #f8fafc;
     border: 1px solid #e5e7eb;
 }
 
 .signature-label {
     color: #64748b;
-    font-size: 8px;
+    font-size: 7.5px;
     text-transform: uppercase;
-    letter-spacing: 1px;
-    margin-bottom: 4px;
-}
-
-.signature-name {
-    font-size: 17px;
-    font-weight: bold;
-    color: #111827;
+    letter-spacing: 0.8px;
     margin-bottom: 3px;
 }
 
+.signature-name {
+    font-size: 15px;
+    font-weight: bold;
+    color: #111827;
+    margin-bottom: 2px;
+}
+
 .signature-line {
-    width: 160px;
-    margin-top: 10px;
+    width: 150px;
+    margin-top: 6px;
     border-top: 1px solid #cbd5e1;
 }
 
@@ -463,38 +455,37 @@ img {
     width: 26%;
     text-align: center;
     vertical-align: middle;
-    padding-left: 12px;
+    padding-left: 8px;
 }
 
 .qr-box {
     display: inline-block;
-    width: 66px;
-    height: 66px;
-    padding: 4px;
+    width: 58px;
+    height: 58px;
+    padding: 3px;
     background: #ffffff;
-    border: none;
 }
 
 .qr-box img {
-    width: 56px;
-    height: 56px;
+    width: 52px;
+    height: 52px;
 }
 
 .qr-text {
-    margin-top: 4px;
+    margin-top: 3px;
     color: #64748b;
-    font-size: 7px;
-    line-height: 1.15;
+    font-size: 6.5px;
+    line-height: 1.1;
 }
 
-/* FOOTER */
+/* FOOTER SIMPLE */
 
 .footer {
-    margin-top: 18px;
-    padding-top: 6px;
+    margin-top: 6px;
+    padding-top: 4px;
     border-top: 1px solid #e5e7eb;
     text-align: center;
-    font-size: 7px;
-    line-height: 1.25;
+    font-size: 6.5px;
+    line-height: 1.2;
     color: #9ca3af;
 }

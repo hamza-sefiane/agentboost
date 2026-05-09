@@ -1,13 +1,13 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Mon entreprise{% endblock %}
+{% block title %}Mon agence{% endblock %}
 
 {% block body %}
-<div class="container py-5" style="max-width: 760px;">
+<div class="container py-5" style="max-width: 820px;">
     <div class="mb-4">
         <h1 class="h3 fw-bold mb-1">Informations agence</h1>
         <p class="text-muted mb-0">
-            Personnalisez les informations affichées sur vos estimations et PDF.
+            Ces informations apparaîtront sur vos estimations et PDF.
         </p>
     </div>
 
@@ -41,22 +41,75 @@
                 </div>
 
                 <div class="mb-3">
-                    <label class="form-label fw-semibold">Adresse</label>
+                    <label class="form-label fw-semibold">Rue</label>
                     <input
-                        name="company_address"
+                        name="agency_street"
                         class="form-control form-control-lg"
-                        placeholder="Ex : 10 rue de Paris, 75000 Paris"
-                        value="{{ user.companyAddress }}"
+                        placeholder="Ex : 10 rue de Paris"
+                        value="{{ user.agencyStreet }}"
                     >
                 </div>
 
-                <div class="mb-4">
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Complément d’adresse</label>
+                    <input
+                        name="agency_address_complement"
+                        class="form-control form-control-lg"
+                        placeholder="Ex : Bâtiment B, 2e étage"
+                        value="{{ user.agencyAddressComplement }}"
+                    >
+                </div>
+
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label fw-semibold">Code postal</label>
+                        <input
+                            name="agency_postal_code"
+                            class="form-control form-control-lg"
+                            placeholder="Ex : 75000"
+                            value="{{ user.agencyPostalCode }}"
+                        >
+                    </div>
+
+                    <div class="col-md-8 mb-3">
+                        <label class="form-label fw-semibold">Ville</label>
+                        <input
+                            name="agency_city"
+                            class="form-control form-control-lg"
+                            placeholder="Ex : Paris"
+                            value="{{ user.agencyCity }}"
+                        >
+                    </div>
+                </div>
+
+                <div class="mb-3">
                     <label class="form-label fw-semibold">Téléphone</label>
                     <input
                         name="company_phone"
                         class="form-control form-control-lg"
                         placeholder="Ex : 06 12 34 56 78"
                         value="{{ user.companyPhone }}"
+                    >
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Email agence</label>
+                    <input
+                        type="email"
+                        name="agency_email"
+                        class="form-control form-control-lg"
+                        placeholder="Ex : contact@agence.fr"
+                        value="{{ user.agencyEmail }}"
+                    >
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label fw-semibold">Site web</label>
+                    <input
+                        name="agency_website"
+                        class="form-control form-control-lg"
+                        placeholder="Ex : https://www.agence.fr"
+                        value="{{ user.agencyWebsite }}"
                     >
                 </div>
 

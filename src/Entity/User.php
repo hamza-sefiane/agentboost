@@ -75,6 +75,24 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(name: 'company_logo', length: 255, nullable: true)]
     private ?string $companyLogo = null;
 
+    #[ORM\Column(name: 'agency_street', length: 255, nullable: true)]
+    private ?string $agencyStreet = null;
+
+    #[ORM\Column(name: 'agency_address_complement', length: 255, nullable: true)]
+    private ?string $agencyAddressComplement = null;
+
+    #[ORM\Column(name: 'agency_postal_code', length: 20, nullable: true)]
+    private ?string $agencyPostalCode = null;
+
+    #[ORM\Column(name: 'agency_city', length: 120, nullable: true)]
+    private ?string $agencyCity = null;
+
+    #[ORM\Column(name: 'agency_email', length: 180, nullable: true)]
+    private ?string $agencyEmail = null;
+
+    #[ORM\Column(name: 'agency_website', length: 255, nullable: true)]
+    private ?string $agencyWebsite = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -275,7 +293,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function setCompanyName(?string $companyName): self
     {
-        $this->companyName = $companyName;
+        $this->companyName = $this->cleanNullableString($companyName);
 
         return $this;
     }
@@ -287,7 +305,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function setCompanyAddress(?string $companyAddress): self
     {
-        $this->companyAddress = $companyAddress;
+        $this->companyAddress = $this->cleanNullableString($companyAddress);
 
         return $this;
     }
@@ -299,7 +317,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function setCompanyPhone(?string $companyPhone): self
     {
-        $this->companyPhone = $companyPhone;
+        $this->companyPhone = $this->cleanNullableString($companyPhone);
 
         return $this;
     }
@@ -311,8 +329,116 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function setCompanyLogo(?string $companyLogo): self
     {
-        $this->companyLogo = $companyLogo;
+        $this->companyLogo = $this->cleanNullableString($companyLogo);
 
         return $this;
+    }
+
+    public function getAgencyStreet(): ?string
+    {
+        return $this->agencyStreet;
+    }
+
+    public function setAgencyStreet(?string $agencyStreet): self
+    {
+        $this->agencyStreet = $this->cleanNullableString($agencyStreet);
+
+        return $this;
+    }
+
+    public function getAgencyAddressComplement(): ?string
+    {
+        return $this->agencyAddressComplement;
+    }
+
+    public function setAgencyAddressComplement(?string $agencyAddressComplement): self
+    {
+        $this->agencyAddressComplement = $this->cleanNullableString($agencyAddressComplement);
+
+        return $this;
+    }
+
+    public function getAgencyPostalCode(): ?string
+    {
+        return $this->agencyPostalCode;
+    }
+
+    public function setAgencyPostalCode(?string $agencyPostalCode): self
+    {
+        $postalCode = $this->cleanNullableString($agencyPostalCode);
+
+        $this->agencyPostalCode = $postalCode !== null
+            ? preg_replace('/\D/', '', $postalCode)
+            : null;
+
+        return $this;
+    }
+
+    public function getAgencyCity(): ?string
+    {
+        return $this->agencyCity;
+    }
+
+    public function setAgencyCity(?string $agencyCity): self
+    {
+        $this->agencyCity = $this->cleanNullableString($agencyCity);
+
+        return $this;
+    }
+
+    public function getAgencyEmail(): ?string
+    {
+        return $this->agencyEmail;
+    }
+
+    public function setAgencyEmail(?string $agencyEmail): self
+    {
+        $email = $this->cleanNullableString($agencyEmail);
+
+        $this->agencyEmail = $email !== null
+            ? mb_strtolower($email)
+            : null;
+
+        return $this;
+    }
+
+    public function getAgencyWebsite(): ?string
+    {
+        return $this->agencyWebsite;
+    }
+
+    public function setAgencyWebsite(?string $agencyWebsite): self
+    {
+        $this->agencyWebsite = $this->cleanNullableString($agencyWebsite);
+
+        return $this;
+    }
+
+    public function getAgencyFullAddress(): ?string
+    {
+        $parts = array_filter([
+            $this->agencyStreet,
+            $this->agencyAddressComplement,
+            trim(sprintf(
+                '%s %s',
+                $this->agencyPostalCode ?? '',
+                $this->agencyCity ?? ''
+            )),
+        ]);
+
+        return $parts !== []
+            ? implode("\n", $parts)
+            : $this->companyAddress;
+    }
+
+    private function cleanNullableString(?string $value): ?string
+    {
+        if ($value === null) {
+            return null;
+        }
+
+        $value = trim($value);
+
+        return $value !== '' ? $value : null;
     }
 }

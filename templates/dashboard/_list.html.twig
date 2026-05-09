@@ -42,29 +42,16 @@
                     {% for p in properties %}
                         <tr class="bg-white">
                             <td>
-                                <input
-                                    type="checkbox"
-                                    name="property_ids[]"
-                                    value="{{ p.id }}"
-                                    class="property-checkbox"
-                                    aria-label="Sélectionner cette estimation"
-                                >
+                                <input type="checkbox" name="property_ids[]" value="{{ p.id }}" class="property-checkbox" aria-label="Sélectionner cette estimation">
                             </td>
 
                             <td>
                                 {% set firstPhoto = p.photos|first %}
 
                                 {% if firstPhoto %}
-                                    <img
-                                        src="{{ asset('uploads/properties/' ~ firstPhoto.filename) }}"
-                                        alt="Photo du bien"
-                                        style="width: 70px; height: 55px; object-fit: cover; border-radius: 8px; border: 1px solid #ddd;"
-                                    >
+                                    <img src="{{ asset('uploads/properties/' ~ firstPhoto.filename) }}" alt="Photo du bien" style="width: 70px; height: 55px; object-fit: cover; border-radius: 8px; border: 1px solid #ddd;">
                                 {% else %}
-                                    <div
-                                        class="text-muted small d-flex align-items-center justify-content-center"
-                                        style="width: 70px; height: 55px; border-radius: 8px; border: 1px dashed #ccc; background: #f8f9fa;"
-                                    >
+                                    <div class="text-muted small d-flex align-items-center justify-content-center" style="width: 70px; height: 55px; border-radius: 8px; border: 1px dashed #ccc; background: #f8f9fa;">
                                         —
                                     </div>
                                 {% endif %}
@@ -111,55 +98,38 @@
 
                             <td class="text-center">
                                 <div class="d-flex flex-wrap gap-1 justify-content-center">
-                                    <button
-                                        type="submit"
-                                        form="generate-ad-form-{{ p.id }}"
-                                        class="btn btn-sm btn-primary"
-                                    >
+                                    <button type="submit" form="generate-ad-form-{{ p.id }}" class="btn btn-sm btn-primary">
                                         Générer IA
                                     </button>
 
                                     {% if p.adText %}
-                                        <button
-                                            type="button"
-                                            class="btn btn-sm btn-outline-primary"
-                                            data-ad="{{ p.adText|e('html_attr') }}"
-                                            onclick="openAdModal(this.dataset.ad)"
-                                        >
+                                        <button type="button" class="btn btn-sm btn-outline-primary" data-ad="{{ p.adText|e('html_attr') }}" onclick="openAdModal(this.dataset.ad)">
                                             Voir
                                         </button>
 
-                                        <button
-                                            type="button"
-                                            class="btn btn-sm btn-outline-secondary"
-                                            data-ad="{{ p.adText|e('html_attr') }}"
-                                            onclick="copyAd(this.dataset.ad)"
-                                        >
+                                        <button type="button" class="btn btn-sm btn-outline-secondary" data-ad="{{ p.adText|e('html_attr') }}" onclick="copyAd(this.dataset.ad)">
                                             Copier
                                         </button>
 
-                                        <button
-                                            type="button"
-                                            class="btn btn-sm btn-outline-dark"
-                                            data-ad="{{ p.adText|e('html_attr') }}"
-                                            onclick="copyLeboncoin(this.dataset.ad)"
-                                        >
+                                        <button type="button" class="btn btn-sm btn-outline-dark" data-ad="{{ p.adText|e('html_attr') }}" onclick="copyLeboncoin(this.dataset.ad)">
                                             Leboncoin
                                         </button>
 
-                                        <a
-                                            href="{{ path('property_pdf', { id: p.id }) }}"
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            class="btn btn-sm btn-outline-success"
-                                        >
+                                        <a href="{{ path('property_pdf', { id: p.id }) }}" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-outline-success">
                                             PDF
                                         </a>
 
-                                        <a
-                                            href="{{ path('property_edit', { id: p.id }) }}"
-                                            class="btn btn-sm btn-outline-warning"
-                                        >
+                                        {% if app.user.subscriptionStatus == 'active' and app.user.currentPlan == 'yearly' %}
+                                            <a href="{{ path('property_pdf_premium', { id: p.id }) }}" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-dark">
+                                                PDF Premium
+                                            </a>
+                                        {% else %}
+                                            <span class="badge bg-light text-muted border align-self-center">
+                                                Premium annuel
+                                            </span>
+                                        {% endif %}
+
+                                        <a href="{{ path('property_edit', { id: p.id }) }}" class="btn btn-sm btn-outline-warning">
                                             Modifier
                                         </a>
                                     {% else %}
@@ -171,12 +141,7 @@
                             </td>
 
                             <td class="text-end">
-                                <button
-                                    type="submit"
-                                    form="delete-property-form-{{ p.id }}"
-                                    class="btn btn-sm btn-danger"
-                                    onclick="return confirm('Supprimer cette estimation ?');"
-                                >
+                                <button type="submit" form="delete-property-form-{{ p.id }}" class="btn btn-sm btn-danger" onclick="return confirm('Supprimer cette estimation ?');">
                                     ✕
                                 </button>
                             </td>
@@ -188,21 +153,11 @@
     </form>
 
     {% for p in properties %}
-        <form
-            id="generate-ad-form-{{ p.id }}"
-            method="post"
-            action="{{ path('property_generate_ad', { id: p.id }) }}"
-            class="d-none"
-        >
+        <form id="generate-ad-form-{{ p.id }}" method="post" action="{{ path('property_generate_ad', { id: p.id }) }}" class="d-none">
             <input type="hidden" name="_token" value="{{ csrf_token('generate_ad_' ~ p.id) }}">
         </form>
 
-        <form
-            id="delete-property-form-{{ p.id }}"
-            method="post"
-            action="{{ path('property_delete', { id: p.id }) }}"
-            class="d-none"
-        >
+        <form id="delete-property-form-{{ p.id }}" method="post" action="{{ path('property_delete', { id: p.id }) }}" class="d-none">
             <input type="hidden" name="_token" value="{{ csrf_token('delete_property_' ~ p.id) }}">
         </form>
     {% endfor %}
@@ -239,6 +194,7 @@
             currentAd = text || '';
 
             const adContent = document.getElementById('adContent');
+
             if (adContent) {
                 adContent.innerText = currentAd;
             }

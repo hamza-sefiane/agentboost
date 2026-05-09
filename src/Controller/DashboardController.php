@@ -31,7 +31,8 @@ final class DashboardController extends AbstractController
 
     public function __construct(
         private readonly EntityManagerInterface $em,
-    ) {}
+    ) {
+    }
 
     #[Route('', name: 'dashboard', methods: ['GET', 'POST'])]
     public function index(Request $request, PropertyEstimator $estimator): Response
@@ -162,6 +163,7 @@ final class DashboardController extends AbstractController
             ]
         );
     }
+
     #[Route('/pdf/{id}/premium', name: 'property_pdf_premium', methods: ['GET'])]
     public function premiumPdf(
         Property $property,
@@ -170,6 +172,12 @@ final class DashboardController extends AbstractController
         $this->denyAccessUnlessGranted('OWNER', $property);
 
         $user = $this->getAuthenticatedUser();
+
+        if ($user->getSubscriptionStatus() !== 'active' || $user->getCurrentPlan() !== 'yearly') {
+            $this->addFlash('error', 'Le PDF premium est réservé aux abonnements annuels.');
+
+            return $this->redirectToRoute('dashboard');
+        }
 
         $html = $this->renderView('pdf/property_premium.html.twig', [
             'property' => $property,
@@ -259,7 +267,7 @@ final class DashboardController extends AbstractController
 
         $ids = array_values(array_unique(array_filter(
             array_map('intval', $request->request->all('property_ids')),
-            static fn(int $id): bool => $id > 0,
+            static fn (int $id): bool => $id > 0,
         )));
 
         if ($ids === []) {
@@ -372,7 +380,7 @@ final class DashboardController extends AbstractController
     {
         $validPhotos = array_values(array_filter(
             $photos,
-            static fn(mixed $photo): bool => $photo instanceof UploadedFile,
+            static fn (mixed $photo): bool => $photo instanceof UploadedFile,
         ));
 
         if ($validPhotos === []) {

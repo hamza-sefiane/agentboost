@@ -11,6 +11,15 @@
 
 <body>
 
+{% set agencyName = app.user.companyName ?: 'AgentBoost Immobilier' %}
+{% set agencyPhone = app.user.companyPhone %}
+{% set agencyEmail = app.user.agencyEmail %}
+{% set agencyWebsite = app.user.agencyWebsite %}
+{% set agencyStreet = app.user.agencyStreet %}
+{% set agencyAddressComplement = app.user.agencyAddressComplement %}
+{% set agencyPostalCode = app.user.agencyPostalCode %}
+{% set agencyCity = app.user.agencyCity %}
+
 <div class="cover">
     <div class="cover-logo">
         {% if logoDataUri %}
@@ -47,7 +56,7 @@
         <table class="cover-footer-table">
             <tr>
                 <td>Généré le {{ "now"|date('d/m/Y à H:i') }}</td>
-                <td>{{ app.user.companyName ?: 'AgentBoost Immobilier' }}</td>
+                <td>{{ agencyName }}</td>
             </tr>
         </table>
     </div>
@@ -61,12 +70,35 @@
         <div class="company-label">Agence immobilière</div>
 
         <div class="company-name">
-            {{ app.user.companyName ?: 'AgentBoost Immobilier' }}
+            {{ agencyName }}
         </div>
 
         <div class="company-info">
-            {{ app.user.companyAddress ?: 'Adresse non renseignée' }}<br>
-            {{ app.user.companyPhone ?: 'Téléphone non renseigné' }}
+            {% if agencyStreet %}
+                {{ agencyStreet }}{% if agencyAddressComplement %} — {{ agencyAddressComplement }}{% endif %}<br>
+            {% elseif agencyAddressComplement %}
+                {{ agencyAddressComplement }}<br>
+            {% endif %}
+
+            {% if agencyPostalCode or agencyCity %}
+                {{ agencyPostalCode }} {{ agencyCity }}<br>
+            {% elseif app.user.companyAddress %}
+                {{ app.user.companyAddress|nl2br }}<br>
+            {% else %}
+                Adresse non renseignée<br>
+            {% endif %}
+
+            {% if agencyPhone %}
+                Tél : {{ agencyPhone }}<br>
+            {% endif %}
+
+            {% if agencyEmail %}
+                {{ agencyEmail }}<br>
+            {% endif %}
+
+            {% if agencyWebsite %}
+                {{ agencyWebsite }}
+            {% endif %}
         </div>
     </div>
 
@@ -260,14 +292,36 @@
     <table class="signature-table">
         <tr>
             <td class="signature-card">
-                <div class="signature-label">Document généré par</div>
+                <div class="signature-label">Document présenté par</div>
 
                 <div class="signature-name">
-                    {{ app.user.companyName ?: 'AgentBoost Immobilier' }}
+                    {{ agencyName }}
                 </div>
 
                 <div class="company-info">
-                    {{ app.user.companyPhone ?: 'Téléphone non renseigné' }}
+                    {% if agencyStreet %}
+                        {{ agencyStreet }}{% if agencyAddressComplement %} — {{ agencyAddressComplement }}{% endif %}<br>
+                    {% elseif agencyAddressComplement %}
+                        {{ agencyAddressComplement }}<br>
+                    {% endif %}
+
+                    {% if agencyPostalCode or agencyCity %}
+                        {{ agencyPostalCode }} {{ agencyCity }}<br>
+                    {% elseif app.user.companyAddress %}
+                        {{ app.user.companyAddress|nl2br }}<br>
+                    {% endif %}
+
+                    {% if agencyPhone %}
+                        Tél : {{ agencyPhone }}<br>
+                    {% endif %}
+
+                    {% if agencyEmail %}
+                        {{ agencyEmail }}<br>
+                    {% endif %}
+
+                    {% if agencyWebsite %}
+                        {{ agencyWebsite }}
+                    {% endif %}
                 </div>
 
                 <div class="signature-line"></div>
@@ -289,8 +343,8 @@
     </table>
 
     <div class="footer">
-        Cette estimation est fournie à titre indicatif sur la base des informations renseignées et ne constitue pas une valeur contractuelle.<br>
-        Document confidentiel — Usage professionnel uniquement — Référence : AB-{{ property.id }}-{{ "now"|date('Ymd') }}
+        Estimation immobilière confidentielle — Générée via AgentBoost.<br>
+        Document non contractuel — Référence : AB-{{ property.id }}-{{ "now"|date('Ymd') }}
     </div>
 
 </div>
