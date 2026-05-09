@@ -30,7 +30,10 @@
     <div class="cover-title">Dossier d’estimation immobilière</div>
 
     <div class="cover-city">
-        {{ property.city|upper }} — {{ property.postalCode }}
+        {% if property.address %}
+            {{ property.address }}<br>
+        {% endif %}
+        {{ property.postalCode }} {{ property.city|upper }}
     </div>
 
     <div class="cover-price-box">
@@ -185,15 +188,19 @@
             <tr>
                 <td colspan="2" class="property-card property-card-full">
                     <div class="property-card-label">Localisation</div>
+
                     <div class="property-card-value">
-                        {{ property.city|upper }} — {{ property.postalCode }}
+                        {% if property.address %}
+                            {{ property.address }}<br>
+                        {% endif %}
+                        {{ property.postalCode }} {{ property.city|upper }}
                     </div>
                 </td>
             </tr>
         </table>
     </div>
 
-    <div class="section">
+    <div class="section no-break">
         <div class="section-title">Synthèse de l’estimation</div>
 
         <table class="market-table">
@@ -257,7 +264,7 @@
         </div>
     </div>
 
-    <table class="two-column-table">
+    <table class="two-column-table no-break">
         <tr>
             {% if sellingAdvices is defined and sellingAdvices is not empty %}
                 <td class="two-column-cell">
@@ -289,7 +296,7 @@
         </tr>
     </table>
 
-    <table class="signature-table">
+    <table class="signature-table no-break">
         <tr>
             <td class="signature-card">
                 <div class="signature-label">Document présenté par</div>

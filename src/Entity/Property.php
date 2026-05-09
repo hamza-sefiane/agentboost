@@ -24,6 +24,9 @@ class Property
     #[ORM\Column(length: 10)]
     private string $postalCode;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $address = null;
+
     #[ORM\Column(type: 'integer')]
     private int $surface;
 
@@ -105,6 +108,20 @@ class Property
     public function setPostalCode(string $postalCode): self
     {
         $this->postalCode = trim($postalCode);
+
+        return $this;
+    }
+
+    public function getAddress(): ?string
+    {
+        return $this->address;
+    }
+
+    public function setAddress(?string $address): self
+    {
+        $address = $address !== null ? trim($address) : null;
+
+        $this->address = $address !== '' ? $address : null;
 
         return $this;
     }

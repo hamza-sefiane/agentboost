@@ -17,7 +17,25 @@
         </div>
 
         <div class="col-md-3">
-            <input name="postalCode" class="form-control" value="{{ property.postalCode }}" required>
+            <input
+                name="address"
+                class="form-control"
+                placeholder="Adresse du bien"
+                maxlength="255"
+                value="{{ property.address }}"
+            >
+        </div>
+
+        <div class="col-md-3">
+            <input
+                name="postalCode"
+                class="form-control"
+                value="{{ property.postalCode }}"
+                maxlength="5"
+                pattern="[0-9]{5}"
+                inputmode="numeric"
+                required
+            >
         </div>
 
         <div class="col-md-3">
@@ -40,7 +58,12 @@
         </div>
 
         <div class="col-12">
-            <textarea name="extraDetails" class="form-control" rows="4">{{ property.extraDetails }}</textarea>
+            <textarea
+                name="extraDetails"
+                class="form-control"
+                rows="4"
+                placeholder="Détails supplémentaires : balcon, vue dégagée, cuisine équipée, proche gare, lumineux..."
+            >{{ property.extraDetails }}</textarea>
         </div>
 
         <div class="col-12">
@@ -60,13 +83,18 @@
     <div class="d-flex flex-wrap gap-3">
         {% for photo in property.photos %}
             <div>
-                <img src="{{ asset('uploads/properties/' ~ photo.filename) }}"
-                     style="width: 140px; height: 100px; object-fit: cover; border-radius: 8px; border: 1px solid #ddd;">
+                <img
+                    src="{{ asset('uploads/properties/' ~ photo.filename) }}"
+                    alt="Photo du bien"
+                    style="width: 140px; height: 100px; object-fit: cover; border-radius: 8px; border: 1px solid #ddd;"
+                >
 
-                <form method="post"
-                      action="{{ path('property_photo_delete', { id: photo.id }) }}"
-                      onsubmit="return confirm('Supprimer cette photo ?');"
-                      class="mt-2">
+                <form
+                    method="post"
+                    action="{{ path('property_photo_delete', { id: photo.id }) }}"
+                    onsubmit="return confirm('Supprimer cette photo ?');"
+                    class="mt-2"
+                >
                     <input type="hidden" name="_token" value="{{ csrf_token('delete_property_photo_' ~ photo.id) }}">
                     <button class="btn btn-sm btn-danger w-100">Supprimer</button>
                 </form>

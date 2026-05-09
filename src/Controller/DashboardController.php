@@ -6,6 +6,7 @@ use App\Entity\Property;
 use App\Entity\PropertyPhoto;
 use App\Entity\User;
 use App\Service\OpenAiPropertyAdGenerator;
+use App\Service\PropertyComparableGenerator;
 use App\Service\PropertyEstimator;
 use App\Service\PropertySellingAdviceGenerator;
 use Doctrine\ORM\EntityManagerInterface;
@@ -147,11 +148,11 @@ final class DashboardController extends AbstractController
         $options->set('defaultFont', 'DejaVu Sans');
         $options->set('isRemoteEnabled', false);
         $options->set('isHtml5ParserEnabled', true);
-        $options->set('dpi', 95);
+        $options->set('dpi', 120);
 
         $dompdf = new Dompdf($options);
         $dompdf->loadHtml($html);
-        $dompdf->setPaper('A4');
+        $dompdf->setPaper('A4', 'portrait');
         $dompdf->render();
 
         return new Response(
@@ -168,6 +169,7 @@ final class DashboardController extends AbstractController
     public function premiumPdf(
         Property $property,
         PropertySellingAdviceGenerator $adviceGenerator,
+        PropertyComparableGenerator $comparableGenerator,
     ): Response {
         $this->denyAccessUnlessGranted('OWNER', $property);
 
@@ -187,17 +189,19 @@ final class DashboardController extends AbstractController
             'sellingStrategy' => $adviceGenerator->generateSellingStrategy($property),
             'confidenceScore' => $adviceGenerator->generateConfidenceScore($property),
             'estimatedSaleDelay' => $adviceGenerator->generateEstimatedSaleDelay($property),
+            'comparables' => $comparableGenerator->generate($property),
+            'marketPosition' => $comparableGenerator->generateMarketPosition($property),
         ]);
 
         $options = new Options();
         $options->set('defaultFont', 'DejaVu Sans');
         $options->set('isRemoteEnabled', false);
         $options->set('isHtml5ParserEnabled', true);
-        $options->set('dpi', 95);
+        $options->set('dpi', 110);
 
         $dompdf = new Dompdf($options);
         $dompdf->loadHtml($html);
-        $dompdf->setPaper('A4');
+        $dompdf->setPaper('A4', 'portrait');
         $dompdf->render();
 
         return new Response(
@@ -304,6 +308,7 @@ final class DashboardController extends AbstractController
         bool $isEdit = false,
     ): ?Response {
         $type = trim((string) $request->request->get('type', ''));
+        $address = trim((string) $request->request->get('address', ''));
         $postalCode = preg_replace('/\D/', '', (string) $request->request->get('postalCode', '')) ?? '';
         $city = trim((string) $request->request->get('city', ''));
         $surface = max(0, (int) $request->request->get('surface', 0));
@@ -318,6 +323,7 @@ final class DashboardController extends AbstractController
 
         $result = $estimator->estimate([
             'type' => $type,
+            'address' => $address,
             'postalCode' => $postalCode,
             'city' => $city,
             'surface' => $surface,
@@ -353,6 +359,7 @@ final class DashboardController extends AbstractController
 
         $property
             ->setType($type)
+            ->setAddress($address !== '' ? $address : null)
             ->setPostalCode($postalCode)
             ->setCity($city)
             ->setSurface($surface)
