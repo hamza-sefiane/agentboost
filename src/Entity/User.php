@@ -181,14 +181,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     public function deactivateSubscription(): void
-    {
-        $this->active = false;
-        $this->subscriptionStatus = self::STATUS_INACTIVE;
-        $this->nextBillingDate = null;
-        $this->cancelAtPeriodEnd = false;
-        $this->deleteAtPeriodEnd = false;
-        $this->pendingPlan = null;
-    }
+{
+    $this->active = false;
+    $this->subscriptionStatus = self::STATUS_INACTIVE;
+    $this->nextBillingDate = null;
+    $this->cancelAtPeriodEnd = false;
+    $this->deleteAtPeriodEnd = false;
+    $this->pendingPlan = null;
+    $this->stripeSubscriptionId = null;
+}
 
     public function markCancellationAtPeriodEnd(\DateTimeImmutable $periodEnd): void
     {
