@@ -1,17 +1,14 @@
 <?php
 
 use App\Kernel;
+use Symfony\Component\HttpFoundation\Request;
 
-$_SERVER['APP_ENV'] = $_SERVER['APP_ENV'] ?? 'prod';
-$_ENV['APP_ENV'] = $_ENV['APP_ENV'] ?? 'prod';
-putenv('APP_ENV=prod');
+require_once dirname(__DIR__).'/vendor/autoload.php';
 
-$_SERVER['APP_DEBUG'] = $_SERVER['APP_DEBUG'] ?? '0';
-$_ENV['APP_DEBUG'] = $_ENV['APP_DEBUG'] ?? '0';
-putenv('APP_DEBUG=0');
+$kernel = new Kernel('prod', false);
 
-require_once dirname(__DIR__).'/vendor/autoload_runtime.php';
+$request = Request::createFromGlobals();
+$response = $kernel->handle($request);
+$response->send();
 
-return function (array $context) {
-    return new Kernel('prod', false);
-};
+$kernel->terminate($request, $response);
