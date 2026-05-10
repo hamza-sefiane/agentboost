@@ -2,7 +2,6 @@
 
 namespace App\Tests\Unit;
 
-use App\Service\AiClientInterface;
 use App\Service\PropertyEstimator;
 use PHPUnit\Framework\TestCase;
 
@@ -10,13 +9,7 @@ class PropertyEstimatorTest extends TestCase
 {
     private function createEstimator(): PropertyEstimator
     {
-        $aiMock = $this->createMock(AiClientInterface::class);
-
-        $aiMock
-            ->method('generate')
-            ->willReturn('Annonce test');
-
-        return new PropertyEstimator($aiMock);
+        return new PropertyEstimator();
     }
 
     public function testEstimateBasicProperty(): void
@@ -32,9 +25,15 @@ class PropertyEstimatorTest extends TestCase
             'parking' => false,
         ]);
 
+        $this->assertIsArray($result);
         $this->assertNotNull($result['estimate']);
+        $this->assertNotNull($result['lowEstimate']);
+        $this->assertNotNull($result['highEstimate']);
+        $this->assertNull($result['adText']);
+
         $this->assertGreaterThan(0, $result['estimate']);
-        $this->assertSame('Annonce test', $result['adText']);
+        $this->assertLessThan($result['estimate'], $result['lowEstimate']);
+        $this->assertGreaterThan($result['estimate'], $result['highEstimate']);
     }
 
     public function testEstimateWithParkingAddsValue(): void
@@ -77,6 +76,7 @@ class PropertyEstimatorTest extends TestCase
 
         $this->assertNotNull($result['estimate']);
         $this->assertGreaterThan(0, $result['estimate']);
+        $this->assertNull($result['adText']);
     }
 
     public function testInvalidDataReturnsNullEstimate(): void
@@ -93,5 +93,8 @@ class PropertyEstimatorTest extends TestCase
         ]);
 
         $this->assertNull($result['estimate']);
+        $this->assertNull($result['lowEstimate']);
+        $this->assertNull($result['highEstimate']);
+        $this->assertNull($result['adText']);
     }
 }

@@ -15,7 +15,43 @@
 		<div class="alert alert-success">{{ message }}</div>
 	{% endfor %}
 
-	<form method="post" action="{{ path('dashboard') }}" class="row g-3 mb-5">
+	<style>
+		.address-autocomplete-wrapper {
+			position: relative;
+		}
+
+		.address-results {
+			position: absolute;
+			top: 100%;
+			left: 0;
+			right: 0;
+			z-index: 1000;
+			background: #ffffff;
+			border: 1px solid #d1d5db;
+			border-radius: 8px;
+			margin-top: 4px;
+			overflow: hidden;
+			box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+			display: none;
+		}
+
+		.address-result-item {
+			padding: 10px 12px;
+			cursor: pointer;
+			font-size: 14px;
+			border-bottom: 1px solid #f1f5f9;
+		}
+
+		.address-result-item:hover {
+			background: #f8fafc;
+		}
+
+		.address-result-item:last-child {
+			border-bottom: none;
+		}
+	</style>
+
+	<form method="post" action="{{ path('dashboard') }}" enctype="multipart/form-data" class="row g-3 mb-5">
 		<div class="col-md-3">
 			<select name="type" id="property-type" class="form-control" required>
 				<option value="Appartement">Appartement</option>
@@ -25,12 +61,17 @@
 			</select>
 		</div>
 
-		<div class="col-md-3">
-			<input name="postalCode" type="text" class="form-control" placeholder="Code postal" maxlength="5" pattern="[0-9]{5}" inputmode="numeric" required>
+		<div class="col-md-3 address-autocomplete-wrapper">
+			<input name="address" id="address-input" type="text" class="form-control" placeholder="Adresse du bien" maxlength="255" autocomplete="off">
+			<div id="address-results" class="address-results"></div>
+		</div>
+
+		<div class="col-md-2">
+			<input name="postalCode" id="postal-code-input" type="text" class="form-control" placeholder="Code postal" maxlength="5" pattern="[0-9]{5}" inputmode="numeric" required>
 		</div>
 
 		<div class="col-md-3">
-			<input name="city" class="form-control" placeholder="Ville" required>
+			<input name="city" id="city-input" class="form-control" placeholder="Ville" required>
 		</div>
 
 		<div class="col-md-2">
@@ -47,8 +88,21 @@
 				<option value="1">Avec parking</option>
 			</select>
 		</div>
+
 		<div class="col-12">
 			<textarea name="extraDetails" class="form-control" rows="4" placeholder="Détails supplémentaires : balcon, vue dégagée, cuisine équipée, proche gare, lumineux..."></textarea>
+		</div>
+
+		<div class="col-12">
+			<label class="form-label fw-semibold">Photos du bien</label>
+			<input type="file" name="photos[]" id="photos-input" class="form-control" accept="image/jpeg,image/png,image/webp" multiple>
+			<small class="text-muted">
+				Formats acceptés : JPG, PNG, WEBP. Maximum 5 photos.
+			</small>
+		</div>
+
+		<div class="col-12">
+			<div id="photos-preview" class="d-flex flex-wrap gap-2 mt-2"></div>
 		</div>
 
 		<div class="col-md-2">
@@ -57,6 +111,19 @@
 			</button>
 		</div>
 	</form>
+
+	{% if app.user.subscriptionStatus == 'active' and app.user.currentPlan == 'monthly' %}
+		<div class="alert alert-info d-flex justify-content-between align-items-center flex-wrap gap-2">
+			<div>
+				<strong>Plus d’outils de diffusion avec l’abonnement annuel.</strong><br>
+				<small>Débloquez Facebook, Leboncoin et le PDF Premium pour gagner du temps sur vos annonces.</small>
+			</div>
+
+			<a href="{{ path('subscription_manage') }}" class="btn btn-sm btn-primary">
+				Passer à l’annuel
+			</a>
+		</div>
+	{% endif %}
 
 	<h2>Biens estimés</h2>
 
@@ -68,6 +135,16 @@ const roomsWrapper = document.getElementById('rooms-wrapper');
 const roomsInput = document.getElementById('rooms-input');
 const parkingWrapper = document.getElementById('parking-wrapper');
 const parkingInput = document.getElementById('parking-input');
+const photosInput = document.getElementById('photos-input');
+const photosPreview = document.getElementById('photos-preview');
+
+const addressInput = document.getElementById('address-input');
+const postalCodeInput = document.getElementById('postal-code-input');
+const cityInput = document.getElementById('city-input');
+const addressResults = document.getElementById('address-results');
+
+let addressTimeout = null;
+let addressAbortController = null;
 
 function toggleFields() {
 const type = typeSelect.value;
@@ -95,7 +172,131 @@ parkingInput.value = '0';
 }
 }
 
+function previewPhotos() {
+photosPreview.innerHTML = '';
+
+const files = Array.from(photosInput.files).slice(0, 5);
+
+files.forEach((file) => {
+if (!file.type.startsWith('image/')) {
+return;
+}
+
+const reader = new FileReader();
+
+reader.onload = function (event) {
+const img = document.createElement('img');
+img.src = event.target.result;
+img.alt = 'Prévisualisation';
+img.style.width = '90px';
+img.style.height = '70px';
+img.style.objectFit = 'cover';
+img.style.borderRadius = '8px';
+img.style.border = '1px solid #ddd';
+
+photosPreview.appendChild(img);
+};
+
+reader.readAsDataURL(file);
+});
+}
+
+function hideAddressResults() {
+addressResults.innerHTML = '';
+addressResults.style.display = 'none';
+}
+
+function renderAddressResults(features) {
+addressResults.innerHTML = '';
+
+if (! features.length) {
+hideAddressResults();
+return;
+}
+
+features.slice(0, 5).forEach((feature) => {
+const properties = feature.properties;
+const item = document.createElement('div');
+
+item.className = 'address-result-item';
+item.textContent = properties.label;
+
+item.addEventListener('click', () => {
+addressInput.value = properties.name || properties.label || '';
+postalCodeInput.value = properties.postcode || '';
+cityInput.value = properties.city || '';
+
+hideAddressResults();
+});
+
+addressResults.appendChild(item);
+});
+
+addressResults.style.display = 'block';
+}
+
+function searchAddress(query) {
+if (addressAbortController) {
+addressAbortController.abort();
+}
+
+addressAbortController = new AbortController();
+
+const postalCode = postalCodeInput.value.trim();
+const city = cityInput.value.trim();
+
+let fullQuery = query;
+
+if (city.length >= 2) {
+fullQuery += ' ' + city;
+}
+
+const params = new URLSearchParams({q: fullQuery, limit: '5'});
+
+if (/^[0-9]{5}$/.test(postalCode)) {
+params.set('postcode', postalCode);
+}
+
+fetch (`https://api-adresse.data.gouv.fr/search/?${
+params.toString()
+}`, {signal: addressAbortController.signal}).then((response) => response.ok ? response.json() : null).then((data) => {
+if (!data || !Array.isArray(data.features)) {
+hideAddressResults();
+return;
+}
+
+renderAddressResults(data.features);
+}).catch((error) => {
+if (error.name !== 'AbortError') {
+hideAddressResults();
+}
+});
+}
+
+addressInput.addEventListener('input', () => {
+const query = addressInput.value.trim();
+
+clearTimeout(addressTimeout);
+
+if (query.length < 3) {
+hideAddressResults();
+return;
+}
+
+addressTimeout = setTimeout(() => {
+searchAddress(query);
+}, 300);
+});
+
+document.addEventListener('click', (event) => {
+if (!event.target.closest('.address-autocomplete-wrapper')) {
+hideAddressResults();
+}
+});
+
 typeSelect.addEventListener('change', toggleFields);
+photosInput.addEventListener('change', previewPhotos);
+
 toggleFields();
 	</script>
 {% endblock %}

@@ -2,10 +2,10 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Dossier d’estimation immobilière</title>
+    <title>Dossier d’estimation immobilière premium</title>
 
     <style>
-        {{ source('pdf/property_pdf.css') }}
+        {{ source('pdf/property_premium.css') }}
     </style>
 </head>
 
@@ -20,55 +20,64 @@
 {% set agencyPostalCode = app.user.agencyPostalCode %}
 {% set agencyCity = app.user.agencyCity %}
 
-<div class="cover">
-    <div class="cover-logo">
-        {% if logoDataUri %}
-            <img src="{{ logoDataUri }}" alt="Logo">
-        {% endif %}
-    </div>
+<div class="premium-cover">
+    {% if photoDataUris is defined and photoDataUris|length > 0 %}
+        <img src="{{ photoDataUris[0] }}" class="premium-cover-image" alt="Bien immobilier">
+    {% endif %}
 
-    <div class="cover-title">Dossier d’estimation immobilière</div>
+    <div class="premium-cover-overlay"></div>
 
-    <div class="cover-city">
-        {% if property.address %}
-            {{ property.address }}<br>
-        {% endif %}
-        {{ property.postalCode }} {{ property.city|upper }}
-    </div>
-
-    <div class="cover-price-box">
-        <div class="cover-price-label">Valeur estimée</div>
-
-        <div class="cover-price">
-            {{ property.estimate|number_format(0, ',', ' ') }} €
+    <div class="premium-cover-content">
+        <div class="premium-cover-top">
+            {% if logoDataUri %}
+                <img src="{{ logoDataUri }}" class="premium-cover-logo" alt="Logo agence">
+            {% endif %}
         </div>
 
-        {% if property.lowEstimate and property.highEstimate %}
-            <div class="cover-range">
-                Fourchette estimative<br>
-                <strong>
-                    {{ property.lowEstimate|number_format(0, ',', ' ') }} €
-                    —
-                    {{ property.highEstimate|number_format(0, ',', ' ') }} €
-                </strong>
-            </div>
-        {% endif %}
-    </div>
+        <div class="premium-cover-center">
+            <div class="premium-cover-badge">ESTIMATION PREMIUM</div>
 
-    <div class="cover-footer">
-        <table class="cover-footer-table">
-            <tr>
-                <td>Généré le {{ "now"|date('d/m/Y à H:i') }}</td>
-                <td>{{ agencyName }}</td>
-            </tr>
-        </table>
+            <h1 class="premium-cover-title">
+                DOSSIER D’ESTIMATION<br>
+                IMMOBILIÈRE
+            </h1>
+
+            <div class="premium-cover-location">
+                {% if property.address %}
+                    {{ property.address }}<br>
+                {% endif %}
+                {{ property.postalCode }} {{ property.city|upper }}
+            </div>
+
+            <div class="premium-cover-price-card">
+                <div class="premium-cover-price-label">Valeur estimée</div>
+
+                <div class="premium-cover-price">
+                    {{ property.estimate|number_format(0, ',', ' ') }} €
+                </div>
+
+                {% if property.lowEstimate and property.highEstimate %}
+                    <div class="premium-cover-range">
+                        {{ property.lowEstimate|number_format(0, ',', ' ') }} €
+                        —
+                        {{ property.highEstimate|number_format(0, ',', ' ') }} €
+                    </div>
+                {% endif %}
+
+                <div class="premium-cover-score">
+                    Score IA : {{ confidenceScore|default(92) }}%
+                </div>
+            </div>
+        </div>
+
+        <div class="premium-cover-footer">
+            <div>{{ agencyName }}</div>
+            <div>Généré le {{ "now"|date('d/m/Y') }}</div>
+        </div>
     </div>
 </div>
 
-<div class="page-break"></div>
-
 <div class="page">
-
     <div class="header">
         <div class="company-label">Agence immobilière</div>
 
@@ -188,7 +197,6 @@
             <tr>
                 <td colspan="2" class="property-card property-card-full">
                     <div class="property-card-label">Localisation</div>
-
                     <div class="property-card-value">
                         {% if property.address %}
                             {{ property.address }}<br>
@@ -231,6 +239,50 @@
             </tr>
         </table>
     </div>
+
+    {% if comparables is defined and comparables is not empty %}
+        <div class="section no-break comparable-section comparable-page-start">
+            <div class="section-title">Analyse comparative du marché</div>
+
+            <table class="comparable-table">
+                <tr>
+                    {% for comparable in comparables %}
+                        <td class="comparable-card">
+                            <div class="comparable-label">Comparable {{ loop.index }}</div>
+
+                            <div class="comparable-type">
+                                {{ comparable.type }}
+                            </div>
+
+                            <div class="comparable-location">
+                                {{ comparable.city|upper }}
+                            </div>
+
+                            <div class="comparable-surface">
+                                {{ comparable.surface }} m²
+                            </div>
+
+                            <div class="comparable-price">
+                                {{ comparable.lowPrice|number_format(0, ',', ' ') }} €
+                                —
+                                {{ comparable.highPrice|number_format(0, ',', ' ') }} €
+                            </div>
+                        </td>
+                    {% endfor %}
+                </tr>
+            </table>
+
+            {% if marketPosition is defined and marketPosition %}
+                <div class="market-position-box">
+                    {{ marketPosition }}
+                </div>
+            {% endif %}
+
+            <div class="comparable-note">
+                Données comparatives générées à titre indicatif à partir des caractéristiques du bien estimé.
+            </div>
+        </div>
+    {% endif %}
 
     <div class="section no-break">
         <div class="strategy-card">
@@ -295,8 +347,9 @@
             {% endif %}
         </tr>
     </table>
+    <div class="signature-spacer"></div>
 
-    <table class="signature-table no-break">
+    <table class="signature-table">
         <tr>
             <td class="signature-card">
                 <div class="signature-label">Document présenté par</div>
@@ -335,10 +388,10 @@
             </td>
 
             <td class="qr-card">
-                {% set qrUrl = absolute_url(path('property_pdf', { id: property.id })) %}
+                {% set qrUrl = absolute_url(path('property_pdf_premium', { id: property.id })) %}
 
                 <div class="qr-box">
-                    <img src="{{ qr_code_data_uri(qrUrl) }}" alt="QR code estimation">
+                    <img src="{{ qr_code_data_uri(qrUrl) }}" alt="QR code estimation premium">
                 </div>
 
                 <div class="qr-text">
@@ -353,7 +406,6 @@
         Estimation immobilière confidentielle — Générée via AgentBoost.<br>
         Document non contractuel — Référence : AB-{{ property.id }}-{{ "now"|date('Ymd') }}
     </div>
-
 </div>
 
 </body>

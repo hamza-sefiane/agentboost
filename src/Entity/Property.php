@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\PropertyRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: PropertyRepository::class)]
@@ -22,6 +24,9 @@ class Property
     #[ORM\Column(length: 10)]
     private string $postalCode;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $address = null;
+
     #[ORM\Column(type: 'integer')]
     private int $surface;
 
@@ -34,6 +39,12 @@ class Property
     #[ORM\Column(type: 'integer', nullable: true)]
     private ?int $estimate = null;
 
+    #[ORM\Column(type: 'integer', nullable: true)]
+    private ?int $lowEstimate = null;
+
+    #[ORM\Column(type: 'integer', nullable: true)]
+    private ?int $highEstimate = null;
+
     #[ORM\Column(type: 'text', nullable: true)]
     private ?string $adText = null;
 
@@ -43,6 +54,22 @@ class Property
     #[ORM\ManyToOne(targetEntity: User::class)]
     #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     private User $owner;
+
+    /**
+     * @var Collection<int, PropertyPhoto>
+     */
+    #[ORM\OneToMany(
+        targetEntity: PropertyPhoto::class,
+        mappedBy: 'property',
+        orphanRemoval: true,
+        cascade: ['persist', 'remove']
+    )]
+    private Collection $photos;
+
+    public function __construct()
+    {
+        $this->photos = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -81,6 +108,20 @@ class Property
     public function setPostalCode(string $postalCode): self
     {
         $this->postalCode = trim($postalCode);
+
+        return $this;
+    }
+
+    public function getAddress(): ?string
+    {
+        return $this->address;
+    }
+
+    public function setAddress(?string $address): self
+    {
+        $address = $address !== null ? trim($address) : null;
+
+        $this->address = $address !== '' ? $address : null;
 
         return $this;
     }
@@ -133,6 +174,30 @@ class Property
         return $this;
     }
 
+    public function getLowEstimate(): ?int
+    {
+        return $this->lowEstimate;
+    }
+
+    public function setLowEstimate(?int $lowEstimate): self
+    {
+        $this->lowEstimate = $lowEstimate !== null ? max(0, $lowEstimate) : null;
+
+        return $this;
+    }
+
+    public function getHighEstimate(): ?int
+    {
+        return $this->highEstimate;
+    }
+
+    public function setHighEstimate(?int $highEstimate): self
+    {
+        $this->highEstimate = $highEstimate !== null ? max(0, $highEstimate) : null;
+
+        return $this;
+    }
+
     public function getAdText(): ?string
     {
         return $this->adText;
@@ -165,6 +230,33 @@ class Property
     public function setOwner(User $owner): self
     {
         $this->owner = $owner;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, PropertyPhoto>
+     */
+    public function getPhotos(): Collection
+    {
+        return $this->photos;
+    }
+
+    public function addPhoto(PropertyPhoto $photo): self
+    {
+        if (!$this->photos->contains($photo)) {
+            $this->photos->add($photo);
+            $photo->setProperty($this);
+        }
+
+        return $this;
+    }
+
+    public function removePhoto(PropertyPhoto $photo): self
+    {
+        if ($this->photos->removeElement($photo) && $photo->getProperty() === $this) {
+            $photo->setProperty(null);
+        }
 
         return $this;
     }
