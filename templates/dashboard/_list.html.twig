@@ -1,3 +1,5 @@
+{% set isYearlyPremium = app.user.subscriptionStatus == 'active' and app.user.currentPlan == 'yearly' %}
+
 {% if properties is empty %}
     <div class="text-center py-5 text-muted">
         <h5>Aucune estimation pour le moment</h5>
@@ -8,48 +10,21 @@
     {% set properties = properties|sort((a, b) => b.estimate <=> a.estimate) %}
 
     <style>
-        .property-actions {
-            min-width: 260px;
-            overflow: visible !important;
-        }
-
-        .property-photo-thumb {
-            width: 70px;
-            height: 55px;
-            object-fit: cover;
-            border-radius: 8px;
-            border: 1px solid #ddd;
-        }
-
-        .property-action-primary {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 6px;
-            justify-content: center;
-            overflow: visible !important;
-        }
-
+        .property-actions { min-width: 260px; overflow: visible !important; }
+        .property-photo-thumb { width: 70px; height: 55px; object-fit: cover; border-radius: 8px; border: 1px solid #ddd; }
+        .property-action-primary { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; overflow: visible !important; }
         .property-table-wrapper,
         .property-table-wrapper table,
         .property-table-wrapper tbody,
         .property-table-wrapper tr,
-        .property-table-wrapper td {
-            overflow: visible !important;
-        }
-
-        .property-table-wrapper .dropdown-menu {
-            z-index: 3000;
-        }
-
-        .property-mobile-card {
-            display: none;
-        }
+        .property-table-wrapper td { overflow: visible !important; }
+        .property-table-wrapper .dropdown-menu { z-index: 3000; }
+        .property-mobile-card { display: none; }
+        .premium-locked-item { color: #94a3b8 !important; cursor: default; }
+        .premium-locked-note { font-size: 11px; color: #64748b; padding: 8px 16px; line-height: 1.3; }
 
         @media (max-width: 768px) {
-            .property-table-wrapper {
-                display: none;
-            }
-
+            .property-table-wrapper { display: none; }
             .property-mobile-card {
                 display: block;
                 background: #ffffff;
@@ -59,61 +34,39 @@
                 margin-bottom: 14px;
                 box-shadow: 0 8px 20px rgba(0, 0, 0, 0.04);
             }
-
-            .property-mobile-top {
-                display: flex;
-                gap: 12px;
-                align-items: flex-start;
-            }
-
-            .property-mobile-photo {
-                width: 90px;
-                height: 70px;
-                object-fit: cover;
-                border-radius: 12px;
-                border: 1px solid #ddd;
-                flex-shrink: 0;
-            }
-
-            .property-mobile-price {
-                font-size: 20px;
-                font-weight: 700;
-                color: #198754;
-            }
-
-            .property-mobile-meta {
-                color: #6b7280;
-                font-size: 13px;
-                line-height: 1.4;
-            }
-
+            .property-mobile-top { display: flex; gap: 12px; align-items: flex-start; }
+            .property-mobile-photo { width: 90px; height: 70px; object-fit: cover; border-radius: 12px; border: 1px solid #ddd; flex-shrink: 0; }
+            .property-mobile-price { font-size: 20px; font-weight: 700; color: #198754; }
+            .property-mobile-meta { color: #6b7280; font-size: 13px; line-height: 1.4; }
             .property-mobile-actions {
                 display: grid;
                 grid-template-columns: 1fr 1fr;
                 gap: 8px;
                 margin-top: 14px;
             }
-
             .property-mobile-actions .btn,
             .property-mobile-actions .dropup,
-            .property-mobile-actions .dropup > .btn {
-                width: 100%;
-            }
-
-            .bulk-header {
-                flex-direction: column;
-                align-items: stretch !important;
-                gap: 10px;
-            }
-
-            .bulk-header .btn {
-                width: 100%;
-            }
+            .property-mobile-actions .dropup > .btn { width: 100%; }
+            .bulk-header { flex-direction: column; align-items: stretch !important; gap: 10px; }
+            .bulk-header .btn { width: 100%; }
         }
     </style>
 
     <form method="post" action="{{ path('property_bulk_delete') }}" id="bulk-delete-form" onsubmit="return confirmBulkDelete();">
         <input type="hidden" name="_token" value="{{ csrf_token('bulk_delete_properties') }}">
+
+        {% if app.user.subscriptionStatus == 'active' and app.user.currentPlan == 'monthly' %}
+            <div class="alert alert-info d-flex justify-content-between align-items-center flex-wrap gap-2">
+                <div>
+                    <strong>Plus d’outils de diffusion avec l’abonnement annuel.</strong><br>
+                    <small>Débloquez Facebook, Leboncoin et le PDF Premium pour gagner du temps sur vos annonces.</small>
+                </div>
+
+                <a href="{{ path('subscription_manage') }}" class="btn btn-sm btn-primary">
+                    Passer à l’annuel
+                </a>
+            </div>
+        {% endif %}
 
         <div class="d-flex justify-content-between align-items-center mb-3 bulk-header">
             <div class="text-muted small">
@@ -208,7 +161,7 @@
                                             Voir
                                         </button>
 
-                                        {% if app.user.subscriptionStatus == 'active' and app.user.currentPlan == 'yearly' %}
+                                        {% if isYearlyPremium %}
                                             <a href="{{ path('property_pdf_premium', { id: p.id }) }}" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-dark">
                                                 Premium
                                             </a>
@@ -230,17 +183,37 @@
                                                     </button>
                                                 </li>
 
-                                                <li>
-                                                    <button type="button" class="dropdown-item" data-ad="{{ p.adText|e('html_attr') }}" onclick="copyLeboncoin(this.dataset.ad)">
-                                                        Format Leboncoin
-                                                    </button>
-                                                </li>
+                                                {% if isYearlyPremium %}
+                                                    <li>
+                                                        <button type="button" class="dropdown-item" data-ad="{{ p.adText|e('html_attr') }}" onclick="copyLeboncoin(this.dataset.ad)">
+                                                            Format Leboncoin
+                                                        </button>
+                                                    </li>
 
-                                                <li>
-                                                    <button type="button" class="dropdown-item" data-ad="{{ p.adText|e('html_attr') }}" onclick="shareFacebook(this.dataset.ad)">
-                                                        Publier sur Facebook
-                                                    </button>
-                                                </li>
+                                                    <li>
+                                                        <button type="button" class="dropdown-item" data-ad="{{ p.adText|e('html_attr') }}" onclick="shareFacebook(this.dataset.ad)">
+                                                            Publier sur Facebook
+                                                        </button>
+                                                    </li>
+                                                {% else %}
+                                                    <li>
+                                                        <span class="dropdown-item premium-locked-item">
+                                                            Leboncoin — Premium annuel
+                                                        </span>
+                                                    </li>
+
+                                                    <li>
+                                                        <span class="dropdown-item premium-locked-item">
+                                                            Facebook — Premium annuel
+                                                        </span>
+                                                    </li>
+
+                                                    <li>
+                                                        <div class="premium-locked-note">
+                                                            Passez à l’annuel pour débloquer les outils de diffusion.
+                                                        </div>
+                                                    </li>
+                                                {% endif %}
 
                                                 <li>
                                                     <a href="{{ path('property_pdf', { id: p.id }) }}" target="_blank" rel="noopener noreferrer" class="dropdown-item">
@@ -342,7 +315,7 @@
                                 Voir annonce
                             </button>
 
-                            {% if app.user.subscriptionStatus == 'active' and app.user.currentPlan == 'yearly' %}
+                            {% if isYearlyPremium %}
                                 <a href="{{ path('property_pdf_premium', { id: p.id }) }}" target="_blank" rel="noopener noreferrer" class="btn btn-dark">
                                     PDF Premium
                                 </a>
@@ -364,17 +337,37 @@
                                         </button>
                                     </li>
 
-                                    <li>
-                                        <button type="button" class="dropdown-item" data-ad="{{ p.adText|e('html_attr') }}" onclick="copyLeboncoin(this.dataset.ad)">
-                                            Format Leboncoin
-                                        </button>
-                                    </li>
+                                    {% if isYearlyPremium %}
+                                        <li>
+                                            <button type="button" class="dropdown-item" data-ad="{{ p.adText|e('html_attr') }}" onclick="copyLeboncoin(this.dataset.ad)">
+                                                Format Leboncoin
+                                            </button>
+                                        </li>
 
-                                    <li>
-                                        <button type="button" class="dropdown-item" data-ad="{{ p.adText|e('html_attr') }}" onclick="shareFacebook(this.dataset.ad)">
-                                            Publier sur Facebook
-                                        </button>
-                                    </li>
+                                        <li>
+                                            <button type="button" class="dropdown-item" data-ad="{{ p.adText|e('html_attr') }}" onclick="shareFacebook(this.dataset.ad)">
+                                                Publier sur Facebook
+                                            </button>
+                                        </li>
+                                    {% else %}
+                                        <li>
+                                            <span class="dropdown-item premium-locked-item">
+                                                Leboncoin — Premium annuel
+                                            </span>
+                                        </li>
+
+                                        <li>
+                                            <span class="dropdown-item premium-locked-item">
+                                                Facebook — Premium annuel
+                                            </span>
+                                        </li>
+
+                                        <li>
+                                            <div class="premium-locked-note">
+                                                Passez à l’annuel pour débloquer les outils de diffusion.
+                                            </div>
+                                        </li>
+                                    {% endif %}
 
                                     <li>
                                         <a href="{{ path('property_pdf', { id: p.id }) }}" target="_blank" rel="noopener noreferrer" class="dropdown-item">
