@@ -9,6 +9,7 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
+#[ORM\Table(name: 'app_user')]
 #[UniqueEntity(fields: ['email'], message: 'Cet email est déjà utilisé.')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
@@ -126,7 +127,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setRoles(array $roles): self
     {
         $roles[] = 'ROLE_USER';
-
         $this->roles = array_values(array_unique($roles));
 
         return $this;
@@ -181,15 +181,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     public function deactivateSubscription(): void
-{
-    $this->active = false;
-    $this->subscriptionStatus = self::STATUS_INACTIVE;
-    $this->nextBillingDate = null;
-    $this->cancelAtPeriodEnd = false;
-    $this->deleteAtPeriodEnd = false;
-    $this->pendingPlan = null;
-    $this->stripeSubscriptionId = null;
-}
+    {
+        $this->active = false;
+        $this->subscriptionStatus = self::STATUS_INACTIVE;
+        $this->nextBillingDate = null;
+        $this->cancelAtPeriodEnd = false;
+        $this->deleteAtPeriodEnd = false;
+        $this->pendingPlan = null;
+        $this->stripeSubscriptionId = null;
+    }
 
     public function markCancellationAtPeriodEnd(\DateTimeImmutable $periodEnd): void
     {
@@ -396,9 +396,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         $email = $this->cleanNullableString($agencyEmail);
 
-        $this->agencyEmail = $email !== null
-            ? mb_strtolower($email)
-            : null;
+        $this->agencyEmail = $email !== null ? mb_strtolower($email) : null;
 
         return $this;
     }
@@ -427,9 +425,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             )),
         ]);
 
-        return $parts !== []
-            ? implode("\n", $parts)
-            : $this->companyAddress;
+        return $parts !== [] ? implode("\n", $parts) : $this->companyAddress;
     }
 
     private function cleanNullableString(?string $value): ?string
