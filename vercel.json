@@ -7,6 +7,10 @@
   },
   "routes": [
     {
+      "src": "/(\\.env.*|\\.git/.*)",
+      "status": 404
+    },
+    {
       "src": "/(.*)",
       "dest": "/api/index.php"
     }
