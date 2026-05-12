@@ -13,7 +13,7 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Attribute\Route;
 
-#[Route('/api/subscription/sync', name: 'subscription_sync', methods: ['POST'])]
+#[Route('/subscription/sync', name: 'subscription_sync', methods: ['POST'])]
 final class SubscriptionSyncController extends AbstractController
 {
     public function __construct(

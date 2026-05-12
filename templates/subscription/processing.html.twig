@@ -34,7 +34,7 @@
 	<script>
 		(async () => {
 for (let i = 0; i < 5; i++) {
-const res = await fetch('/api/subscription/sync', {method: 'POST'});
+const res = await fetch('/subscription/sync', {method: 'POST'});
 const data = await res.json();
 
 if (data.ok) {
