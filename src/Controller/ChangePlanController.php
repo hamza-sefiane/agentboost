@@ -8,10 +8,10 @@ use Stripe\Exception\ApiErrorException;
 use Stripe\Stripe;
 use Stripe\Subscription;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
-use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 #[IsGranted('ROLE_USER')]
 final class ChangePlanController extends AbstractController
@@ -29,7 +29,6 @@ final class ChangePlanController extends AbstractController
         #[Autowire('%env(STRIPE_PRICE_YEARLY)%')] string $priceYearly,
         #[Autowire('%env(STRIPE_SECRET_KEY)%')] string $stripeSecretKey
     ): RedirectResponse {
-        /** @var User $user */
         $user = $this->getUser();
 
         if (!$user instanceof User || !$user->getStripeSubscriptionId()) {
@@ -45,14 +44,9 @@ final class ChangePlanController extends AbstractController
             return $this->redirectToRoute('dashboard');
         }
 
-        // Downgrade déjà programmé → on bloque
-        if ($user->getPendingPlan() !== null) {
-            return $this->redirectToRoute('dashboard');
-        }
-
         $priceId = match ($plan) {
             'monthly' => $priceMonthly,
-            'yearly'  => $priceYearly,
+            'yearly' => $priceYearly,
         };
 
         Stripe::setApiKey($stripeSecretKey);
@@ -61,6 +55,10 @@ final class ChangePlanController extends AbstractController
             $subscription = Subscription::retrieve(
                 $user->getStripeSubscriptionId()
             );
+
+            $isDowngrade =
+                $user->getCurrentPlan() === 'yearly'
+                && $plan === 'monthly';
 
             Subscription::update(
                 $subscription->id,
@@ -73,16 +71,31 @@ final class ChangePlanController extends AbstractController
                 ]
             );
 
-            // 🧠 INTENTION UNIQUEMENT
-            if ($user->getCurrentPlan() === 'yearly' && $plan === 'monthly') {
-                // Downgrade → fin de période
+            // Upgrade immédiat
+            if ($plan === 'yearly') {
+                $user->setCurrentPlan('yearly');
+                $user->setPendingPlan(null);
+            }
+
+            // Downgrade différé
+            if ($isDowngrade) {
                 $user->setPendingPlan('monthly');
             }
 
             $em->flush();
 
+            $this->addFlash(
+                'success',
+                $plan === 'yearly'
+                    ? 'Abonnement annuel activé.'
+                    : 'Retour au mensuel programmé.'
+            );
+
         } catch (ApiErrorException) {
-            $this->addFlash('error', 'Impossible de changer le plan.');
+            $this->addFlash(
+                'error',
+                'Impossible de changer le plan.'
+            );
         }
 
         return $this->redirectToRoute('dashboard');
