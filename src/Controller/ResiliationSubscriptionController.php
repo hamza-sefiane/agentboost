@@ -39,7 +39,7 @@ final class ResiliationSubscriptionController extends AbstractController
         Stripe::setApiKey($this->params->get('stripe.secret_key'));
 
         try {
-            $subscription = Subscription::update(
+            Subscription::update(
                 $user->getStripeSubscriptionId(),
                 [
                     'cancel_at_period_end' => true,
@@ -47,6 +47,10 @@ final class ResiliationSubscriptionController extends AbstractController
                 [
                     'idempotency_key' => 'cancel-sub-' . $user->getId() . '-' . time(),
                 ]
+            );
+
+            $subscription = Subscription::retrieve(
+                $user->getStripeSubscriptionId()
             );
 
             $periodEnd = $subscription->current_period_end ?? null;
