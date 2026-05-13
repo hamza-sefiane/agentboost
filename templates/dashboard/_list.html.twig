@@ -2,571 +2,618 @@
 {% set isMonthlyPremium = app.user and app.user.subscriptionStatus == 'active' and app.user.currentPlan == 'monthly' %}
 
 {% if properties is empty %}
-    <div class="text-center py-5 text-muted">
-        <h5>Aucune estimation pour le moment</h5>
-        <small>Commence par estimer un bien 👆</small>
-    </div>
+	<div class="text-center py-5 text-muted">
+		<h5>Aucune estimation pour le moment</h5>
+		<small>Commence par estimer un bien 👆</small>
+	</div>
 {% else %}
-    {% set properties = properties|sort((a, b) => b.estimate <=> a.estimate) %}
-
-    <style>
-        .property-actions { min-width: 260px; overflow: visible !important; }
-        .property-photo-thumb { width: 70px; height: 55px; object-fit: cover; border-radius: 8px; border: 1px solid #ddd; background: #f8f9fa; }
-        .property-photo-placeholder { width: 70px; height: 55px; border-radius: 8px; border: 1px dashed #ccc; background: #f8f9fa; }
-        .property-action-primary { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; overflow: visible !important; }
-        .property-table-wrapper,
-        .property-table-wrapper table,
-        .property-table-wrapper tbody,
-        .property-table-wrapper tr,
-        .property-table-wrapper td { overflow: visible !important; }
-        .property-table-wrapper .dropdown-menu { z-index: 3000; }
-        .property-mobile-card { display: none; }
-        .premium-locked-item { color: #94a3b8 !important; cursor: default; }
-        .premium-locked-note { font-size: 11px; color: #64748b; padding: 8px 16px; line-height: 1.3; }
-
-        @media (max-width: 768px) {
-            .property-table-wrapper { display: none; }
-            .property-mobile-card {
-                display: block;
-                background: #ffffff;
-                border: 1px solid #e5e7eb;
-                border-radius: 16px;
-                padding: 16px;
-                margin-bottom: 14px;
-                box-shadow: 0 8px 20px rgba(0, 0, 0, 0.04);
-            }
-            .property-mobile-top { display: flex; gap: 12px; align-items: flex-start; }
-            .property-mobile-photo { width: 90px; height: 70px; object-fit: cover; border-radius: 12px; border: 1px solid #ddd; flex-shrink: 0; background: #f8f9fa; }
-            .property-mobile-price { font-size: 20px; font-weight: 700; color: #198754; }
-            .property-mobile-meta { color: #6b7280; font-size: 13px; line-height: 1.4; }
-            .property-mobile-actions {
-                display: grid;
-                grid-template-columns: 1fr 1fr;
-                gap: 8px;
-                margin-top: 14px;
-            }
-            .property-mobile-actions .btn,
-            .property-mobile-actions .dropup,
-            .property-mobile-actions .dropup > .btn { width: 100%; }
-            .bulk-header { flex-direction: column; align-items: stretch !important; gap: 10px; }
-            .bulk-header .btn { width: 100%; }
-        }
-    </style>
-
-    <form method="post" action="{{ path('property_bulk_delete') }}" id="bulk-delete-form" onsubmit="return confirmBulkDelete();">
-        <input type="hidden" name="_token" value="{{ csrf_token('bulk_delete_properties') }}">
-
-        {% if isMonthlyPremium %}
-            <div class="alert alert-info d-flex justify-content-between align-items-center flex-wrap gap-2">
-                <div>
-                    <strong>Plus d’outils de diffusion avec l’abonnement annuel.</strong><br>
-                    <small>Débloquez Facebook, Leboncoin et le PDF Premium pour gagner du temps sur vos annonces.</small>
-                </div>
-
-                <a href="{{ path('subscription_manage') }}" class="btn btn-sm btn-primary">
-                    Passer à l’annuel
-                </a>
-            </div>
-        {% endif %}
-
-        <div class="d-flex justify-content-between align-items-center mb-3 bulk-header">
-            <div class="text-muted small">
-                {{ properties|length }} estimation(s)
-            </div>
-
-            <button type="submit" class="btn btn-sm btn-danger" id="bulk-delete-btn" disabled>
-                Supprimer la sélection
-            </button>
-        </div>
-
-        <div class="property-table-wrapper table-responsive" style="overflow: visible;">
-            <table class="table align-middle shadow-sm rounded">
-                <thead class="table-dark">
-                    <tr>
-                        <th style="width: 40px;">
-                            <input type="checkbox" id="select-all-properties" aria-label="Tout sélectionner">
-                        </th>
-                        <th>Photo</th>
-                        <th>Bien</th>
-                        <th>Localisation</th>
-                        <th>Surface</th>
-                        <th>Infos</th>
-                        <th>Prix</th>
-                        <th class="text-center">Actions</th>
-                    </tr>
-                </thead>
-
-                <tbody>
-                    {% for p in properties %}
-                        {% set firstPhoto = p.photos|first %}
-
-                        <tr class="bg-white">
-                            <td>
-                                <input type="checkbox" name="property_ids[]" value="{{ p.id }}" class="property-checkbox" aria-label="Sélectionner cette estimation">
-                            </td>
-
-                            <td>
-                                {% if firstPhoto %}
-                                    <img
-                                        src="{{ asset('uploads/properties/' ~ firstPhoto.filename) }}"
-                                        alt="Photo du bien"
-                                        class="property-photo-thumb"
-                                        loading="lazy"
-                                        onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
-                                    >
-                                    <div class="property-photo-placeholder text-muted small align-items-center justify-content-center" style="display: none;">
-                                        —
-                                    </div>
-                                {% else %}
-                                    <div class="property-photo-placeholder text-muted small d-flex align-items-center justify-content-center">
-                                        —
-                                    </div>
-                                {% endif %}
-                            </td>
-
-                            <td>
-                                <span class="badge bg-primary">{{ p.type }}</span>
-
-                                {% if p.photos|length > 0 %}
-                                    <br>
-                                    <small class="text-muted">{{ p.photos|length }} photo(s)</small>
-                                {% endif %}
-                            </td>
-
-                            <td>
-                                {% if p.address %}
-                                    <strong>{{ p.address }}</strong><br>
-                                {% endif %}
-                                <strong>{{ p.city|capitalize }}</strong><br>
-                                <small class="text-muted">{{ p.postalCode }}</small>
-                            </td>
-
-                            <td class="text-nowrap">
-                                {{ p.surface }} m²
-                            </td>
-
-                            <td>
-                                {% if p.type|lower == 'parking' %}
-                                    <span class="text-muted">Parking</span>
-                                {% else %}
-                                    {{ p.rooms }} pièces<br>
-                                    <small class="text-muted">Parking : {{ p.parking ? 'Oui' : 'Non' }}</small>
-                                {% endif %}
-                            </td>
-
-                            <td class="text-nowrap">
-                                <strong class="text-success fs-6">
-                                    {{ p.estimate|number_format(0, ',', ' ') }} €
-                                </strong>
-                            </td>
-
-                            <td class="text-center property-actions">
-                                <div class="property-action-primary">
-                                    <button type="submit" form="generate-ad-form-{{ p.id }}" class="btn btn-sm btn-primary">
-                                        Générer IA
-                                    </button>
-
-                                    {% if p.adText %}
-                                        <button type="button" class="btn btn-sm btn-outline-primary" data-ad="{{ p.adText|e('html_attr') }}" onclick="openAdModal(this.dataset.ad)">
-                                            Voir
-                                        </button>
-
-                                        {% if isYearlyPremium %}
-                                            <a href="{{ path('property_pdf_premium', { id: p.id }) }}" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-dark">
-                                                Premium
-                                            </a>
-                                        {% else %}
-                                            <a href="{{ path('property_pdf', { id: p.id }) }}" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-outline-success">
-                                                PDF
-                                            </a>
-                                        {% endif %}
-
-                                        <div class="dropup">
-                                            <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" data-bs-boundary="viewport" aria-expanded="false">
-                                                Actions
-                                            </button>
-
-                                            <ul class="dropdown-menu dropdown-menu-end">
-                                                <li>
-                                                    <button type="button" class="dropdown-item" data-ad="{{ p.adText|e('html_attr') }}" onclick="copyAd(this.dataset.ad)">
-                                                        Copier l’annonce
-                                                    </button>
-                                                </li>
-
-                                                {% if isYearlyPremium %}
-                                                    <li>
-                                                        <button type="button" class="dropdown-item" data-ad="{{ p.adText|e('html_attr') }}" onclick="copyLeboncoin(this.dataset.ad)">
-                                                            Format Leboncoin
-                                                        </button>
-                                                    </li>
-
-                                                    <li>
-                                                        <button type="button" class="dropdown-item" data-ad="{{ p.adText|e('html_attr') }}" onclick="shareFacebook(this.dataset.ad)">
-                                                            Publier sur Facebook
-                                                        </button>
-                                                    </li>
-                                                {% else %}
-                                                    <li>
-                                                        <span class="dropdown-item premium-locked-item">
-                                                            Leboncoin — Premium annuel
-                                                        </span>
-                                                    </li>
-
-                                                    <li>
-                                                        <span class="dropdown-item premium-locked-item">
-                                                            Facebook — Premium annuel
-                                                        </span>
-                                                    </li>
-
-                                                    <li>
-                                                        <div class="premium-locked-note">
-                                                            Passez à l’annuel pour débloquer les outils de diffusion.
-                                                        </div>
-                                                    </li>
-                                                {% endif %}
-
-                                                <li>
-                                                    <a href="{{ path('property_pdf', { id: p.id }) }}" target="_blank" rel="noopener noreferrer" class="dropdown-item">
-                                                        PDF classique
-                                                    </a>
-                                                </li>
-
-                                                <li>
-                                                    <a href="{{ path('property_edit', { id: p.id }) }}" class="dropdown-item">
-                                                        Modifier
-                                                    </a>
-                                                </li>
-
-                                                <li>
-                                                    <hr class="dropdown-divider">
-                                                </li>
-
-                                                <li>
-                                                    <button type="submit" form="delete-property-form-{{ p.id }}" class="dropdown-item text-danger" onclick="return confirm('Supprimer cette estimation ?');">
-                                                        Supprimer
-                                                    </button>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    {% else %}
-                                        <small class="d-block text-muted align-self-center">
-                                            Aucune annonce
-                                        </small>
-
-                                        <a href="{{ path('property_edit', { id: p.id }) }}" class="btn btn-sm btn-outline-warning">
-                                            Modifier
-                                        </a>
-                                    {% endif %}
-                                </div>
-                            </td>
-                        </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-
-        <div class="property-mobile-list">
-            {% for p in properties %}
-                {% set firstPhoto = p.photos|first %}
-
-                <div class="property-mobile-card">
-                    <div class="property-mobile-top">
-                        <input type="checkbox" name="property_ids[]" value="{{ p.id }}" class="property-checkbox mt-1" aria-label="Sélectionner cette estimation">
-
-                        {% if firstPhoto %}
-                            <img
-                                src="{{ asset('uploads/properties/' ~ firstPhoto.filename) }}"
-                                alt="Photo du bien"
-                                class="property-mobile-photo"
-                                loading="lazy"
-                                onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
-                            >
-                            <div class="property-mobile-photo align-items-center justify-content-center text-muted" style="display: none; border: 1px dashed #ccc;">
-                                —
-                            </div>
-                        {% else %}
-                            <div class="property-mobile-photo d-flex align-items-center justify-content-center text-muted" style="border: 1px dashed #ccc;">
-                                —
-                            </div>
-                        {% endif %}
-
-                        <div class="flex-grow-1">
-                            <div class="d-flex justify-content-between gap-2">
-                                <span class="badge bg-primary align-self-start">{{ p.type }}</span>
-
-                                <button type="submit" form="delete-property-form-{{ p.id }}" class="btn btn-sm btn-danger" onclick="return confirm('Supprimer cette estimation ?');">
-                                    ✕
-                                </button>
-                            </div>
-
-                            <div class="property-mobile-price mt-2">
-                                {{ p.estimate|number_format(0, ',', ' ') }} €
-                            </div>
-
-                            <div class="property-mobile-meta">
-                                {{ p.surface }} m²
-                                {% if p.type|lower != 'parking' %}
-                                    · {{ p.rooms }} pièces
-                                {% endif %}
-                                · Parking : {{ p.parking ? 'Oui' : 'Non' }}
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="property-mobile-meta mt-3">
-                        {% if p.address %}
-                            <strong>{{ p.address }}</strong><br>
-                        {% endif %}
-                        {{ p.postalCode }} {{ p.city|upper }}
-
-                        {% if p.photos|length > 0 %}
-                            <br>{{ p.photos|length }} photo(s)
-                        {% endif %}
-                    </div>
-
-                    <div class="property-mobile-actions">
-                        <button type="submit" form="generate-ad-form-{{ p.id }}" class="btn btn-primary">
-                            Générer IA
-                        </button>
-
-                        {% if p.adText %}
-                            <button type="button" class="btn btn-outline-primary" data-ad="{{ p.adText|e('html_attr') }}" onclick="openAdModal(this.dataset.ad)">
-                                Voir annonce
-                            </button>
-
-                            {% if isYearlyPremium %}
-                                <a href="{{ path('property_pdf_premium', { id: p.id }) }}" target="_blank" rel="noopener noreferrer" class="btn btn-dark">
-                                    PDF Premium
-                                </a>
-                            {% else %}
-                                <a href="{{ path('property_pdf', { id: p.id }) }}" target="_blank" rel="noopener noreferrer" class="btn btn-outline-success">
-                                    PDF
-                                </a>
-                            {% endif %}
-
-                            <div class="dropup">
-                                <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" data-bs-boundary="viewport" aria-expanded="false">
-                                    Plus d’actions
-                                </button>
-
-                                <ul class="dropdown-menu dropdown-menu-end">
-                                    <li>
-                                        <button type="button" class="dropdown-item" data-ad="{{ p.adText|e('html_attr') }}" onclick="copyAd(this.dataset.ad)">
-                                            Copier l’annonce
-                                        </button>
-                                    </li>
-
-                                    {% if isYearlyPremium %}
-                                        <li>
-                                            <button type="button" class="dropdown-item" data-ad="{{ p.adText|e('html_attr') }}" onclick="copyLeboncoin(this.dataset.ad)">
-                                                Format Leboncoin
-                                            </button>
-                                        </li>
-
-                                        <li>
-                                            <button type="button" class="dropdown-item" data-ad="{{ p.adText|e('html_attr') }}" onclick="shareFacebook(this.dataset.ad)">
-                                                Publier sur Facebook
-                                            </button>
-                                        </li>
-                                    {% else %}
-                                        <li>
-                                            <span class="dropdown-item premium-locked-item">
-                                                Leboncoin — Premium annuel
-                                            </span>
-                                        </li>
-
-                                        <li>
-                                            <span class="dropdown-item premium-locked-item">
-                                                Facebook — Premium annuel
-                                            </span>
-                                        </li>
-
-                                        <li>
-                                            <div class="premium-locked-note">
-                                                Passez à l’annuel pour débloquer les outils de diffusion.
-                                            </div>
-                                        </li>
-                                    {% endif %}
-
-                                    <li>
-                                        <a href="{{ path('property_pdf', { id: p.id }) }}" target="_blank" rel="noopener noreferrer" class="dropdown-item">
-                                            PDF classique
-                                        </a>
-                                    </li>
-
-                                    <li>
-                                        <a href="{{ path('property_edit', { id: p.id }) }}" class="dropdown-item">
-                                            Modifier
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
-                        {% else %}
-                            <span class="badge bg-light text-muted border d-flex align-items-center justify-content-center">
-                                Aucune annonce
-                            </span>
-
-                            <a href="{{ path('property_edit', { id: p.id }) }}" class="btn btn-outline-warning">
-                                Modifier
-                            </a>
-                        {% endif %}
-                    </div>
-                </div>
-            {% endfor %}
-        </div>
-    </form>
-
-    {% for p in properties %}
-        <form id="generate-ad-form-{{ p.id }}" method="post" action="{{ path('property_generate_ad', { id: p.id }) }}" class="d-none">
-            <input type="hidden" name="_token" value="{{ csrf_token('generate_ad_' ~ p.id) }}">
-        </form>
-
-        <form id="delete-property-form-{{ p.id }}" method="post" action="{{ path('property_delete', { id: p.id }) }}" class="d-none">
-            <input type="hidden" name="_token" value="{{ csrf_token('delete_property_' ~ p.id) }}">
-        </form>
-    {% endfor %}
-
-    <div class="modal fade" id="adModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-lg modal-dialog-centered">
-            <div class="modal-content shadow">
-                <div class="modal-header">
-                    <h5 class="modal-title">Annonce générée</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
-                </div>
-
-                <div class="modal-body">
-                    <div id="adContent" style="white-space: pre-line;"></div>
-                </div>
-
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-success" onclick="copyFromModal()">
-                        Copier
-                    </button>
-
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                        Fermer
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        let currentAd = '';
-
-        function openAdModal(text) {
-            currentAd = text || '';
-
-            const adContent = document.getElementById('adContent');
-
-            if (adContent) {
-                adContent.innerText = currentAd;
-            }
-
-            const modalElement = document.getElementById('adModal');
-
-            if (modalElement && window.bootstrap) {
-                const modal = new bootstrap.Modal(modalElement);
-                modal.show();
-            }
-        }
-
-        function copyAd(text) {
-            copyToClipboard(text || '', 'Annonce copiée');
-        }
-
-        function copyFromModal() {
-            copyToClipboard(currentAd || '', 'Annonce copiée');
-        }
-
-        function copyLeboncoin(text) {
-            const formatted = (text || '').replace(/\n/g, '\n\n').toUpperCase();
-
-            copyToClipboard(formatted, 'Format Leboncoin copié');
-        }
-
-        function shareFacebook(text) {
-            copyToClipboard(text || '', 'Annonce copiée pour Facebook');
-
-            window.open(
-                'https://www.facebook.com/',
-                '_blank',
-                'noopener,noreferrer'
-            );
-        }
-
-        function copyToClipboard(text, successMessage) {
-            if (!navigator.clipboard) {
-                showToast('Copie impossible sur ce navigateur', true);
-                return;
-            }
-
-            navigator.clipboard
-                .writeText(text)
-                .then(() => showToast(successMessage))
-                .catch(() => showToast('Erreur lors de la copie', true));
-        }
-
-        function showToast(message, isError = false) {
-            const toast = document.createElement('div');
-
-            toast.innerText = message;
-            toast.style.position = 'fixed';
-            toast.style.bottom = '20px';
-            toast.style.right = '20px';
-            toast.style.background = isError ? '#dc3545' : '#198754';
-            toast.style.color = '#fff';
-            toast.style.padding = '10px 15px';
-            toast.style.borderRadius = '5px';
-            toast.style.zIndex = '9999';
-            toast.style.boxShadow = '0 4px 12px rgba(0,0,0,.15)';
-
-            document.body.appendChild(toast);
-
-            setTimeout(() => toast.remove(), 2000);
-        }
-
-        const selectAll = document.getElementById('select-all-properties');
-        const checkboxes = document.querySelectorAll('.property-checkbox');
-        const bulkDeleteBtn = document.getElementById('bulk-delete-btn');
-
-        function updateBulkDeleteState() {
-            const checkedCount = document.querySelectorAll('.property-checkbox:checked').length;
-
-            if (bulkDeleteBtn) {
-                bulkDeleteBtn.disabled = checkedCount === 0;
-            }
-
-            if (selectAll) {
-                selectAll.checked = checkedCount > 0 && checkedCount === checkboxes.length;
-                selectAll.indeterminate = checkedCount > 0 && checkedCount < checkboxes.length;
-            }
-        }
-
-        if (selectAll) {
-            selectAll.addEventListener('change', function () {
-                checkboxes.forEach((checkbox) => {
-                    checkbox.checked = selectAll.checked;
-                });
-
-                updateBulkDeleteState();
-            });
-        }
-
-        checkboxes.forEach((checkbox) => {
-            checkbox.addEventListener('change', updateBulkDeleteState);
-        });
-
-        function confirmBulkDelete() {
-            const checkedCount = document.querySelectorAll('.property-checkbox:checked').length;
-
-            if (checkedCount === 0) {
-                return false;
-            }
-
-            return confirm('Supprimer ' + checkedCount + ' estimation(s) ?');
-        }
-
-        updateBulkDeleteState();
-    </script>
+	{% set properties = properties|sort((a, b) => b.estimate <=> a.estimate) %}
+
+	<style>
+		.property-actions {
+			min-width: 260px;
+			overflow: visible !important;
+		}
+		.property-photo-thumb {
+			width: 70px;
+			height: 55px;
+			object-fit: cover;
+			border-radius: 8px;
+			border: 1px solid #ddd;
+			background: #f8f9fa;
+		}
+		.property-photo-placeholder {
+			width: 70px;
+			height: 55px;
+			border-radius: 8px;
+			border: 1px dashed #ccc;
+			background: #f8f9fa;
+		}
+		.property-action-primary {
+			display: flex;
+			flex-wrap: wrap;
+			gap: 6px;
+			justify-content: center;
+			overflow: visible !important;
+		}
+		.property-table-wrapper,
+		.property-table-wrapper table,
+		.property-table-wrapper tbody,
+		.property-table-wrapper tr,
+		.property-table-wrapper td {
+			overflow: visible !important;
+		}
+		.property-table-wrapper .dropdown-menu {
+			z-index: 3000;
+		}
+		.property-mobile-card {
+			display: none;
+		}
+		.premium-locked-item {
+			color: #94a3b8 !important;
+			cursor: default;
+		}
+		.premium-locked-note {
+			font-size: 11px;
+			color: #64748b;
+			padding: 8px 16px;
+			line-height: 1.3;
+		}
+
+		@media(max-width: 768px) {
+			.property-table-wrapper {
+				display: none;
+			}
+			.property-mobile-card {
+				display: block;
+				background: #ffffff;
+				border: 1px solid #e5e7eb;
+				border-radius: 16px;
+				padding: 16px;
+				margin-bottom: 14px;
+				box-shadow: 0 8px 20px rgba(0, 0, 0, 0.04);
+			}
+			.property-mobile-top {
+				display: flex;
+				gap: 12px;
+				align-items: flex-start;
+			}
+			.property-mobile-photo {
+				width: 90px;
+				height: 70px;
+				object-fit: cover;
+				border-radius: 12px;
+				border: 1px solid #ddd;
+				flex-shrink: 0;
+				background: #f8f9fa;
+			}
+			.property-mobile-price {
+				font-size: 20px;
+				font-weight: 700;
+				color: #198754;
+			}
+			.property-mobile-meta {
+				color: #6b7280;
+				font-size: 13px;
+				line-height: 1.4;
+			}
+			.property-mobile-actions {
+				display: grid;
+				grid-template-columns: 1fr 1fr;
+				gap: 8px;
+				margin-top: 14px;
+			}
+			.property-mobile-actions .btn,
+			.property-mobile-actions .dropup,
+			.property-mobile-actions .dropup > .btn {
+				width: 100%;
+			}
+			.bulk-header {
+				flex-direction: column;
+				align-items: stretch !important;
+				gap: 10px;
+			}
+			.bulk-header .btn {
+				width: 100%;
+			}
+		}
+	</style>
+
+	<form method="post" action="{{ path('property_bulk_delete') }}" id="bulk-delete-form" onsubmit="return confirmBulkDelete();">
+		<input type="hidden" name="_token" value="{{ csrf_token('bulk_delete_properties') }}">
+
+		<div class="d-flex justify-content-between align-items-center mb-3 bulk-header">
+			<div class="text-muted small">
+				{{ properties|length }}
+				estimation(s)
+			</div>
+
+			<button type="submit" class="btn btn-sm btn-danger" id="bulk-delete-btn" disabled>
+				Supprimer la sélection
+			</button>
+		</div>
+
+		<div class="property-table-wrapper table-responsive" style="overflow: visible;">
+			<table class="table align-middle shadow-sm rounded">
+				<thead class="table-dark">
+					<tr>
+						<th style="width: 40px;">
+							<input type="checkbox" id="select-all-properties" aria-label="Tout sélectionner">
+						</th>
+						<th>Photo</th>
+						<th>Bien</th>
+						<th>Localisation</th>
+						<th>Surface</th>
+						<th>Infos</th>
+						<th>Prix</th>
+						<th class="text-center">Actions</th>
+					</tr>
+				</thead>
+
+				<tbody>
+					{% for p in properties %}
+						{% set firstPhoto = p.photos|first %}
+
+						<tr class="bg-white">
+							<td>
+								<input type="checkbox" name="property_ids[]" value="{{ p.id }}" class="property-checkbox" aria-label="Sélectionner cette estimation">
+							</td>
+
+							<td>
+								{% if firstPhoto %}
+									<img src="{{ asset('uploads/properties/' ~ firstPhoto.filename) }}" alt="Photo du bien" class="property-photo-thumb" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+									<div class="property-photo-placeholder text-muted small align-items-center justify-content-center" style="display: none;">
+										—
+									</div>
+								{% else %}
+									<div class="property-photo-placeholder text-muted small d-flex align-items-center justify-content-center">
+										—
+									</div>
+								{% endif %}
+							</td>
+
+							<td>
+								<span class="badge bg-primary">{{ p.type }}</span>
+
+								{% if p.photos|length > 0 %}
+									<br>
+									<small class="text-muted">{{ p.photos|length }}
+										photo(s)</small>
+								{% endif %}
+							</td>
+
+							<td>
+								{% if p.address %}
+									<strong>{{ p.address }}</strong><br>
+								{% endif %}
+								<strong>{{ p.city|capitalize }}</strong><br>
+								<small class="text-muted">{{ p.postalCode }}</small>
+							</td>
+
+							<td class="text-nowrap">
+								{{ p.surface }}
+								m²
+							</td>
+
+							<td>
+								{% if p.type|lower == 'parking' %}
+									<span class="text-muted">Parking</span>
+								{% else %}
+									{{ p.rooms }}
+									pièces<br>
+									<small class="text-muted">Parking :
+										{{ p.parking ? 'Oui' : 'Non' }}</small>
+								{% endif %}
+							</td>
+
+							<td class="text-nowrap">
+								<strong class="text-success fs-6">
+									{{ p.estimate|number_format(0, ',', ' ') }}
+									€
+								</strong>
+							</td>
+
+							<td class="text-center property-actions">
+								<div class="property-action-primary">
+									<button type="submit" form="generate-ad-form-{{ p.id }}" class="btn btn-sm btn-primary">
+										Générer IA
+									</button>
+
+									{% if p.adText %}
+										<button type="button" class="btn btn-sm btn-outline-primary" data-ad="{{ p.adText|e('html_attr') }}" onclick="openAdModal(this.dataset.ad)">
+											Voir
+										</button>
+
+										{% if isYearlyPremium %}
+											<a href="{{ path('property_pdf_premium', { id: p.id }) }}" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-dark">
+												Premium
+											</a>
+										{% else %}
+											<a href="{{ path('property_pdf', { id: p.id }) }}" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-outline-success">
+												PDF
+											</a>
+										{% endif %}
+
+										<div class="dropup">
+											<button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" data-bs-boundary="viewport" aria-expanded="false">
+												Actions
+											</button>
+
+											<ul class="dropdown-menu dropdown-menu-end">
+												<li>
+													<button type="button" class="dropdown-item" data-ad="{{ p.adText|e('html_attr') }}" onclick="copyAd(this.dataset.ad)">
+														Copier l’annonce
+													</button>
+												</li>
+
+												{% if isYearlyPremium %}
+													<li>
+														<button type="button" class="dropdown-item" data-ad="{{ p.adText|e('html_attr') }}" onclick="copyLeboncoin(this.dataset.ad)">
+															Format Leboncoin
+														</button>
+													</li>
+
+													<li>
+														<button type="button" class="dropdown-item" data-ad="{{ p.adText|e('html_attr') }}" onclick="shareFacebook(this.dataset.ad)">
+															Publier sur Facebook
+														</button>
+													</li>
+												{% else %}
+													<li>
+														<span class="dropdown-item premium-locked-item">
+															Leboncoin — Premium annuel
+														</span>
+													</li>
+
+													<li>
+														<span class="dropdown-item premium-locked-item">
+															Facebook — Premium annuel
+														</span>
+													</li>
+
+													<li>
+														<div class="premium-locked-note">
+															Passez à l’annuel pour débloquer les outils de diffusion.
+														</div>
+													</li>
+												{% endif %}
+
+												<li>
+													<a href="{{ path('property_pdf', { id: p.id }) }}" target="_blank" rel="noopener noreferrer" class="dropdown-item">
+														PDF classique
+													</a>
+												</li>
+
+												<li>
+													<a href="{{ path('property_edit', { id: p.id }) }}" class="dropdown-item">
+														Modifier
+													</a>
+												</li>
+
+												<li>
+													<hr class="dropdown-divider">
+												</li>
+
+												<li>
+													<button type="submit" form="delete-property-form-{{ p.id }}" class="dropdown-item text-danger" onclick="return confirm('Supprimer cette estimation ?');">
+														Supprimer
+													</button>
+												</li>
+											</ul>
+										</div>
+									{% else %}
+										<small class="d-block text-muted align-self-center">
+											Aucune annonce
+										</small>
+
+										<a href="{{ path('property_edit', { id: p.id }) }}" class="btn btn-sm btn-outline-warning">
+											Modifier
+										</a>
+									{% endif %}
+								</div>
+							</td>
+						</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+
+		<div class="property-mobile-list">
+			{% for p in properties %}
+				{% set firstPhoto = p.photos|first %}
+
+				<div class="property-mobile-card">
+					<div class="property-mobile-top">
+						<input type="checkbox" name="property_ids[]" value="{{ p.id }}" class="property-checkbox mt-1" aria-label="Sélectionner cette estimation">
+
+						{% if firstPhoto %}
+							<img src="{{ asset('uploads/properties/' ~ firstPhoto.filename) }}" alt="Photo du bien" class="property-mobile-photo" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+							<div class="property-mobile-photo align-items-center justify-content-center text-muted" style="display: none; border: 1px dashed #ccc;">
+								—
+							</div>
+						{% else %}
+							<div class="property-mobile-photo d-flex align-items-center justify-content-center text-muted" style="border: 1px dashed #ccc;">
+								—
+							</div>
+						{% endif %}
+
+						<div class="flex-grow-1">
+							<div class="d-flex justify-content-between gap-2">
+								<span class="badge bg-primary align-self-start">{{ p.type }}</span>
+
+								<button type="submit" form="delete-property-form-{{ p.id }}" class="btn btn-sm btn-danger" onclick="return confirm('Supprimer cette estimation ?');">
+									✕
+								</button>
+							</div>
+
+							<div class="property-mobile-price mt-2">
+								{{ p.estimate|number_format(0, ',', ' ') }}
+								€
+							</div>
+
+							<div class="property-mobile-meta">
+								{{ p.surface }}
+								m²
+								{% if p.type|lower != 'parking' %}
+									·
+									{{ p.rooms }}
+									pièces
+								{% endif %}
+								· Parking :
+								{{ p.parking ? 'Oui' : 'Non' }}
+							</div>
+						</div>
+					</div>
+
+					<div class="property-mobile-meta mt-3">
+						{% if p.address %}
+							<strong>{{ p.address }}</strong><br>
+						{% endif %}
+						{{ p.postalCode }}
+						{{ p.city|upper }}
+
+						{% if p.photos|length > 0 %}
+							<br>{{ p.photos|length }}
+							photo(s)
+						{% endif %}
+					</div>
+
+					<div class="property-mobile-actions">
+						<button type="submit" form="generate-ad-form-{{ p.id }}" class="btn btn-primary">
+							Générer IA
+						</button>
+
+						{% if p.adText %}
+							<button type="button" class="btn btn-outline-primary" data-ad="{{ p.adText|e('html_attr') }}" onclick="openAdModal(this.dataset.ad)">
+								Voir annonce
+							</button>
+
+							{% if isYearlyPremium %}
+								<a href="{{ path('property_pdf_premium', { id: p.id }) }}" target="_blank" rel="noopener noreferrer" class="btn btn-dark">
+									PDF Premium
+								</a>
+							{% else %}
+								<a href="{{ path('property_pdf', { id: p.id }) }}" target="_blank" rel="noopener noreferrer" class="btn btn-outline-success">
+									PDF
+								</a>
+							{% endif %}
+
+							<div class="dropup">
+								<button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" data-bs-boundary="viewport" aria-expanded="false">
+									Plus d’actions
+								</button>
+
+								<ul class="dropdown-menu dropdown-menu-end">
+									<li>
+										<button type="button" class="dropdown-item" data-ad="{{ p.adText|e('html_attr') }}" onclick="copyAd(this.dataset.ad)">
+											Copier l’annonce
+										</button>
+									</li>
+
+									{% if isYearlyPremium %}
+										<li>
+											<button type="button" class="dropdown-item" data-ad="{{ p.adText|e('html_attr') }}" onclick="copyLeboncoin(this.dataset.ad)">
+												Format Leboncoin
+											</button>
+										</li>
+
+										<li>
+											<button type="button" class="dropdown-item" data-ad="{{ p.adText|e('html_attr') }}" onclick="shareFacebook(this.dataset.ad)">
+												Publier sur Facebook
+											</button>
+										</li>
+									{% else %}
+										<li>
+											<span class="dropdown-item premium-locked-item">
+												Leboncoin — Premium annuel
+											</span>
+										</li>
+
+										<li>
+											<span class="dropdown-item premium-locked-item">
+												Facebook — Premium annuel
+											</span>
+										</li>
+
+										<li>
+											<div class="premium-locked-note">
+												Passez à l’annuel pour débloquer les outils de diffusion.
+											</div>
+										</li>
+									{% endif %}
+
+									<li>
+										<a href="{{ path('property_pdf', { id: p.id }) }}" target="_blank" rel="noopener noreferrer" class="dropdown-item">
+											PDF classique
+										</a>
+									</li>
+
+									<li>
+										<a href="{{ path('property_edit', { id: p.id }) }}" class="dropdown-item">
+											Modifier
+										</a>
+									</li>
+								</ul>
+							</div>
+						{% else %}
+							<span class="badge bg-light text-muted border d-flex align-items-center justify-content-center">
+								Aucune annonce
+							</span>
+
+							<a href="{{ path('property_edit', { id: p.id }) }}" class="btn btn-outline-warning">
+								Modifier
+							</a>
+						{% endif %}
+					</div>
+				</div>
+			{% endfor %}
+		</div>
+	</form>
+
+	{% for p in properties %}
+		<form id="generate-ad-form-{{ p.id }}" method="post" action="{{ path('property_generate_ad', { id: p.id }) }}" class="d-none">
+			<input type="hidden" name="_token" value="{{ csrf_token('generate_ad_' ~ p.id) }}">
+		</form>
+
+		<form id="delete-property-form-{{ p.id }}" method="post" action="{{ path('property_delete', { id: p.id }) }}" class="d-none">
+			<input type="hidden" name="_token" value="{{ csrf_token('delete_property_' ~ p.id) }}">
+		</form>
+	{% endfor %}
+
+	<div class="modal fade" id="adModal" tabindex="-1" aria-hidden="true">
+		<div class="modal-dialog modal-lg modal-dialog-centered">
+			<div class="modal-content shadow">
+				<div class="modal-header">
+					<h5 class="modal-title">Annonce générée</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+				</div>
+
+				<div class="modal-body">
+					<div id="adContent" style="white-space: pre-line;"></div>
+				</div>
+
+				<div class="modal-footer">
+					<button type="button" class="btn btn-success" onclick="copyFromModal()">
+						Copier
+					</button>
+
+					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+						Fermer
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script>
+		let currentAd = '';
+
+function openAdModal(text) {
+currentAd = text || '';
+
+const adContent = document.getElementById('adContent');
+
+if (adContent) {
+adContent.innerText = currentAd;
+}
+
+const modalElement = document.getElementById('adModal');
+
+if (modalElement && window.bootstrap) {
+const modal = new bootstrap.Modal(modalElement);
+modal.show();
+}
+}
+
+function copyAd(text) {
+copyToClipboard(text || '', 'Annonce copiée');
+}
+
+function copyFromModal() {
+copyToClipboard(currentAd || '', 'Annonce copiée');
+}
+
+function copyLeboncoin(text) {
+const formatted = (text || '').replace(/\n/g, '\n\n').toUpperCase();
+
+copyToClipboard(formatted, 'Format Leboncoin copié');
+}
+
+function shareFacebook(text) {
+copyToClipboard(text || '', 'Annonce copiée pour Facebook');
+
+window.open('https://www.facebook.com/', '_blank', 'noopener,noreferrer');
+}
+
+function copyToClipboard(text, successMessage) {
+if (!navigator.clipboard) {
+showToast('Copie impossible sur ce navigateur', true);
+return;
+}
+
+navigator.clipboard.writeText(text).then(() => showToast(successMessage)).catch(() => showToast('Erreur lors de la copie', true));
+}
+
+function showToast(message, isError = false) {
+const toast = document.createElement('div');
+
+toast.innerText = message;
+toast.style.position = 'fixed';
+toast.style.bottom = '20px';
+toast.style.right = '20px';
+toast.style.background = isError ? '#dc3545' : '#198754';
+toast.style.color = '#fff';
+toast.style.padding = '10px 15px';
+toast.style.borderRadius = '5px';
+toast.style.zIndex = '9999';
+toast.style.boxShadow = '0 4px 12px rgba(0,0,0,.15)';
+
+document.body.appendChild(toast);
+
+setTimeout(() => toast.remove(), 2000);
+}
+
+const selectAll = document.getElementById('select-all-properties');
+const checkboxes = document.querySelectorAll('.property-checkbox');
+const bulkDeleteBtn = document.getElementById('bulk-delete-btn');
+
+function updateBulkDeleteState() {
+const checkedCount = document.querySelectorAll('.property-checkbox:checked').length;
+
+if (bulkDeleteBtn) {
+bulkDeleteBtn.disabled = checkedCount === 0;
+}
+
+if (selectAll) {
+selectAll.checked = checkedCount > 0 && checkedCount === checkboxes.length;
+selectAll.indeterminate = checkedCount > 0 && checkedCount < checkboxes.length;
+}
+}
+
+if (selectAll) {
+selectAll.addEventListener('change', function () {
+checkboxes.forEach((checkbox) => {
+checkbox.checked = selectAll.checked;
+});
+
+updateBulkDeleteState();
+});
+}
+
+checkboxes.forEach((checkbox) => {
+checkbox.addEventListener('change', updateBulkDeleteState);
+});
+
+function confirmBulkDelete() {
+const checkedCount = document.querySelectorAll('.property-checkbox:checked').length;
+
+if (checkedCount === 0) {
+return false;
+}
+
+return confirm('Supprimer ' + checkedCount + ' estimation(s) ?');
+}
+
+updateBulkDeleteState();
+	</script>
 {% endif %}
