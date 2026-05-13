@@ -342,19 +342,6 @@
 
                 <div class="signature-line"></div>
             </td>
-
-            <td class="qr-card">
-                {% set qrUrl = absolute_url(path('property_pdf', { id: property.id })) %}
-
-                <div class="qr-box">
-                    <img src="{{ qr_code_data_uri(qrUrl) }}" alt="QR code estimation">
-                </div>
-
-                <div class="qr-text">
-                    Scanner pour ouvrir<br>
-                    cette estimation
-                </div>
-            </td>
         </tr>
     </table>
 
