@@ -95,14 +95,6 @@
 			</section>
 		{% endif %}
 
-		<pre>
-<pre>
-subscriptionStatus: {{ user.subscriptionStatus }}
-isCancelAtPeriodEnd: {{ user.isCancelAtPeriodEnd ? 'true' : 'false' }}
-isDeleteAtPeriodEnd: {{ user.isDeleteAtPeriodEnd ? 'true' : 'false' }}
-</pre>
-</pre>
-
 		{% if user.pendingPlan and not isAccountDeletionScheduled %}
 			<section class="mb-5">
 				<div class="p-4 rounded-3 border" style="background:#fffaf0;border-color:#facc15">
@@ -151,7 +143,7 @@ isDeleteAtPeriodEnd: {{ user.isDeleteAtPeriodEnd ? 'true' : 'false' }}
 				<div class="p-4 rounded-3 border" style="background:#f0fdf4;border-color:#22c55e">
 					<p class="mb-3 text-success">
 						Votre abonnement est en cours de résiliation.
-						                    Vous pouvez encore annuler cette résiliation avant la fin de la période.
+												                    Vous pouvez encore annuler cette résiliation avant la fin de la période.
 					</p>
 
 					<form method="post" action="{{ path('subscription_cancel_cancellation') }}">
