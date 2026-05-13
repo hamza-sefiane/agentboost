@@ -10,6 +10,8 @@ use Stripe\Subscription;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
@@ -19,6 +21,7 @@ final class ResiliationSubscriptionController extends AbstractController
     public function __construct(
         private readonly ParameterBagInterface $params,
         private readonly EntityManagerInterface $entityManager,
+        private readonly MailerInterface $mailer,
     ) {
     }
 
@@ -49,9 +52,7 @@ final class ResiliationSubscriptionController extends AbstractController
                 ]
             );
 
-            $subscription = Subscription::retrieve(
-                $user->getStripeSubscriptionId()
-            );
+            $subscription = Subscription::retrieve($user->getStripeSubscriptionId());
 
             $periodEnd = $subscription->current_period_end ?? null;
 
@@ -63,13 +64,31 @@ final class ResiliationSubscriptionController extends AbstractController
                 $periodEnd = (new \DateTimeImmutable('+1 month'))->getTimestamp();
             }
 
-            $user->markCancellationAtPeriodEnd(
-                (new \DateTimeImmutable())->setTimestamp((int) $periodEnd)
-            );
+            $periodEndDate = (new \DateTimeImmutable())->setTimestamp((int) $periodEnd);
+
+            $user->markCancellationAtPeriodEnd($periodEndDate);
 
             $this->entityManager->persist($user);
             $this->entityManager->flush();
 
+            try {
+                $this->mailer->send(
+                    (new Email())
+                        ->from('AgentBoost <no-reply@agentboost-immo.fr>')
+                        ->to($user->getEmail())
+                        ->subject('Résiliation de votre abonnement AgentBoost')
+                        ->html(sprintf(
+                            '<p>Bonjour,</p>
+                            <p>Votre abonnement AgentBoost a bien été programmé pour résiliation.</p>
+                            <p>Vous conservez l’accès à vos fonctionnalités jusqu’au <strong>%s</strong>.</p>
+                            <p>Vous pouvez annuler cette résiliation depuis votre espace client tant que cette date n’est pas passée.</p>
+                            <p>— L’équipe AgentBoost</p>',
+                            $periodEndDate->format('d/m/Y')
+                        ))
+                );
+            } catch (\Throwable) {
+                // Ne bloque pas la résiliation si l’email échoue.
+            }
         } catch (ApiErrorException) {
             $this->addFlash('error', 'Impossible de résilier l’abonnement. Réessayez.');
 
