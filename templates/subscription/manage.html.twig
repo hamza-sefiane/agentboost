@@ -96,9 +96,11 @@
 		{% endif %}
 
 		<pre>
-{{ dump(user.subscriptionStatus) }}
-{{ dump(user.isCancelAtPeriodEnd) }}
-{{ dump(user.isDeleteAtPeriodEnd) }}
+<pre>
+subscriptionStatus: {{ user.subscriptionStatus }}
+isCancelAtPeriodEnd: {{ user.isCancelAtPeriodEnd ? 'true' : 'false' }}
+isDeleteAtPeriodEnd: {{ user.isDeleteAtPeriodEnd ? 'true' : 'false' }}
+</pre>
 </pre>
 
 		{% if user.pendingPlan and not isAccountDeletionScheduled %}
