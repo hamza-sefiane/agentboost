@@ -11,25 +11,29 @@
 
 <body>
 
-{% set agencyName = app.user.companyName ?: 'AgentBoost Immobilier' %}
-{% set agencyPhone = app.user.companyPhone %}
-{% set agencyEmail = app.user.agencyEmail %}
-{% set agencyWebsite = app.user.agencyWebsite %}
-{% set agencyStreet = app.user.agencyStreet %}
-{% set agencyAddressComplement = app.user.agencyAddressComplement %}
-{% set agencyPostalCode = app.user.agencyPostalCode %}
-{% set agencyCity = app.user.agencyCity %}
+{% set currentUser = app.user %}
+{% set agencyName = currentUser.companyName|default('') ?: 'AgentBoost Immobilier' %}
+{% set agencyPhone = currentUser.companyPhone|default(null) %}
+{% set agencyEmail = currentUser.agencyEmail|default(null) %}
+{% set agencyWebsite = currentUser.agencyWebsite|default(null) %}
+{% set agencyStreet = currentUser.agencyStreet|default(null) %}
+{% set agencyAddressComplement = currentUser.agencyAddressComplement|default(null) %}
+{% set agencyPostalCode = currentUser.agencyPostalCode|default(null) %}
+{% set agencyCity = currentUser.agencyCity|default(null) %}
+{% set agencyLegacyAddress = currentUser.companyAddress|default(null) %}
+{% set photos = photoDataUris is defined and photoDataUris is iterable ? photoDataUris : [] %}
+{% set surface = property.surface > 0 ? property.surface : 1 %}
 
 <div class="premium-cover">
-    {% if photoDataUris is defined and photoDataUris|length > 0 %}
-        <img src="{{ photoDataUris[0] }}" class="premium-cover-image" alt="Bien immobilier">
+    {% if photos|length > 0 %}
+        <img src="{{ photos[0] }}" class="premium-cover-image" alt="Bien immobilier">
     {% endif %}
 
     <div class="premium-cover-overlay"></div>
 
     <div class="premium-cover-content">
         <div class="premium-cover-top">
-            {% if logoDataUri %}
+            {% if logoDataUri is defined and logoDataUri %}
                 <img src="{{ logoDataUri }}" class="premium-cover-logo" alt="Logo agence">
             {% endif %}
         </div>
@@ -94,8 +98,8 @@
 
             {% if agencyPostalCode or agencyCity %}
                 {{ agencyPostalCode }} {{ agencyCity }}<br>
-            {% elseif app.user.companyAddress %}
-                {{ app.user.companyAddress|nl2br }}<br>
+            {% elseif agencyLegacyAddress %}
+                {{ agencyLegacyAddress|nl2br }}<br>
             {% else %}
                 Adresse non renseignée<br>
             {% endif %}
@@ -114,18 +118,18 @@
         </div>
     </div>
 
-    {% if photoDataUris is defined and photoDataUris|length > 0 %}
+    {% if photos|length > 0 %}
         <div class="section">
             <div class="section-title">Galerie du bien</div>
 
             <div class="photo-hero-wrapper">
-                <img src="{{ photoDataUris[0] }}" class="photo-hero" alt="Photo principale du bien">
+                <img src="{{ photos[0] }}" class="photo-hero" alt="Photo principale du bien">
             </div>
 
-            {% if photoDataUris|length > 1 %}
+            {% if photos|length > 1 %}
                 <table class="photo-table">
                     <tr>
-                        {% for photoDataUri in photoDataUris|slice(1, 4) %}
+                        {% for photoDataUri in photos|slice(1, 4) %}
                             <td class="photo-thumb-cell">
                                 <img src="{{ photoDataUri }}" class="photo-thumb" alt="Photo du bien">
                             </td>
@@ -135,7 +139,7 @@
             {% endif %}
 
             <div class="gallery-count">
-                {{ photoDataUris|length }} photo(s) jointe(s)
+                {{ photos|length }} photo(s) jointe(s)
             </div>
         </div>
     {% endif %}
@@ -185,12 +189,16 @@
             <tr>
                 <td class="property-card">
                     <div class="property-card-label">Pièces</div>
-                    <div class="property-card-value">{{ property.rooms }}</div>
+                    <div class="property-card-value">
+                        {{ property.type|lower == 'parking' or property.type|lower == 'terrain' ? '—' : property.rooms }}
+                    </div>
                 </td>
 
                 <td class="property-card">
                     <div class="property-card-label">Parking</div>
-                    <div class="property-card-value">{{ property.parking ? 'Oui' : 'Non' }}</div>
+                    <div class="property-card-value">
+                        {{ property.parking ? 'Oui' : 'Non' }}
+                    </div>
                 </td>
             </tr>
 
@@ -216,7 +224,7 @@
                 <td class="market-card">
                     <div class="market-title">Prix estimé au m²</div>
                     <div class="market-value">
-                        {{ (property.estimate / property.surface)|round(0, 'floor')|number_format(0, ',', ' ') }} €/m²
+                        {{ (property.estimate / surface)|round(0, 'floor')|number_format(0, ',', ' ') }} €/m²
                     </div>
                     <div class="market-sub">Calculé à partir de l’estimation cible</div>
                 </td>
@@ -240,7 +248,7 @@
         </table>
     </div>
 
-    {% if comparables is defined and comparables is not empty %}
+    {% if comparables is defined and comparables is iterable and comparables is not empty %}
         <div class="section no-break comparable-section comparable-page-start">
             <div class="section-title">Analyse comparative du marché</div>
 
@@ -251,21 +259,21 @@
                             <div class="comparable-label">Comparable {{ loop.index }}</div>
 
                             <div class="comparable-type">
-                                {{ comparable.type }}
+                                {{ comparable.type|default(property.type) }}
                             </div>
 
                             <div class="comparable-location">
-                                {{ comparable.city|upper }}
+                                {{ comparable.city|default(property.city)|upper }}
                             </div>
 
                             <div class="comparable-surface">
-                                {{ comparable.surface }} m²
+                                {{ comparable.surface|default(property.surface) }} m²
                             </div>
 
                             <div class="comparable-price">
-                                {{ comparable.lowPrice|number_format(0, ',', ' ') }} €
+                                {{ comparable.lowPrice|default(property.lowEstimate)|number_format(0, ',', ' ') }} €
                                 —
-                                {{ comparable.highPrice|number_format(0, ',', ' ') }} €
+                                {{ comparable.highPrice|default(property.highEstimate)|number_format(0, ',', ' ') }} €
                             </div>
                         </td>
                     {% endfor %}
@@ -306,7 +314,7 @@
                 </tr>
             </table>
 
-            {% if sellingStrategy is defined and sellingStrategy is not empty %}
+            {% if sellingStrategy is defined and sellingStrategy is iterable and sellingStrategy is not empty %}
                 <ul class="strategy-list">
                     {% for item in sellingStrategy %}
                         <li>{{ item }}</li>
@@ -316,37 +324,40 @@
         </div>
     </div>
 
-    <table class="two-column-table no-break">
-        <tr>
-            {% if sellingAdvices is defined and sellingAdvices is not empty %}
-                <td class="two-column-cell">
-                    <div class="section">
-                        <div class="section-title">Conseils avant mise en vente</div>
+    {% if (sellingAdvices is defined and sellingAdvices is iterable and sellingAdvices is not empty) or property.adText %}
+        <table class="two-column-table no-break">
+            <tr>
+                {% if sellingAdvices is defined and sellingAdvices is iterable and sellingAdvices is not empty %}
+                    <td class="two-column-cell">
+                        <div class="section">
+                            <div class="section-title">Conseils avant mise en vente</div>
 
-                        <div class="advice-box">
-                            <ul class="advice-list">
-                                {% for advice in sellingAdvices %}
-                                    <li>{{ advice }}</li>
-                                {% endfor %}
-                            </ul>
+                            <div class="advice-box">
+                                <ul class="advice-list">
+                                    {% for advice in sellingAdvices %}
+                                        <li>{{ advice }}</li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
                         </div>
-                    </div>
-                </td>
-            {% endif %}
+                    </td>
+                {% endif %}
 
-            {% if property.adText %}
-                <td class="two-column-cell">
-                    <div class="section">
-                        <div class="section-title">Annonce IA</div>
+                {% if property.adText %}
+                    <td class="two-column-cell">
+                        <div class="section">
+                            <div class="section-title">Annonce IA</div>
 
-                        <div class="ad-box">
-                            {{ property.adText }}
+                            <div class="ad-box">
+                                {{ property.adText|nl2br }}
+                            </div>
                         </div>
-                    </div>
-                </td>
-            {% endif %}
-        </tr>
-    </table>
+                    </td>
+                {% endif %}
+            </tr>
+        </table>
+    {% endif %}
+
     <div class="signature-spacer"></div>
 
     <table class="signature-table">
@@ -367,8 +378,8 @@
 
                     {% if agencyPostalCode or agencyCity %}
                         {{ agencyPostalCode }} {{ agencyCity }}<br>
-                    {% elseif app.user.companyAddress %}
-                        {{ app.user.companyAddress|nl2br }}<br>
+                    {% elseif agencyLegacyAddress %}
+                        {{ agencyLegacyAddress|nl2br }}<br>
                     {% endif %}
 
                     {% if agencyPhone %}

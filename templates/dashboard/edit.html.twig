@@ -39,6 +39,15 @@
         .address-result-item:last-child {
             border-bottom: none;
         }
+
+        .property-photo-preview {
+            width: 140px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            background: #f8f9fa;
+        }
     </style>
 
     <form method="post" enctype="multipart/form-data" class="row g-3 mb-4">
@@ -59,7 +68,7 @@
                 class="form-control"
                 placeholder="Adresse du bien"
                 maxlength="255"
-                value="{{ property.address }}"
+                value="{{ property.address|default('') }}"
                 autocomplete="off"
             >
             <div id="address-results" class="address-results"></div>
@@ -70,7 +79,7 @@
                 name="postalCode"
                 id="postal-code-input"
                 class="form-control"
-                value="{{ property.postalCode }}"
+                value="{{ property.postalCode|default('') }}"
                 maxlength="5"
                 pattern="[0-9]{5}"
                 inputmode="numeric"
@@ -83,7 +92,7 @@
                 name="city"
                 id="city-input"
                 class="form-control"
-                value="{{ property.city }}"
+                value="{{ property.city|default('') }}"
                 required
             >
         </div>
@@ -109,13 +118,15 @@
                 class="form-control"
                 rows="4"
                 placeholder="Détails supplémentaires : balcon, vue dégagée, cuisine équipée, proche gare, lumineux..."
-            >{{ property.extraDetails }}</textarea>
+            >{{ property.extraDetails|default('') }}</textarea>
         </div>
 
         <div class="col-12">
             <label class="form-label fw-semibold">Ajouter des photos</label>
-            <input type="file" name="photos[]" class="form-control" accept=".jpg,.jpeg,.png,.webp" multiple>
-            <small class="text-muted">Maximum 5 photos au total.</small>
+            <input type="file" name="photos[]" class="form-control" accept="image/jpeg,image/png,image/webp" multiple>
+            <small class="text-muted">
+                Maximum 5 photos au total. En production Vercel, les photos sont ignorées sans stockage externe.
+            </small>
         </div>
 
         <div class="col-12">
@@ -132,8 +143,14 @@
                 <img
                     src="{{ asset('uploads/properties/' ~ photo.filename) }}"
                     alt="Photo du bien"
-                    style="width: 140px; height: 100px; object-fit: cover; border-radius: 8px; border: 1px solid #ddd;"
+                    class="property-photo-preview"
+                    loading="lazy"
+                    onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"
                 >
+
+                <div class="text-muted small border rounded p-2 bg-light" style="display: none; width: 140px;">
+                    Photo indisponible
+                </div>
 
                 <form
                     method="post"
@@ -167,22 +184,22 @@
         function renderAddressResults(features) {
             addressResults.innerHTML = '';
 
-            if (!features.length) {
+            if (!Array.isArray(features) || features.length === 0) {
                 hideAddressResults();
                 return;
             }
 
             features.slice(0, 5).forEach((feature) => {
-                const properties = feature.properties;
+                const properties = feature.properties || {};
                 const item = document.createElement('div');
 
                 item.className = 'address-result-item';
-                item.textContent = properties.label;
+                item.textContent = properties.label || '';
 
                 item.addEventListener('click', () => {
                     addressInput.value = properties.name || properties.label || '';
                     postalCodeInput.value = properties.postcode || '';
-                    cityInput.value = properties.city || '';
+                    cityInput.value = properties.city || properties.municipality || '';
 
                     hideAddressResults();
                 });
@@ -194,48 +211,48 @@
         }
 
         function searchAddress(query) {
-	if (addressAbortController) {
-		addressAbortController.abort();
-	}
+            if (addressAbortController) {
+                addressAbortController.abort();
+            }
 
-	addressAbortController = new AbortController();
+            addressAbortController = new AbortController();
 
-	const postalCode = postalCodeInput.value.trim();
-	const city = cityInput.value.trim();
+            const postalCode = postalCodeInput.value.trim();
+            const city = cityInput.value.trim();
 
-	let fullQuery = query;
+            let fullQuery = query;
 
-	if (city.length >= 2) {
-		fullQuery += ' ' + city;
-	}
+            if (city.length >= 2) {
+                fullQuery += ' ' + city;
+            }
 
-	const params = new URLSearchParams({
-		q: fullQuery,
-		limit: '5'
-	});
+            const params = new URLSearchParams({
+                q: fullQuery,
+                limit: '5'
+            });
 
-	if (/^[0-9]{5}$/.test(postalCode)) {
-		params.set('postcode', postalCode);
-	}
+            if (/^[0-9]{5}$/.test(postalCode)) {
+                params.set('postcode', postalCode);
+            }
 
-	fetch(`https://api-adresse.data.gouv.fr/search/?${params.toString()}`, {
-		signal: addressAbortController.signal
-	})
-		.then((response) => response.ok ? response.json() : null)
-		.then((data) => {
-			if (!data || !Array.isArray(data.features)) {
-				hideAddressResults();
-				return;
-			}
+            fetch(`https://api-adresse.data.gouv.fr/search/?${params.toString()}`, {
+                signal: addressAbortController.signal
+            })
+                .then((response) => response.ok ? response.json() : null)
+                .then((data) => {
+                    if (!data || !Array.isArray(data.features)) {
+                        hideAddressResults();
+                        return;
+                    }
 
-			renderAddressResults(data.features);
-		})
-		.catch((error) => {
-			if (error.name !== 'AbortError') {
-				hideAddressResults();
-			}
-		});
-}
+                    renderAddressResults(data.features);
+                })
+                .catch((error) => {
+                    if (error.name !== 'AbortError') {
+                        hideAddressResults();
+                    }
+                });
+        }
 
         addressInput.addEventListener('input', () => {
             const query = addressInput.value.trim();

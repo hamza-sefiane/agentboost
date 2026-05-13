@@ -6,6 +6,7 @@ use App\Repository\PropertyPhotoRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: PropertyPhotoRepository::class)]
+#[ORM\HasLifecycleCallbacks]
 class PropertyPhoto
 {
     #[ORM\Id]
@@ -14,10 +15,10 @@ class PropertyPhoto
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $filename = null;
+    private string $filename = '';
 
-    #[ORM\Column(nullable: true)]
-    private ?int $position = null;
+    #[ORM\Column]
+    private int $position = 0;
 
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
@@ -31,31 +32,45 @@ class PropertyPhoto
         $this->createdAt = new \DateTimeImmutable();
     }
 
+    #[ORM\PrePersist]
+    public function initializeCreatedAt(): void
+    {
+        if (!$this->createdAt instanceof \DateTimeImmutable) {
+            $this->createdAt = new \DateTimeImmutable();
+        }
+    }
+
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getFilename(): ?string
+    public function getFilename(): string
     {
         return $this->filename;
     }
 
     public function setFilename(string $filename): self
     {
-        $this->filename = trim($filename);
+        $filename = trim($filename);
+
+        if ($filename === '') {
+            throw new \InvalidArgumentException('Le nom du fichier photo ne peut pas être vide.');
+        }
+
+        $this->filename = $filename;
 
         return $this;
     }
 
-    public function getPosition(): ?int
+    public function getPosition(): int
     {
         return $this->position;
     }
 
     public function setPosition(?int $position): self
     {
-        $this->position = $position;
+        $this->position = max(0, (int) $position);
 
         return $this;
     }
