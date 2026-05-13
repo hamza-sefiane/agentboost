@@ -55,10 +55,12 @@ final class ResiliationSubscriptionController extends AbstractController
 
             $periodEnd = $subscription->current_period_end ?? null;
 
-            if (!$periodEnd) {
-                $this->addFlash('error', 'Impossible de récupérer la date de fin de période.');
+            if (!$periodEnd && $user->getNextBillingDate() instanceof \DateTimeImmutable) {
+                $periodEnd = $user->getNextBillingDate()->getTimestamp();
+            }
 
-                return $this->redirectToRoute('subscription_manage');
+            if (!$periodEnd) {
+                $periodEnd = (new \DateTimeImmutable('+1 month'))->getTimestamp();
             }
 
             $user->markCancellationAtPeriodEnd(
