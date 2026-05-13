@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use Doctrine\ORM\EntityManagerInterface;
 use Stripe\Exception\ApiErrorException;
 use Stripe\Stripe;
 use Stripe\Subscription;
@@ -17,8 +18,8 @@ final class ResiliationSubscriptionController extends AbstractController
 {
     public function __construct(
         private readonly ParameterBagInterface $params,
-    ) {
-    }
+        private readonly EntityManagerInterface $entityManager,
+    ) {}
 
     #[Route('/subscription/cancel', name: 'subscription_cancel', methods: ['POST'])]
     public function __invoke(): RedirectResponse
@@ -37,22 +38,34 @@ final class ResiliationSubscriptionController extends AbstractController
         Stripe::setApiKey($this->params->get('stripe.secret_key'));
 
         try {
-            Subscription::update(
+            $subscription = Subscription::update(
                 $user->getStripeSubscriptionId(),
                 [
                     'cancel_at_period_end' => true,
                 ],
                 [
-                    'idempotency_key' => 'cancel-sub-'.$user->getId().'-'.time(),
+                    'idempotency_key' => 'cancel-sub-' . $user->getId() . '-' . time(),
                 ]
             );
+
+            if (isset($subscription->current_period_end)) {
+                $user->markCancellationAtPeriodEnd(
+                    (new \DateTimeImmutable())
+                        ->setTimestamp($subscription->current_period_end)
+                );
+            }
+
+            $this->entityManager->flush();
         } catch (ApiErrorException) {
             $this->addFlash('error', 'Impossible de résilier l’abonnement. Réessayez.');
 
             return $this->redirectToRoute('subscription_manage');
         }
 
-        $this->addFlash('success', 'Votre abonnement sera résilié à la fin de la période en cours.');
+        $this->addFlash(
+            'success',
+            'Votre abonnement sera résilié à la fin de la période en cours.'
+        );
 
         return $this->redirectToRoute('subscription_manage');
     }

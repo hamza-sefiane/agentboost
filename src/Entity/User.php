@@ -199,6 +199,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->nextBillingDate = $periodEnd;
     }
 
+    public function cancelCancellationAtPeriodEnd(): void
+    {
+        $this->cancelAtPeriodEnd = false;
+        $this->subscriptionStatus = self::STATUS_ACTIVE;
+    }
+
     public function markDeletionAtPeriodEnd(?\DateTimeImmutable $periodEnd = null): void
     {
         $this->deleteAtPeriodEnd = true;
@@ -218,6 +224,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function isDeleteAtPeriodEnd(): bool
     {
         return $this->deleteAtPeriodEnd;
+    }
+
+    public function setDeleteAtPeriodEnd(bool $deleteAtPeriodEnd): self
+    {
+        $this->deleteAtPeriodEnd = $deleteAtPeriodEnd;
+
+        return $this;
     }
 
     public function getCurrentPlan(): string
@@ -277,14 +290,41 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->subscriptionStatus;
     }
 
+    public function setSubscriptionStatus(string $subscriptionStatus): self
+    {
+        if (in_array($subscriptionStatus, [
+            self::STATUS_INACTIVE,
+            self::STATUS_ACTIVE,
+            self::STATUS_GRACE,
+        ], true)) {
+            $this->subscriptionStatus = $subscriptionStatus;
+        }
+
+        return $this;
+    }
+
     public function getNextBillingDate(): ?\DateTimeImmutable
     {
         return $this->nextBillingDate;
     }
 
+    public function setNextBillingDate(?\DateTimeImmutable $nextBillingDate): self
+    {
+        $this->nextBillingDate = $nextBillingDate;
+
+        return $this;
+    }
+
     public function isCancelAtPeriodEnd(): bool
     {
         return $this->cancelAtPeriodEnd;
+    }
+
+    public function setCancelAtPeriodEnd(bool $cancelAtPeriodEnd): self
+    {
+        $this->cancelAtPeriodEnd = $cancelAtPeriodEnd;
+
+        return $this;
     }
 
     public function getCompanyName(): ?string
