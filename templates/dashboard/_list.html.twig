@@ -1,4 +1,5 @@
-{% set isYearlyPremium = app.user.subscriptionStatus == 'active' and app.user.currentPlan == 'yearly' %}
+{% set isYearlyPremium = app.user and app.user.subscriptionStatus == 'active' and app.user.currentPlan == 'yearly' %}
+{% set isMonthlyPremium = app.user and app.user.subscriptionStatus == 'active' and app.user.currentPlan == 'monthly' %}
 
 {% if properties is empty %}
     <div class="text-center py-5 text-muted">
@@ -6,12 +7,12 @@
         <small>Commence par estimer un bien 👆</small>
     </div>
 {% else %}
-
     {% set properties = properties|sort((a, b) => b.estimate <=> a.estimate) %}
 
     <style>
         .property-actions { min-width: 260px; overflow: visible !important; }
-        .property-photo-thumb { width: 70px; height: 55px; object-fit: cover; border-radius: 8px; border: 1px solid #ddd; }
+        .property-photo-thumb { width: 70px; height: 55px; object-fit: cover; border-radius: 8px; border: 1px solid #ddd; background: #f8f9fa; }
+        .property-photo-placeholder { width: 70px; height: 55px; border-radius: 8px; border: 1px dashed #ccc; background: #f8f9fa; }
         .property-action-primary { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; overflow: visible !important; }
         .property-table-wrapper,
         .property-table-wrapper table,
@@ -35,7 +36,7 @@
                 box-shadow: 0 8px 20px rgba(0, 0, 0, 0.04);
             }
             .property-mobile-top { display: flex; gap: 12px; align-items: flex-start; }
-            .property-mobile-photo { width: 90px; height: 70px; object-fit: cover; border-radius: 12px; border: 1px solid #ddd; flex-shrink: 0; }
+            .property-mobile-photo { width: 90px; height: 70px; object-fit: cover; border-radius: 12px; border: 1px solid #ddd; flex-shrink: 0; background: #f8f9fa; }
             .property-mobile-price { font-size: 20px; font-weight: 700; color: #198754; }
             .property-mobile-meta { color: #6b7280; font-size: 13px; line-height: 1.4; }
             .property-mobile-actions {
@@ -55,7 +56,7 @@
     <form method="post" action="{{ path('property_bulk_delete') }}" id="bulk-delete-form" onsubmit="return confirmBulkDelete();">
         <input type="hidden" name="_token" value="{{ csrf_token('bulk_delete_properties') }}">
 
-        {% if app.user.subscriptionStatus == 'active' and app.user.currentPlan == 'monthly' %}
+        {% if isMonthlyPremium %}
             <div class="alert alert-info d-flex justify-content-between align-items-center flex-wrap gap-2">
                 <div>
                     <strong>Plus d’outils de diffusion avec l’abonnement annuel.</strong><br>
@@ -97,18 +98,27 @@
 
                 <tbody>
                     {% for p in properties %}
+                        {% set firstPhoto = p.photos|first %}
+
                         <tr class="bg-white">
                             <td>
                                 <input type="checkbox" name="property_ids[]" value="{{ p.id }}" class="property-checkbox" aria-label="Sélectionner cette estimation">
                             </td>
 
                             <td>
-                                {% set firstPhoto = p.photos|first %}
-
                                 {% if firstPhoto %}
-                                    <img src="{{ asset('uploads/properties/' ~ firstPhoto.filename) }}" alt="Photo du bien" class="property-photo-thumb">
+                                    <img
+                                        src="{{ asset('uploads/properties/' ~ firstPhoto.filename) }}"
+                                        alt="Photo du bien"
+                                        class="property-photo-thumb"
+                                        loading="lazy"
+                                        onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+                                    >
+                                    <div class="property-photo-placeholder text-muted small align-items-center justify-content-center" style="display: none;">
+                                        —
+                                    </div>
                                 {% else %}
-                                    <div class="text-muted small d-flex align-items-center justify-content-center" style="width: 70px; height: 55px; border-radius: 8px; border: 1px dashed #ccc; background: #f8f9fa;">
+                                    <div class="property-photo-placeholder text-muted small d-flex align-items-center justify-content-center">
                                         —
                                     </div>
                                 {% endif %}
@@ -264,9 +274,18 @@
                         <input type="checkbox" name="property_ids[]" value="{{ p.id }}" class="property-checkbox mt-1" aria-label="Sélectionner cette estimation">
 
                         {% if firstPhoto %}
-                            <img src="{{ asset('uploads/properties/' ~ firstPhoto.filename) }}" alt="Photo du bien" class="property-mobile-photo">
+                            <img
+                                src="{{ asset('uploads/properties/' ~ firstPhoto.filename) }}"
+                                alt="Photo du bien"
+                                class="property-mobile-photo"
+                                loading="lazy"
+                                onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+                            >
+                            <div class="property-mobile-photo align-items-center justify-content-center text-muted" style="display: none; border: 1px dashed #ccc;">
+                                —
+                            </div>
                         {% else %}
-                            <div class="property-mobile-photo d-flex align-items-center justify-content-center text-muted" style="border: 1px dashed #ccc; background: #f8f9fa;">
+                            <div class="property-mobile-photo d-flex align-items-center justify-content-center text-muted" style="border: 1px dashed #ccc;">
                                 —
                             </div>
                         {% endif %}
@@ -462,6 +481,7 @@
 
         function copyLeboncoin(text) {
             const formatted = (text || '').replace(/\n/g, '\n\n').toUpperCase();
+
             copyToClipboard(formatted, 'Format Leboncoin copié');
         }
 
@@ -546,6 +566,7 @@
 
             return confirm('Supprimer ' + checkedCount + ' estimation(s) ?');
         }
-    </script>
 
+        updateBulkDeleteState();
+    </script>
 {% endif %}

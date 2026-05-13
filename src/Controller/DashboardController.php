@@ -332,27 +332,12 @@ final class DashboardController extends AbstractController
         ]);
 
         if (
-            !isset($result['estimate'])
+            !isset($result['estimate'], $result['lowEstimate'], $result['highEstimate'])
             || !is_numeric($result['estimate'])
-            || !isset($result['lowEstimate'])
             || !is_numeric($result['lowEstimate'])
-            || !isset($result['highEstimate'])
             || !is_numeric($result['highEstimate'])
         ) {
             $this->addFlash('error', 'Données invalides.');
-
-            return $this->redirectToFormOrigin($property, $isEdit);
-        }
-
-        $photoErrors = $this->attachUploadedPhotos(
-            $property,
-            $request->files->all('photos'),
-        );
-
-        if ($photoErrors !== []) {
-            foreach ($photoErrors as $photoError) {
-                $this->addFlash('error', $photoError);
-            }
 
             return $this->redirectToFormOrigin($property, $isEdit);
         }
@@ -375,13 +360,30 @@ final class DashboardController extends AbstractController
             $property->setAdText(isset($result['adText']) && is_string($result['adText']) ? $result['adText'] : null);
         }
 
+        $photoResult = $this->attachUploadedPhotos(
+            $property,
+            $request->files->all('photos'),
+        );
+
+        foreach ($photoResult['warnings'] as $warning) {
+            $this->addFlash('warning', $warning);
+        }
+
+        if ($photoResult['errors'] !== []) {
+            foreach ($photoResult['errors'] as $error) {
+                $this->addFlash('error', $error);
+            }
+
+            return $this->redirectToFormOrigin($property, $isEdit);
+        }
+
         return null;
     }
 
     /**
-     * @param array<int, UploadedFile|null> $photos
+     * @param array<int, mixed> $photos
      *
-     * @return array<int, string>
+     * @return array{errors: array<int, string>, warnings: array<int, string>}
      */
     private function attachUploadedPhotos(Property $property, array $photos): array
     {
@@ -391,23 +393,46 @@ final class DashboardController extends AbstractController
         ));
 
         if ($validPhotos === []) {
-            return [];
+            return [
+                'errors' => [],
+                'warnings' => [],
+            ];
+        }
+
+        if ($this->isVercelRuntime()) {
+            return [
+                'errors' => [],
+                'warnings' => [
+                    'Les photos ne sont pas enregistrées sur Vercel sans stockage externe. Estimation créée sans photo.',
+                ],
+            ];
         }
 
         $remainingSlots = self::MAX_PHOTOS - $property->getPhotos()->count();
 
         if ($remainingSlots <= 0) {
-            return [sprintf('Maximum %d photos autorisées par estimation.', self::MAX_PHOTOS)];
+            return [
+                'errors' => [sprintf('Maximum %d photos autorisées par estimation.', self::MAX_PHOTOS)],
+                'warnings' => [],
+            ];
         }
 
         if (count($validPhotos) > $remainingSlots) {
-            return [sprintf('Vous pouvez encore ajouter %d photo(s) maximum.', $remainingSlots)];
+            return [
+                'errors' => [sprintf('Vous pouvez encore ajouter %d photo(s) maximum.', $remainingSlots)],
+                'warnings' => [],
+            ];
         }
 
         $uploadDir = $this->getPropertyUploadDir();
 
-        if (!is_dir($uploadDir) && !mkdir($uploadDir, 0775, true) && !is_dir($uploadDir)) {
-            return ['Impossible de préparer le dossier d’upload.'];
+        if (!$this->ensureWritableDirectory($uploadDir)) {
+            return [
+                'errors' => [],
+                'warnings' => [
+                    'Impossible d’enregistrer les photos. Estimation créée sans photo.',
+                ],
+            ];
         }
 
         $errors = [];
@@ -430,7 +455,7 @@ final class DashboardController extends AbstractController
 
             $size = $photo->getSize();
 
-            if ($size !== false && $size > self::MAX_PHOTO_SIZE) {
+            if ($size !== null && $size > self::MAX_PHOTO_SIZE) {
                 $errors[] = sprintf('Le fichier "%s" dépasse la taille maximale de 5 Mo.', $originalName);
                 continue;
             }
@@ -450,7 +475,10 @@ final class DashboardController extends AbstractController
             $property->addPhoto($propertyPhoto);
         }
 
-        return $errors;
+        return [
+            'errors' => $errors,
+            'warnings' => [],
+        ];
     }
 
     private function redirectToFormOrigin(Property $property, bool $isEdit): Response
@@ -472,6 +500,10 @@ final class DashboardController extends AbstractController
 
     private function deleteFile(string $path): void
     {
+        if ($this->isVercelRuntime()) {
+            return;
+        }
+
         if (is_file($path)) {
             @unlink($path);
         }
@@ -485,7 +517,7 @@ final class DashboardController extends AbstractController
             return null;
         }
 
-        $path = $this->getParameter('kernel.project_dir') . '/public/uploads/logos/' . $logo;
+        $path = $this->getProjectDir() . '/public/uploads/logos/' . $logo;
 
         if (!is_file($path)) {
             return null;
@@ -536,7 +568,26 @@ final class DashboardController extends AbstractController
 
     private function getPropertyUploadDir(): string
     {
-        return $this->getParameter('kernel.project_dir') . '/public/uploads/properties';
+        return $this->getProjectDir() . '/public/uploads/properties';
+    }
+
+    private function getProjectDir(): string
+    {
+        return (string) $this->getParameter('kernel.project_dir');
+    }
+
+    private function ensureWritableDirectory(string $dir): bool
+    {
+        if (!is_dir($dir) && !@mkdir($dir, 0775, true) && !is_dir($dir)) {
+            return false;
+        }
+
+        return is_writable($dir);
+    }
+
+    private function isVercelRuntime(): bool
+    {
+        return getenv('VERCEL') === '1' || getenv('VERCEL_ENV') !== false;
     }
 
     private function getAuthenticatedUser(): User
