@@ -17,27 +17,27 @@ use Symfony\Component\Routing\Attribute\Route;
 final class SubscriptionSyncController extends AbstractController
 {
     public function __construct(
-        private EntityManagerInterface $em,
-        private ParameterBagInterface $params
-    ) {}
+        private readonly EntityManagerInterface $em,
+        private readonly ParameterBagInterface $params,
+    ) {
+    }
 
     public function __invoke(): JsonResponse
     {
-        /** @var User|null $user */
         $user = $this->getUser();
 
-        if (!$user || !$user->getStripeCustomerId()) {
+        if (!$user instanceof User || !$user->getStripeCustomerId()) {
             return new JsonResponse(['ok' => false], 400);
         }
 
-        Stripe::setApiKey($this->params->get('stripe.secret_key'));
+        Stripe::setApiKey((string) $this->params->get('stripe.secret_key'));
 
         try {
-            // 1️⃣ Subscription active
             $subscriptions = Subscription::all([
                 'customer' => $user->getStripeCustomerId(),
-                'status'   => 'active',
-                'limit'    => 1,
+                'status' => 'active',
+                'limit' => 1,
+                'expand' => ['data.items.data.price'],
             ]);
 
             if (count($subscriptions->data) === 0) {
@@ -46,12 +46,11 @@ final class SubscriptionSyncController extends AbstractController
 
             $subscription = $subscriptions->data[0];
 
-            // 2️⃣ Dernière invoice payée
             $invoices = Invoice::all([
-                'customer'     => $user->getStripeCustomerId(),
+                'customer' => $user->getStripeCustomerId(),
                 'subscription' => $subscription->id,
-                'status'       => 'paid',
-                'limit'        => 1,
+                'status' => 'paid',
+                'limit' => 1,
             ]);
 
             if (count($invoices->data) === 0) {
@@ -65,16 +64,27 @@ final class SubscriptionSyncController extends AbstractController
                 return new JsonResponse(['ok' => false]);
             }
 
-            // 3️⃣ ÉCRITURE BD (UNIQUE ENDROIT)
             $user->setStripeSubscriptionId($subscription->id);
+
+            $price = $subscription->items->data[0]->price ?? null;
+            $interval = $price?->recurring?->interval;
+
+            if ($interval === 'year') {
+                $user->setCurrentPlan('yearly');
+            } else {
+                $user->setCurrentPlan('monthly');
+            }
+
             $user->activateSubscription(
                 (new \DateTimeImmutable())->setTimestamp((int) $periodEnd)
             );
 
             $this->em->flush();
 
-            return new JsonResponse(['ok' => true]);
-
+            return new JsonResponse([
+                'ok' => true,
+                'plan' => $user->getCurrentPlan(),
+            ]);
         } catch (ApiErrorException) {
             return new JsonResponse(['ok' => false], 500);
         }
