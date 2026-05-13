@@ -10,6 +10,8 @@ use Stripe\Subscription;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
@@ -17,9 +19,11 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 final class CancelSubscriptionController extends AbstractController
 {
     public function __construct(
-        private ParameterBagInterface $params,
-        private EntityManagerInterface $em,
-    ) {}
+        private readonly ParameterBagInterface $params,
+        private readonly EntityManagerInterface $em,
+        private readonly MailerInterface $mailer,
+    ) {
+    }
 
     #[Route('/subscription/cancel-cancellation', name: 'subscription_cancel_cancellation', methods: ['POST'])]
     public function __invoke(): RedirectResponse
@@ -45,8 +49,7 @@ final class CancelSubscriptionController extends AbstractController
                     'cancel_at_period_end' => false,
                 ],
                 [
-                    // 🔥 clé idempotente
-                    'idempotency_key' => 'cancel-cancellation-'.$user->getId(),
+                    'idempotency_key' => 'cancel-cancellation-' . $user->getId() . '-' . time(),
                 ]
             );
         } catch (ApiErrorException) {
@@ -58,10 +61,26 @@ final class CancelSubscriptionController extends AbstractController
             return $this->redirectToRoute('subscription_manage');
         }
 
-        // 🔥 Update immédiat UX (mais Stripe reste source de vérité)
         $user->activateSubscription($user->getNextBillingDate());
 
         $this->em->flush();
+
+        try {
+            $this->mailer->send(
+                (new Email())
+                    ->from('AgentBoost <no-reply@agentboost-immo.fr>')
+                    ->to($user->getEmail())
+                    ->subject('Résiliation annulée — AgentBoost')
+                    ->html(
+                        '<p>Bonjour,</p>
+                        <p>Votre demande de résiliation a bien été annulée.</p>
+                        <p>Votre abonnement AgentBoost reste actif et vos accès premium sont conservés.</p>
+                        <p>— L’équipe AgentBoost</p>'
+                    )
+            );
+        } catch (\Throwable) {
+            // Ne bloque pas l’annulation si l’email échoue.
+        }
 
         $this->addFlash(
             'success',
