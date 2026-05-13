@@ -19,7 +19,8 @@ final class ResiliationSubscriptionController extends AbstractController
     public function __construct(
         private readonly ParameterBagInterface $params,
         private readonly EntityManagerInterface $entityManager,
-    ) {}
+    ) {
+    }
 
     #[Route('/subscription/cancel', name: 'subscription_cancel', methods: ['POST'])]
     public function __invoke(): RedirectResponse
@@ -48,14 +49,21 @@ final class ResiliationSubscriptionController extends AbstractController
                 ]
             );
 
-            if (isset($subscription->current_period_end)) {
-                $user->markCancellationAtPeriodEnd(
-                    (new \DateTimeImmutable())
-                        ->setTimestamp($subscription->current_period_end)
-                );
+            $periodEnd = $subscription->current_period_end ?? null;
+
+            if (!$periodEnd) {
+                $this->addFlash('error', 'Impossible de récupérer la date de fin de période.');
+
+                return $this->redirectToRoute('subscription_manage');
             }
 
+            $user->markCancellationAtPeriodEnd(
+                (new \DateTimeImmutable())->setTimestamp((int) $periodEnd)
+            );
+
+            $this->entityManager->persist($user);
             $this->entityManager->flush();
+
         } catch (ApiErrorException) {
             $this->addFlash('error', 'Impossible de résilier l’abonnement. Réessayez.');
 
