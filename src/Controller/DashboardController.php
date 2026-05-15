@@ -9,6 +9,7 @@ use App\Service\OpenAiPropertyAdGenerator;
 use App\Service\PropertyComparableGenerator;
 use App\Service\PropertyEstimator;
 use App\Service\PropertySellingAdviceGenerator;
+use App\Service\SubscriptionLimiter;
 use Doctrine\ORM\EntityManagerInterface;
 use Dompdf\Dompdf;
 use Dompdf\Options;
@@ -32,6 +33,7 @@ final class DashboardController extends AbstractController
 
     public function __construct(
         private readonly EntityManagerInterface $em,
+        private readonly SubscriptionLimiter $subscriptionLimiter,
     ) {
     }
 
@@ -43,6 +45,15 @@ final class DashboardController extends AbstractController
         $this->denyAccessUnlessGranted('ACCESS_DASHBOARD');
 
         if ($request->isMethod('POST')) {
+            if (!$this->subscriptionLimiter->canCreateEstimation($user)) {
+                $this->addFlash(
+                    'error',
+                    'Vous avez atteint la limite gratuite de 3 estimations ce mois-ci. Passez à une offre premium pour continuer.'
+                );
+
+                return $this->redirectToRoute('pricing');
+            }
+
             $property = new Property();
 
             $response = $this->handlePropertyForm($property, $request, $estimator, $user);
@@ -50,6 +61,8 @@ final class DashboardController extends AbstractController
             if ($response instanceof Response) {
                 return $response;
             }
+
+            $this->subscriptionLimiter->incrementEstimations($user);
 
             $this->em->persist($property);
             $this->em->flush();
@@ -109,12 +122,19 @@ final class DashboardController extends AbstractController
 
         $user = $this->getAuthenticatedUser();
 
-        if (!$user->isActive()) {
+        if (!$this->subscriptionLimiter->canGenerateAd($user)) {
+            $this->addFlash(
+                'error',
+                'Vous avez atteint la limite gratuite de génération IA ce mois-ci. Passez à une offre premium pour continuer.'
+            );
+
             return $this->redirectToRoute('pricing');
         }
 
         try {
             $property->setAdText($adGenerator->generate($property));
+            $this->subscriptionLimiter->incrementAiGenerations($user);
+
             $this->em->flush();
 
             $this->addFlash('success', 'Annonce IA générée.');
@@ -175,7 +195,7 @@ final class DashboardController extends AbstractController
 
         $user = $this->getAuthenticatedUser();
 
-        if ($user->getSubscriptionStatus() !== 'active' || $user->getCurrentPlan() !== 'yearly') {
+        if ($user->getSubscriptionStatus() !== User::STATUS_ACTIVE || $user->getCurrentPlan() !== User::PLAN_YEARLY) {
             $this->addFlash('error', 'Le PDF premium est réservé aux abonnements annuels.');
 
             return $this->redirectToRoute('dashboard');
