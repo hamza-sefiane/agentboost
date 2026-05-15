@@ -79,6 +79,15 @@ final class DashboardController extends AbstractController
 
         return $this->render('dashboard/index.html.twig', [
             'properties' => $properties,
+            'usage' => [
+                'isPremium' => $user->isActive(),
+                'estimationsUsed' => $user->getMonthlyEstimations(),
+                'estimationsLimit' => 3,
+                'estimationsRemaining' => $this->subscriptionLimiter->getRemainingEstimations($user),
+                'aiUsed' => $user->getMonthlyAiGenerations(),
+                'aiLimit' => 1,
+                'aiRemaining' => $this->subscriptionLimiter->getRemainingAiGenerations($user),
+            ],
         ]);
     }
 
@@ -146,10 +155,8 @@ final class DashboardController extends AbstractController
     }
 
     #[Route('/pdf/{id}', name: 'property_pdf', methods: ['GET'])]
-    public function pdf(
-        Property $property,
-        PropertySellingAdviceGenerator $adviceGenerator,
-    ): Response {
+    public function pdf(Property $property, PropertySellingAdviceGenerator $adviceGenerator): Response
+    {
         $this->denyAccessUnlessGranted('OWNER', $property);
 
         $user = $this->getAuthenticatedUser();
@@ -175,14 +182,10 @@ final class DashboardController extends AbstractController
         $dompdf->setPaper('A4', 'portrait');
         $dompdf->render();
 
-        return new Response(
-            $dompdf->output(),
-            Response::HTTP_OK,
-            [
-                'Content-Type' => 'application/pdf',
-                'Content-Disposition' => 'inline; filename="estimation-agentboost.pdf"',
-            ]
-        );
+        return new Response($dompdf->output(), Response::HTTP_OK, [
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' => 'inline; filename="estimation-agentboost.pdf"',
+        ]);
     }
 
     #[Route('/pdf/{id}/premium', name: 'property_pdf_premium', methods: ['GET'])]
@@ -224,14 +227,10 @@ final class DashboardController extends AbstractController
         $dompdf->setPaper('A4', 'portrait');
         $dompdf->render();
 
-        return new Response(
-            $dompdf->output(),
-            Response::HTTP_OK,
-            [
-                'Content-Type' => 'application/pdf',
-                'Content-Disposition' => 'inline; filename="estimation-agentboost-premium.pdf"',
-            ]
-        );
+        return new Response($dompdf->output(), Response::HTTP_OK, [
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' => 'inline; filename="estimation-agentboost-premium.pdf"',
+        ]);
     }
 
     #[Route('/property-photo/{id}/delete', name: 'property_photo_delete', methods: ['POST'])]
@@ -380,10 +379,7 @@ final class DashboardController extends AbstractController
             $property->setAdText(isset($result['adText']) && is_string($result['adText']) ? $result['adText'] : null);
         }
 
-        $photoResult = $this->attachUploadedPhotos(
-            $property,
-            $request->files->all('photos'),
-        );
+        $photoResult = $this->attachUploadedPhotos($property, $request->files->all('photos'));
 
         foreach ($photoResult['warnings'] as $warning) {
             $this->addFlash('warning', $warning);
@@ -413,10 +409,7 @@ final class DashboardController extends AbstractController
         ));
 
         if ($validPhotos === []) {
-            return [
-                'errors' => [],
-                'warnings' => [],
-            ];
+            return ['errors' => [], 'warnings' => []];
         }
 
         if ($this->isVercelRuntime()) {
@@ -449,9 +442,7 @@ final class DashboardController extends AbstractController
         if (!$this->ensureWritableDirectory($uploadDir)) {
             return [
                 'errors' => [],
-                'warnings' => [
-                    'Impossible d’enregistrer les photos. Estimation créée sans photo.',
-                ],
+                'warnings' => ['Impossible d’enregistrer les photos. Estimation créée sans photo.'],
             ];
         }
 
@@ -495,10 +486,7 @@ final class DashboardController extends AbstractController
             $property->addPhoto($propertyPhoto);
         }
 
-        return [
-            'errors' => $errors,
-            'warnings' => [],
-        ];
+        return ['errors' => $errors, 'warnings' => []];
     }
 
     private function redirectToFormOrigin(Property $property, bool $isEdit): Response
