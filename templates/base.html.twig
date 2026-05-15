@@ -61,6 +61,20 @@
                 white-space: nowrap;
             }
 
+            .language-dropdown .nav-link {
+                display: inline-flex;
+                align-items: center;
+                gap: 6px;
+            }
+
+            .language-dot {
+                width: 8px;
+                height: 8px;
+                border-radius: 999px;
+                background: #22c55e;
+                display: inline-block;
+            }
+
             .dropdown-menu {
                 border: 1px solid rgba(226, 232, 240, 0.9);
                 border-radius: 16px;
@@ -77,6 +91,13 @@
 
             .dropdown-item:hover {
                 background: #f1f5f9;
+            }
+
+            .dropdown-item.active,
+            .dropdown-item:active {
+                background: #dcfce7;
+                color: #166534;
+                font-weight: 800;
             }
 
             main.container {
@@ -145,6 +166,10 @@
                     text-align: center;
                 }
 
+                .language-dropdown .nav-link {
+                    justify-content: center;
+                }
+
                 .dropdown-menu {
                     margin-top: 8px;
                 }
@@ -194,7 +219,7 @@
                     AgentBoost
                 </a>
 
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Ouvrir le menu">
                     <span class="navbar-toggler-icon"></span>
                 </button>
 
@@ -220,7 +245,7 @@
                                     Mon compte
                                 </a>
 
-                                <ul class="dropdown-menu dropdown-menu-end">
+                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="accountDropdown">
                                     <li>
                                         <a class="dropdown-item" href="{{ path('company_profile') }}">
                                             Modifier mes coordonnées
@@ -239,7 +264,7 @@
                                         <form method="post" action="{{ path('account_delete') }}" onsubmit="return confirm('Supprimer définitivement votre compte ?');">
                                             <input type="hidden" name="_token" value="{{ csrf_token('delete_account') }}">
 
-                                            <button class="dropdown-item text-danger">
+                                            <button class="dropdown-item text-danger" type="submit">
                                                 Supprimer mon compte
                                             </button>
                                         </form>
@@ -275,6 +300,33 @@
                                 </a>
                             </li>
                         {% endif %}
+
+                        <li class="nav-item dropdown language-dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="languageDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <span class="language-dot"></span>
+                                Français
+                            </a>
+
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="languageDropdown">
+                                <li>
+                                    <a class="dropdown-item active" href="#">
+                                        Français
+                                    </a>
+                                </li>
+
+                                <li>
+                                    <a class="dropdown-item" href="#">
+                                        English
+                                    </a>
+                                </li>
+
+                                <li>
+                                    <a class="dropdown-item" href="#">
+                                        Español
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
                     </ul>
                 </div>
             </div>
