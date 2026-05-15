@@ -1,804 +1,802 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Dashboard – AgentBoost{% endblock %}
+{% block title %}Dashboard – AgentBoost
+{% endblock %}
 
 {% block body %}
-<style>
-    .dashboard-page {
-        padding: 12px 0 36px;
-    }
-
-    .dashboard-top {
-        display: flex;
-        justify-content: space-between;
-        gap: 18px;
-        align-items: flex-start;
-        margin-bottom: 24px;
-    }
-
-    .dashboard-heading {
-        display: flex;
-        align-items: center;
-        gap: 16px;
-    }
-
-    .dashboard-icon {
-        width: 58px;
-        height: 58px;
-        border-radius: 18px;
-        background: #dcfce7;
-        color: #15803d;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 28px;
-        font-weight: 900;
-    }
-
-    .dashboard-title {
-        margin: 0;
-        font-size: 34px;
-        font-weight: 950;
-        letter-spacing: -0.05em;
-        color: #0f172a;
-    }
-
-    .dashboard-subtitle {
-        margin: 6px 0 0;
-        color: #64748b;
-        font-size: 15px;
-    }
-
-    .help-btn {
-        border: 1px solid #dbe2ea;
-        background: #fff;
-        color: #0f172a;
-        border-radius: 14px;
-        padding: 11px 16px;
-        font-weight: 800;
-        font-size: 14px;
-        text-decoration: none;
-    }
-
-    .help-btn:hover {
-        background: #f8fafc;
-        color: #0f172a;
-    }
-
-    .stats-grid {
-        display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        gap: 16px;
-        margin-bottom: 20px;
-    }
-
-    .stat-card {
-        background: #fff;
-        border: 1px solid #e5e7eb;
-        border-radius: 22px;
-        padding: 22px;
-        display: flex;
-        gap: 16px;
-        align-items: center;
-        box-shadow: 0 14px 35px rgba(15, 23, 42, 0.05);
-    }
-
-    .stat-icon {
-        width: 54px;
-        height: 54px;
-        border-radius: 18px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 25px;
-        background: #eff6ff;
-    }
-
-    .stat-value {
-        font-size: 26px;
-        font-weight: 950;
-        color: #0f172a;
-        line-height: 1;
-    }
-
-    .stat-label {
-        margin-top: 6px;
-        color: #0f172a;
-        font-size: 14px;
-        font-weight: 900;
-    }
-
-    .stat-note {
-        margin-top: 3px;
-        color: #64748b;
-        font-size: 12px;
-        font-weight: 700;
-    }
-
-    .dashboard-card {
-        background: #fff;
-        border: 1px solid #e5e7eb;
-        border-radius: 28px;
-        padding: 26px;
-        box-shadow: 0 18px 45px rgba(15, 23, 42, 0.06);
-        margin-bottom: 26px;
-    }
-
-    .form-layout {
-        display: grid;
-        grid-template-columns: 1fr 320px;
-        gap: 28px;
-        align-items: start;
-    }
-
-    .form-section-title {
-        font-size: 17px;
-        font-weight: 950;
-        color: #0f172a;
-        margin-bottom: 22px;
-        position: relative;
-    }
-
-    .form-section-title::after {
-        content: "";
-        display: block;
-        width: 34px;
-        height: 3px;
-        background: #198754;
-        border-radius: 999px;
-        margin-top: 10px;
-    }
-
-    .field-label {
-        font-size: 13px;
-        font-weight: 900;
-        color: #0f172a;
-        margin-bottom: 8px;
-    }
-
-    .form-control,
-    .form-select {
-        border-radius: 13px;
-        border: 1px solid #dbe2ea;
-        min-height: 48px;
-        font-size: 14px;
-    }
-
-    textarea.form-control {
-        min-height: 54px;
-    }
-
-    .upload-zone {
-        border: 1px dashed #cbd5e1;
-        border-radius: 18px;
-        padding: 16px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 16px;
-        background: #f8fafc;
-    }
-
-    .upload-left {
-        display: flex;
-        align-items: center;
-        gap: 14px;
-    }
-
-    .upload-icon {
-        width: 48px;
-        height: 48px;
-        border-radius: 14px;
-        background: #fff;
-        border: 1px solid #e5e7eb;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 22px;
-    }
-
-    .upload-title {
-        font-weight: 900;
-        color: #0f172a;
-        margin-bottom: 2px;
-    }
-
-    .upload-text {
-        font-size: 13px;
-        color: #64748b;
-    }
-
-    .photo-preview-img {
-        width: 92px;
-        height: 72px;
-        object-fit: cover;
-        border-radius: 12px;
-        border: 1px solid #e5e7eb;
-    }
-
-    .estimate-submit {
-        min-height: 48px;
-        padding: 0 22px;
-        border-radius: 14px;
-        border: none;
-        background: #198754;
-        color: #fff;
-        font-weight: 900;
-        margin-top: 16px;
-    }
-
-    .estimate-submit:hover {
-        background: #157347;
-    }
-
-    .ai-panel {
-        display: grid;
-        gap: 16px;
-    }
-
-    .ai-box {
-        background: linear-gradient(135deg, #ecfdf5, #ffffff);
-        border: 1px solid #bbf7d0;
-        border-radius: 22px;
-        padding: 22px;
-    }
-
-    .ai-title {
-        font-size: 16px;
-        font-weight: 950;
-        color: #166534;
-        margin-bottom: 12px;
-    }
-
-    .ai-text {
-        color: #475569;
-        font-size: 14px;
-        line-height: 1.6;
-        margin-bottom: 16px;
-    }
-
-    .ai-list {
-        list-style: none;
-        padding: 0;
-        margin: 0;
-        display: grid;
-        gap: 12px;
-    }
-
-    .ai-list li {
-        color: #334155;
-        font-size: 14px;
-        display: flex;
-        gap: 10px;
-        align-items: center;
-    }
-
-    .ai-list li::before {
-        content: "✓";
-        color: #15803d;
-        font-weight: 950;
-    }
-
-    .security-box {
-        display: flex;
-        gap: 14px;
-        align-items: center;
-        background: #f8fafc;
-        border: 1px solid #e5e7eb;
-        border-radius: 18px;
-        padding: 16px;
-        color: #475569;
-        font-size: 14px;
-        line-height: 1.5;
-    }
-
-    .address-autocomplete-wrapper {
-        position: relative;
-    }
-
-    .address-results {
-        position: absolute;
-        top: 100%;
-        left: 0;
-        right: 0;
-        z-index: 1000;
-        background: #ffffff;
-        border: 1px solid #d1d5db;
-        border-radius: 12px;
-        margin-top: 6px;
-        overflow: hidden;
-        box-shadow: 0 18px 35px rgba(15, 23, 42, 0.14);
-        display: none;
-    }
-
-    .address-result-item {
-        padding: 11px 13px;
-        cursor: pointer;
-        font-size: 14px;
-        border-bottom: 1px solid #f1f5f9;
-    }
-
-    .address-result-item:hover {
-        background: #f8fafc;
-    }
-
-    .annual-upsell {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 24px;
-        padding: 18px 22px;
-        margin: 8px 0 28px;
-        border: 1px solid #bfdbfe;
-        border-radius: 20px;
-        background: linear-gradient(135deg, #eff6ff 0%, #ffffff 70%);
-    }
-
-    .annual-upsell-content {
-        display: flex;
-        align-items: center;
-        gap: 14px;
-    }
-
-    .annual-upsell-icon {
-        width: 44px;
-        height: 44px;
-        min-width: 44px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border-radius: 14px;
-        background: #2563eb;
-        color: #ffffff;
-        font-size: 22px;
-        font-weight: 800;
-    }
-
-    .annual-upsell-title {
-        margin: 0;
-        font-size: 16px;
-        font-weight: 900;
-        color: #0f172a;
-    }
-
-    .annual-upsell-text {
-        margin: 4px 0 0;
-        font-size: 14px;
-        color: #475569;
-    }
-
-    .annual-upsell-button {
-        white-space: nowrap;
-        padding: 11px 16px;
-        border-radius: 13px;
-        background: #2563eb;
-        color: #ffffff;
-        text-decoration: none;
-        font-weight: 800;
-        font-size: 14px;
-    }
-
-    .properties-header {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 16px;
-        margin-bottom: 14px;
-    }
-
-    .properties-header h2 {
-        margin: 0;
-        font-size: 24px;
-        font-weight: 950;
-        color: #0f172a;
-    }
-
-    @media (max-width: 991px) {
-        .stats-grid {
-            grid-template-columns: repeat(2, 1fr);
-        }
-
-        .form-layout {
-            grid-template-columns: 1fr;
-        }
-    }
-
-    @media (max-width: 768px) {
-        .dashboard-top {
-            flex-direction: column;
-        }
-
-        .dashboard-title {
-            font-size: 28px;
-        }
-
-        .stats-grid {
-            grid-template-columns: 1fr;
-        }
-
-        .dashboard-card {
-            padding: 20px;
-            border-radius: 22px;
-        }
-
-        .upload-zone {
-            align-items: flex-start;
-            flex-direction: column;
-        }
-
-        .annual-upsell {
-            align-items: flex-start;
-            flex-direction: column;
-        }
-
-        .annual-upsell-button {
-            width: 100%;
-            text-align: center;
-        }
-    }
-</style>
-
-<div class="dashboard-page">
-    <div class="dashboard-top">
-        <div class="dashboard-heading">
-            <div class="dashboard-icon">↯</div>
-            <div>
-                <h1 class="dashboard-title">Nouvelle estimation</h1>
-                <p class="dashboard-subtitle">
-                    Créez une estimation immobilière rapide et exploitable grâce à AgentBoost.
-                </p>
-            </div>
-        </div>
-
-        <a href="{{ path('home') }}" class="help-btn">
-            Besoin d’aide ?
-        </a>
-    </div>
-
-    <div class="stats-grid">
-        <div class="stat-card">
-            <div class="stat-icon">🏠</div>
-            <div>
-                <div class="stat-value">{{ properties|length }}</div>
-                <div class="stat-label">Biens estimés</div>
-                <div class="stat-note">Total actuel</div>
-            </div>
-        </div>
-
-        <div class="stat-card">
-            <div class="stat-icon">📈</div>
-            <div>
-                <div class="stat-value">{{ properties|length }}</div>
-                <div class="stat-label">Estimations</div>
-                <div class="stat-note">Créées ce mois-ci</div>
-            </div>
-        </div>
-
-        <div class="stat-card">
-            <div class="stat-icon">📄</div>
-            <div>
-                <div class="stat-value">{{ properties|length }}</div>
-                <div class="stat-label">PDF générés</div>
-                <div class="stat-note">Disponibles</div>
-            </div>
-        </div>
-
-        <div class="stat-card">
-            <div class="stat-icon">✍️</div>
-            <div>
-                <div class="stat-value">0</div>
-                <div class="stat-label">Annonces IA</div>
-                <div class="stat-note">À générer</div>
-            </div>
-        </div>
-    </div>
-
-    <div class="dashboard-card">
-        <form method="post" action="{{ path('dashboard') }}" enctype="multipart/form-data">
-            <div class="form-layout">
-                <div>
-                    <div class="form-section-title">Informations du bien</div>
-
-                    <div class="row g-3">
-                        <div class="col-md-4">
-                            <label class="field-label" for="property-type">Type de bien</label>
-                            <select name="type" id="property-type" class="form-select" required>
-                                <option value="Appartement">Appartement</option>
-                                <option value="Maison">Maison</option>
-                                <option value="Terrain">Terrain</option>
-                                <option value="Parking">Parking</option>
-                            </select>
-                        </div>
-
-                        <div class="col-md-5 address-autocomplete-wrapper">
-                            <label class="field-label" for="address-input">Adresse du bien</label>
-                            <input name="address" id="address-input" type="text" class="form-control" placeholder="Adresse complète" maxlength="255" autocomplete="off">
-                            <div id="address-results" class="address-results"></div>
-                        </div>
-
-                        <div class="col-md-3">
-                            <label class="field-label" for="postal-code-input">Code postal</label>
-                            <input name="postalCode" id="postal-code-input" type="text" class="form-control" placeholder="Code postal" maxlength="5" pattern="[0-9]{5}" inputmode="numeric" required>
-                        </div>
-
-                        <div class="col-md-4">
-                            <label class="field-label" for="city-input">Ville</label>
-                            <input name="city" id="city-input" class="form-control" placeholder="Ville" required>
-                        </div>
-
-                        <div class="col-md-4">
-                            <label class="field-label">Surface (m²)</label>
-                            <input name="surface" type="number" min="1" class="form-control" placeholder="Ex : 72" required>
-                        </div>
-
-                        <div class="col-md-4" id="rooms-wrapper">
-                            <label class="field-label" for="rooms-input">Nombre de pièces</label>
-                            <input name="rooms" id="rooms-input" type="number" min="1" class="form-control" placeholder="Ex : 3">
-                        </div>
-
-                        <div class="col-md-4" id="parking-wrapper">
-                            <label class="field-label" for="parking-input">Parking</label>
-                            <select name="parking" id="parking-input" class="form-select">
-                                <option value="0">Sans parking</option>
-                                <option value="1">Avec parking</option>
-                            </select>
-                        </div>
-
-                        <div class="col-12">
-                            <label class="field-label">Détails supplémentaires <span class="text-muted fw-normal">(optionnel)</span></label>
-                            <textarea name="extraDetails" class="form-control" rows="2" placeholder="Ex : balcon, vue dégagée, cuisine équipée, proche gare, lumineux..."></textarea>
-                        </div>
-
-                        <div class="col-12">
-                            <label class="field-label">Photos du bien</label>
-
-                            <div class="upload-zone">
-                                <div class="upload-left">
-                                    <div class="upload-icon">🖼️</div>
-                                    <div>
-                                        <div class="upload-title">Déposez vos photos ici</div>
-                                        <div class="upload-text">JPG, PNG, WEBP. Maximum 5 photos.</div>
-                                    </div>
-                                </div>
-
-                                <input type="file" name="photos[]" id="photos-input" class="form-control" accept="image/jpeg,image/png,image/webp" multiple>
-                            </div>
-
-                            <div id="photos-preview" class="d-flex flex-wrap gap-2 mt-3"></div>
-                        </div>
-
-                        <div class="col-12">
-                            <button type="submit" class="estimate-submit">
-                                Estimer le bien
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <aside class="ai-panel">
-                    <div class="ai-box">
-                        <div class="ai-title">↯ Estimation rapide & IA</div>
-
-                        <p class="ai-text">
-                            Obtenez une estimation structurée et des supports exploitables pour vos clients.
-                        </p>
-
-                        <ul class="ai-list">
-                            <li>Analyse du marché local</li>
-                            <li>Estimation claire</li>
-                            <li>Rapport PDF généré</li>
-                            <li>Annonce prête à retravailler</li>
-                        </ul>
-                    </div>
-
-                    <div class="security-box">
-                        <strong>🔒</strong>
-                        <span>Vos données sont sécurisées et ne sont jamais partagées.</span>
-                    </div>
-                </aside>
-            </div>
-        </form>
-    </div>
-
-    {% if app.user and app.user.subscriptionStatus == 'active' and app.user.currentPlan == 'monthly' %}
-        <div class="annual-upsell">
-            <div class="annual-upsell-content">
-                <div class="annual-upsell-icon">↗</div>
-                <div>
-                    <p class="annual-upsell-title">Passez à l’annuel et diffusez plus vite</p>
-                    <p class="annual-upsell-text">
-                        Facebook, Leboncoin et PDF Premium inclus pour gagner du temps sur vos annonces.
-                    </p>
-                </div>
-            </div>
-
-            <a href="{{ path('subscription_manage') }}" class="annual-upsell-button">
-                Passer à l’annuel
-            </a>
-        </div>
-    {% endif %}
-
-    <div class="properties-header">
-        <h2>Mes biens estimés</h2>
-    </div>
-
-    {% include 'dashboard/_list.html.twig' with { properties: properties } %}
-</div>
-
-<script>
-    const typeSelect = document.getElementById('property-type');
-    const roomsWrapper = document.getElementById('rooms-wrapper');
-    const roomsInput = document.getElementById('rooms-input');
-    const parkingWrapper = document.getElementById('parking-wrapper');
-    const parkingInput = document.getElementById('parking-input');
-    const photosInput = document.getElementById('photos-input');
-    const photosPreview = document.getElementById('photos-preview');
-
-    const addressInput = document.getElementById('address-input');
-    const postalCodeInput = document.getElementById('postal-code-input');
-    const cityInput = document.getElementById('city-input');
-    const addressResults = document.getElementById('address-results');
-
-    let addressTimeout = null;
-    let addressAbortController = null;
-
-    function toggleFields() {
-        const type = typeSelect.value;
-        const isParking = type === 'Parking';
-        const isTerrain = type === 'Terrain';
-
-        const hideRooms = isParking || isTerrain;
-        const hideParking = isParking || isTerrain;
-
-        roomsWrapper.style.display = hideRooms ? 'none' : 'block';
-        parkingWrapper.style.display = hideParking ? 'none' : 'block';
-
-        roomsInput.required = !hideRooms;
-        roomsInput.disabled = hideRooms;
-
-        parkingInput.required = !hideParking;
-        parkingInput.disabled = hideParking;
-
-        if (hideRooms) {
-            roomsInput.value = '';
-        }
-
-        if (hideParking) {
-            parkingInput.value = '0';
-        }
-    }
-
-    function previewPhotos() {
-        photosPreview.innerHTML = '';
-
-        const files = Array.from(photosInput.files).slice(0, 5);
-
-        files.forEach((file) => {
-            if (!file.type.startsWith('image/')) {
-                return;
-            }
-
-            const reader = new FileReader();
-
-            reader.onload = function (event) {
-                if (!event.target || typeof event.target.result !== 'string') {
-                    return;
-                }
-
-                const img = document.createElement('img');
-                img.src = event.target.result;
-                img.alt = 'Prévisualisation';
-                img.className = 'photo-preview-img';
-
-                photosPreview.appendChild(img);
-            };
-
-            reader.readAsDataURL(file);
-        });
-    }
-
-    function hideAddressResults() {
-        addressResults.innerHTML = '';
-        addressResults.style.display = 'none';
-    }
-
-    function renderAddressResults(features) {
-        addressResults.innerHTML = '';
-
-        if (!Array.isArray(features) || features.length === 0) {
-            hideAddressResults();
-            return;
-        }
-
-        features.slice(0, 5).forEach((feature) => {
-            const properties = feature.properties || {};
-            const item = document.createElement('div');
-
-            item.className = 'address-result-item';
-            item.textContent = properties.label || '';
-
-            item.addEventListener('click', () => {
-                addressInput.value = properties.name || properties.label || '';
-                postalCodeInput.value = properties.postcode || '';
-                cityInput.value = properties.city || properties.municipality || '';
-
-                hideAddressResults();
-            });
-
-            addressResults.appendChild(item);
-        });
-
-        addressResults.style.display = 'block';
-    }
-
-    function searchAddress(query) {
-        if (addressAbortController) {
-            addressAbortController.abort();
-        }
-
-        addressAbortController = new AbortController();
-
-        const postalCode = postalCodeInput.value.trim();
-        const city = cityInput.value.trim();
-
-        let fullQuery = query;
-
-        if (city.length >= 2) {
-            fullQuery += ' ' + city;
-        }
-
-        const params = new URLSearchParams({
-            q: fullQuery,
-            limit: '5'
-        });
-
-        if (/^[0-9]{5}$/.test(postalCode)) {
-            params.set('postcode', postalCode);
-        }
-
-        fetch(`https://api-adresse.data.gouv.fr/search/?${params.toString()}`, {
-            signal: addressAbortController.signal
-        })
-            .then((response) => response.ok ? response.json() : null)
-            .then((data) => {
-                if (!data || !Array.isArray(data.features)) {
-                    hideAddressResults();
-                    return;
-                }
-
-                renderAddressResults(data.features);
-            })
-            .catch((error) => {
-                if (error.name !== 'AbortError') {
-                    hideAddressResults();
-                }
-            });
-    }
-
-    addressInput.addEventListener('input', () => {
-        const query = addressInput.value.trim();
-
-        clearTimeout(addressTimeout);
-
-        if (query.length < 3) {
-            hideAddressResults();
-            return;
-        }
-
-        addressTimeout = setTimeout(() => {
-            searchAddress(query);
-        }, 300);
-    });
-
-    document.addEventListener('click', (event) => {
-        if (!event.target.closest('.address-autocomplete-wrapper')) {
-            hideAddressResults();
-        }
-    });
-
-    typeSelect.addEventListener('change', toggleFields);
-    photosInput.addEventListener('change', previewPhotos);
-
-    toggleFields();
-</script>
-{% endblock %}
+	<style>
+		.dashboard-page {
+			padding: 12px 0 36px;
+		}
+
+		.dashboard-top {
+			display: flex;
+			justify-content: space-between;
+			gap: 18px;
+			align-items: flex-start;
+			margin-bottom: 24px;
+		}
+
+		.dashboard-heading {
+			display: flex;
+			align-items: center;
+			gap: 16px;
+		}
+
+		.dashboard-icon {
+			width: 58px;
+			height: 58px;
+			border-radius: 18px;
+			background: #dcfce7;
+			color: #15803d;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			font-size: 28px;
+			font-weight: 900;
+		}
+
+		.dashboard-title {
+			margin: 0;
+			font-size: 34px;
+			font-weight: 950;
+			letter-spacing: -0.05em;
+			color: #0f172a;
+		}
+
+		.dashboard-subtitle {
+			margin: 6px 0 0;
+			color: #64748b;
+			font-size: 15px;
+		}
+
+		.help-btn {
+			border: 1px solid #dbe2ea;
+			background: #fff;
+			color: #0f172a;
+			border-radius: 14px;
+			padding: 11px 16px;
+			font-weight: 800;
+			font-size: 14px;
+			text-decoration: none;
+		}
+
+		.help-btn:hover {
+			background: #f8fafc;
+			color: #0f172a;
+		}
+
+		.stats-grid {
+			display: grid;
+			grid-template-columns: repeat(4, 1fr);
+			gap: 16px;
+			margin-bottom: 20px;
+		}
+
+		.stat-card {
+			background: #fff;
+			border: 1px solid #e5e7eb;
+			border-radius: 22px;
+			padding: 22px;
+			display: flex;
+			gap: 16px;
+			align-items: center;
+			box-shadow: 0 14px 35px rgba(15, 23, 42, 0.05);
+		}
+
+		.stat-icon {
+			width: 54px;
+			height: 54px;
+			border-radius: 18px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			font-size: 25px;
+			background: #eff6ff;
+		}
+
+		.stat-value {
+			font-size: 26px;
+			font-weight: 950;
+			color: #0f172a;
+			line-height: 1;
+		}
+
+		.stat-label {
+			margin-top: 6px;
+			color: #0f172a;
+			font-size: 14px;
+			font-weight: 900;
+		}
+
+		.stat-note {
+			margin-top: 3px;
+			color: #64748b;
+			font-size: 12px;
+			font-weight: 700;
+		}
+
+		.dashboard-card {
+			background: #fff;
+			border: 1px solid #e5e7eb;
+			border-radius: 28px;
+			padding: 26px;
+			box-shadow: 0 18px 45px rgba(15, 23, 42, 0.06);
+			margin-bottom: 26px;
+		}
+
+		.form-layout {
+			display: grid;
+			grid-template-columns: 1fr 320px;
+			gap: 28px;
+			align-items: start;
+		}
+
+		.form-section-title {
+			font-size: 17px;
+			font-weight: 950;
+			color: #0f172a;
+			margin-bottom: 22px;
+			position: relative;
+		}
+
+		.form-section-title::after {
+			content: "";
+			display: block;
+			width: 34px;
+			height: 3px;
+			background: #198754;
+			border-radius: 999px;
+			margin-top: 10px;
+		}
+
+		.field-label {
+			font-size: 13px;
+			font-weight: 900;
+			color: #0f172a;
+			margin-bottom: 8px;
+		}
+
+		.form-control,
+		.form-select {
+			border-radius: 13px;
+			border: 1px solid #dbe2ea;
+			min-height: 48px;
+			font-size: 14px;
+		}
+
+		textarea.form-control {
+			min-height: 54px;
+		}
+
+		.upload-zone {
+			border: 1px dashed #cbd5e1;
+			border-radius: 18px;
+			padding: 16px;
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			gap: 16px;
+			background: #f8fafc;
+		}
+
+		.upload-left {
+			display: flex;
+			align-items: center;
+			gap: 14px;
+		}
+
+		.upload-icon {
+			width: 48px;
+			height: 48px;
+			border-radius: 14px;
+			background: #fff;
+			border: 1px solid #e5e7eb;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			font-size: 22px;
+		}
+
+		.upload-title {
+			font-weight: 900;
+			color: #0f172a;
+			margin-bottom: 2px;
+		}
+
+		.upload-text {
+			font-size: 13px;
+			color: #64748b;
+		}
+
+		.photo-preview-img {
+			width: 92px;
+			height: 72px;
+			object-fit: cover;
+			border-radius: 12px;
+			border: 1px solid #e5e7eb;
+		}
+
+		.estimate-submit {
+			min-height: 48px;
+			padding: 0 22px;
+			border-radius: 14px;
+			border: none;
+			background: #198754;
+			color: #fff;
+			font-weight: 900;
+			margin-top: 16px;
+		}
+
+		.estimate-submit:hover {
+			background: #157347;
+		}
+
+		.ai-panel {
+			display: grid;
+			gap: 16px;
+		}
+
+		.ai-box {
+			background: linear-gradient(135deg, #ecfdf5, #ffffff);
+			border: 1px solid #bbf7d0;
+			border-radius: 22px;
+			padding: 22px;
+		}
+
+		.ai-title {
+			font-size: 16px;
+			font-weight: 950;
+			color: #166534;
+			margin-bottom: 12px;
+		}
+
+		.ai-text {
+			color: #475569;
+			font-size: 14px;
+			line-height: 1.6;
+			margin-bottom: 16px;
+		}
+
+		.ai-list {
+			list-style: none;
+			padding: 0;
+			margin: 0;
+			display: grid;
+			gap: 12px;
+		}
+
+		.ai-list li {
+			color: #334155;
+			font-size: 14px;
+			display: flex;
+			gap: 10px;
+			align-items: center;
+		}
+
+		.ai-list li::before {
+			content: "✓";
+			color: #15803d;
+			font-weight: 950;
+		}
+
+		.security-box {
+			display: flex;
+			gap: 14px;
+			align-items: center;
+			background: #f8fafc;
+			border: 1px solid #e5e7eb;
+			border-radius: 18px;
+			padding: 16px;
+			color: #475569;
+			font-size: 14px;
+			line-height: 1.5;
+		}
+
+		.address-autocomplete-wrapper {
+			position: relative;
+		}
+
+		.address-results {
+			position: absolute;
+			top: 100%;
+			left: 0;
+			right: 0;
+			z-index: 1000;
+			background: #ffffff;
+			border: 1px solid #d1d5db;
+			border-radius: 12px;
+			margin-top: 6px;
+			overflow: hidden;
+			box-shadow: 0 18px 35px rgba(15, 23, 42, 0.14);
+			display: none;
+		}
+
+		.address-result-item {
+			padding: 11px 13px;
+			cursor: pointer;
+			font-size: 14px;
+			border-bottom: 1px solid #f1f5f9;
+		}
+
+		.address-result-item:hover {
+			background: #f8fafc;
+		}
+
+		.annual-upsell {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			gap: 24px;
+			padding: 18px 22px;
+			margin: 8px 0 28px;
+			border: 1px solid #bfdbfe;
+			border-radius: 20px;
+			background: linear-gradient(135deg, #eff6ff 0%, #ffffff 70%);
+		}
+
+		.annual-upsell-content {
+			display: flex;
+			align-items: center;
+			gap: 14px;
+		}
+
+		.annual-upsell-icon {
+			width: 44px;
+			height: 44px;
+			min-width: 44px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			border-radius: 14px;
+			background: #2563eb;
+			color: #ffffff;
+			font-size: 22px;
+			font-weight: 800;
+		}
+
+		.annual-upsell-title {
+			margin: 0;
+			font-size: 16px;
+			font-weight: 900;
+			color: #0f172a;
+		}
+
+		.annual-upsell-text {
+			margin: 4px 0 0;
+			font-size: 14px;
+			color: #475569;
+		}
+
+		.annual-upsell-button {
+			white-space: nowrap;
+			padding: 11px 16px;
+			border-radius: 13px;
+			background: #2563eb;
+			color: #ffffff;
+			text-decoration: none;
+			font-weight: 800;
+			font-size: 14px;
+		}
+
+		.properties-header {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			gap: 16px;
+			margin-bottom: 14px;
+		}
+
+		.properties-header h2 {
+			margin: 0;
+			font-size: 24px;
+			font-weight: 950;
+			color: #0f172a;
+		}
+
+		@media(max-width: 991px) {
+			.stats-grid {
+				grid-template-columns: repeat(2, 1fr);
+			}
+
+			.form-layout {
+				grid-template-columns: 1fr;
+			}
+		}
+
+		@media(max-width: 768px) {
+			.dashboard-top {
+				flex-direction: column;
+			}
+
+			.dashboard-title {
+				font-size: 28px;
+			}
+
+			.stats-grid {
+				grid-template-columns: 1fr;
+			}
+
+			.dashboard-card {
+				padding: 20px;
+				border-radius: 22px;
+			}
+
+			.upload-zone {
+				align-items: flex-start;
+				flex-direction: column;
+			}
+
+			.annual-upsell {
+				align-items: flex-start;
+				flex-direction: column;
+			}
+
+			.annual-upsell-button {
+				width: 100%;
+				text-align: center;
+			}
+		}
+	</style>
+
+	<div class="dashboard-page">
+		<div class="dashboard-top">
+			<div class="dashboard-heading">
+				<div class="dashboard-icon">↯</div>
+				<div>
+					<h1 class="dashboard-title">Nouvelle estimation</h1>
+					<p class="dashboard-subtitle">
+						Créez une estimation immobilière rapide et exploitable grâce à AgentBoost.
+					</p>
+				</div>
+			</div>
+
+			<a href="{{ path('home') }}" class="help-btn">
+				Besoin d’aide ?
+			</a>
+		</div>
+
+		<div class="stats-grid">
+			<div class="stat-card">
+				<div class="stat-icon">🏠</div>
+				<div>
+					<div class="stat-value">{{ properties|length }}</div>
+					<div class="stat-label">Biens estimés</div>
+					<div class="stat-note">Total actuel</div>
+				</div>
+			</div>
+
+			<div class="stat-card">
+				<div class="stat-icon">📈</div>
+				<div>
+					<div class="stat-value">{{ properties|length }}</div>
+					<div class="stat-label">Estimations</div>
+					<div class="stat-note">Créées ce mois-ci</div>
+				</div>
+			</div>
+
+			<div class="stat-card">
+				<div class="stat-icon">📄</div>
+				<div>
+					<div class="stat-value">{{ properties|length }}</div>
+					<div class="stat-label">PDF générés</div>
+					<div class="stat-note">Disponibles</div>
+				</div>
+			</div>
+
+			<div class="stat-card">
+				<div class="stat-icon">✍️</div>
+				<div>
+					<div class="stat-value">0</div>
+					<div class="stat-label">Annonces IA</div>
+					<div class="stat-note">À générer</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="dashboard-card">
+			<form method="post" action="{{ path('dashboard') }}" enctype="multipart/form-data">
+				<div class="form-layout">
+					<div>
+						<div class="form-section-title">Informations du bien</div>
+
+						<div class="row g-3">
+							<div class="col-md-4">
+								<label class="field-label" for="property-type">Type de bien</label>
+								<select name="type" id="property-type" class="form-select" required>
+									<option value="Appartement">Appartement</option>
+									<option value="Maison">Maison</option>
+									<option value="Terrain">Terrain</option>
+									<option value="Parking">Parking</option>
+								</select>
+							</div>
+
+							<div class="col-md-5 address-autocomplete-wrapper">
+								<label class="field-label" for="address-input">Adresse du bien</label>
+								<input name="address" id="address-input" type="text" class="form-control" placeholder="Adresse complète" maxlength="255" autocomplete="off">
+								<div id="address-results" class="address-results"></div>
+							</div>
+
+							<div class="col-md-3">
+								<label class="field-label" for="postal-code-input">Code postal</label>
+								<input name="postalCode" id="postal-code-input" type="text" class="form-control" placeholder="Code postal" maxlength="5" pattern="[0-9]{5}" inputmode="numeric" required>
+							</div>
+
+							<div class="col-md-4">
+								<label class="field-label" for="city-input">Ville</label>
+								<input name="city" id="city-input" class="form-control" placeholder="Ville" required>
+							</div>
+
+							<div class="col-md-4">
+								<label class="field-label">Surface (m²)</label>
+								<input name="surface" type="number" min="1" class="form-control" placeholder="Ex : 72" required>
+							</div>
+
+							<div class="col-md-4" id="rooms-wrapper">
+								<label class="field-label" for="rooms-input">Nombre de pièces</label>
+								<input name="rooms" id="rooms-input" type="number" min="1" class="form-control" placeholder="Ex : 3">
+							</div>
+
+							<div class="col-md-4" id="parking-wrapper">
+								<label class="field-label" for="parking-input">Parking</label>
+								<select name="parking" id="parking-input" class="form-select">
+									<option value="0">Sans parking</option>
+									<option value="1">Avec parking</option>
+								</select>
+							</div>
+
+							<div class="col-12">
+								<label class="field-label">Détails supplémentaires
+									<span class="text-muted fw-normal">(optionnel)</span>
+								</label>
+								<textarea name="extraDetails" class="form-control" rows="2" placeholder="Ex : balcon, vue dégagée, cuisine équipée, proche gare, lumineux..."></textarea>
+							</div>
+
+							<div class="col-12">
+								<label class="field-label">Photos du bien</label>
+
+								<div class="upload-zone">
+									<div class="upload-left">
+										<div class="upload-icon">🖼️</div>
+										<div>
+											<div class="upload-title">Déposez vos photos ici</div>
+											<div class="upload-text">JPG, PNG, WEBP. Maximum 5 photos.</div>
+										</div>
+									</div>
+
+									<input type="file" name="photos[]" id="photos-input" class="form-control" accept="image/jpeg,image/png,image/webp" multiple>
+								</div>
+
+								<div id="photos-preview" class="d-flex flex-wrap gap-2 mt-3"></div>
+							</div>
+
+							<div class="col-12">
+								<button type="submit" class="estimate-submit">
+									Estimer le bien
+								</button>
+							</div>
+						</div>
+					</div>
+
+					<aside class="ai-panel">
+						<div class="ai-box">
+							<div class="ai-title">↯ Estimation rapide & IA</div>
+
+							<p class="ai-text">
+								Obtenez une estimation structurée et des supports exploitables pour vos clients.
+							</p>
+
+							<ul class="ai-list">
+								<li>Analyse du marché local</li>
+								<li>Estimation claire</li>
+								<li>Rapport PDF généré</li>
+								<li>Annonce prête à retravailler</li>
+							</ul>
+						</div>
+
+						<div class="security-box">
+							<strong>🔒</strong>
+							<span>Vos données sont sécurisées et ne sont jamais partagées.</span>
+						</div>
+					</aside>
+				</div>
+			</form>
+		</div>
+
+		{% if app.user and app.user.subscriptionStatus == 'active' and app.user.currentPlan == 'monthly' %}
+			<div class="annual-upsell">
+				<div class="annual-upsell-content">
+					<div class="annual-upsell-icon">↗</div>
+					<div>
+						<p class="annual-upsell-title">Passez à l’annuel et diffusez plus vite</p>
+						<p class="annual-upsell-text">
+							Facebook, Leboncoin et PDF Premium inclus pour gagner du temps sur vos annonces.
+						</p>
+					</div>
+				</div>
+
+				<a href="{{ path('subscription_manage') }}" class="annual-upsell-button">
+					Passer à l’annuel
+				</a>
+			</div>
+		{% endif %}
+
+		<div class="properties-section" id="properties-section">
+			<div class="properties-header">
+				<h2>Mes biens estimés</h2>
+			</div>
+
+			{% include 'dashboard/_list.html.twig' with { properties: properties } %}
+		</div>
+
+		<script>
+			const typeSelect = document.getElementById('property-type');
+const roomsWrapper = document.getElementById('rooms-wrapper');
+const roomsInput = document.getElementById('rooms-input');
+const parkingWrapper = document.getElementById('parking-wrapper');
+const parkingInput = document.getElementById('parking-input');
+const photosInput = document.getElementById('photos-input');
+const photosPreview = document.getElementById('photos-preview');
+
+const addressInput = document.getElementById('address-input');
+const postalCodeInput = document.getElementById('postal-code-input');
+const cityInput = document.getElementById('city-input');
+const addressResults = document.getElementById('address-results');
+
+let addressTimeout = null;
+let addressAbortController = null;
+
+function toggleFields() {
+const type = typeSelect.value;
+const isParking = type === 'Parking';
+const isTerrain = type === 'Terrain';
+
+const hideRooms = isParking || isTerrain;
+const hideParking = isParking || isTerrain;
+
+roomsWrapper.style.display = hideRooms ? 'none' : 'block';
+parkingWrapper.style.display = hideParking ? 'none' : 'block';
+
+roomsInput.required = ! hideRooms;
+roomsInput.disabled = hideRooms;
+
+parkingInput.required = ! hideParking;
+parkingInput.disabled = hideParking;
+
+if (hideRooms) {
+roomsInput.value = '';
+}
+
+if (hideParking) {
+parkingInput.value = '0';
+}
+}
+
+function previewPhotos() {
+photosPreview.innerHTML = '';
+
+const files = Array.from(photosInput.files).slice(0, 5);
+
+files.forEach((file) => {
+if (!file.type.startsWith('image/')) {
+return;
+}
+
+const reader = new FileReader();
+
+reader.onload = function (event) {
+if (! event.target || typeof event.target.result !== 'string') {
+return;
+}
+
+const img = document.createElement('img');
+img.src = event.target.result;
+img.alt = 'Prévisualisation';
+img.className = 'photo-preview-img';
+
+photosPreview.appendChild(img);
+};
+
+reader.readAsDataURL(file);
+});
+}
+
+function hideAddressResults() {
+addressResults.innerHTML = '';
+addressResults.style.display = 'none';
+}
+
+function renderAddressResults(features) {
+addressResults.innerHTML = '';
+
+if (!Array.isArray(features) || features.length === 0) {
+hideAddressResults();
+return;
+}
+
+features.slice(0, 5).forEach((feature) => {
+const properties = feature.properties || {};
+const item = document.createElement('div');
+
+item.className = 'address-result-item';
+item.textContent = properties.label || '';
+
+item.addEventListener('click', () => {
+addressInput.value = properties.name || properties.label || '';
+postalCodeInput.value = properties.postcode || '';
+cityInput.value = properties.city || properties.municipality || '';
+
+hideAddressResults();
+});
+
+addressResults.appendChild(item);
+});
+
+addressResults.style.display = 'block';
+}
+
+function searchAddress(query) {
+if (addressAbortController) {
+addressAbortController.abort();
+}
+
+addressAbortController = new AbortController();
+
+const postalCode = postalCodeInput.value.trim();
+const city = cityInput.value.trim();
+
+let fullQuery = query;
+
+if (city.length >= 2) {
+fullQuery += ' ' + city;
+}
+
+const params = new URLSearchParams({q: fullQuery, limit: '5'});
+
+if (/^[0-9]{5}$/.test(postalCode)) {
+params.set('postcode', postalCode);
+}
+
+fetch (`https://api-adresse.data.gouv.fr/search/?${
+params.toString()
+}`, {signal: addressAbortController.signal}).then((response) => response.ok ? response.json() : null).then((data) => {
+if (!data || !Array.isArray(data.features)) {
+hideAddressResults();
+return;
+}
+
+renderAddressResults(data.features);
+}).catch((error) => {
+if (error.name !== 'AbortError') {
+hideAddressResults();
+}
+});
+}
+
+addressInput.addEventListener('input', () => {
+const query = addressInput.value.trim();
+
+clearTimeout(addressTimeout);
+
+if (query.length < 3) {
+hideAddressResults();
+return;
+}
+
+addressTimeout = setTimeout(() => {
+searchAddress(query);
+}, 300);
+});
+
+document.addEventListener('click', (event) => {
+if (!event.target.closest('.address-autocomplete-wrapper')) {
+hideAddressResults();
+}
+});
+
+typeSelect.addEventListener('change', toggleFields);
+photosInput.addEventListener('change', previewPhotos);
+
+toggleFields();
+		</script>
+	{% endblock %}
