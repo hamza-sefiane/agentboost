@@ -29,16 +29,31 @@ final class RegistrationController extends AbstractController
         }
 
         if ($request->isMethod('POST')) {
-            $email = trim((string) $request->request->get('email'));
-            $password = (string) $request->request->get('password');
+            $email = strtolower(trim((string) $request->request->get('email')));
+            $password = trim((string) $request->request->get('password'));
+            $confirmPassword = trim((string) $request->request->get('confirm_password'));
 
-            if (!filter_var($email, FILTER_VALIDATE_EMAIL) || strlen($password) < 8) {
-                $this->addFlash('error', 'Email invalide ou mot de passe trop court.');
+            if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                $this->addFlash('error', 'Adresse email invalide.');
+
+                return $this->redirectToRoute('app_register');
+            }
+
+            if (strlen($password) < 8) {
+                $this->addFlash('error', 'Le mot de passe doit contenir au moins 8 caractères.');
+
+                return $this->redirectToRoute('app_register');
+            }
+
+            if ($password !== $confirmPassword) {
+                $this->addFlash('error', 'Les mots de passe ne correspondent pas.');
+
                 return $this->redirectToRoute('app_register');
             }
 
             if ($em->getRepository(User::class)->findOneBy(['email' => $email])) {
                 $this->addFlash('error', 'Un compte existe déjà avec cet email.');
+
                 return $this->redirectToRoute('app_register');
             }
 
@@ -49,8 +64,11 @@ final class RegistrationController extends AbstractController
             ]);
 
             $user = new User();
+
             $user->setEmail($email);
-            $user->setPassword($passwordHasher->hashPassword($user, $password));
+            $user->setPassword(
+                $passwordHasher->hashPassword($user, $password)
+            );
             $user->setStripeCustomerId($customer->id);
             $user->setIsVerified(false);
 
@@ -83,6 +101,7 @@ final class RegistrationController extends AbstractController
 
         if (!$id) {
             $this->addFlash('error', 'Lien de vérification invalide.');
+
             return $this->redirectToRoute('app_login');
         }
 
@@ -90,6 +109,7 @@ final class RegistrationController extends AbstractController
 
         if (!$user instanceof User) {
             $this->addFlash('error', 'Utilisateur introuvable.');
+
             return $this->redirectToRoute('app_login');
         }
 
@@ -97,10 +117,14 @@ final class RegistrationController extends AbstractController
             $emailVerifier->handleEmailConfirmation($request, $user);
         } catch (VerifyEmailExceptionInterface $exception) {
             $this->addFlash('error', $exception->getReason());
+
             return $this->redirectToRoute('app_check_email');
         }
 
-        $this->addFlash('success', 'Email vérifié. Connectez-vous pour choisir un abonnement.');
+        $this->addFlash(
+            'success',
+            'Email vérifié. Connectez-vous pour choisir un abonnement.'
+        );
 
         return $this->redirectToRoute('app_login');
     }

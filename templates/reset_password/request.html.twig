@@ -1,0 +1,146 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mot de passe oublié{% endblock %}
+
+{% block body %}
+    <style>
+        .reset-wrapper {
+            min-height: calc(100vh - 220px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+        }
+
+        .reset-card {
+            width: 100%;
+            max-width: 520px;
+            background: #ffffff;
+            border-radius: 28px;
+            padding: 38px;
+            border: 1px solid #e5e7eb;
+            box-shadow: 0 20px 60px rgba(15, 23, 42, 0.08);
+        }
+
+        .reset-title {
+            font-size: 32px;
+            font-weight: 900;
+            color: #0f172a;
+            text-align: center;
+            margin-bottom: 12px;
+            letter-spacing: -0.04em;
+        }
+
+        .reset-subtitle {
+            text-align: center;
+            color: #64748b;
+            font-size: 15px;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+
+        .reset-card label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 700;
+            color: #0f172a;
+        }
+
+        .reset-card input {
+            width: 100%;
+            height: 58px;
+            border-radius: 18px;
+            border: 1px solid #dbe4ee;
+            padding: 0 18px;
+            font-size: 16px;
+            margin-bottom: 18px;
+            transition: 0.2s ease;
+        }
+
+        .reset-card input:focus {
+            outline: none;
+            border-color: #198754;
+            box-shadow: 0 0 0 4px rgba(25, 135, 84, 0.08);
+        }
+
+        .reset-btn {
+            width: 100%;
+            height: 58px;
+            border: none;
+            border-radius: 18px;
+            background: #198754;
+            color: #ffffff;
+            font-size: 17px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: 0.2s ease;
+        }
+
+        .reset-btn:hover {
+            background: #157347;
+        }
+
+        .reset-back {
+            margin-top: 22px;
+            text-align: center;
+        }
+
+        .reset-back a {
+            color: #198754;
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        .reset-alert {
+            background: #fee2e2;
+            color: #991b1b;
+            padding: 14px;
+            border-radius: 14px;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+        @media (max-width: 640px) {
+            .reset-card {
+                padding: 28px 22px;
+                border-radius: 24px;
+            }
+
+            .reset-title {
+                font-size: 28px;
+            }
+        }
+    </style>
+
+    <div class="reset-wrapper">
+        <div class="reset-card">
+            {% for flash_error in app.flashes('reset_password_error') %}
+                <div class="reset-alert">
+                    {{ flash_error }}
+                </div>
+            {% endfor %}
+
+            <h1 class="reset-title">Mot de passe oublié</h1>
+
+            <p class="reset-subtitle">
+                Entrez votre adresse email. Nous vous enverrons un lien sécurisé pour réinitialiser votre mot de passe.
+            </p>
+
+            {{ form_start(requestForm) }}
+                {{ form_row(requestForm.email, {
+                    label: 'Adresse email'
+                }) }}
+
+                <button class="reset-btn">
+                    Envoyer le lien
+                </button>
+            {{ form_end(requestForm) }}
+
+            <div class="reset-back">
+                <a href="{{ path('app_login') }}">
+                    Retour à la connexion
+                </a>
+            </div>
+        </div>
+    </div>
+{% endblock %}
