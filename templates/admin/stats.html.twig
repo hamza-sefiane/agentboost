@@ -1,0 +1,228 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Statistiques admin
+{% endblock %}
+
+{% block body %}
+	<div class="admin-stats-page">
+		<h1>Statistiques admin</h1>
+
+		<div class="admin-stats-grid">
+			<div class="admin-card">
+				<span>Utilisateurs</span>
+				<strong>{{ stats.users }}</strong>
+			</div>
+
+			<div class="admin-card">
+				<span>Abonnements actifs</span>
+				<strong>{{ stats.activeSubscriptions }}</strong>
+			</div>
+
+			<div class="admin-card">
+				<span>Biens estimés</span>
+				<strong>{{ stats.properties }}</strong>
+			</div>
+
+			<div class="admin-card">
+				<span>Revenu estimé</span>
+				<strong>{{ stats.estimatedRevenue }}
+					€</strong>
+			</div>
+
+			<div class="admin-card">
+				<span>Taux conversion</span>
+				<strong>{{ stats.conversionRate }}%</strong>
+			</div>
+
+			<div class="admin-card">
+				<span>Utilisateurs gratuits</span>
+				<strong>{{ stats.freeUsers }}</strong>
+			</div>
+		</div>
+
+		<div class="admin-charts-grid">
+			<div class="admin-chart-card">
+				<h2>Répartition utilisateurs</h2>
+				<div class="admin-chart-wrapper">
+					<canvas id="usersPieChart"></canvas>
+				</div>
+			</div>
+
+			<div class="admin-chart-card">
+				<h2>Vue globale</h2>
+				<div class="admin-chart-wrapper">
+					<canvas id="globalBarChart"></canvas>
+				</div>
+			</div>
+
+			<div class="admin-chart-card">
+				<h2>Top villes estimées</h2>
+				<div class="admin-chart-wrapper">
+					<canvas id="citiesChart"></canvas>
+				</div>
+			</div>
+		</div>
+
+		<div class="admin-tables-grid">
+			<div class="admin-table-card">
+				<h2>Derniers utilisateurs</h2>
+
+				<table>
+					<thead>
+						<tr>
+							<th>Email</th>
+							<th>Statut</th>
+							<th>Plan</th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for user in latestUsers %}
+							<tr>
+								<td>{{ user.email }}</td>
+								<td>{{ user.subscription_status }}</td>
+								<td>{{ user.current_plan }}</td>
+							</tr>
+						{% else %}
+							<tr>
+								<td colspan="3">Aucun utilisateur.</td>
+							</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
+
+			<div class="admin-table-card">
+				<h2>Derniers événements Stripe</h2>
+
+				<table>
+					<thead>
+						<tr>
+							<th>Événement</th>
+							<th>Date</th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for event in latestStripeEvents %}
+							<tr>
+								<td>{{ event.event_id }}</td>
+								<td>{{ event.created_at }}</td>
+							</tr>
+						{% else %}
+							<tr>
+								<td colspan="2">Aucun événement Stripe.</td>
+							</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+
+	 <script type="application/json" id="admin-stats-data">{{ stats|json_encode|raw }}</script>
+	 <script type="application/json" id="admin-cities-data">{{ topCities|json_encode|raw }}</script>
+{% endblock %}
+
+{% block javascripts %}
+	{{ parent() }}
+
+ <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+	 <script>
+			document.addEventListener('DOMContentLoaded', function () {
+				const statsElement = document.getElementById('admin-stats-data');
+				const citiesElement = document.getElementById('admin-cities-data');
+	
+				if (!statsElement || !citiesElement || typeof Chart === 'undefined') {
+					return;
+				}
+	
+				const stats = JSON.parse(statsElement.textContent || '{}');
+				const cities = JSON.parse(citiesElement.textContent || '[]');
+	
+				const chartOptions = {
+					responsive: true,
+					maintainAspectRatio: false,
+					plugins: {
+						legend: {
+							display: true
+						}
+					}
+				};
+	
+				const barOptions = {
+					responsive: true,
+					maintainAspectRatio: false,
+					scales: {
+						y: {
+							beginAtZero: true,
+							ticks: {
+								precision: 0
+							}
+						}
+					},
+					plugins: {
+						legend: {
+							display: true
+						}
+					}
+				};
+	
+				const usersPieCanvas = document.getElementById('usersPieChart');
+				const globalBarCanvas = document.getElementById('globalBarChart');
+				const citiesCanvas = document.getElementById('citiesChart');
+	
+				if (usersPieCanvas) {
+					new Chart(usersPieCanvas, {
+						type: 'doughnut',
+						data: {
+							labels: ['Abonnés actifs', 'Utilisateurs gratuits'],
+							datasets: [{
+								data: [
+									Number(stats.activeSubscriptions) || 0,
+									Number(stats.freeUsers) || 0
+								]
+							}]
+						},
+						options: chartOptions
+					});
+				}
+	
+				if (globalBarCanvas) {
+					new Chart(globalBarCanvas, {
+						type: 'bar',
+						data: {
+							labels: ['Utilisateurs', 'Abonnements', 'Biens', 'Revenu estimé'],
+							datasets: [{
+								label: 'Total',
+								data: [
+									Number(stats.users) || 0,
+									Number(stats.activeSubscriptions) || 0,
+									Number(stats.properties) || 0,
+									Number(stats.estimatedRevenue) || 0
+								]
+							}]
+						},
+						options: barOptions
+					});
+				}
+	
+				if (citiesCanvas) {
+					new Chart(citiesCanvas, {
+						type: 'bar',
+						data: {
+							labels: cities.length > 0
+								? cities.map(city => city.city || 'Non renseigné')
+								: ['Aucune donnée'],
+							datasets: [{
+								label: 'Biens estimés',
+								data: cities.length > 0
+									? cities.map(city => Number(city.total) || 0)
+									: [0]
+							}]
+						},
+						options: barOptions
+					});
+				}
+			});
+		</script>
+{% endblock %}

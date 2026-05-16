@@ -41,6 +41,7 @@ security:
         - { path: ^/pricing, roles: PUBLIC_ACCESS }
         - { path: ^/login, roles: PUBLIC_ACCESS }
         - { path: ^/register, roles: PUBLIC_ACCESS }
+        - { path: ^/reset-password, roles: PUBLIC_ACCESS }
 
         # Tout le reste = utilisateur connecté
         - { path: ^/, roles: IS_AUTHENTICATED_FULLY }

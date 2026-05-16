@@ -1,0 +1,89 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nouveau mot de passe
+{% endblock %}
+
+{% block body %}
+	<div class="auth-wrapper">
+		<div class="auth-card">
+			<div class="auth-badge">🔒</div>
+
+			<h1 class="auth-title">Nouveau mot de passe</h1>
+
+			<p class="auth-subtitle">
+				Choisissez un nouveau mot de passe sécurisé pour votre compte AgentBoost.
+			</p>
+
+			{{ form_start(resetForm) }}
+			{{ form_errors(resetForm) }}
+
+			<div class="auth-field">
+				<label class="auth-label" for="reset-password-input">
+					Nouveau mot de passe
+				</label>
+
+				<div class="password-wrapper">
+					{{ form_widget(resetForm.plainPassword.first, {
+                            attr: {
+                                id: 'reset-password-input',
+                                autocomplete: 'new-password',
+                                class: 'password-input',
+                                placeholder: 'Votre nouveau mot de passe'
+                            }
+                        }) }}
+
+					<button type="button" class="password-toggle" data-target="reset-password-input" aria-label="Afficher le mot de passe">
+						👁
+					</button>
+				</div>
+
+				<div class="password-strength" id="password-strength">
+					<span></span>
+					<span></span>
+					<span></span>
+					<span></span>
+				</div>
+
+				<div class="password-strength-label" id="password-strength-label">
+					Sécurité du mot de passe
+				</div>
+
+				<div class="auth-errors">
+					{{ form_errors(resetForm.plainPassword.first) }}
+				</div>
+			</div>
+
+			<div class="auth-field">
+				<label class="auth-label" for="{{ resetForm.plainPassword.second.vars.id }}">
+					Confirmer le nouveau mot de passe
+				</label>
+
+				<div class="password-wrapper">
+					{{ form_widget(resetForm.plainPassword.second, {
+                            attr: {
+                                autocomplete: 'new-password',
+                                placeholder: 'Confirmez le mot de passe'
+                            }
+                        }) }}
+
+					<button type="button" class="password-toggle" data-target="{{ resetForm.plainPassword.second.vars.id }}" aria-label="Afficher le mot de passe">
+						👁
+					</button>
+				</div>
+
+				<div class="auth-errors">
+					{{ form_errors(resetForm.plainPassword.second) }}
+				</div>
+			</div>
+
+			<button class="auth-submit">
+				Réinitialiser le mot de passe
+			</button>
+			{{ form_end(resetForm) }}
+
+			<a href="{{ path('app_login') }}" class="auth-back">
+				← Retour à la connexion
+			</a>
+		</div>
+	</div>
+{% endblock %}

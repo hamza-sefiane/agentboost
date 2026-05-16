@@ -1,19 +1,39 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}À bientôt – AgentBoost{% endblock %}
+{% block title %}Compte supprimé – AgentBoost
+{% endblock %}
 
 {% block body %}
-<div class="container text-center" style="max-width:600px; margin-top:4rem;">
-    <h1 class="mb-3">Abonnement résilié</h1>
 
-    <p class="text-muted">
-        Vous conservez l’accès jusqu’à la fin de votre période en cours.
-    </p>
+	<div class="goodbye-wrapper">
+		<div class="goodbye-card">
+			<div class="goodbye-icon">
+				✓
+			</div>
 
-    <div class="mt-4">
-        <a href="{{ path('app_login') }}" class="btn btn-primary">
-            Retour à l’accueil
-        </a>
-    </div>
-</div>
+			<h1 class="goodbye-title">
+				Compte supprimé
+			</h1>
+
+			<p class="goodbye-subtitle">
+				Votre compte AgentBoost a bien été supprimé.
+			</p>
+
+			<div class="goodbye-alert">
+				Vos accès ont été désactivés et votre session a été fermée.
+				<br><br>
+				Merci d’avoir utilisé AgentBoost pour vos estimations et vos automatisations immobilières.
+			</div>
+
+			<div class="goodbye-actions">
+				<a href="{{ path('home') }}" class="goodbye-btn-primary">
+					Retour à l’accueil
+				</a>
+
+				<a href="{{ path('pricing') }}" class="goodbye-btn-secondary">
+					Voir les offres
+				</a>
+			</div>
+		</div>
+	</div>
 {% endblock %}

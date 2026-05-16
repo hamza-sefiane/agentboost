@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mot de passe oublié
+{% endblock %}
+
+{% block body %}
+	<div class="reset-wrapper">
+		<div class="reset-card">
+			{% for flash_error in app.flashes('reset_password_error') %}
+				<div class="reset-alert">
+					{{ flash_error }}
+				</div>
+			{% endfor %}
+
+			<h1 class="reset-title">Mot de passe oublié</h1>
+
+			<p class="reset-subtitle">
+				Entrez votre adresse email. Nous vous enverrons un lien sécurisé pour réinitialiser votre mot de passe.
+			</p>
+
+			{{ form_start(requestForm) }}
+
+			{{ form_row(requestForm.email, {
+                    label: 'Adresse email'
+                }) }}
+
+			<button class="reset-btn">
+				Envoyer le lien
+			</button>
+
+			{{ form_end(requestForm) }}
+
+			<div class="reset-back">
+				<a href="{{ path('app_login') }}">
+					Retour à la connexion
+				</a>
+			</div>
+		</div>
+	</div>
+{% endblock %}

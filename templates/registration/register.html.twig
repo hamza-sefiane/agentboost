@@ -1,265 +1,90 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}S'inscrire{% endblock %}
-
-{% block stylesheets %}
-<style>
-body {
-    background: #f0f2f5;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
-
-.register-container {
-    max-width: 400px;
-    margin: 80px auto;
-    background: #fff;
-    border-radius: 12px;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-    padding: 40px 30px;
-}
-
-h1 {
-    text-align: center;
-    margin-bottom: 30px;
-    color: #28a745;
-    font-size: 1.8rem;
-}
-
-label {
-    display: block;
-    margin-bottom: 8px;
-    font-weight: 600;
-    color: #333;
-}
-
-input[type="email"],
-input[type="password"],
-input[type="text"] {
-    width: 100%;
-    padding: 12px 15px;
-    margin-bottom: 20px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    font-size: 1rem;
-    transition: border-color 0.3s;
-    box-sizing: border-box;
-}
-
-input[type="email"]:focus,
-input[type="password"]:focus,
-input[type="text"]:focus {
-    border-color: #28a745;
-    outline: none;
-}
-
-.btn-register {
-    width: 100%;
-    padding: 12px;
-    background-color: #28a745;
-    color: #fff;
-    font-weight: bold;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 1rem;
-    transition: background-color 0.3s, opacity 0.3s;
-}
-
-.btn-register:hover {
-    background-color: #218838;
-}
-
-.btn-register:disabled {
-    opacity: 0.7;
-    cursor: not-allowed;
-}
-
-.flash-message {
-    padding: 10px;
-    border-radius: 8px;
-    margin-bottom: 20px;
-    font-size: 0.9rem;
-    color: #b71c1c;
-    border: 1px solid #b71c1c;
-    background: #ffe5e5;
-}
-
-.login-link {
-    text-align: center;
-    margin-top: 20px;
-    font-size: 0.9rem;
-}
-
-.login-link a {
-    color: #28a745;
-    text-decoration: none;
-    font-weight: 600;
-}
-
-.login-link a:hover {
-    text-decoration: underline;
-}
-
-.password-wrapper {
-    position: relative;
-}
-
-.password-wrapper input {
-    padding-right: 50px;
-}
-
-.toggle-password {
-    position: absolute;
-    right: 12px;
-    top: 38%;
-    transform: translateY(-50%);
-    background: none;
-    border: none;
-    cursor: pointer;
-    color: #666;
-    padding: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.toggle-password:hover {
-    color: #28a745;
-}
-
-.toggle-password svg {
-    width: 20px;
-    height: 20px;
-}
-
-.helper-text {
-    margin-top: -12px;
-    margin-bottom: 18px;
-    font-size: 0.85rem;
-    color: #666;
-}
-
-.field-error {
-    color: #b71c1c;
-    font-size: 0.85rem;
-    margin-top: -12px;
-    margin-bottom: 16px;
-}
-</style>
+{% block title %}S'inscrire
 {% endblock %}
 
 {% block body %}
-<div class="register-container">
-    <h1>Inscription</h1>
+	<div class="auth-page">
+		<div class="auth-card">
+			<h1 class="auth-title">Inscription</h1>
 
-    {% for message in app.flashes('error') %}
-        <div class="flash-message">{{ message }}</div>
-    {% endfor %}
+			{% for message in app.flashes('error') %}
+				<div class="auth-flash">
+					{{ message }}
+				</div>
+			{% endfor %}
 
-    <form method="POST" action="{{ path('app_register') }}" id="registerForm" novalidate>
-        <label for="email">Email</label>
-        <input type="email" id="email" name="email" required autofocus>
-        <div id="emailError" class="field-error" style="display:none;"></div>
+			<form method="POST" action="{{ path('app_register') }}" id="registerForm" novalidate>
 
-        <label for="password">Mot de passe</label>
-        <div class="password-wrapper">
-            <input type="password" id="password" name="password" required>
-            <button type="button" id="togglePassword" class="toggle-password" aria-label="Afficher ou masquer le mot de passe">
-                <svg id="eyeOpen" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
-                </svg>
+				<div class="auth-field">
+					<label for="email" class="auth-label">Email</label>
 
-                <svg id="eyeClosed" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="display:none;">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.542-7a9.956 9.956 0 012.223-3.592M6.228 6.228A9.956 9.956 0 0112 5c4.478 0 8.268 2.943 9.542 7a9.969 9.969 0 01-4.104 5.135M15 12a3 3 0 00-3-3m0 0a2.99 2.99 0 00-2.12.879M12 9l0 3m0 0l0 3m8.485 8.485L3.515 3.515"/>
-                </svg>
-            </button>
-        </div>
-        <div class="helper-text">8 caractères minimum</div>
-        <div id="passwordError" class="field-error" style="display:none;"></div>
+					<input type="email" id="email" name="email" class="auth-input" autocomplete="email" required autofocus>
 
-        <button type="submit" class="btn-register" id="submitButton">S'inscrire</button>
-    </form>
+					<div id="emailError" class="auth-error"></div>
+				</div>
 
-    <div class="login-link">
-        Déjà inscrit ? <a href="{{ path('app_login') }}">Se connecter</a>
-    </div>
-</div>
-{% endblock %}
+				<div class="auth-field">
+					<label for="password" class="auth-label">Mot de passe</label>
 
-{% block javascripts %}
-<script>
-document.addEventListener('DOMContentLoaded', () => {
-    const form = document.getElementById('registerForm');
-    const emailInput = document.getElementById('email');
-    const passwordInput = document.getElementById('password');
-    const togglePassword = document.getElementById('togglePassword');
-    const eyeOpen = document.getElementById('eyeOpen');
-    const eyeClosed = document.getElementById('eyeClosed');
-    const submitButton = document.getElementById('submitButton');
-    const emailError = document.getElementById('emailError');
-    const passwordError = document.getElementById('passwordError');
+					<div class="auth-password-wrapper">
+						<input type="password" id="password" name="password" class="auth-input" autocomplete="new-password" required>
 
-    const showError = (element, message) => {
-        element.textContent = message;
-        element.style.display = 'block';
-    };
+						<button type="button" id="togglePassword" class="auth-toggle-password" aria-label="Afficher le mot de passe">
+							<svg id="eyeOpen" xmlns="http://www.w3.org/2000/svg" fill="none" viewbox="0 0 24 24" stroke="currentColor">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+							</svg>
 
-    const hideError = (element) => {
-        element.textContent = '';
-        element.style.display = 'none';
-    };
+							<svg id="eyeClosed" xmlns="http://www.w3.org/2000/svg" fill="none" viewbox="0 0 24 24" stroke="currentColor" style="display:none;">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3l18 18"/>
+							</svg>
+						</button>
+					</div>
 
-    if (togglePassword && passwordInput) {
-        togglePassword.addEventListener('click', () => {
-            const hidden = passwordInput.type === 'password';
+					<div class="auth-helper">
+						Minimum 8 caractères
+					</div>
 
-            passwordInput.type = hidden ? 'text' : 'password';
-            eyeOpen.style.display = hidden ? 'none' : 'block';
-            eyeClosed.style.display = hidden ? 'block' : 'none';
-        });
-    }
+					<div id="passwordError" class="auth-error"></div>
+				</div>
 
-    if (emailInput) {
-        emailInput.addEventListener('input', () => {
-            hideError(emailError);
-        });
-    }
+				<div class="auth-field">
+					<label for="confirmPassword" class="auth-label">
+						Confirmer le mot de passe
+					</label>
 
-    if (passwordInput) {
-        passwordInput.addEventListener('input', () => {
-            hideError(passwordError);
-        });
-    }
+					<div class="auth-password-wrapper">
+						<input type="password" id="confirmPassword" name="confirm_password" class="auth-input" autocomplete="new-password" required>
 
-    if (form) {
-        form.addEventListener('submit', (event) => {
-            hideError(emailError);
-            hideError(passwordError);
+						<button type="button" id="toggleConfirmPassword" class="auth-toggle-password" aria-label="Afficher le mot de passe">
+							<svg id="confirmEyeOpen" xmlns="http://www.w3.org/2000/svg" fill="none" viewbox="0 0 24 24" stroke="currentColor">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+							</svg>
 
-            let hasError = false;
-            const email = emailInput.value.trim();
-            const password = passwordInput.value;
+							<svg id="confirmEyeClosed" xmlns="http://www.w3.org/2000/svg" fill="none" viewbox="0 0 24 24" stroke="currentColor" style="display:none;">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3l18 18"/>
+							</svg>
+						</button>
+					</div>
 
-            if (!email || !email.includes('@')) {
-                showError(emailError, 'Veuillez saisir un email valide.');
-                hasError = true;
-            }
+					<div class="auth-helper">
+						Retapez votre mot de passe
+					</div>
 
-            if (password.length < 8) {
-                showError(passwordError, 'Le mot de passe doit contenir au moins 8 caractères.');
-                hasError = true;
-            }
+					<div id="confirmPasswordError" class="auth-error"></div>
+				</div>
 
-            if (hasError) {
-                event.preventDefault();
-                return;
-            }
+				<button type="submit" class="auth-submit" id="submitButton">
+					Créer mon compte
+				</button>
+			</form>
 
-            submitButton.disabled = true;
-            submitButton.textContent = 'Chargement...';
-        });
-    }
-});
-</script>
+			<div class="auth-footer">
+				Déjà inscrit ?
+				<a href="{{ path('app_login') }}">Se connecter</a>
+			</div>
+		</div>
+	</div>
 {% endblock %}

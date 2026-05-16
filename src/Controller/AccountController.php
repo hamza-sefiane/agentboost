@@ -32,9 +32,7 @@ final class AccountController extends AbstractController
             throw $this->createAccessDeniedException();
         }
 
-        // 🔥 CAS 1 : user avec abonnement actif
         if ($user->isActive()) {
-
             if ($user->getStripeSubscriptionId()) {
                 try {
                     $stripe = new StripeClient($stripeSecretKey);
@@ -45,39 +43,32 @@ final class AccountController extends AbstractController
                             'cancel_at_period_end' => true,
                         ],
                         [
-                            // 🔥 clé idempotente
                             'idempotency_key' => 'delete-account-'.$user->getId(),
                         ]
                     );
                 } catch (ApiErrorException) {
-                    $this->addFlash(
-                        'error',
-                        'Impossible de programmer la suppression. Réessayez.'
-                    );
+                    $this->addFlash('error', 'Impossible de programmer la suppression du compte. Réessayez.');
 
                     return $this->redirectToRoute('subscription_manage');
                 }
             }
 
-            // 🔥 On marque la suppression (DB)
             $user->markDeletionAtPeriodEnd($user->getNextBillingDate());
-
             $em->flush();
 
             $this->addFlash(
                 'success',
-                'Votre compte sera supprimé automatiquement à la fin de votre abonnement.'
+                'Votre compte sera supprimé automatiquement à la fin de votre période d’abonnement.'
             );
 
             return $this->redirectToRoute('subscription_manage');
         }
 
-        // 🔥 CAS 2 : pas d’abonnement → suppression immédiate
         $em->remove($user);
         $em->flush();
 
-        $logoutResponse = $security->logout(false);
+        $security->logout(false);
 
-        return $logoutResponse ?? $this->redirectToRoute('home');
+        return $this->redirectToRoute('goodbye');
     }
 }

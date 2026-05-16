@@ -9,6 +9,7 @@ use App\Service\OpenAiPropertyAdGenerator;
 use App\Service\PropertyComparableGenerator;
 use App\Service\PropertyEstimator;
 use App\Service\PropertySellingAdviceGenerator;
+use App\Service\SubscriptionLimiter;
 use Doctrine\ORM\EntityManagerInterface;
 use Dompdf\Dompdf;
 use Dompdf\Options;
@@ -32,6 +33,7 @@ final class DashboardController extends AbstractController
 
     public function __construct(
         private readonly EntityManagerInterface $em,
+        private readonly SubscriptionLimiter $subscriptionLimiter,
     ) {
     }
 
@@ -43,6 +45,15 @@ final class DashboardController extends AbstractController
         $this->denyAccessUnlessGranted('ACCESS_DASHBOARD');
 
         if ($request->isMethod('POST')) {
+            if (!$this->subscriptionLimiter->canCreateEstimation($user)) {
+                $this->addFlash(
+                    'error',
+                    'Vous avez atteint la limite gratuite de 3 estimations ce mois-ci. Passez à une offre premium pour continuer.'
+                );
+
+                return $this->redirectToRoute('pricing');
+            }
+
             $property = new Property();
 
             $response = $this->handlePropertyForm($property, $request, $estimator, $user);
@@ -50,6 +61,8 @@ final class DashboardController extends AbstractController
             if ($response instanceof Response) {
                 return $response;
             }
+
+            $this->subscriptionLimiter->incrementEstimations($user);
 
             $this->em->persist($property);
             $this->em->flush();
@@ -66,6 +79,15 @@ final class DashboardController extends AbstractController
 
         return $this->render('dashboard/index.html.twig', [
             'properties' => $properties,
+            'usage' => [
+                'isPremium' => $user->isActive(),
+                'estimationsUsed' => $user->getMonthlyEstimations(),
+                'estimationsLimit' => 3,
+                'estimationsRemaining' => $this->subscriptionLimiter->getRemainingEstimations($user),
+                'aiUsed' => $user->getMonthlyAiGenerations(),
+                'aiLimit' => 1,
+                'aiRemaining' => $this->subscriptionLimiter->getRemainingAiGenerations($user),
+            ],
         ]);
     }
 
@@ -109,12 +131,19 @@ final class DashboardController extends AbstractController
 
         $user = $this->getAuthenticatedUser();
 
-        if (!$user->isActive()) {
+        if (!$this->subscriptionLimiter->canGenerateAd($user)) {
+            $this->addFlash(
+                'error',
+                'Vous avez atteint la limite gratuite de génération IA ce mois-ci. Passez à une offre premium pour continuer.'
+            );
+
             return $this->redirectToRoute('pricing');
         }
 
         try {
             $property->setAdText($adGenerator->generate($property));
+            $this->subscriptionLimiter->incrementAiGenerations($user);
+
             $this->em->flush();
 
             $this->addFlash('success', 'Annonce IA générée.');
@@ -126,10 +155,8 @@ final class DashboardController extends AbstractController
     }
 
     #[Route('/pdf/{id}', name: 'property_pdf', methods: ['GET'])]
-    public function pdf(
-        Property $property,
-        PropertySellingAdviceGenerator $adviceGenerator,
-    ): Response {
+    public function pdf(Property $property, PropertySellingAdviceGenerator $adviceGenerator): Response
+    {
         $this->denyAccessUnlessGranted('OWNER', $property);
 
         $user = $this->getAuthenticatedUser();
@@ -155,14 +182,10 @@ final class DashboardController extends AbstractController
         $dompdf->setPaper('A4', 'portrait');
         $dompdf->render();
 
-        return new Response(
-            $dompdf->output(),
-            Response::HTTP_OK,
-            [
-                'Content-Type' => 'application/pdf',
-                'Content-Disposition' => 'inline; filename="estimation-agentboost.pdf"',
-            ]
-        );
+        return new Response($dompdf->output(), Response::HTTP_OK, [
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' => 'inline; filename="estimation-agentboost.pdf"',
+        ]);
     }
 
     #[Route('/pdf/{id}/premium', name: 'property_pdf_premium', methods: ['GET'])]
@@ -175,7 +198,7 @@ final class DashboardController extends AbstractController
 
         $user = $this->getAuthenticatedUser();
 
-        if ($user->getSubscriptionStatus() !== 'active' || $user->getCurrentPlan() !== 'yearly') {
+        if ($user->getSubscriptionStatus() !== User::STATUS_ACTIVE || $user->getCurrentPlan() !== User::PLAN_YEARLY) {
             $this->addFlash('error', 'Le PDF premium est réservé aux abonnements annuels.');
 
             return $this->redirectToRoute('dashboard');
@@ -204,14 +227,10 @@ final class DashboardController extends AbstractController
         $dompdf->setPaper('A4', 'portrait');
         $dompdf->render();
 
-        return new Response(
-            $dompdf->output(),
-            Response::HTTP_OK,
-            [
-                'Content-Type' => 'application/pdf',
-                'Content-Disposition' => 'inline; filename="estimation-agentboost-premium.pdf"',
-            ]
-        );
+        return new Response($dompdf->output(), Response::HTTP_OK, [
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' => 'inline; filename="estimation-agentboost-premium.pdf"',
+        ]);
     }
 
     #[Route('/property-photo/{id}/delete', name: 'property_photo_delete', methods: ['POST'])]
@@ -360,10 +379,7 @@ final class DashboardController extends AbstractController
             $property->setAdText(isset($result['adText']) && is_string($result['adText']) ? $result['adText'] : null);
         }
 
-        $photoResult = $this->attachUploadedPhotos(
-            $property,
-            $request->files->all('photos'),
-        );
+        $photoResult = $this->attachUploadedPhotos($property, $request->files->all('photos'));
 
         foreach ($photoResult['warnings'] as $warning) {
             $this->addFlash('warning', $warning);
@@ -393,10 +409,7 @@ final class DashboardController extends AbstractController
         ));
 
         if ($validPhotos === []) {
-            return [
-                'errors' => [],
-                'warnings' => [],
-            ];
+            return ['errors' => [], 'warnings' => []];
         }
 
         if ($this->isVercelRuntime()) {
@@ -429,9 +442,7 @@ final class DashboardController extends AbstractController
         if (!$this->ensureWritableDirectory($uploadDir)) {
             return [
                 'errors' => [],
-                'warnings' => [
-                    'Impossible d’enregistrer les photos. Estimation créée sans photo.',
-                ],
+                'warnings' => ['Impossible d’enregistrer les photos. Estimation créée sans photo.'],
             ];
         }
 
@@ -475,10 +486,7 @@ final class DashboardController extends AbstractController
             $property->addPhoto($propertyPhoto);
         }
 
-        return [
-            'errors' => $errors,
-            'warnings' => [],
-        ];
+        return ['errors' => $errors, 'warnings' => []];
     }
 
     private function redirectToFormOrigin(Property $property, bool $isEdit): Response

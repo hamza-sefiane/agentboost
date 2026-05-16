@@ -40,6 +40,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(name: 'is_active', type: 'boolean')]
     private bool $active = false;
 
+    #[ORM\Column(name: 'created_at', type: 'datetime_immutable')]
+    private \DateTimeImmutable $createdAt;
+
     #[ORM\Column(name: 'next_billing_date', type: 'datetime_immutable', nullable: true)]
     private ?\DateTimeImmutable $nextBillingDate = null;
 
@@ -57,6 +60,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(name: 'pending_plan', length: 10, nullable: true)]
     private ?string $pendingPlan = null;
+
+    #[ORM\Column(name: 'monthly_estimations', type: 'integer', options: ['default' => 0])]
+    private int $monthlyEstimations = 0;
+
+    #[ORM\Column(name: 'monthly_ai_generations', type: 'integer', options: ['default' => 0])]
+    private int $monthlyAiGenerations = 0;
 
     #[ORM\Column(name: 'stripe_customer_id', length: 255, nullable: true)]
     private ?string $stripeCustomerId = null;
@@ -94,9 +103,19 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(name: 'agency_website', length: 255, nullable: true)]
     private ?string $agencyWebsite = null;
 
+    public function __construct()
+    {
+        $this->createdAt = new \DateTimeImmutable();
+    }
+
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getCreatedAt(): \DateTimeImmutable
+    {
+        return $this->createdAt;
     }
 
     public function getEmail(): string
@@ -257,6 +276,66 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->pendingPlan = in_array($plan, [self::PLAN_MONTHLY, self::PLAN_YEARLY], true)
             ? $plan
             : null;
+
+        return $this;
+    }
+
+    public function getMonthlyEstimations(): int
+    {
+        return $this->monthlyEstimations;
+    }
+
+    public function setMonthlyEstimations(int $monthlyEstimations): self
+    {
+        $this->monthlyEstimations = max(0, $monthlyEstimations);
+
+        return $this;
+    }
+
+    public function incrementMonthlyEstimations(): self
+    {
+        ++$this->monthlyEstimations;
+
+        return $this;
+    }
+
+    public function resetMonthlyEstimations(): self
+    {
+        $this->monthlyEstimations = 0;
+
+        return $this;
+    }
+
+    public function getMonthlyAiGenerations(): int
+    {
+        return $this->monthlyAiGenerations;
+    }
+
+    public function setMonthlyAiGenerations(int $monthlyAiGenerations): self
+    {
+        $this->monthlyAiGenerations = max(0, $monthlyAiGenerations);
+
+        return $this;
+    }
+
+    public function incrementMonthlyAiGenerations(): self
+    {
+        ++$this->monthlyAiGenerations;
+
+        return $this;
+    }
+
+    public function resetMonthlyAiGenerations(): self
+    {
+        $this->monthlyAiGenerations = 0;
+
+        return $this;
+    }
+
+    public function resetMonthlyUsage(): self
+    {
+        $this->monthlyEstimations = 0;
+        $this->monthlyAiGenerations = 0;
 
         return $this;
     }

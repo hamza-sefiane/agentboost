@@ -1,135 +1,191 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-AgentBoost – L’outil qui fait gagner du temps aux agents immobiliers
+	AgentBoost – Estimations, annonces et documents pour agents immobiliers
 {% endblock %}
 
 {% block body %}
 
-<!-- HERO -->
-<section class="container py-5 text-center">
-    <h1 class="fw-bold mb-3">
-        Gagnez plus de mandats,<br>
-        sans travailler plus.
-    </h1>
+	<section class="home-hero">
+		<div class="hero-grid">
+			<div>
+				<div class="hero-kicker">
+					<span>●</span>
+					Outil métier pour agents immobiliers
+				</div>
 
-    <p class="lead mb-4">
-        AgentBoost est l’outil conçu pour les agents immobiliers
-        qui veulent se concentrer sur le terrain,
-        pas sur l’administratif.
-    </p>
+				<h1 class="hero-title">
+					Estimations, annonces et documents.
+					<br>
+					Depuis un seul outil.
+				</h1>
 
-    <div class="mb-4">
-        {% if is_granted('ACCESS_DASHBOARD') %}
-            <a href="{{ path('dashboard') }}" class="btn btn-success btn-lg px-5">
-                Accéder à l’outil
-            </a>
+				<p class="hero-text">
+					AgentBoost aide les agents immobiliers à créer des estimations, générer des annonces assistées et produire des documents professionnels sans perdre des heures sur l’administratif.
+				</p>
 
-        {% elseif app.user %}
-            <a href="{{ path('pricing') }}" class="btn btn-success btn-lg px-5">
-                Activer mon accès
-            </a>
+				<div class="hero-actions">
+					{% if is_granted('ACCESS_DASHBOARD') %}
+						<a href="{{ path('dashboard') }}" class="hero-btn-primary">
+							Ouvrir mon dashboard
+						</a>
+					{% elseif app.user %}
+						<a href="{{ path('pricing') }}" class="hero-btn-primary">
+							Choisir mon accès
+						</a>
+					{% else %}
+						<a href="{{ path('app_register') }}" class="hero-btn-primary">
+							Créer une estimation
+						</a>
+					{% endif %}
 
-        {% else %}
-            <a href="{{ path('app_register') }}" class="btn btn-success btn-lg px-5">
-                Tester l’outil
-            </a>
-            <div class="text-muted mt-2">
-                Inscription gratuite · Activation rapide
-            </div>
-        {% endif %}
-    </div>
-</section>
+					<a href="{{ path('pricing') }}" class="hero-btn-secondary">
+						Voir les offres
+					</a>
+				</div>
 
-<!-- PROBLÈMES -->
-<section class="container py-5">
-    <div class="row text-center">
-        <div class="col-md-4 mb-4">
-            <h4>⏱️ Trop de temps perdu</h4>
-            <p>
-                Estimations, annonces, suivis clients…
-                vous passez plus de temps à gérer qu’à signer.
-            </p>
-        </div>
+				<div class="hero-note">
+					Pensé pour les indépendants, agences et professionnels terrain.
+				</div>
+			</div>
 
-        <div class="col-md-4 mb-4">
-            <h4>📄 Outils dispersés</h4>
-            <p>
-                Tableurs, mails, notes, CRM bricolé :
-                rien n’est vraiment centralisé.
-            </p>
-        </div>
+			<div class="product-preview">
+				<div class="preview-window">
+					<div class="preview-topbar">
+						<span class="preview-dot"></span>
+						<span class="preview-dot"></span>
+						<span class="preview-dot"></span>
+					</div>
 
-        <div class="col-md-4 mb-4">
-            <h4>😓 Moins de focus terrain</h4>
-            <p>
-                Chaque tâche administrative vous éloigne
-                de ce qui crée de la valeur : le mandat.
-            </p>
-        </div>
-    </div>
-</section>
+					<div class="preview-body">
+						<div class="preview-stat-grid">
+							<div class="preview-stat">
+								<strong>12</strong>
+								<span>estimations</span>
+							</div>
 
-<!-- SOLUTION -->
-<section class="container py-5 bg-light rounded">
-    <div class="text-center mb-5">
-        <h2 class="fw-bold">
-            Un outil pensé pour le quotidien réel des agents immobiliers
-        </h2>
-        <p class="text-muted">
-            Pas un SaaS générique. Un outil métier.
-        </p>
-    </div>
+							<div class="preview-stat">
+								<strong>8</strong>
+								<span>annonces</span>
+							</div>
 
-    <div class="row text-center">
-        <div class="col-md-4 mb-4">
-            <h4>🏡 Estimation simplifiée</h4>
-            <p>
-                Vous renseignez l’essentiel,
-                l’outil vous aide à poser une estimation cohérente.
-            </p>
-        </div>
+							<div class="preview-stat">
+								<strong>5</strong>
+								<span>PDF prêts</span>
+							</div>
+						</div>
 
-        <div class="col-md-4 mb-4">
-            <h4>✍️ Annonces assistées par IA</h4>
-            <p>
-                Des textes professionnels,
-                adaptés au bien et au secteur, en quelques instants.
-            </p>
-        </div>
+						<div class="preview-card">
+							<div class="preview-card-head">
+								<span class="preview-badge">Appartement</span>
+								<span class="preview-price">312 000 €</span>
+							</div>
 
-        <div class="col-md-4 mb-4">
-            <h4>📊 Tableau de bord clair</h4>
-            <p>
-                Biens, estimations et historiques
-                regroupés au même endroit.
-            </p>
-        </div>
-    </div>
-</section>
+							<div class="preview-line"></div>
+							<div class="preview-line short"></div>
+							<div class="preview-line"></div>
 
-<!-- CTA FINAL -->
-<section class="container py-5 text-center">
-    <h2 class="fw-bold mb-3">
-        Concentrez-vous sur vos clients.<br>
-        AgentBoost s’occupe du reste.
-    </h2>
+							<div class="preview-actions">
+								<div class="preview-action primary">
+									Générer annonce
+								</div>
 
-    {% if is_granted('ACCESS_DASHBOARD') %}
-        <a href="{{ path('dashboard') }}" class="btn btn-success btn-lg px-5">
-            Accéder au dashboard
-        </a>
+								<div class="preview-action secondary">
+									PDF estimation
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
 
-    {% elseif app.user %}
-        <a href="{{ path('pricing') }}" class="btn btn-success btn-lg px-5">
-            Activer mon accès
-        </a>
+	<section class="section-soft">
+		<div class="feature-grid">
+			<div class="feature-card">
+				<div class="feature-icon">🏡</div>
+				<h3>Estimation rapide</h3>
+				<p>Renseignez les informations clés du bien et obtenez une estimation structurée en quelques instants.</p>
+			</div>
 
-    {% else %}
-        <a href="{{ path('app_register') }}" class="btn btn-success btn-lg px-5">
-            Tester l’outil
-        </a>
-    {% endif %}
-</section>
+			<div class="feature-card">
+				<div class="feature-icon">✍️</div>
+				<h3>Annonces assistées</h3>
+				<p>Générez des textes d’annonces exploitables, clairs et adaptés au bien présenté.</p>
+			</div>
 
+			<div class="feature-card">
+				<div class="feature-icon">📄</div>
+				<h3>PDF professionnel</h3>
+				<p>Présentez vos estimations avec des documents propres, lisibles et crédibles.</p>
+			</div>
+
+			<div class="feature-card">
+				<div class="feature-icon">📊</div>
+				<h3>Dashboard centralisé</h3>
+				<p>Retrouvez vos biens, estimations, annonces et documents au même endroit.</p>
+			</div>
+		</div>
+	</section>
+
+	<section class="workflow-section">
+		<div>
+			<h2 class="section-title">
+				Un flux simple, pensé pour le terrain.
+			</h2>
+
+			<p class="section-text">
+				AgentBoost ne remplace pas votre expertise. Il vous aide à gagner du temps sur les tâches répétitives pour vous concentrer sur les clients et les mandats.
+			</p>
+		</div>
+
+		<div class="workflow-grid">
+			<div class="workflow-step">
+				<span>1</span>
+				<h3>Ajoutez le bien</h3>
+				<p>Type, surface, ville, pièces, photos et détails utiles.</p>
+			</div>
+
+			<div class="workflow-step">
+				<span>2</span>
+				<h3>Générez le contenu</h3>
+				<p>Annonce assistée, estimation, mise en forme et supports commerciaux.</p>
+			</div>
+
+			<div class="workflow-step">
+				<span>3</span>
+				<h3>Exploitez vos documents</h3>
+				<p>PDF, annonce, diffusion et suivi depuis votre espace AgentBoost.</p>
+			</div>
+		</div>
+	</section>
+
+	<section class="final-cta">
+		<div class="final-cta-card">
+			<h2>
+				Passez moins de temps à produire.
+				<br>
+				Plus de temps à vendre.
+			</h2>
+
+			<p>
+				Créez votre première estimation et découvrez un workflow plus propre pour vos biens.
+			</p>
+
+			{% if is_granted('ACCESS_DASHBOARD') %}
+				<a href="{{ path('dashboard') }}" class="hero-btn-primary">
+					Accéder au dashboard
+				</a>
+			{% elseif app.user %}
+				<a href="{{ path('pricing') }}" class="hero-btn-primary">
+					Choisir mon accès
+				</a>
+			{% else %}
+				<a href="{{ path('app_register') }}" class="hero-btn-primary">
+					Créer une estimation
+				</a>
+			{% endif %}
+		</div>
+	</section>
 {% endblock %}

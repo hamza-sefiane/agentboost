@@ -2,25 +2,67 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
+    <title>Confirmation d’annulation</title>
 </head>
-<body>
-    <p>Bonjour {{ prenom }},</p>
+<body style="margin:0; padding:0; background:#f3f6f9; font-family:Arial, Helvetica, sans-serif;">
 
-    <p>
-        Nous confirmons l’annulation de votre abonnement.
-    </p>
+    <div style="max-width:640px; margin:0 auto; padding:36px 18px;">
 
-    <p>
-        Vous conservez l’accès jusqu’au
-        <strong>{{ subscription_end_date|date('d/m/Y') }}</strong>.
-    </p>
+        <div style="background:#064663; border-radius:24px 24px 0 0; padding:26px 30px;">
+            <div style="color:#ffffff; font-size:24px; font-weight:900; letter-spacing:-0.4px;">
+                AgentBoost
+            </div>
 
-    <p>
-        Merci d’avoir utilisé AgentBoost.
-    </p>
+            <div style="color:#cfe8f3; font-size:14px; margin-top:6px;">
+                Confirmation d’annulation
+            </div>
+        </div>
 
-    <p>
-        — L’équipe AgentBoost
-    </p>
+        <div style="background:#ffffff; border:1px solid #e5e7eb; border-top:none; border-radius:0 0 24px 24px; padding:34px 30px;">
+
+            <div style="width:56px; height:56px; border-radius:18px; background:#fef2f2; color:#991b1b; text-align:center; line-height:56px; font-size:24px; margin-bottom:22px;">
+                !
+            </div>
+
+            <h1 style="margin:0 0 14px; color:#0f172a; font-size:30px; line-height:1.2; font-weight:900; letter-spacing:-0.6px;">
+                Votre abonnement a été annulé
+            </h1>
+
+            <p style="margin:0 0 18px; color:#475569; font-size:15px; line-height:1.7;">
+                Bonjour {{ prenom }},
+            </p>
+
+            <p style="margin:0 0 22px; color:#475569; font-size:15px; line-height:1.7;">
+                Nous confirmons l’annulation de votre abonnement AgentBoost.
+            </p>
+
+            <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:16px; padding:18px; margin:26px 0;">
+                <p style="margin:0; color:#475569; font-size:14px; line-height:1.6;">
+                    Vous conservez l’accès à toutes les fonctionnalités jusqu’au
+                    <strong style="color:#0f172a;">
+                        {{ subscription_end_date|date('d/m/Y') }}
+                    </strong>.
+                </p>
+            </div>
+
+            <p style="margin:0 0 28px; color:#475569; font-size:15px; line-height:1.7;">
+                Merci d’avoir utilisé AgentBoost pour vos estimations et vos automatisations immobilières.
+            </p>
+
+            <div style="text-align:center; margin:34px 0;">
+                <a href="https://agentboost-immo.fr" style="display:inline-block; background:#198754; color:#ffffff; text-decoration:none; padding:16px 30px; border-radius:14px; font-size:15px; font-weight:900;">
+                    Retourner sur AgentBoost
+                </a>
+            </div>
+
+            <div style="height:1px; background:#e5e7eb; margin:30px 0;"></div>
+
+            <p style="margin:0; color:#94a3b8; font-size:13px; line-height:1.6;">
+                AgentBoost — estimations immobilières, génération de documents et automatisation IA pour les professionnels de l’immobilier.
+            </p>
+
+        </div>
+    </div>
+
 </body>
 </html>

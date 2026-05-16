@@ -1,217 +1,62 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Connexion{% endblock %}
-
-{% block stylesheets %}
-<style>
-body {
-    background: #f0f2f5;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
-
-.login-container {
-    max-width: 400px;
-    margin: 80px auto;
-    background: #fff;
-    border-radius: 12px;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-    padding: 40px 30px;
-}
-
-h1 {
-    text-align: center;
-    margin-bottom: 30px;
-    color: #28a745;
-    font-size: 1.8rem;
-}
-
-label {
-    display: block;
-    margin-bottom: 8px;
-    font-weight: 600;
-    color: #333;
-}
-
-input {
-    width: 100%;
-    padding: 12px 15px;
-    margin-bottom: 20px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    font-size: 1rem;
-    transition: border-color 0.3s;
-    box-sizing: border-box;
-}
-
-input:focus {
-    border-color: #28a745;
-    outline: none;
-}
-
-.btn-login {
-    width: 100%;
-    padding: 12px;
-    background-color: #28a745;
-    color: #fff;
-    font-weight: bold;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 1rem;
-}
-
-.btn-login:hover {
-    background-color: #218838;
-}
-
-.btn-login:disabled {
-    opacity: 0.7;
-    cursor: not-allowed;
-}
-
-.flash-message {
-    padding: 10px;
-    border-radius: 8px;
-    margin-bottom: 20px;
-    font-size: 0.9rem;
-    color: #b71c1c;
-    border: 1px solid #b71c1c;
-    background: #ffe5e5;
-}
-
-.login-link {
-    text-align: center;
-    margin-top: 20px;
-    font-size: 0.9rem;
-}
-
-.login-link a {
-    color: #28a745;
-    text-decoration: none;
-    font-weight: 600;
-}
-
-.login-link a:hover {
-    text-decoration: underline;
-}
-
-.password-wrapper {
-    position: relative;
-}
-
-.password-wrapper input {
-    padding-right: 50px;
-}
-
-.toggle-password {
-    position: absolute;
-    right: 12px;
-    top: 38%;
-    transform: translateY(-50%);
-    background: none;
-    border: none;
-    cursor: pointer;
-    color: #666;
-}
-
-.toggle-password:hover {
-    color: #28a745;
-}
-
-.toggle-password svg {
-    width: 20px;
-    height: 20px;
-}
-</style>
+{% block title %}Connexion
 {% endblock %}
 
 {% block body %}
-<div class="login-container">
-    <h1>Connexion</h1>
+	<div class="auth-page">
+		<div class="auth-card">
+			<h1 class="auth-title">Connexion</h1>
 
-    {% if error %}
-        <div class="flash-message">
-            {{ error.messageKey|trans(error.messageData, 'security') }}
-        </div>
-    {% endif %}
+			{% if error %}
+				<div class="auth-error">
+					{{ error.messageKey|trans(error.messageData, 'security') }}
+				</div>
+			{% endif %}
 
-    <form method="post" action="{{ path('app_login') }}" id="loginForm">
+			<form method="post" action="{{ path('app_login') }}" id="loginForm">
+				<input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
 
-        <input type="hidden" name="_csrf_token"
-               value="{{ csrf_token('authenticate') }}">
+				<div class="auth-field">
+					<label for="username" class="auth-label">Email</label>
+					<input type="email" id="username" name="_username" value="{{ last_username|default('') }}" class="auth-input" autocomplete="email" required autofocus>
+				</div>
 
-        <label for="username">Email</label>
-        <input type="email"
-               id="username"
-               name="_username"
-               value="{{ last_username|default('') }}"
-               required autofocus>
+				<div class="auth-field">
+					<label for="password" class="auth-label">Mot de passe</label>
 
-        <label for="password">Mot de passe</label>
+					<div class="auth-password-wrapper">
+						<input type="password" id="password" name="_password" class="auth-input" autocomplete="current-password" required>
 
-        <div class="password-wrapper">
-            <input type="password"
-                   id="password"
-                   name="_password"
-                   required>
+						<button type="button" id="togglePassword" class="auth-toggle-password" aria-label="Afficher le mot de passe">
+							<svg id="eyeOpen" xmlns="http://www.w3.org/2000/svg" fill="none" viewbox="0 0 24 24" stroke="currentColor">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+							</svg>
 
-            <button type="button" id="togglePassword" class="toggle-password">
-                <svg id="eyeOpen" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                          d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                          d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
-                </svg>
+							<svg id="eyeClosed" xmlns="http://www.w3.org/2000/svg" fill="none" viewbox="0 0 24 24" stroke="currentColor" style="display: none;">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3l18 18"/>
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.584 10.587A2 2 0 0012 14a2 2 0 001.414-.586"/>
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.88 4.24A10.45 10.45 0 0112 4c4.5 0 8.2 2.8 9.54 7a10.35 10.35 0 01-2.21 3.59"/>
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6.61 6.61A10.6 10.6 0 002.46 12C3.8 16.2 7.5 19 12 19a10.5 10.5 0 004.04-.79"/>
+							</svg>
+						</button>
+					</div>
+				</div>
 
-                <svg id="eyeClosed" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="display:none;">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                          d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.542-7a9.956 9.956 0 012.223-3.592M6.228 6.228A9.956 9.956 0 0112 5c4.478 0 8.268 2.943 9.542 7a9.969 9.969 0 01-4.104 5.135M15 12a3 3 0 00-3-3"/>
-                </svg>
-            </button>
-        </div>
+				<div class="auth-forgot">
+					<a href="{{ path('app_forgot_password_request') }}">Mot de passe oublié ?</a>
+				</div>
 
-        <button type="submit" class="btn-login" id="submitBtn">
-            Continuer
-        </button>
-    </form>
+				<button type="submit" class="auth-submit" id="submitBtn">
+					Continuer
+				</button>
+			</form>
 
-    <div class="login-link">
-        Pas encore inscrit ?
-        <a href="{{ path('app_register') }}">Créer un compte</a>
-    </div>
-</div>
-{% endblock %}
-
-{% block javascripts %}
-<script>
-document.addEventListener('DOMContentLoaded', () => {
-
-    const form = document.getElementById('loginForm');
-    const passwordInput = document.getElementById('password');
-    const toggleBtn = document.getElementById('togglePassword');
-    const eyeOpen = document.getElementById('eyeOpen');
-    const eyeClosed = document.getElementById('eyeClosed');
-    const submitBtn = document.getElementById('submitBtn');
-
-    // Toggle password
-    if (toggleBtn) {
-        toggleBtn.addEventListener('click', () => {
-            const hidden = passwordInput.type === 'password';
-
-            passwordInput.type = hidden ? 'text' : 'password';
-            eyeOpen.style.display = hidden ? 'none' : 'block';
-            eyeClosed.style.display = hidden ? 'block' : 'none';
-        });
-    }
-
-    // Bouton loading
-    if (form) {
-        form.addEventListener('submit', () => {
-            submitBtn.disabled = true;
-            submitBtn.textContent = 'Connexion...';
-        });
-    }
-
-});
-</script>
+			<div class="auth-link">
+				Pas encore inscrit ?
+				<a href="{{ path('app_register') }}">Créer un compte</a>
+			</div>
+		</div>
+	</div>
 {% endblock %}
