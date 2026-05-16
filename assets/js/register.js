@@ -5,50 +5,21 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
     }
 
-    const bindPasswordToggle = (
-        buttonId,
-        inputId,
-        openIconId,
-        closedIconId,
-    ) => {
+    const bindPasswordToggle = (buttonId, inputId) => {
         const button = document.getElementById(buttonId);
         const input = document.getElementById(inputId);
-        const openIcon = document.getElementById(openIconId);
-        const closedIcon = document.getElementById(closedIconId);
 
         if (!button || !input) {
             return;
         }
 
         button.addEventListener("click", () => {
-            const isHidden = input.type === "password";
-
-            input.type = isHidden ? "text" : "password";
-
-            if (openIcon) {
-                openIcon.style.display = isHidden ? "none" : "block";
-            }
-
-            if (closedIcon) {
-                closedIcon.style.display = isHidden ? "block" : "none";
-            }
-
-            button.setAttribute(
-                "aria-label",
-                isHidden
-                    ? "Masquer le mot de passe"
-                    : "Afficher le mot de passe",
-            );
+            input.type = input.type === "password" ? "text" : "password";
         });
     };
 
-    bindPasswordToggle("togglePassword", "password", "eyeOpen", "eyeClosed");
-    bindPasswordToggle(
-        "toggleConfirmPassword",
-        "confirmPassword",
-        "confirmEyeOpen",
-        "confirmEyeClosed",
-    );
+    bindPasswordToggle("togglePassword", "password");
+    bindPasswordToggle("toggleConfirmPassword", "confirmPassword");
 
     const emailInput = document.getElementById("email");
     const passwordInput = document.getElementById("password");
