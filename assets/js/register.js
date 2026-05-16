@@ -1,6 +1,10 @@
 document.addEventListener("DOMContentLoaded", () => {
     const form = document.getElementById("registerForm");
 
+    if (!form) {
+        return;
+    }
+
     const emailInput = document.getElementById("email");
 
     const passwordInput = document.getElementById("password");
@@ -26,11 +30,19 @@ document.addEventListener("DOMContentLoaded", () => {
     );
 
     const showError = (element, message) => {
+        if (!element) {
+            return;
+        }
+
         element.textContent = message;
         element.style.display = "block";
     };
 
     const hideError = (element) => {
+        if (!element) {
+            return;
+        }
+
         element.textContent = "";
         element.style.display = "none";
     };
@@ -41,8 +53,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
             passwordInput.type = hidden ? "text" : "password";
 
-            eyeOpen.style.display = hidden ? "none" : "block";
-            eyeClosed.style.display = hidden ? "block" : "none";
+            if (eyeOpen) {
+                eyeOpen.style.display = hidden ? "none" : "block";
+            }
+
+            if (eyeClosed) {
+                eyeClosed.style.display = hidden ? "block" : "none";
+            }
         });
     }
 
@@ -52,8 +69,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
             confirmPasswordInput.type = hidden ? "text" : "password";
 
-            confirmEyeOpen.style.display = hidden ? "none" : "block";
-            confirmEyeClosed.style.display = hidden ? "block" : "none";
+            if (confirmEyeOpen) {
+                confirmEyeOpen.style.display = hidden ? "none" : "block";
+            }
+
+            if (confirmEyeClosed) {
+                confirmEyeClosed.style.display = hidden ? "block" : "none";
+            }
         });
     }
 
@@ -69,49 +91,51 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
-    if (form) {
-        form.addEventListener("submit", (event) => {
-            hideError(emailError);
-            hideError(passwordError);
-            hideError(confirmPasswordError);
+    form.addEventListener("submit", (event) => {
+        hideError(emailError);
+        hideError(passwordError);
+        hideError(confirmPasswordError);
 
-            let hasError = false;
+        let hasError = false;
 
-            const email = emailInput.value.trim();
-            const password = passwordInput.value;
-            const confirmPassword = confirmPasswordInput.value;
+        const email = emailInput ? emailInput.value.trim() : "";
+        const password = passwordInput ? passwordInput.value : "";
+        const confirmPassword = confirmPasswordInput
+            ? confirmPasswordInput.value
+            : "";
 
-            if (!email || !email.includes("@")) {
-                showError(
-                    emailError,
-                    "Veuillez saisir une adresse email valide.",
-                );
-                hasError = true;
-            }
+        if (!email || !email.includes("@")) {
+            showError(emailError, "Veuillez saisir une adresse email valide.");
 
-            if (password.length < 8) {
-                showError(
-                    passwordError,
-                    "Le mot de passe doit contenir au moins 8 caractères.",
-                );
-                hasError = true;
-            }
+            hasError = true;
+        }
 
-            if (password !== confirmPassword) {
-                showError(
-                    confirmPasswordError,
-                    "Les mots de passe ne correspondent pas.",
-                );
-                hasError = true;
-            }
+        if (password.length < 8) {
+            showError(
+                passwordError,
+                "Le mot de passe doit contenir au moins 8 caractères.",
+            );
 
-            if (hasError) {
-                event.preventDefault();
-                return;
-            }
+            hasError = true;
+        }
 
+        if (password !== confirmPassword) {
+            showError(
+                confirmPasswordError,
+                "Les mots de passe ne correspondent pas.",
+            );
+
+            hasError = true;
+        }
+
+        if (hasError) {
+            event.preventDefault();
+            return;
+        }
+
+        if (submitButton) {
             submitButton.disabled = true;
             submitButton.textContent = "Création du compte...";
-        });
-    }
+        }
+    });
 });
