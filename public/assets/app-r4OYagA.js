@@ -19,3 +19,4 @@ import "./js/property-edit.js";
 import "./js/property-list.js";
 import "./js/register.js";
 import "./js/reset-password.js";
+import "./js/login.js";
