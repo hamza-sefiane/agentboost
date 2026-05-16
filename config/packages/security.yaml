@@ -9,17 +9,14 @@ security:
                 property: email
 
     firewalls:
-        # Stripe webhook (PUBLIC, hors sécurité)
         stripe_webhook:
             pattern: ^/stripe/webhook
             security: false
 
-        # Dev
         dev:
             pattern: ^/(_profiler|_wdt|assets|build)/
             security: false
 
-        # App principale
         main:
             lazy: true
             provider: app_user_provider
@@ -27,21 +24,23 @@ security:
             form_login:
                 login_path: app_login
                 check_path: app_login
+                default_target_path: app_dashboard
+                always_use_default_target_path: true
 
             logout:
                 path: app_logout
                 target: home
 
     access_control:
-        # Stripe webhook PUBLIC
         - { path: ^/stripe/webhook, roles: PUBLIC_ACCESS }
 
-        # Pages publiques
         - { path: ^/$, roles: PUBLIC_ACCESS }
         - { path: ^/pricing, roles: PUBLIC_ACCESS }
         - { path: ^/login, roles: PUBLIC_ACCESS }
         - { path: ^/register, roles: PUBLIC_ACCESS }
         - { path: ^/reset-password, roles: PUBLIC_ACCESS }
+        - { path: ^/contact, roles: PUBLIC_ACCESS }
 
-        # Tout le reste = utilisateur connecté
+        - { path: ^/admin, roles: ROLE_ADMIN }
+        - { path: ^/dashboard, roles: ROLE_USER }
         - { path: ^/, roles: IS_AUTHENTICATED_FULLY }
