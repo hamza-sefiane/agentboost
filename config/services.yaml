@@ -3,6 +3,7 @@ parameters:
     stripe.webhook_secret: '%env(STRIPE_WEBHOOK_SECRET)%'
     stripe.price_monthly: '%env(STRIPE_PRICE_MONTHLY)%'
     stripe.price_yearly: '%env(STRIPE_PRICE_YEARLY)%'
+    app.contact_email: '%env(APP_CONTACT_EMAIL)%'
 
 twig:
     globals:
@@ -30,3 +31,7 @@ services:
 
     App\Service\AiClientInterface:
         alias: App\Service\OpenAiClient
+
+    App\Controller\ContactController:
+        arguments:
+            $contactEmail: '%app.contact_email%'

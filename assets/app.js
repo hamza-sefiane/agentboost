@@ -10,6 +10,7 @@ import "./styles/register.css";
 import "./styles/reset-password.css";
 import "./styles/goodbye.css";
 import "./styles/login.css";
+import "./styles/contact.css";
 
 import "./js/home.js";
 import "./js/admin.js";
