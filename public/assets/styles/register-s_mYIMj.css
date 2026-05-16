@@ -65,6 +65,11 @@
     padding-right: 54px;
 }
 
+.auth-toggle-password:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.18);
+}
+
 .auth-toggle-password {
     position: absolute;
     right: 12px;
@@ -90,6 +95,7 @@
 .auth-toggle-password svg {
     width: 21px;
     height: 21px;
+    pointer-events: none;
 }
 
 .auth-helper {
