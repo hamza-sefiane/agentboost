@@ -14,7 +14,7 @@
 				</div>
 			{% endif %}
 
-			<form method="post" action="{{ path('app_login') }}" id="loginForm">
+			<form method="post" action="{{ path('app_login') }}" id="loginForm" class="auth-form" data-turbo="false">
 				<input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
 
 				<div class="auth-field">
