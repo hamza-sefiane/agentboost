@@ -5,22 +5,54 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
     }
 
-    const emailInput = document.getElementById("email");
+    const bindPasswordToggle = (
+        buttonId,
+        inputId,
+        openIconId,
+        closedIconId,
+    ) => {
+        const button = document.getElementById(buttonId);
+        const input = document.getElementById(inputId);
+        const openIcon = document.getElementById(openIconId);
+        const closedIcon = document.getElementById(closedIconId);
 
-    const passwordInput = document.getElementById("password");
-    const confirmPasswordInput = document.getElementById("confirmPassword");
+        if (!button || !input) {
+            return;
+        }
 
-    const togglePassword = document.getElementById("togglePassword");
-    const toggleConfirmPassword = document.getElementById(
+        button.addEventListener("click", () => {
+            const isHidden = input.type === "password";
+
+            input.type = isHidden ? "text" : "password";
+
+            if (openIcon) {
+                openIcon.style.display = isHidden ? "none" : "block";
+            }
+
+            if (closedIcon) {
+                closedIcon.style.display = isHidden ? "block" : "none";
+            }
+
+            button.setAttribute(
+                "aria-label",
+                isHidden
+                    ? "Masquer le mot de passe"
+                    : "Afficher le mot de passe",
+            );
+        });
+    };
+
+    bindPasswordToggle("togglePassword", "password", "eyeOpen", "eyeClosed");
+    bindPasswordToggle(
         "toggleConfirmPassword",
+        "confirmPassword",
+        "confirmEyeOpen",
+        "confirmEyeClosed",
     );
 
-    const eyeOpen = document.getElementById("eyeOpen");
-    const eyeClosed = document.getElementById("eyeClosed");
-
-    const confirmEyeOpen = document.getElementById("confirmEyeOpen");
-    const confirmEyeClosed = document.getElementById("confirmEyeClosed");
-
+    const emailInput = document.getElementById("email");
+    const passwordInput = document.getElementById("password");
+    const confirmPasswordInput = document.getElementById("confirmPassword");
     const submitButton = document.getElementById("submitButton");
 
     const emailError = document.getElementById("emailError");
@@ -46,38 +78,6 @@ document.addEventListener("DOMContentLoaded", () => {
         element.textContent = "";
         element.style.display = "none";
     };
-
-    if (togglePassword && passwordInput) {
-        togglePassword.addEventListener("click", () => {
-            const hidden = passwordInput.type === "password";
-
-            passwordInput.type = hidden ? "text" : "password";
-
-            if (eyeOpen) {
-                eyeOpen.style.display = hidden ? "none" : "block";
-            }
-
-            if (eyeClosed) {
-                eyeClosed.style.display = hidden ? "block" : "none";
-            }
-        });
-    }
-
-    if (toggleConfirmPassword && confirmPasswordInput) {
-        toggleConfirmPassword.addEventListener("click", () => {
-            const hidden = confirmPasswordInput.type === "password";
-
-            confirmPasswordInput.type = hidden ? "text" : "password";
-
-            if (confirmEyeOpen) {
-                confirmEyeOpen.style.display = hidden ? "none" : "block";
-            }
-
-            if (confirmEyeClosed) {
-                confirmEyeClosed.style.display = hidden ? "block" : "none";
-            }
-        });
-    }
 
     [emailInput, passwordInput, confirmPasswordInput].forEach((input) => {
         if (!input) {
@@ -106,7 +106,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (!email || !email.includes("@")) {
             showError(emailError, "Veuillez saisir une adresse email valide.");
-
             hasError = true;
         }
 
@@ -115,7 +114,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 passwordError,
                 "Le mot de passe doit contenir au moins 8 caractères.",
             );
-
             hasError = true;
         }
 
@@ -124,7 +122,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 confirmPasswordError,
                 "Les mots de passe ne correspondent pas.",
             );
-
             hasError = true;
         }
 
