@@ -1,278 +1,86 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Modifier estimation{% endblock %}
+{% block title %}Modifier estimation
+{% endblock %}
 
 {% block body %}
-    <h1 class="mb-4">Modifier l’estimation</h1>
+	<h1 class="mb-4">Modifier l’estimation</h1>
 
-    <style>
-        .address-autocomplete-wrapper {
-            position: relative;
-        }
+	<form method="post" enctype="multipart/form-data" class="row g-3 mb-4">
+		<div class="col-md-3">
+			<select name="type" class="form-control" required>
+				{% for type in ['Appartement', 'Maison', 'Terrain', 'Parking'] %}
+					<option value="{{ type }}" {{ property.type == type ? 'selected' : '' }}>
+						{{ type }}
+					</option>
+				{% endfor %}
+			</select>
+		</div>
 
-        .address-results {
-            position: absolute;
-            top: 100%;
-            left: 0;
-            right: 0;
-            z-index: 1000;
-            background: #ffffff;
-            border: 1px solid #d1d5db;
-            border-radius: 8px;
-            margin-top: 4px;
-            overflow: hidden;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
-            display: none;
-        }
+		<div class="col-md-3 address-autocomplete-wrapper">
+			<input name="address" id="address-input" class="form-control" placeholder="Adresse du bien" maxlength="255" value="{{ property.address|default('') }}" autocomplete="off">
+			<div id="address-results" class="address-results"></div>
+		</div>
 
-        .address-result-item {
-            padding: 10px 12px;
-            cursor: pointer;
-            font-size: 14px;
-            border-bottom: 1px solid #f1f5f9;
-        }
+		<div class="col-md-3">
+			<input name="postalCode" id="postal-code-input" class="form-control" value="{{ property.postalCode|default('') }}" maxlength="5" pattern="[0-9]{5}" inputmode="numeric" required>
+		</div>
 
-        .address-result-item:hover {
-            background: #f8fafc;
-        }
+		<div class="col-md-3">
+			<input name="city" id="city-input" class="form-control" value="{{ property.city|default('') }}" required>
+		</div>
 
-        .address-result-item:last-child {
-            border-bottom: none;
-        }
+		<div class="col-md-2">
+			<input name="surface" type="number" min="1" class="form-control" value="{{ property.surface }}" required>
+		</div>
 
-        .property-photo-preview {
-            width: 140px;
-            height: 100px;
-            object-fit: cover;
-            border-radius: 8px;
-            border: 1px solid #ddd;
-            background: #f8f9fa;
-        }
-    </style>
+		<div class="col-md-2">
+			<input name="rooms" type="number" min="0" class="form-control" value="{{ property.rooms }}">
+		</div>
 
-    <form method="post" enctype="multipart/form-data" class="row g-3 mb-4">
-        <div class="col-md-3">
-            <select name="type" class="form-control" required>
-                {% for type in ['Appartement', 'Maison', 'Terrain', 'Parking'] %}
-                    <option value="{{ type }}" {{ property.type == type ? 'selected' : '' }}>
-                        {{ type }}
-                    </option>
-                {% endfor %}
-            </select>
-        </div>
+		<div class="col-md-2">
+			<select name="parking" class="form-control">
+				<option value="0" {{ not property.parking ? 'selected' : '' }}>Sans parking</option>
+				<option value="1" {{ property.parking ? 'selected' : '' }}>Avec parking</option>
+			</select>
+		</div>
 
-        <div class="col-md-3 address-autocomplete-wrapper">
-            <input
-                name="address"
-                id="address-input"
-                class="form-control"
-                placeholder="Adresse du bien"
-                maxlength="255"
-                value="{{ property.address|default('') }}"
-                autocomplete="off"
-            >
-            <div id="address-results" class="address-results"></div>
-        </div>
+		<div class="col-12">
+			<textarea name="extraDetails" class="form-control" rows="4" placeholder="Détails supplémentaires : balcon, vue dégagée, cuisine équipée, proche gare, lumineux...">{{ property.extraDetails|default('') }}</textarea>
+		</div>
 
-        <div class="col-md-3">
-            <input
-                name="postalCode"
-                id="postal-code-input"
-                class="form-control"
-                value="{{ property.postalCode|default('') }}"
-                maxlength="5"
-                pattern="[0-9]{5}"
-                inputmode="numeric"
-                required
-            >
-        </div>
+		<div class="col-12">
+			<label class="form-label fw-semibold">Ajouter des photos</label>
+			<input type="file" name="photos[]" class="form-control" accept="image/jpeg,image/png,image/webp" multiple>
+			<small class="text-muted">
+				Maximum 5 photos au total. En production Vercel, les photos sont ignorées sans stockage externe.
+			</small>
+		</div>
 
-        <div class="col-md-3">
-            <input
-                name="city"
-                id="city-input"
-                class="form-control"
-                value="{{ property.city|default('') }}"
-                required
-            >
-        </div>
+		<div class="col-12">
+			<button class="btn btn-success">Enregistrer</button>
+			<a href="{{ path('dashboard') }}" class="btn btn-secondary">Retour</a>
+		</div>
+	</form>
 
-        <div class="col-md-2">
-            <input name="surface" type="number" min="1" class="form-control" value="{{ property.surface }}" required>
-        </div>
+	<h2 class="mb-3">Photos actuelles</h2>
 
-        <div class="col-md-2">
-            <input name="rooms" type="number" min="0" class="form-control" value="{{ property.rooms }}">
-        </div>
+	<div class="d-flex flex-wrap gap-3">
+		{% for photo in property.photos %}
+			<div>
+				<img src="{{ asset('uploads/properties/' ~ photo.filename) }}" alt="Photo du bien" class="property-photo-preview" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
 
-        <div class="col-md-2">
-            <select name="parking" class="form-control">
-                <option value="0" {{ not property.parking ? 'selected' : '' }}>Sans parking</option>
-                <option value="1" {{ property.parking ? 'selected' : '' }}>Avec parking</option>
-            </select>
-        </div>
+				<div class="text-muted small border rounded p-2 bg-light" style="display: none; width: 140px;">
+					Photo indisponible
+				</div>
 
-        <div class="col-12">
-            <textarea
-                name="extraDetails"
-                class="form-control"
-                rows="4"
-                placeholder="Détails supplémentaires : balcon, vue dégagée, cuisine équipée, proche gare, lumineux..."
-            >{{ property.extraDetails|default('') }}</textarea>
-        </div>
-
-        <div class="col-12">
-            <label class="form-label fw-semibold">Ajouter des photos</label>
-            <input type="file" name="photos[]" class="form-control" accept="image/jpeg,image/png,image/webp" multiple>
-            <small class="text-muted">
-                Maximum 5 photos au total. En production Vercel, les photos sont ignorées sans stockage externe.
-            </small>
-        </div>
-
-        <div class="col-12">
-            <button class="btn btn-success">Enregistrer</button>
-            <a href="{{ path('dashboard') }}" class="btn btn-secondary">Retour</a>
-        </div>
-    </form>
-
-    <h2 class="mb-3">Photos actuelles</h2>
-
-    <div class="d-flex flex-wrap gap-3">
-        {% for photo in property.photos %}
-            <div>
-                <img
-                    src="{{ asset('uploads/properties/' ~ photo.filename) }}"
-                    alt="Photo du bien"
-                    class="property-photo-preview"
-                    loading="lazy"
-                    onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"
-                >
-
-                <div class="text-muted small border rounded p-2 bg-light" style="display: none; width: 140px;">
-                    Photo indisponible
-                </div>
-
-                <form
-                    method="post"
-                    action="{{ path('property_photo_delete', { id: photo.id }) }}"
-                    onsubmit="return confirm('Supprimer cette photo ?');"
-                    class="mt-2"
-                >
-                    <input type="hidden" name="_token" value="{{ csrf_token('delete_property_photo_' ~ photo.id) }}">
-                    <button class="btn btn-sm btn-danger w-100">Supprimer</button>
-                </form>
-            </div>
-        {% else %}
-            <p class="text-muted">Aucune photo.</p>
-        {% endfor %}
-    </div>
-
-    <script>
-        const addressInput = document.getElementById('address-input');
-        const postalCodeInput = document.getElementById('postal-code-input');
-        const cityInput = document.getElementById('city-input');
-        const addressResults = document.getElementById('address-results');
-
-        let addressTimeout = null;
-        let addressAbortController = null;
-
-        function hideAddressResults() {
-            addressResults.innerHTML = '';
-            addressResults.style.display = 'none';
-        }
-
-        function renderAddressResults(features) {
-            addressResults.innerHTML = '';
-
-            if (!Array.isArray(features) || features.length === 0) {
-                hideAddressResults();
-                return;
-            }
-
-            features.slice(0, 5).forEach((feature) => {
-                const properties = feature.properties || {};
-                const item = document.createElement('div');
-
-                item.className = 'address-result-item';
-                item.textContent = properties.label || '';
-
-                item.addEventListener('click', () => {
-                    addressInput.value = properties.name || properties.label || '';
-                    postalCodeInput.value = properties.postcode || '';
-                    cityInput.value = properties.city || properties.municipality || '';
-
-                    hideAddressResults();
-                });
-
-                addressResults.appendChild(item);
-            });
-
-            addressResults.style.display = 'block';
-        }
-
-        function searchAddress(query) {
-            if (addressAbortController) {
-                addressAbortController.abort();
-            }
-
-            addressAbortController = new AbortController();
-
-            const postalCode = postalCodeInput.value.trim();
-            const city = cityInput.value.trim();
-
-            let fullQuery = query;
-
-            if (city.length >= 2) {
-                fullQuery += ' ' + city;
-            }
-
-            const params = new URLSearchParams({
-                q: fullQuery,
-                limit: '5'
-            });
-
-            if (/^[0-9]{5}$/.test(postalCode)) {
-                params.set('postcode', postalCode);
-            }
-
-            fetch(`https://api-adresse.data.gouv.fr/search/?${params.toString()}`, {
-                signal: addressAbortController.signal
-            })
-                .then((response) => response.ok ? response.json() : null)
-                .then((data) => {
-                    if (!data || !Array.isArray(data.features)) {
-                        hideAddressResults();
-                        return;
-                    }
-
-                    renderAddressResults(data.features);
-                })
-                .catch((error) => {
-                    if (error.name !== 'AbortError') {
-                        hideAddressResults();
-                    }
-                });
-        }
-
-        addressInput.addEventListener('input', () => {
-            const query = addressInput.value.trim();
-
-            clearTimeout(addressTimeout);
-
-            if (query.length < 3) {
-                hideAddressResults();
-                return;
-            }
-
-            addressTimeout = setTimeout(() => {
-                searchAddress(query);
-            }, 300);
-        });
-
-        document.addEventListener('click', (event) => {
-            if (!event.target.closest('.address-autocomplete-wrapper')) {
-                hideAddressResults();
-            }
-        });
-    </script>
+				<form method="post" action="{{ path('property_photo_delete', { id: photo.id }) }}" onsubmit="return confirm('Supprimer cette photo ?');" class="mt-2">
+					<input type="hidden" name="_token" value="{{ csrf_token('delete_property_photo_' ~ photo.id) }}">
+					<button class="btn btn-sm btn-danger w-100">Supprimer</button>
+				</form>
+			</div>
+		{% else %}
+			<p class="text-muted">Aucune photo.</p>
+		{% endfor %}
+	</div>
 {% endblock %}

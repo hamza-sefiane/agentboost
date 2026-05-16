@@ -1,342 +1,89 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Nouveau mot de passe{% endblock %}
+{% block title %}Nouveau mot de passe
+{% endblock %}
 
 {% block body %}
-    <style>
-        .auth-wrapper {
-            min-height: calc(100vh - 220px);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 40px 15px;
-        }
+	<div class="auth-wrapper">
+		<div class="auth-card">
+			<div class="auth-badge">🔒</div>
 
-        .auth-card {
-            width: 100%;
-            max-width: 560px;
-            background: #ffffff;
-            border-radius: 28px;
-            padding: 38px;
-            border: 1px solid #e5e7eb;
-            box-shadow: 0 20px 60px rgba(15, 23, 42, 0.08);
-        }
+			<h1 class="auth-title">Nouveau mot de passe</h1>
 
-        .auth-badge {
-            width: 58px;
-            height: 58px;
-            border-radius: 18px;
-            background: #dcfce7;
-            color: #166534;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 26px;
-            margin-bottom: 20px;
-        }
+			<p class="auth-subtitle">
+				Choisissez un nouveau mot de passe sécurisé pour votre compte AgentBoost.
+			</p>
 
-        .auth-title {
-            font-size: 32px;
-            font-weight: 900;
-            letter-spacing: -0.04em;
-            color: #0f172a;
-            margin-bottom: 10px;
-        }
+			{{ form_start(resetForm) }}
+			{{ form_errors(resetForm) }}
 
-        .auth-subtitle {
-            color: #64748b;
-            font-size: 15px;
-            line-height: 1.6;
-            margin-bottom: 28px;
-        }
+			<div class="auth-field">
+				<label class="auth-label" for="reset-password-input">
+					Nouveau mot de passe
+				</label>
 
-        .auth-field {
-            margin-bottom: 20px;
-        }
-
-        .auth-label {
-            display: block;
-            font-weight: 800;
-            margin-bottom: 8px;
-            color: #0f172a;
-        }
-
-        .password-wrapper {
-            position: relative;
-        }
-
-        .password-wrapper input {
-            width: 100%;
-            min-height: 54px;
-            border-radius: 16px;
-            border: 1px solid #dbe2ea;
-            padding: 0 54px 0 16px;
-            font-size: 16px;
-            box-shadow: none !important;
-        }
-
-        .password-wrapper input:focus {
-            outline: none;
-            border-color: #198754;
-            box-shadow: 0 0 0 4px rgba(25, 135, 84, 0.08) !important;
-        }
-
-        .password-toggle {
-            position: absolute;
-            top: 50%;
-            right: 12px;
-            transform: translateY(-50%);
-            width: 36px;
-            height: 36px;
-            border: none;
-            background: transparent;
-            color: #64748b;
-            font-size: 18px;
-            cursor: pointer;
-        }
-
-        .password-toggle:hover {
-            color: #0f172a;
-        }
-
-        .password-strength {
-            display: flex;
-            align-items: center;
-            gap: 7px;
-            margin-top: 12px;
-        }
-
-        .password-strength span {
-            height: 6px;
-            flex: 1;
-            border-radius: 999px;
-            background: #e5e7eb;
-            transition: 0.2s ease;
-        }
-
-        .password-strength-label {
-            margin-top: 7px;
-            font-size: 13px;
-            font-weight: 700;
-            color: #94a3b8;
-        }
-
-        .password-strength.is-weak span:nth-child(1) {
-            background: #dc3545;
-        }
-
-        .password-strength.is-medium span:nth-child(1),
-        .password-strength.is-medium span:nth-child(2) {
-            background: #f59e0b;
-        }
-
-        .password-strength.is-good span:nth-child(1),
-        .password-strength.is-good span:nth-child(2),
-        .password-strength.is-good span:nth-child(3) {
-            background: #22c55e;
-        }
-
-        .password-strength.is-strong span {
-            background: #198754;
-        }
-
-        .auth-errors {
-            color: #dc3545;
-            font-size: 14px;
-            margin-top: 8px;
-        }
-
-        .auth-errors ul {
-            margin-bottom: 0;
-            padding-left: 20px;
-        }
-
-        .auth-submit {
-            width: 100%;
-            min-height: 54px;
-            border: none;
-            border-radius: 16px;
-            background: #198754;
-            color: #ffffff;
-            font-weight: 900;
-            margin-top: 10px;
-        }
-
-        .auth-submit:hover {
-            background: #157347;
-        }
-
-        .auth-back {
-            display: block;
-            margin-top: 22px;
-            text-align: center;
-            color: #198754;
-            font-weight: 800;
-            text-decoration: none;
-        }
-
-        @media (max-width: 576px) {
-            .auth-card {
-                padding: 28px 22px;
-                border-radius: 24px;
-            }
-
-            .auth-title {
-                font-size: 27px;
-            }
-        }
-    </style>
-
-    <div class="auth-wrapper">
-        <div class="auth-card">
-            <div class="auth-badge">🔒</div>
-
-            <h1 class="auth-title">Nouveau mot de passe</h1>
-
-            <p class="auth-subtitle">
-                Choisissez un nouveau mot de passe sécurisé pour votre compte AgentBoost.
-            </p>
-
-            {{ form_start(resetForm) }}
-
-                {{ form_errors(resetForm) }}
-
-                <div class="auth-field">
-                    <label class="auth-label" for="{{ resetForm.plainPassword.first.vars.id }}">
-                        Nouveau mot de passe
-                    </label>
-
-                    <div class="password-wrapper">
-                        {{ form_widget(resetForm.plainPassword.first, {
+				<div class="password-wrapper">
+					{{ form_widget(resetForm.plainPassword.first, {
                             attr: {
+                                id: 'reset-password-input',
                                 autocomplete: 'new-password',
                                 class: 'password-input',
                                 placeholder: 'Votre nouveau mot de passe'
                             }
                         }) }}
 
-                        <button type="button" class="password-toggle" data-target="{{ resetForm.plainPassword.first.vars.id }}" aria-label="Afficher le mot de passe">
-                            👁
-                        </button>
-                    </div>
+					<button type="button" class="password-toggle" data-target="reset-password-input" aria-label="Afficher le mot de passe">
+						👁
+					</button>
+				</div>
 
-                    <div class="password-strength" id="password-strength">
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                    </div>
+				<div class="password-strength" id="password-strength">
+					<span></span>
+					<span></span>
+					<span></span>
+					<span></span>
+				</div>
 
-                    <div class="password-strength-label" id="password-strength-label">
-                        Sécurité du mot de passe
-                    </div>
+				<div class="password-strength-label" id="password-strength-label">
+					Sécurité du mot de passe
+				</div>
 
-                    <div class="auth-errors">
-                        {{ form_errors(resetForm.plainPassword.first) }}
-                    </div>
-                </div>
+				<div class="auth-errors">
+					{{ form_errors(resetForm.plainPassword.first) }}
+				</div>
+			</div>
 
-                <div class="auth-field">
-                    <label class="auth-label" for="{{ resetForm.plainPassword.second.vars.id }}">
-                        Confirmer le nouveau mot de passe
-                    </label>
+			<div class="auth-field">
+				<label class="auth-label" for="{{ resetForm.plainPassword.second.vars.id }}">
+					Confirmer le nouveau mot de passe
+				</label>
 
-                    <div class="password-wrapper">
-                        {{ form_widget(resetForm.plainPassword.second, {
+				<div class="password-wrapper">
+					{{ form_widget(resetForm.plainPassword.second, {
                             attr: {
                                 autocomplete: 'new-password',
                                 placeholder: 'Confirmez le mot de passe'
                             }
                         }) }}
 
-                        <button type="button" class="password-toggle" data-target="{{ resetForm.plainPassword.second.vars.id }}" aria-label="Afficher le mot de passe">
-                            👁
-                        </button>
-                    </div>
+					<button type="button" class="password-toggle" data-target="{{ resetForm.plainPassword.second.vars.id }}" aria-label="Afficher le mot de passe">
+						👁
+					</button>
+				</div>
 
-                    <div class="auth-errors">
-                        {{ form_errors(resetForm.plainPassword.second) }}
-                    </div>
-                </div>
+				<div class="auth-errors">
+					{{ form_errors(resetForm.plainPassword.second) }}
+				</div>
+			</div>
 
-                <button class="auth-submit">
-                    Réinitialiser le mot de passe
-                </button>
+			<button class="auth-submit">
+				Réinitialiser le mot de passe
+			</button>
+			{{ form_end(resetForm) }}
 
-            {{ form_end(resetForm) }}
-
-            <a href="{{ path('app_login') }}" class="auth-back">
-                ← Retour à la connexion
-            </a>
-        </div>
-    </div>
-
-    <script>
-        document.querySelectorAll('.password-toggle').forEach((button) => {
-            button.addEventListener('click', () => {
-                const input = document.getElementById(button.dataset.target);
-
-                if (!input) {
-                    return;
-                }
-
-                input.type = input.type === 'password' ? 'text' : 'password';
-                button.textContent = '👁';
-            });
-        });
-
-        const passwordInput = document.getElementById('{{ resetForm.plainPassword.first.vars.id }}');
-        const strengthBar = document.getElementById('password-strength');
-        const strengthLabel = document.getElementById('password-strength-label');
-
-        function updatePasswordStrength(value) {
-            let score = 0;
-
-            if (value.length >= 8) score++;
-            if (value.length >= 12) score++;
-            if (/[A-Z]/.test(value) && /[a-z]/.test(value)) score++;
-            if (/[0-9]/.test(value) || /[^A-Za-z0-9]/.test(value)) score++;
-
-            strengthBar.className = 'password-strength';
-
-            if (!value) {
-                strengthLabel.textContent = 'Sécurité du mot de passe';
-                strengthLabel.style.color = '#94a3b8';
-                return;
-            }
-
-            if (score <= 1) {
-                strengthBar.classList.add('is-weak');
-                strengthLabel.textContent = 'Trop faible';
-                strengthLabel.style.color = '#dc3545';
-                return;
-            }
-
-            if (score === 2) {
-                strengthBar.classList.add('is-medium');
-                strengthLabel.textContent = 'Moyen';
-                strengthLabel.style.color = '#f59e0b';
-                return;
-            }
-
-            if (score === 3) {
-                strengthBar.classList.add('is-good');
-                strengthLabel.textContent = 'Bon';
-                strengthLabel.style.color = '#22c55e';
-                return;
-            }
-
-            strengthBar.classList.add('is-strong');
-            strengthLabel.textContent = 'Fort';
-            strengthLabel.style.color = '#198754';
-        }
-
-        if (passwordInput) {
-            updatePasswordStrength(passwordInput.value);
-
-            passwordInput.addEventListener('input', () => {
-                updatePasswordStrength(passwordInput.value);
-            });
-        }
-    </script>
+			<a href="{{ path('app_login') }}" class="auth-back">
+				← Retour à la connexion
+			</a>
+		</div>
+	</div>
 {% endblock %}

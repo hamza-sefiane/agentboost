@@ -1,595 +1,191 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-AgentBoost – Estimations, annonces et documents pour agents immobiliers
+	AgentBoost – Estimations, annonces et documents pour agents immobiliers
 {% endblock %}
 
 {% block body %}
-<style>
-    .home-hero {
-        padding: 72px 0 54px;
-    }
 
-    .hero-grid {
-        display: grid;
-        grid-template-columns: 1.05fr 0.95fr;
-        gap: 42px;
-        align-items: center;
-    }
-
-    .hero-kicker {
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        background: #dcfce7;
-        color: #166534;
-        border-radius: 999px;
-        padding: 8px 14px;
-        font-size: 13px;
-        font-weight: 800;
-        margin-bottom: 18px;
-    }
-
-    .hero-title {
-        font-size: clamp(38px, 5vw, 62px);
-        line-height: 0.98;
-        font-weight: 950;
-        letter-spacing: -0.06em;
-        color: #0f172a;
-        margin-bottom: 22px;
-    }
-
-    .hero-text {
-        color: #64748b;
-        font-size: 18px;
-        line-height: 1.7;
-        max-width: 620px;
-        margin-bottom: 30px;
-    }
-
-    .hero-actions {
-        display: flex;
-        gap: 12px;
-        flex-wrap: wrap;
-        align-items: center;
-    }
-
-    .hero-btn-primary,
-    .hero-btn-secondary {
-        min-height: 52px;
-        border-radius: 16px;
-        padding: 0 22px;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        font-weight: 900;
-        text-decoration: none;
-    }
-
-    .hero-btn-primary {
-        background: #198754;
-        color: #fff;
-    }
-
-    .hero-btn-primary:hover {
-        background: #157347;
-        color: #fff;
-    }
-
-    .hero-btn-secondary {
-        background: #fff;
-        color: #0f172a;
-        border: 1px solid #dbe2ea;
-    }
-
-    .hero-btn-secondary:hover {
-        background: #f8fafc;
-        color: #0f172a;
-    }
-
-    .hero-note {
-        color: #94a3b8;
-        font-size: 13px;
-        margin-top: 12px;
-    }
-
-    .product-preview {
-        background: linear-gradient(145deg, #0f172a, #064663);
-        border-radius: 30px;
-        padding: 18px;
-        box-shadow: 0 28px 70px rgba(15, 23, 42, 0.24);
-    }
-
-    .preview-window {
-        background: #f8fafc;
-        border-radius: 22px;
-        overflow: hidden;
-    }
-
-    .preview-topbar {
-        height: 44px;
-        background: #ffffff;
-        border-bottom: 1px solid #e5e7eb;
-        display: flex;
-        align-items: center;
-        gap: 7px;
-        padding: 0 16px;
-    }
-
-    .preview-dot {
-        width: 10px;
-        height: 10px;
-        border-radius: 999px;
-        background: #cbd5e1;
-    }
-
-    .preview-body {
-        padding: 20px;
-    }
-
-    .preview-stat-grid {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 10px;
-        margin-bottom: 16px;
-    }
-
-    .preview-stat {
-        background: #ffffff;
-        border: 1px solid #e5e7eb;
-        border-radius: 16px;
-        padding: 14px;
-    }
-
-    .preview-stat strong {
-        display: block;
-        color: #0f172a;
-        font-size: 19px;
-        line-height: 1;
-    }
-
-    .preview-stat span {
-        display: block;
-        margin-top: 6px;
-        color: #64748b;
-        font-size: 12px;
-        font-weight: 700;
-    }
-
-    .preview-card {
-        background: #ffffff;
-        border: 1px solid #e5e7eb;
-        border-radius: 20px;
-        padding: 18px;
-    }
-
-    .preview-card-head {
-        display: flex;
-        justify-content: space-between;
-        gap: 10px;
-        margin-bottom: 16px;
-    }
-
-    .preview-badge {
-        background: #dbeafe;
-        color: #1d4ed8;
-        border-radius: 999px;
-        padding: 6px 10px;
-        font-size: 12px;
-        font-weight: 900;
-    }
-
-    .preview-price {
-        color: #166534;
-        font-size: 25px;
-        font-weight: 950;
-        letter-spacing: -0.04em;
-    }
-
-    .preview-line {
-        height: 10px;
-        background: #e5e7eb;
-        border-radius: 999px;
-        margin-bottom: 10px;
-    }
-
-    .preview-line.short {
-        width: 68%;
-    }
-
-    .preview-actions {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 10px;
-        margin-top: 18px;
-    }
-
-    .preview-action {
-        height: 42px;
-        border-radius: 13px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 13px;
-        font-weight: 900;
-    }
-
-    .preview-action.primary {
-        background: #198754;
-        color: #ffffff;
-    }
-
-    .preview-action.secondary {
-        background: #f8fafc;
-        color: #0f172a;
-        border: 1px solid #e5e7eb;
-    }
-
-    .section-soft {
-        padding: 34px 0;
-    }
-
-    .feature-grid {
-        display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        gap: 16px;
-    }
-
-    .feature-card {
-        background: #ffffff;
-        border: 1px solid #e5e7eb;
-        border-radius: 24px;
-        padding: 24px;
-        box-shadow: 0 14px 35px rgba(15, 23, 42, 0.05);
-    }
-
-    .feature-icon {
-        width: 44px;
-        height: 44px;
-        border-radius: 14px;
-        background: #eff6ff;
-        color: #1d4ed8;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 21px;
-        margin-bottom: 16px;
-    }
-
-    .feature-card h3 {
-        font-size: 17px;
-        font-weight: 900;
-        color: #0f172a;
-        margin-bottom: 10px;
-    }
-
-    .feature-card p {
-        color: #64748b;
-        font-size: 14px;
-        line-height: 1.6;
-        margin: 0;
-    }
-
-    .workflow-section {
-        background: #ffffff;
-        border: 1px solid #e5e7eb;
-        border-radius: 30px;
-        padding: 36px;
-        margin-top: 22px;
-    }
-
-    .section-title {
-        font-size: 34px;
-        line-height: 1.15;
-        font-weight: 950;
-        color: #0f172a;
-        letter-spacing: -0.04em;
-        margin-bottom: 12px;
-    }
-
-    .section-text {
-        color: #64748b;
-        font-size: 16px;
-        line-height: 1.7;
-        margin-bottom: 0;
-    }
-
-    .workflow-grid {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 18px;
-        margin-top: 28px;
-    }
-
-    .workflow-step {
-        background: #f8fafc;
-        border: 1px solid #e5e7eb;
-        border-radius: 22px;
-        padding: 22px;
-    }
-
-    .workflow-step span {
-        display: inline-flex;
-        width: 34px;
-        height: 34px;
-        border-radius: 12px;
-        background: #064663;
-        color: #ffffff;
-        align-items: center;
-        justify-content: center;
-        font-weight: 900;
-        margin-bottom: 14px;
-    }
-
-    .workflow-step h3 {
-        color: #0f172a;
-        font-size: 17px;
-        font-weight: 900;
-        margin-bottom: 8px;
-    }
-
-    .workflow-step p {
-        color: #64748b;
-        font-size: 14px;
-        line-height: 1.6;
-        margin: 0;
-    }
-
-    .final-cta {
-        text-align: center;
-        padding: 58px 0 30px;
-    }
-
-    .final-cta-card {
-        background: linear-gradient(135deg, #064663, #075985);
-        border-radius: 32px;
-        padding: 42px 24px;
-        color: #ffffff;
-        box-shadow: 0 24px 60px rgba(15, 23, 42, 0.18);
-    }
-
-    .final-cta-card h2 {
-        font-size: 36px;
-        font-weight: 950;
-        letter-spacing: -0.05em;
-        margin-bottom: 12px;
-    }
-
-    .final-cta-card p {
-        color: #cfe8f3;
-        margin-bottom: 26px;
-    }
-
-    @media (max-width: 991px) {
-        .home-hero {
-            padding-top: 42px;
-        }
-
-        .hero-grid {
-            grid-template-columns: 1fr;
-        }
-
-        .feature-grid {
-            grid-template-columns: repeat(2, 1fr);
-        }
-
-        .workflow-grid {
-            grid-template-columns: 1fr;
-        }
-    }
-
-    @media (max-width: 576px) {
-        .hero-title {
-            font-size: 39px;
-        }
-
-        .hero-text {
-            font-size: 16px;
-        }
-
-        .hero-actions a {
-            width: 100%;
-        }
-
-        .feature-grid {
-            grid-template-columns: 1fr;
-        }
-
-        .workflow-section {
-            padding: 24px;
-            border-radius: 24px;
-        }
-
-        .preview-stat-grid {
-            grid-template-columns: 1fr;
-        }
-
-        .final-cta-card h2 {
-            font-size: 28px;
-        }
-    }
-</style>
-
-<section class="home-hero">
-    <div class="hero-grid">
-        <div>
-            <div class="hero-kicker">
-                <span>●</span>
-                Outil métier pour agents immobiliers
-            </div>
-
-            <h1 class="hero-title">
-                Estimations, annonces et documents.
-                <br>
-                Depuis un seul outil.
-            </h1>
-
-            <p class="hero-text">
-                AgentBoost aide les agents immobiliers à créer des estimations, générer des annonces assistées et produire des documents professionnels sans perdre des heures sur l’administratif.
-            </p>
-
-            <div class="hero-actions">
-                {% if is_granted('ACCESS_DASHBOARD') %}
-                    <a href="{{ path('dashboard') }}" class="hero-btn-primary">
-                        Ouvrir mon dashboard
-                    </a>
-                {% elseif app.user %}
-                    <a href="{{ path('pricing') }}" class="hero-btn-primary">
-                        Choisir mon accès
-                    </a>
-                {% else %}
-                    <a href="{{ path('app_register') }}" class="hero-btn-primary">
-                        Créer une estimation
-                    </a>
-                {% endif %}
-
-                <a href="{{ path('pricing') }}" class="hero-btn-secondary">
-                    Voir les offres
-                </a>
-            </div>
-
-            <div class="hero-note">
-                Pensé pour les indépendants, agences et professionnels terrain.
-            </div>
-        </div>
-
-        <div class="product-preview">
-            <div class="preview-window">
-                <div class="preview-topbar">
-                    <span class="preview-dot"></span>
-                    <span class="preview-dot"></span>
-                    <span class="preview-dot"></span>
-                </div>
-
-                <div class="preview-body">
-                    <div class="preview-stat-grid">
-                        <div class="preview-stat">
-                            <strong>12</strong>
-                            <span>estimations</span>
-                        </div>
-
-                        <div class="preview-stat">
-                            <strong>8</strong>
-                            <span>annonces</span>
-                        </div>
-
-                        <div class="preview-stat">
-                            <strong>5</strong>
-                            <span>PDF prêts</span>
-                        </div>
-                    </div>
-
-                    <div class="preview-card">
-                        <div class="preview-card-head">
-                            <span class="preview-badge">Appartement</span>
-                            <span class="preview-price">312 000 €</span>
-                        </div>
-
-                        <div class="preview-line"></div>
-                        <div class="preview-line short"></div>
-                        <div class="preview-line"></div>
-
-                        <div class="preview-actions">
-                            <div class="preview-action primary">
-                                Générer annonce
-                            </div>
-
-                            <div class="preview-action secondary">
-                                PDF estimation
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<section class="section-soft">
-    <div class="feature-grid">
-        <div class="feature-card">
-            <div class="feature-icon">🏡</div>
-            <h3>Estimation rapide</h3>
-            <p>Renseignez les informations clés du bien et obtenez une estimation structurée en quelques instants.</p>
-        </div>
-
-        <div class="feature-card">
-            <div class="feature-icon">✍️</div>
-            <h3>Annonces assistées</h3>
-            <p>Générez des textes d’annonces exploitables, clairs et adaptés au bien présenté.</p>
-        </div>
-
-        <div class="feature-card">
-            <div class="feature-icon">📄</div>
-            <h3>PDF professionnel</h3>
-            <p>Présentez vos estimations avec des documents propres, lisibles et crédibles.</p>
-        </div>
-
-        <div class="feature-card">
-            <div class="feature-icon">📊</div>
-            <h3>Dashboard centralisé</h3>
-            <p>Retrouvez vos biens, estimations, annonces et documents au même endroit.</p>
-        </div>
-    </div>
-</section>
-
-<section class="workflow-section">
-    <div>
-        <h2 class="section-title">
-            Un flux simple, pensé pour le terrain.
-        </h2>
-
-        <p class="section-text">
-            AgentBoost ne remplace pas votre expertise. Il vous aide à gagner du temps sur les tâches répétitives pour vous concentrer sur les clients et les mandats.
-        </p>
-    </div>
-
-    <div class="workflow-grid">
-        <div class="workflow-step">
-            <span>1</span>
-            <h3>Ajoutez le bien</h3>
-            <p>Type, surface, ville, pièces, photos et détails utiles.</p>
-        </div>
-
-        <div class="workflow-step">
-            <span>2</span>
-            <h3>Générez le contenu</h3>
-            <p>Annonce assistée, estimation, mise en forme et supports commerciaux.</p>
-        </div>
-
-        <div class="workflow-step">
-            <span>3</span>
-            <h3>Exploitez vos documents</h3>
-            <p>PDF, annonce, diffusion et suivi depuis votre espace AgentBoost.</p>
-        </div>
-    </div>
-</section>
-
-<section class="final-cta">
-    <div class="final-cta-card">
-        <h2>
-            Passez moins de temps à produire.
-            <br>
-            Plus de temps à vendre.
-        </h2>
-
-        <p>
-            Créez votre première estimation et découvrez un workflow plus propre pour vos biens.
-        </p>
-
-        {% if is_granted('ACCESS_DASHBOARD') %}
-            <a href="{{ path('dashboard') }}" class="hero-btn-primary">
-                Accéder au dashboard
-            </a>
-        {% elseif app.user %}
-            <a href="{{ path('pricing') }}" class="hero-btn-primary">
-                Choisir mon accès
-            </a>
-        {% else %}
-            <a href="{{ path('app_register') }}" class="hero-btn-primary">
-                Créer une estimation
-            </a>
-        {% endif %}
-    </div>
-</section>
+	<section class="home-hero">
+		<div class="hero-grid">
+			<div>
+				<div class="hero-kicker">
+					<span>●</span>
+					Outil métier pour agents immobiliers
+				</div>
+
+				<h1 class="hero-title">
+					Estimations, annonces et documents.
+					<br>
+					Depuis un seul outil.
+				</h1>
+
+				<p class="hero-text">
+					AgentBoost aide les agents immobiliers à créer des estimations, générer des annonces assistées et produire des documents professionnels sans perdre des heures sur l’administratif.
+				</p>
+
+				<div class="hero-actions">
+					{% if is_granted('ACCESS_DASHBOARD') %}
+						<a href="{{ path('dashboard') }}" class="hero-btn-primary">
+							Ouvrir mon dashboard
+						</a>
+					{% elseif app.user %}
+						<a href="{{ path('pricing') }}" class="hero-btn-primary">
+							Choisir mon accès
+						</a>
+					{% else %}
+						<a href="{{ path('app_register') }}" class="hero-btn-primary">
+							Créer une estimation
+						</a>
+					{% endif %}
+
+					<a href="{{ path('pricing') }}" class="hero-btn-secondary">
+						Voir les offres
+					</a>
+				</div>
+
+				<div class="hero-note">
+					Pensé pour les indépendants, agences et professionnels terrain.
+				</div>
+			</div>
+
+			<div class="product-preview">
+				<div class="preview-window">
+					<div class="preview-topbar">
+						<span class="preview-dot"></span>
+						<span class="preview-dot"></span>
+						<span class="preview-dot"></span>
+					</div>
+
+					<div class="preview-body">
+						<div class="preview-stat-grid">
+							<div class="preview-stat">
+								<strong>12</strong>
+								<span>estimations</span>
+							</div>
+
+							<div class="preview-stat">
+								<strong>8</strong>
+								<span>annonces</span>
+							</div>
+
+							<div class="preview-stat">
+								<strong>5</strong>
+								<span>PDF prêts</span>
+							</div>
+						</div>
+
+						<div class="preview-card">
+							<div class="preview-card-head">
+								<span class="preview-badge">Appartement</span>
+								<span class="preview-price">312 000 €</span>
+							</div>
+
+							<div class="preview-line"></div>
+							<div class="preview-line short"></div>
+							<div class="preview-line"></div>
+
+							<div class="preview-actions">
+								<div class="preview-action primary">
+									Générer annonce
+								</div>
+
+								<div class="preview-action secondary">
+									PDF estimation
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<section class="section-soft">
+		<div class="feature-grid">
+			<div class="feature-card">
+				<div class="feature-icon">🏡</div>
+				<h3>Estimation rapide</h3>
+				<p>Renseignez les informations clés du bien et obtenez une estimation structurée en quelques instants.</p>
+			</div>
+
+			<div class="feature-card">
+				<div class="feature-icon">✍️</div>
+				<h3>Annonces assistées</h3>
+				<p>Générez des textes d’annonces exploitables, clairs et adaptés au bien présenté.</p>
+			</div>
+
+			<div class="feature-card">
+				<div class="feature-icon">📄</div>
+				<h3>PDF professionnel</h3>
+				<p>Présentez vos estimations avec des documents propres, lisibles et crédibles.</p>
+			</div>
+
+			<div class="feature-card">
+				<div class="feature-icon">📊</div>
+				<h3>Dashboard centralisé</h3>
+				<p>Retrouvez vos biens, estimations, annonces et documents au même endroit.</p>
+			</div>
+		</div>
+	</section>
+
+	<section class="workflow-section">
+		<div>
+			<h2 class="section-title">
+				Un flux simple, pensé pour le terrain.
+			</h2>
+
+			<p class="section-text">
+				AgentBoost ne remplace pas votre expertise. Il vous aide à gagner du temps sur les tâches répétitives pour vous concentrer sur les clients et les mandats.
+			</p>
+		</div>
+
+		<div class="workflow-grid">
+			<div class="workflow-step">
+				<span>1</span>
+				<h3>Ajoutez le bien</h3>
+				<p>Type, surface, ville, pièces, photos et détails utiles.</p>
+			</div>
+
+			<div class="workflow-step">
+				<span>2</span>
+				<h3>Générez le contenu</h3>
+				<p>Annonce assistée, estimation, mise en forme et supports commerciaux.</p>
+			</div>
+
+			<div class="workflow-step">
+				<span>3</span>
+				<h3>Exploitez vos documents</h3>
+				<p>PDF, annonce, diffusion et suivi depuis votre espace AgentBoost.</p>
+			</div>
+		</div>
+	</section>
+
+	<section class="final-cta">
+		<div class="final-cta-card">
+			<h2>
+				Passez moins de temps à produire.
+				<br>
+				Plus de temps à vendre.
+			</h2>
+
+			<p>
+				Créez votre première estimation et découvrez un workflow plus propre pour vos biens.
+			</p>
+
+			{% if is_granted('ACCESS_DASHBOARD') %}
+				<a href="{{ path('dashboard') }}" class="hero-btn-primary">
+					Accéder au dashboard
+				</a>
+			{% elseif app.user %}
+				<a href="{{ path('pricing') }}" class="hero-btn-primary">
+					Choisir mon accès
+				</a>
+			{% else %}
+				<a href="{{ path('app_register') }}" class="hero-btn-primary">
+					Créer une estimation
+				</a>
+			{% endif %}
+		</div>
+	</section>
 {% endblock %}

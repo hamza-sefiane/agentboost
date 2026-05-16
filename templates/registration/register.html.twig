@@ -1,410 +1,90 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}S'inscrire{% endblock %}
-
-{% block stylesheets %}
-<style>
-    .auth-page {
-        min-height: calc(100vh - 220px);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 32px 0;
-    }
-
-    .auth-card {
-        width: 100%;
-        max-width: 460px;
-        background: #ffffff;
-        border: 1px solid #e5e7eb;
-        border-radius: 30px;
-        padding: 36px;
-        box-shadow: 0 24px 60px rgba(15, 23, 42, 0.10);
-    }
-
-    .auth-title {
-        text-align: center;
-        margin-bottom: 30px;
-        color: #166534;
-        font-size: 36px;
-        font-weight: 900;
-        letter-spacing: -0.04em;
-    }
-
-    .auth-label {
-        display: block;
-        margin-bottom: 8px;
-        font-size: 15px;
-        font-weight: 800;
-        color: #0f172a;
-    }
-
-    .auth-field {
-        margin-bottom: 20px;
-    }
-
-    .auth-input {
-        width: 100%;
-        min-height: 54px;
-        padding: 12px 15px;
-        border: 1px solid #d1d5db;
-        border-radius: 16px;
-        background: #ffffff;
-        color: #111827;
-        font-size: 16px;
-        transition: border-color .2s ease, box-shadow .2s ease;
-    }
-
-    .auth-input:focus {
-        border-color: #16a34a;
-        outline: none;
-        box-shadow: 0 0 0 4px rgba(22, 163, 74, 0.12);
-    }
-
-    .auth-password-wrapper {
-        position: relative;
-    }
-
-    .auth-password-wrapper .auth-input {
-        padding-right: 54px;
-    }
-
-    .auth-toggle-password {
-        position: absolute;
-        right: 12px;
-        top: 50%;
-        width: 38px;
-        height: 38px;
-        transform: translateY(-50%);
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        border: none;
-        border-radius: 12px;
-        background: transparent;
-        color: #64748b;
-        cursor: pointer;
-    }
-
-    .auth-toggle-password:hover {
-        background: #f1f5f9;
-        color: #166534;
-    }
-
-    .auth-toggle-password svg {
-        width: 21px;
-        height: 21px;
-    }
-
-    .auth-helper {
-        margin-top: 8px;
-        font-size: 13px;
-        color: #64748b;
-    }
-
-    .auth-error {
-        margin-top: 8px;
-        font-size: 13px;
-        color: #b91c1c;
-        font-weight: 600;
-        display: none;
-    }
-
-    .auth-flash {
-        padding: 14px;
-        margin-bottom: 20px;
-        border-radius: 16px;
-        border: 1px solid #fecaca;
-        background: #fef2f2;
-        color: #991b1b;
-        font-size: 14px;
-    }
-
-    .auth-submit {
-        width: 100%;
-        min-height: 54px;
-        margin-top: 10px;
-        border: none;
-        border-radius: 16px;
-        background: #15803d;
-        color: #ffffff;
-        font-size: 17px;
-        font-weight: 900;
-        transition: transform .15s ease, background .15s ease;
-    }
-
-    .auth-submit:hover {
-        background: #166534;
-        transform: translateY(-1px);
-    }
-
-    .auth-submit:disabled {
-        opacity: .75;
-        cursor: not-allowed;
-        transform: none;
-    }
-
-    .auth-footer {
-        margin-top: 24px;
-        text-align: center;
-        color: #475569;
-        font-size: 15px;
-    }
-
-    .auth-footer a {
-        color: #166534;
-        text-decoration: none;
-        font-weight: 800;
-    }
-
-    .auth-footer a:hover {
-        text-decoration: underline;
-    }
-
-    @media (max-width: 576px) {
-        .auth-page {
-            align-items: flex-start;
-            padding-top: 24px;
-        }
-
-        .auth-card {
-            max-width: 100%;
-            padding: 28px 22px;
-            border-radius: 24px;
-        }
-
-        .auth-title {
-            font-size: 32px;
-        }
-    }
-</style>
+{% block title %}S'inscrire
 {% endblock %}
 
 {% block body %}
-<div class="auth-page">
-    <div class="auth-card">
-        <h1 class="auth-title">Inscription</h1>
+	<div class="auth-page">
+		<div class="auth-card">
+			<h1 class="auth-title">Inscription</h1>
 
-        {% for message in app.flashes('error') %}
-            <div class="auth-flash">
-                {{ message }}
-            </div>
-        {% endfor %}
+			{% for message in app.flashes('error') %}
+				<div class="auth-flash">
+					{{ message }}
+				</div>
+			{% endfor %}
 
-        <form method="POST" action="{{ path('app_register') }}" id="registerForm" novalidate>
+			<form method="POST" action="{{ path('app_register') }}" id="registerForm" novalidate>
 
-            <div class="auth-field">
-                <label for="email" class="auth-label">Email</label>
+				<div class="auth-field">
+					<label for="email" class="auth-label">Email</label>
 
-                <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    class="auth-input"
-                    autocomplete="email"
-                    required
-                    autofocus
-                >
+					<input type="email" id="email" name="email" class="auth-input" autocomplete="email" required autofocus>
 
-                <div id="emailError" class="auth-error"></div>
-            </div>
+					<div id="emailError" class="auth-error"></div>
+				</div>
 
-            <div class="auth-field">
-                <label for="password" class="auth-label">Mot de passe</label>
+				<div class="auth-field">
+					<label for="password" class="auth-label">Mot de passe</label>
 
-                <div class="auth-password-wrapper">
-                    <input
-                        type="password"
-                        id="password"
-                        name="password"
-                        class="auth-input"
-                        autocomplete="new-password"
-                        required
-                    >
+					<div class="auth-password-wrapper">
+						<input type="password" id="password" name="password" class="auth-input" autocomplete="new-password" required>
 
-                    <button
-                        type="button"
-                        id="togglePassword"
-                        class="auth-toggle-password"
-                        aria-label="Afficher le mot de passe"
-                    >
-                        <svg id="eyeOpen" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
-                        </svg>
+						<button type="button" id="togglePassword" class="auth-toggle-password" aria-label="Afficher le mot de passe">
+							<svg id="eyeOpen" xmlns="http://www.w3.org/2000/svg" fill="none" viewbox="0 0 24 24" stroke="currentColor">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+							</svg>
 
-                        <svg id="eyeClosed" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="display:none;">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3l18 18"/>
-                        </svg>
-                    </button>
-                </div>
+							<svg id="eyeClosed" xmlns="http://www.w3.org/2000/svg" fill="none" viewbox="0 0 24 24" stroke="currentColor" style="display:none;">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3l18 18"/>
+							</svg>
+						</button>
+					</div>
 
-                <div class="auth-helper">
-                    Minimum 8 caractères
-                </div>
+					<div class="auth-helper">
+						Minimum 8 caractères
+					</div>
 
-                <div id="passwordError" class="auth-error"></div>
-            </div>
+					<div id="passwordError" class="auth-error"></div>
+				</div>
 
-            <div class="auth-field">
-                <label for="confirmPassword" class="auth-label">
-                    Confirmer le mot de passe
-                </label>
+				<div class="auth-field">
+					<label for="confirmPassword" class="auth-label">
+						Confirmer le mot de passe
+					</label>
 
-                <div class="auth-password-wrapper">
-                    <input
-                        type="password"
-                        id="confirmPassword"
-                        name="confirm_password"
-                        class="auth-input"
-                        autocomplete="new-password"
-                        required
-                    >
+					<div class="auth-password-wrapper">
+						<input type="password" id="confirmPassword" name="confirm_password" class="auth-input" autocomplete="new-password" required>
 
-                    <button
-                        type="button"
-                        id="toggleConfirmPassword"
-                        class="auth-toggle-password"
-                        aria-label="Afficher le mot de passe"
-                    >
-                        <svg id="confirmEyeOpen" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
-                        </svg>
+						<button type="button" id="toggleConfirmPassword" class="auth-toggle-password" aria-label="Afficher le mot de passe">
+							<svg id="confirmEyeOpen" xmlns="http://www.w3.org/2000/svg" fill="none" viewbox="0 0 24 24" stroke="currentColor">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+							</svg>
 
-                        <svg id="confirmEyeClosed" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="display:none;">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3l18 18"/>
-                        </svg>
-                    </button>
-                </div>
+							<svg id="confirmEyeClosed" xmlns="http://www.w3.org/2000/svg" fill="none" viewbox="0 0 24 24" stroke="currentColor" style="display:none;">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3l18 18"/>
+							</svg>
+						</button>
+					</div>
 
-                <div class="auth-helper">
-                    Retapez votre mot de passe
-                </div>
+					<div class="auth-helper">
+						Retapez votre mot de passe
+					</div>
 
-                <div id="confirmPasswordError" class="auth-error"></div>
-            </div>
+					<div id="confirmPasswordError" class="auth-error"></div>
+				</div>
 
-            <button type="submit" class="auth-submit" id="submitButton">
-                Créer mon compte
-            </button>
-        </form>
+				<button type="submit" class="auth-submit" id="submitButton">
+					Créer mon compte
+				</button>
+			</form>
 
-        <div class="auth-footer">
-            Déjà inscrit ?
-            <a href="{{ path('app_login') }}">Se connecter</a>
-        </div>
-    </div>
-</div>
-{% endblock %}
-
-{% block javascripts %}
-<script>
-document.addEventListener('DOMContentLoaded', () => {
-
-    const form = document.getElementById('registerForm');
-
-    const emailInput = document.getElementById('email');
-
-    const passwordInput = document.getElementById('password');
-    const confirmPasswordInput = document.getElementById('confirmPassword');
-
-    const togglePassword = document.getElementById('togglePassword');
-    const toggleConfirmPassword = document.getElementById('toggleConfirmPassword');
-
-    const eyeOpen = document.getElementById('eyeOpen');
-    const eyeClosed = document.getElementById('eyeClosed');
-
-    const confirmEyeOpen = document.getElementById('confirmEyeOpen');
-    const confirmEyeClosed = document.getElementById('confirmEyeClosed');
-
-    const submitButton = document.getElementById('submitButton');
-
-    const emailError = document.getElementById('emailError');
-    const passwordError = document.getElementById('passwordError');
-    const confirmPasswordError = document.getElementById('confirmPasswordError');
-
-    const showError = (element, message) => {
-        element.textContent = message;
-        element.style.display = 'block';
-    };
-
-    const hideError = (element) => {
-        element.textContent = '';
-        element.style.display = 'none';
-    };
-
-    if (togglePassword && passwordInput) {
-        togglePassword.addEventListener('click', () => {
-            const hidden = passwordInput.type === 'password';
-
-            passwordInput.type = hidden ? 'text' : 'password';
-
-            eyeOpen.style.display = hidden ? 'none' : 'block';
-            eyeClosed.style.display = hidden ? 'block' : 'none';
-        });
-    }
-
-    if (toggleConfirmPassword && confirmPasswordInput) {
-        toggleConfirmPassword.addEventListener('click', () => {
-            const hidden = confirmPasswordInput.type === 'password';
-
-            confirmPasswordInput.type = hidden ? 'text' : 'password';
-
-            confirmEyeOpen.style.display = hidden ? 'none' : 'block';
-            confirmEyeClosed.style.display = hidden ? 'block' : 'none';
-        });
-    }
-
-    [emailInput, passwordInput, confirmPasswordInput].forEach((input) => {
-        if (!input) {
-            return;
-        }
-
-        input.addEventListener('input', () => {
-            hideError(emailError);
-            hideError(passwordError);
-            hideError(confirmPasswordError);
-        });
-    });
-
-    if (form) {
-        form.addEventListener('submit', (event) => {
-
-            hideError(emailError);
-            hideError(passwordError);
-            hideError(confirmPasswordError);
-
-            let hasError = false;
-
-            const email = emailInput.value.trim();
-            const password = passwordInput.value;
-            const confirmPassword = confirmPasswordInput.value;
-
-            if (!email || !email.includes('@')) {
-                showError(emailError, 'Veuillez saisir une adresse email valide.');
-                hasError = true;
-            }
-
-            if (password.length < 8) {
-                showError(passwordError, 'Le mot de passe doit contenir au moins 8 caractères.');
-                hasError = true;
-            }
-
-            if (password !== confirmPassword) {
-                showError(confirmPasswordError, 'Les mots de passe ne correspondent pas.');
-                hasError = true;
-            }
-
-            if (hasError) {
-                event.preventDefault();
-                return;
-            }
-
-            submitButton.disabled = true;
-            submitButton.textContent = 'Création du compte...';
-        });
-    }
-});
-</script>
+			<div class="auth-footer">
+				Déjà inscrit ?
+				<a href="{{ path('app_login') }}">Se connecter</a>
+			</div>
+		</div>
+	</div>
 {% endblock %}
