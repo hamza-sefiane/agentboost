@@ -1,0 +1,109 @@
+.admin-stats-page {
+    padding: 40px;
+    background: #f5f7fa;
+    min-height: 100vh;
+}
+
+.admin-stats-page h1 {
+    margin-bottom: 30px;
+    font-size: 32px;
+    font-weight: 800;
+}
+
+.admin-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 18px;
+    margin-bottom: 30px;
+}
+
+.admin-card,
+.admin-chart-card,
+.admin-table-card {
+    background: #ffffff;
+    border-radius: 18px;
+    padding: 24px;
+    box-shadow: 0 10px 30px rgba(15, 23, 42, .08);
+}
+
+.admin-card span {
+    display: block;
+    color: #64748b;
+    margin-bottom: 10px;
+    font-size: 14px;
+}
+
+.admin-card strong {
+    font-size: 32px;
+    font-weight: 800;
+}
+
+.admin-charts-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin-bottom: 30px;
+}
+
+.admin-chart-card {
+    height: 360px;
+}
+
+.admin-chart-card h2,
+.admin-table-card h2 {
+    margin-bottom: 20px;
+    font-size: 20px;
+    font-weight: 800;
+}
+
+.admin-chart-card canvas {
+    width: 100% !important;
+    height: 270px !important;
+}
+
+.admin-tables-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+}
+
+.admin-table-card table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.admin-table-card th,
+.admin-table-card td {
+    padding: 12px;
+    border-bottom: 1px solid #e5e7eb;
+    font-size: 14px;
+}
+
+.admin-table-card th {
+    color: #475569;
+    font-weight: 800;
+}
+
+@media (max-width: 1200px) {
+    .admin-stats-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .admin-charts-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .admin-tables-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 700px) {
+    .admin-stats-page {
+        padding: 20px;
+    }
+
+    .admin-stats-grid {
+        grid-template-columns: 1fr;
+    }
+}

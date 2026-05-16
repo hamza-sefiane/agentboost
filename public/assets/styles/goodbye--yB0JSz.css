@@ -1,0 +1,125 @@
+.goodbye-wrapper {
+    min-height: calc(100vh - 180px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+}
+
+.goodbye-card {
+    width: 100%;
+    max-width: 640px;
+    background: #ffffff;
+    border-radius: 30px;
+    padding: 48px;
+    box-shadow: 0 20px 60px rgba(15, 23, 42, 0.08);
+    text-align: center;
+    border: 1px solid #e5e7eb;
+}
+
+.goodbye-icon {
+    width: 82px;
+    height: 82px;
+    margin: 0 auto 26px;
+    border-radius: 24px;
+    background: #f8fafc;
+    color: #064663;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 34px;
+    font-weight: 900;
+}
+
+.goodbye-title {
+    font-size: 40px;
+    font-weight: 900;
+    letter-spacing: -0.05em;
+    color: #0f172a;
+    margin-bottom: 16px;
+}
+
+.goodbye-subtitle {
+    font-size: 17px;
+    line-height: 1.8;
+    color: #64748b;
+    margin-bottom: 30px;
+}
+
+.goodbye-alert {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 18px;
+    padding: 22px;
+    color: #475569;
+    line-height: 1.7;
+    font-size: 15px;
+    margin-bottom: 34px;
+}
+
+.goodbye-actions {
+    display: flex;
+    justify-content: center;
+    gap: 14px;
+    flex-wrap: wrap;
+}
+
+.goodbye-btn-primary {
+    min-height: 54px;
+    padding: 0 26px;
+    border-radius: 16px;
+    background: #198754;
+    color: #ffffff;
+    border: none;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    transition: 0.2s ease;
+}
+
+.goodbye-btn-primary:hover {
+    background: #157347;
+    color: #ffffff;
+}
+
+.goodbye-btn-secondary {
+    min-height: 54px;
+    padding: 0 26px;
+    border-radius: 16px;
+    background: #ffffff;
+    color: #0f172a;
+    border: 1px solid #dbe2ea;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    transition: 0.2s ease;
+}
+
+.goodbye-btn-secondary:hover {
+    background: #f8fafc;
+    color: #0f172a;
+}
+
+@media (max-width: 640px) {
+    .goodbye-card {
+        padding: 34px 24px;
+        border-radius: 24px;
+    }
+
+    .goodbye-title {
+        font-size: 31px;
+    }
+
+    .goodbye-actions {
+        flex-direction: column;
+    }
+
+    .goodbye-btn-primary,
+    .goodbye-btn-secondary {
+        width: 100%;
+    }
+}
