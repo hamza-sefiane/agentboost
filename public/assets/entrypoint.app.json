@@ -18,7 +18,6 @@
     "\/assets\/js\/property-list.js",
     "\/assets\/js\/register.js",
     "\/assets\/js\/reset-password.js",
-    "\/assets\/js\/login.js",
     "@symfony\/stimulus-bundle",
     "@hotwired\/stimulus",
     "\/assets\/@symfony\/stimulus-bundle\/controllers.js",
