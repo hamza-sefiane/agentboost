@@ -1,6 +1,6 @@
 {
     "app": {
-        "path": "\/assets\/app-r4OYagA.js",
+        "path": "\/assets\/app-Wflug78.js",
         "type": "js"
     },
     "\/assets\/bootstrap.js": {
@@ -93,10 +93,6 @@
     },
     "\/assets\/js\/reset-password.js": {
         "path": "\/assets\/js\/reset-password-maoG0wF.js",
-        "type": "js"
-    },
-    "\/assets\/js\/login.js": {
-        "path": "\/assets\/js\/login-H-Ej8Jv.js",
         "type": "js"
     },
     "@hotwired\/stimulus": {
