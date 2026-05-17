@@ -5,21 +5,23 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
     }
 
-    const bindPasswordToggle = (buttonId, inputId) => {
-        const button = document.getElementById(buttonId);
-        const input = document.getElementById(inputId);
-
-        if (!button || !input) {
-            return;
-        }
-
+    document.querySelectorAll(".auth-toggle-password").forEach((button) => {
         button.addEventListener("click", () => {
+            const wrapper = button.closest(".auth-password-wrapper");
+
+            if (!wrapper) {
+                return;
+            }
+
+            const input = wrapper.querySelector("input");
+
+            if (!input) {
+                return;
+            }
+
             input.type = input.type === "password" ? "text" : "password";
         });
-    };
-
-    bindPasswordToggle("togglePassword", "password");
-    bindPasswordToggle("toggleConfirmPassword", "confirmPassword");
+    });
 
     const emailInput = document.getElementById("email");
     const passwordInput = document.getElementById("password");
@@ -33,27 +35,21 @@ document.addEventListener("DOMContentLoaded", () => {
     );
 
     const showError = (element, message) => {
-        if (!element) {
-            return;
-        }
+        if (!element) return;
 
         element.textContent = message;
         element.style.display = "block";
     };
 
     const hideError = (element) => {
-        if (!element) {
-            return;
-        }
+        if (!element) return;
 
         element.textContent = "";
         element.style.display = "none";
     };
 
     [emailInput, passwordInput, confirmPasswordInput].forEach((input) => {
-        if (!input) {
-            return;
-        }
+        if (!input) return;
 
         input.addEventListener("input", () => {
             hideError(emailError);
