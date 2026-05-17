@@ -16,24 +16,23 @@ use Symfony\Component\Mime\Address;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
-use SymfonyCasts\Bundle\ResetPassword\Controller\ResetPasswordControllerTrait;
 use SymfonyCasts\Bundle\ResetPassword\Exception\ResetPasswordExceptionInterface;
 use SymfonyCasts\Bundle\ResetPassword\ResetPasswordHelperInterface;
 
 #[Route('/reset-password')]
 class ResetPasswordController extends AbstractController
 {
-    use ResetPasswordControllerTrait;
-
     public function __construct(
         private readonly ResetPasswordHelperInterface $resetPasswordHelper,
         private readonly EntityManagerInterface $entityManager,
-    ) {
-    }
+    ) {}
 
     #[Route('', name: 'app_forgot_password_request')]
-    public function request(Request $request, MailerInterface $mailer, TranslatorInterface $translator): Response
-    {
+    public function request(
+        Request $request,
+        MailerInterface $mailer,
+        TranslatorInterface $translator,
+    ): Response {
         $form = $this->createForm(ResetPasswordRequestFormType::class);
         $form->handleRequest($request);
 
@@ -51,9 +50,7 @@ class ResetPasswordController extends AbstractController
     #[Route('/check-email', name: 'app_check_email')]
     public function checkEmail(): Response
     {
-        if (null === ($resetToken = $this->getTokenObjectFromSession())) {
-            $resetToken = $this->resetPasswordHelper->generateFakeResetToken();
-        }
+        $resetToken = $this->resetPasswordHelper->generateFakeResetToken();
 
         return $this->render('reset_password/check_email.html.twig', [
             'resetToken' => $resetToken,
@@ -66,29 +63,19 @@ class ResetPasswordController extends AbstractController
         UserPasswordHasherInterface $passwordHasher,
         TranslatorInterface $translator,
         MailerInterface $mailer,
-        ?string $token = null
+        string $token,
     ): Response {
-        if ($token) {
-            $this->storeTokenInSession($token);
-
-            return $this->redirectToRoute('app_reset_password');
-        }
-
-        $token = $this->getTokenFromSession();
-
-       if (null === $token) {
-    $this->addFlash('reset_password_error', 'Le lien de réinitialisation est invalide ou expiré.');
-
-    return $this->redirectToRoute('app_forgot_password_request');
-}
-
         try {
             /** @var User $user */
             $user = $this->resetPasswordHelper->validateTokenAndFetchUser($token);
         } catch (ResetPasswordExceptionInterface $exception) {
             $this->addFlash('reset_password_error', sprintf(
                 '%s - %s',
-                $translator->trans(ResetPasswordExceptionInterface::MESSAGE_PROBLEM_VALIDATE, [], 'ResetPasswordBundle'),
+                $translator->trans(
+                    ResetPasswordExceptionInterface::MESSAGE_PROBLEM_VALIDATE,
+                    [],
+                    'ResetPasswordBundle'
+                ),
                 $translator->trans($exception->getReason(), [], 'ResetPasswordBundle')
             ));
 
@@ -99,18 +86,19 @@ class ResetPasswordController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->resetPasswordHelper->removeResetRequest($token);
-
             $plainPassword = (string) $form->get('plainPassword')->getData();
 
             $user->setPassword($passwordHasher->hashPassword($user, $plainPassword));
-            $this->entityManager->flush();
 
-            $this->cleanSessionAfterReset();
+            $this->resetPasswordHelper->removeResetRequest($token);
+            $this->entityManager->flush();
 
             $this->sendPasswordChangedEmail($user, $mailer);
 
-            $this->addFlash('success', 'Votre mot de passe a bien été réinitialisé. Vous pouvez vous connecter.');
+            $this->addFlash(
+                'success',
+                'Votre mot de passe a bien été réinitialisé. Vous pouvez vous connecter.'
+            );
 
             return $this->redirectToRoute('app_login');
         }
@@ -123,13 +111,13 @@ class ResetPasswordController extends AbstractController
     private function processSendingPasswordResetEmail(
         string $emailFormData,
         MailerInterface $mailer,
-        TranslatorInterface $translator
+        TranslatorInterface $translator,
     ): RedirectResponse {
         $user = $this->entityManager->getRepository(User::class)->findOneBy([
             'email' => $emailFormData,
         ]);
 
-        if (!$user) {
+        if (!$user instanceof User) {
             return $this->redirectToRoute('app_check_email');
         }
 
@@ -149,8 +137,6 @@ class ResetPasswordController extends AbstractController
             ]);
 
         $mailer->send($email);
-
-        $this->setTokenObjectInSession($resetToken);
 
         return $this->redirectToRoute('app_check_email');
     }
