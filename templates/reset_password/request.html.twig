@@ -4,33 +4,50 @@
 {% endblock %}
 
 {% block body %}
-	<div class="reset-wrapper">
-		<div class="reset-card">
+	<div class="auth-page">
+		<div class="auth-card">
+			<h1 class="auth-title">Mot de passe oublié</h1>
+
 			{% for flash_error in app.flashes('reset_password_error') %}
-				<div class="reset-alert">
+				<div class="auth-error">
 					{{ flash_error }}
 				</div>
 			{% endfor %}
 
-			<h1 class="reset-title">Mot de passe oublié</h1>
-
-			<p class="reset-subtitle">
+			<p class="auth-helper text-center mb-4">
 				Entrez votre adresse email. Nous vous enverrons un lien sécurisé pour réinitialiser votre mot de passe.
 			</p>
 
-			{{ form_start(requestForm) }}
+			{{ form_start(requestForm, {
+                attr: {
+                    class: 'auth-form'
+                }
+            }) }}
 
-			{{ form_row(requestForm.email, {
-                    label: 'Adresse email'
-                }) }}
+			<div class="auth-field">
+				{{ form_label(requestForm.email, 'Adresse email', {
+                        label_attr: {
+                            class: 'auth-label'
+                        }
+                    }) }}
 
-			<button class="reset-btn">
+				{{ form_widget(requestForm.email, {
+                        attr: {
+                            class: 'auth-input',
+                            autocomplete: 'email'
+                        }
+                    }) }}
+
+				{{ form_errors(requestForm.email) }}
+			</div>
+
+			<button type="submit" class="auth-submit">
 				Envoyer le lien
 			</button>
 
 			{{ form_end(requestForm) }}
 
-			<div class="reset-back">
+			<div class="auth-link">
 				<a href="{{ path('app_login') }}">
 					Retour à la connexion
 				</a>
