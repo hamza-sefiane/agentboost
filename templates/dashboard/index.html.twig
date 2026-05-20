@@ -3,8 +3,19 @@
 {% block title %}Dashboard – AgentBoost
 {% endblock %}
 
-{% block body %}
+{% block stylesheets %}
+	{{ parent() }}
+	<link rel="stylesheet" href="{{ asset('styles/property-create.css') }}">
+	<link rel="stylesheet" href="{{ asset('styles/property-list.css') }}">
+{% endblock %}
 
+{% block javascripts %}
+	{{ parent() }}
+ <script type="module" src="{{ asset('js/property-create.js') }}"></script>
+	 <script type="module" src="{{ asset('js/property-list.js') }}"></script>
+{% endblock %}
+
+{% block body %}
 	<div class="dashboard-page">
 		<div class="dashboard-top">
 			<div class="dashboard-heading">

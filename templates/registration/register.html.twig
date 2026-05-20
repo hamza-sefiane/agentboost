@@ -1,6 +1,17 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}S'inscrire
+{% block title %}
+	S'inscrire
+{% endblock %}
+
+{% block stylesheets %}
+	{{ parent() }}
+	<link rel="stylesheet" href="{{ asset('styles/register.css') }}">
+{% endblock %}
+
+{% block javascripts %}
+	{{ parent() }}
+	 <script type="module" src="{{ asset('js/register.js') }}"></script>
 {% endblock %}
 
 {% block body %}
@@ -14,13 +25,10 @@
 				</div>
 			{% endfor %}
 
-			<form method="POST" action="{{ path('app_register') }}" id="registerForm" novalidate>
-
+			<form method="post" action="{{ path('app_register') }}" id="registerForm" novalidate>
 				<div class="auth-field">
 					<label for="email" class="auth-label">Email</label>
-
 					<input type="email" id="email" name="email" class="auth-input" autocomplete="email" required autofocus>
-
 					<div id="emailError" class="auth-error"></div>
 				</div>
 
@@ -36,7 +44,7 @@
 								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
 							</svg>
 
-							<svg id="eyeClosed" xmlns="http://www.w3.org/2000/svg" fill="none" viewbox="0 0 24 24" stroke="currentColor" style="display:none;">
+							<svg id="eyeClosed" xmlns="http://www.w3.org/2000/svg" fill="none" viewbox="0 0 24 24" stroke="currentColor" hidden>
 								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3l18 18"/>
 							</svg>
 						</button>
@@ -63,7 +71,7 @@
 								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
 							</svg>
 
-							<svg id="confirmEyeClosed" xmlns="http://www.w3.org/2000/svg" fill="none" viewbox="0 0 24 24" stroke="currentColor" style="display:none;">
+							<svg id="confirmEyeClosed" xmlns="http://www.w3.org/2000/svg" fill="none" viewbox="0 0 24 24" stroke="currentColor" hidden>
 								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3l18 18"/>
 							</svg>
 						</button>

@@ -1,17 +1,24 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Vérification email{% endblock %}
+{% block title %}
+	Vérification email
+{% endblock %}
+
+{% block stylesheets %}
+	{{ parent() }}
+	<link rel="stylesheet" href="{{ asset('styles/verify-email.css') }}">
+{% endblock %}
 
 {% block body %}
-    <div class="container py-5">
-        <h1>Vérifiez votre email</h1>
+	<div class="container py-5">
+		<h1>Vérifiez votre email</h1>
 
-        <p>
-            Votre compte a été créé. Un email vient de vous être envoyé.
-        </p>
+		<p>
+			Votre compte a été créé. Un email vient de vous être envoyé.
+		</p>
 
-        <p class="text-muted">
-            Vous devez valider votre email avant de choisir un abonnement.
-        </p>
-    </div>
+		<p class="text-muted">
+			Vous devez valider votre email avant de choisir un abonnement.
+		</p>
+	</div>
 {% endblock %}

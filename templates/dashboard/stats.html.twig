@@ -1,6 +1,12 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Statistiques
+{% block title %}
+	Statistiques
+{% endblock %}
+
+{% block stylesheets %}
+	{{ parent() }}
+	<link rel="stylesheet" href="{{ asset('styles/admin.css') }}">
 {% endblock %}
 
 {% block body %}

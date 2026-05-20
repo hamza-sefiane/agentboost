@@ -1,10 +1,15 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Compte supprimé – AgentBoost
+{% block title %}
+	Compte supprimé – AgentBoost
+{% endblock %}
+
+{% block stylesheets %}
+	{{ parent() }}
+	<link rel="stylesheet" href="{{ asset('styles/goodbye.css') }}">
 {% endblock %}
 
 {% block body %}
-
 	<div class="goodbye-wrapper">
 		<div class="goodbye-card">
 			<div class="goodbye-icon">

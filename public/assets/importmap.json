@@ -1,6 +1,6 @@
 {
     "app": {
-        "path": "\/assets\/app-r4OYagA.js",
+        "path": "\/assets\/app-HtQNg3v.js",
         "type": "js"
     },
     "\/assets\/bootstrap.js": {
@@ -20,80 +20,8 @@
         "type": "js"
     },
     "\/assets\/styles\/app.css": {
-        "path": "\/assets\/styles\/app-4dDF0Jl.css",
+        "path": "\/assets\/styles\/app-uyXzZCA.css",
         "type": "css"
-    },
-    "\/assets\/styles\/home.css": {
-        "path": "\/assets\/styles\/home-fjQWu5Q.css",
-        "type": "css"
-    },
-    "\/assets\/styles\/admin.css": {
-        "path": "\/assets\/styles\/admin-c_AEvv4.css",
-        "type": "css"
-    },
-    "\/assets\/styles\/property-create.css": {
-        "path": "\/assets\/styles\/property-create-I1EDH_L.css",
-        "type": "css"
-    },
-    "\/assets\/styles\/property-edit.css": {
-        "path": "\/assets\/styles\/property-edit-5uz7kdK.css",
-        "type": "css"
-    },
-    "\/assets\/styles\/property-list.css": {
-        "path": "\/assets\/styles\/property-list-nDp75ZB.css",
-        "type": "css"
-    },
-    "\/assets\/styles\/register.css": {
-        "path": "\/assets\/styles\/register-s_mYIMj.css",
-        "type": "css"
-    },
-    "\/assets\/styles\/reset-password.css": {
-        "path": "\/assets\/styles\/reset-password-a2OPE69.css",
-        "type": "css"
-    },
-    "\/assets\/styles\/goodbye.css": {
-        "path": "\/assets\/styles\/goodbye--yB0JSz.css",
-        "type": "css"
-    },
-    "\/assets\/styles\/login.css": {
-        "path": "\/assets\/styles\/login-b6StFR0.css",
-        "type": "css"
-    },
-    "\/assets\/styles\/contact.css": {
-        "path": "\/assets\/styles\/contact-jTl7vNf.css",
-        "type": "css"
-    },
-    "\/assets\/js\/home.js": {
-        "path": "\/assets\/js\/home-CKPoIij.js",
-        "type": "js"
-    },
-    "\/assets\/js\/admin.js": {
-        "path": "\/assets\/js\/admin-aWghGnB.js",
-        "type": "js"
-    },
-    "\/assets\/js\/property-create.js": {
-        "path": "\/assets\/js\/property-create-99dZKlC.js",
-        "type": "js"
-    },
-    "\/assets\/js\/property-edit.js": {
-        "path": "\/assets\/js\/property-edit-99dZKlC.js",
-        "type": "js"
-    },
-    "\/assets\/js\/property-list.js": {
-        "path": "\/assets\/js\/property-list-M6V8hYq.js",
-        "type": "js"
-    },
-    "\/assets\/js\/register.js": {
-        "path": "\/assets\/js\/register-IIkXYAn.js",
-        "type": "js"
-    },
-    "\/assets\/js\/reset-password.js": {
-        "path": "\/assets\/js\/reset-password-maoG0wF.js",
-        "type": "js"
-    },
-    "\/assets\/js\/login.js": {
-        "path": "\/assets\/js\/login-H-Ej8Jv.js",
-        "type": "js"
     },
     "@hotwired\/stimulus": {
         "path": "\/assets\/vendor\/@hotwired\/stimulus\/stimulus.index-S4zNcea.js",

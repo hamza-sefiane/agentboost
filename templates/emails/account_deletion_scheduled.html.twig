@@ -1,21 +1,24 @@
 <div style="margin:0; padding:0; background:#f3f6f9; font-family:Arial, Helvetica, sans-serif;">
 	<div style="max-width:640px; margin:0 auto; padding:36px 18px;">
+
 		<div style="background:#064663; border-radius:24px 24px 0 0; padding:26px 30px;">
-			<div style="color:#ffffff; font-size:24px; font-weight:900; letter-spacing:-0.4px;">
+			<div style="color:#ffffff; font-size:24px; font-weight:900;">
 				AgentBoost
 			</div>
+
 			<div style="color:#cfe8f3; font-size:14px; margin-top:6px;">
-				Gestion de votre abonnement
+				Gestion de votre compte
 			</div>
 		</div>
 
 		<div style="background:#ffffff; border:1px solid #e5e7eb; border-top:none; border-radius:0 0 24px 24px; padding:34px 30px;">
+
 			<div style="width:56px; height:56px; border-radius:18px; background:#fef3c7; color:#92400e; text-align:center; line-height:56px; font-size:26px; margin-bottom:22px;">
 				⚠️
 			</div>
 
-			<h1 style="margin:0 0 14px; color:#0f172a; font-size:28px; line-height:1.2; font-weight:900; letter-spacing:-0.6px;">
-				Résiliation programmée
+			<h1 style="margin:0 0 14px; color:#0f172a; font-size:28px; line-height:1.2; font-weight:900;">
+				Suppression programmée
 			</h1>
 
 			<p style="margin:0 0 18px; color:#475569; font-size:15px; line-height:1.7;">
@@ -23,18 +26,23 @@
 			</p>
 
 			<p style="margin:0 0 18px; color:#475569; font-size:15px; line-height:1.7;">
-				Votre abonnement AgentBoost a bien été programmé pour résiliation.
+				Votre demande de suppression de compte a bien été prise en compte.
 			</p>
 
 			<div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:16px; padding:18px; margin:28px 0;">
 				<p style="margin:0; color:#64748b; font-size:14px; line-height:1.6;">
-					Vous conservez l’accès à vos fonctionnalités jusqu’au
-					<strong style="color:#0f172a;">{{ periodEndDate|date('d/m/Y') }}</strong>.
+					Votre compte sera supprimé automatiquement à la fin de votre période d’abonnement
+					{% if deleteAt %}
+						le
+						<strong style="color:#0f172a;">{{ deleteAt|date('d/m/Y') }}</strong>.
+					{% else %}
+						.
+					{% endif %}
 				</p>
 			</div>
 
 			<p style="margin:0 0 28px; color:#475569; font-size:15px; line-height:1.7;">
-				Vous pouvez encore annuler cette résiliation depuis votre espace client tant que cette date n’est pas passée.
+				Vous pouvez encore annuler cette demande depuis votre espace client avant cette date.
 			</p>
 
 			<div style="text-align:center; margin:34px 0;">
@@ -46,8 +54,9 @@
 			<div style="height:1px; background:#e5e7eb; margin:28px 0;"></div>
 
 			<p style="margin:0; color:#94a3b8; font-size:13px; line-height:1.6;">
-				AgentBoost — estimations, annonces et documents immobiliers.
+				AgentBoost — estimation immobilière rapide et exploitable.
 			</p>
+
 		</div>
 	</div>
 </div>
