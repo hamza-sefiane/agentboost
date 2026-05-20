@@ -1,6 +1,17 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Modifier estimation
+{% block title %}
+	Modifier estimation
+{% endblock %}
+
+{% block stylesheets %}
+	{{ parent() }}
+	<link rel="stylesheet" href="{{ asset('styles/property-edit.css') }}">
+{% endblock %}
+
+{% block javascripts %}
+	{{ parent() }}
+	 <script type="module" src="{{ asset('js/property-edit.js') }}"></script>
 {% endblock %}
 
 {% block body %}
@@ -58,7 +69,7 @@
 		</div>
 
 		<div class="col-12">
-			<button class="btn btn-success">Enregistrer</button>
+			<button type="submit" class="btn btn-success">Enregistrer</button>
 			<a href="{{ path('dashboard') }}" class="btn btn-secondary">Retour</a>
 		</div>
 	</form>
@@ -76,7 +87,7 @@
 
 				<form method="post" action="{{ path('property_photo_delete', { id: photo.id }) }}" onsubmit="return confirm('Supprimer cette photo ?');" class="mt-2">
 					<input type="hidden" name="_token" value="{{ csrf_token('delete_property_photo_' ~ photo.id) }}">
-					<button class="btn btn-sm btn-danger w-100">Supprimer</button>
+					<button type="submit" class="btn btn-sm btn-danger w-100">Supprimer</button>
 				</form>
 			</div>
 		{% else %}

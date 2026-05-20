@@ -1,6 +1,12 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Email envoyé
+{% block title %}
+	Email envoyé
+{% endblock %}
+
+{% block stylesheets %}
+	{{ parent() }}
+	<link rel="stylesheet" href="{{ asset('styles/reset-password.css') }}">
 {% endblock %}
 
 {% block body %}
@@ -12,7 +18,7 @@
 
 			<p class="auth-text">
 				Si un compte correspond à cette adresse email, un lien de réinitialisation vient d’être envoyé.
-								                Ce lien expirera dans
+								Ce lien expirera dans
 				{{ resetToken.expirationMessageKey|trans(resetToken.expirationMessageData, 'ResetPasswordBundle') }}.
 			</p>
 

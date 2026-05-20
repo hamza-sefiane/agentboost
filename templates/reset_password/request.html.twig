@@ -1,10 +1,16 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Mot de passe oublié
+{% block title %}
+	Mot de passe oublié
+{% endblock %}
+
+{% block stylesheets %}
+	{{ parent() }}
+	<link rel="stylesheet" href="{{ asset('styles/reset-password.css') }}">
 {% endblock %}
 
 {% block body %}
-	<div class="auth-page">
+	<div class="auth-wrapper">
 		<div class="auth-card">
 			<h1 class="auth-title">Mot de passe oublié</h1>
 
@@ -19,24 +25,24 @@
 			</p>
 
 			{{ form_start(requestForm, {
-                attr: {
-                    class: 'auth-form'
-                }
-            }) }}
+				attr: {
+					class: 'auth-form'
+				}
+			}) }}
 
 			<div class="auth-field">
 				{{ form_label(requestForm.email, 'Adresse email', {
-                        label_attr: {
-                            class: 'auth-label'
-                        }
-                    }) }}
+					label_attr: {
+						class: 'auth-label'
+					}
+				}) }}
 
 				{{ form_widget(requestForm.email, {
-                        attr: {
-                            class: 'auth-input',
-                            autocomplete: 'email'
-                        }
-                    }) }}
+					attr: {
+						class: 'auth-input',
+						autocomplete: 'email'
+					}
+				}) }}
 
 				{{ form_errors(requestForm.email) }}
 			</div>
