@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-	Vérification email
+	{{ 'verify_email.meta.title'|trans }}
 {% endblock %}
 
 {% block stylesheets %}
@@ -11,14 +11,18 @@
 
 {% block body %}
 	<div class="container py-5">
-		<h1>Vérifiez votre email</h1>
+
+		<h1>
+			{{ 'verify_email.title'|trans }}
+		</h1>
 
 		<p>
-			Votre compte a été créé. Un email vient de vous être envoyé.
+			{{ 'verify_email.text.line_1'|trans }}
 		</p>
 
 		<p class="text-muted">
-			Vous devez valider votre email avant de choisir un abonnement.
+			{{ 'verify_email.text.line_2'|trans }}
 		</p>
+
 	</div>
 {% endblock %}

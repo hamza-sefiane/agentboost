@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-	Email envoyé
+	{{ 'reset_password.sent.meta.title'|trans }}
 {% endblock %}
 
 {% block stylesheets %}
@@ -12,29 +12,37 @@
 {% block body %}
 	<div class="auth-wrapper">
 		<div class="auth-card">
-			<div class="auth-badge">✓</div>
 
-			<h1 class="auth-title">Email envoyé</h1>
+			<div class="auth-badge">
+				✓
+			</div>
+
+			<h1 class="auth-title">
+				{{ 'reset_password.sent.title'|trans }}
+			</h1>
 
 			<p class="auth-text">
-				Si un compte correspond à cette adresse email, un lien de réinitialisation vient d’être envoyé.
-								Ce lien expirera dans
+				{{ 'reset_password.sent.text.line_1'|trans }}
+
 				{{ resetToken.expirationMessageKey|trans(resetToken.expirationMessageData, 'ResetPasswordBundle') }}.
 			</p>
 
 			<p class="auth-text mt-3">
-				Pensez à vérifier vos courriers indésirables.
+				{{ 'reset_password.sent.text.line_2'|trans }}
 			</p>
 
 			<div class="auth-actions">
+
 				<a href="{{ path('app_forgot_password_request') }}" class="btn btn-outline-success">
-					Renvoyer un lien
+					{{ 'reset_password.sent.actions.resend'|trans }}
 				</a>
 
 				<a href="{{ path('app_login') }}" class="btn btn-success">
-					Retour connexion
+					{{ 'reset_password.sent.actions.back_login'|trans }}
 				</a>
+
 			</div>
+
 		</div>
 	</div>
 {% endblock %}

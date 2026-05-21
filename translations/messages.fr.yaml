@@ -92,11 +92,9 @@ contact:
         email: "Email"
         subject: "Sujet"
         message: "Message"
-
         name_placeholder: "Votre nom"
         email_placeholder: "Votre adresse email"
         message_placeholder: "Décrivez votre demande..."
-
         submit: "Envoyer le message"
 
     subject:
@@ -107,60 +105,177 @@ contact:
         ai: "Fonctionnalité IA"
         other: "Autre"
 
-home:
+pricing:
     meta:
-        title: "AgentBoost – Estimations, annonces et documents pour agents immobiliers"
+        title: "Tarifs – AgentBoost"
 
-    hero:
-        kicker: "Outil métier pour agents immobiliers"
-        title_line_1: "Estimations, annonces et documents."
-        title_line_2: "Depuis un seul outil."
-        text: "AgentBoost aide les agents immobiliers à créer des estimations, générer des annonces assistées et produire des documents professionnels sans perdre des heures sur l’administratif."
-        note: "Pensé pour les indépendants, agences et professionnels terrain."
+    title: "Choisissez votre formule"
 
-    actions:
-        open_dashboard: "Ouvrir mon dashboard"
-        access_dashboard: "Accéder au dashboard"
-        choose_access: "Choisir mon accès"
-        create_estimation: "Créer une estimation"
-        view_offers: "Voir les offres"
+    subtitle_line_1: "Accès complet à AgentBoost."
+    subtitle_line_2: "Même outil, mêmes fonctionnalités. Seule la facturation change."
 
-    preview:
-        estimations: "estimations"
-        listings: "annonces"
-        pdf_ready: "PDF prêts"
-        apartment: "Appartement"
-        generate_listing: "Générer annonce"
-        pdf_estimation: "PDF estimation"
+    monthly:
+        title: "Mensuel"
+        period: "par mois"
+
+    yearly:
+        title: "Annuel"
+        period: "par an"
+        discount: "(2 mois offerts)"
 
     features:
-        estimation:
-            title: "Estimation rapide"
-            text: "Renseignez les informations clés du bien et obtenez une estimation structurée en quelques instants."
-        listings:
-            title: "Annonces assistées"
-            text: "Générez des textes d’annonces exploitables, clairs et adaptés au bien présenté."
-        pdf:
-            title: "PDF professionnel"
-            text: "Présentez vos estimations avec des documents propres, lisibles et crédibles."
-        dashboard:
-            title: "Dashboard centralisé"
-            text: "Retrouvez vos biens, estimations, annonces et documents au même endroit."
+        full_access: "Accès complet à l’outil"
+        no_commitment: "Sans engagement"
+        cancel_anytime: "Résiliable à tout moment"
+        instant_saving: "Économie immédiate"
+        yearly_billing: "Facturation annuelle"
 
-    workflow:
-        title: "Un flux simple, pensé pour le terrain."
-        text: "AgentBoost ne remplace pas votre expertise. Il vous aide à gagner du temps sur les tâches répétitives pour vous concentrer sur les clients et les mandats."
-        step_1:
-            title: "Ajoutez le bien"
-            text: "Type, surface, ville, pièces, photos et détails utiles."
-        step_2:
-            title: "Générez le contenu"
-            text: "Annonce assistée, estimation, mise en forme et supports commerciaux."
-        step_3:
-            title: "Exploitez vos documents"
-            text: "PDF, annonce, diffusion et suivi depuis votre espace AgentBoost."
+    actions:
+        dashboard: "Accéder au dashboard"
+        choose_monthly: "Choisir mensuel"
+        choose_yearly: "Choisir annuel"
+        create_account: "Créer un compte"
 
-    final_cta:
-        title_line_1: "Passez moins de temps à produire."
-        title_line_2: "Plus de temps à vendre."
-        text: "Créez votre première estimation et découvrez un workflow plus propre pour vos biens."        
+    footer:
+        line_1: "Aucun engagement. Annulation possible à tout moment."
+        line_2: "Paiement sécurisé via Stripe."
+
+    errors:
+        payment: "Erreur lors du paiement"
+
+verify_email:
+    meta:
+        title: "Vérification email"
+
+    title: "Vérifiez votre email"
+
+    text:
+        line_1: "Votre compte a été créé. Un email vient de vous être envoyé."
+        line_2: "Vous devez valider votre email avant de choisir un abonnement."
+
+register:
+    meta:
+        title: "S'inscrire"
+
+    title: "Inscription"
+
+    form:
+        email: "Email"
+        password: "Mot de passe"
+        confirm_password: "Confirmer le mot de passe"
+        show_password: "Afficher le mot de passe"
+        password_helper: "Minimum 8 caractères"
+        confirm_password_helper: "Retapez votre mot de passe"
+        submit: "Créer mon compte"
+
+    footer:
+        already_registered: "Déjà inscrit ?"
+        login: "Se connecter"
+
+forgot_password:
+    meta:
+        title: "Mot de passe oublié"
+
+    title: "Mot de passe oublié"
+
+    helper: "Entrez votre adresse email. Nous vous enverrons un lien sécurisé pour réinitialiser votre mot de passe."
+
+    form:
+        email: "Adresse email"
+        submit: "Envoyer le lien"
+
+    back_login: "Retour à la connexion"
+
+reset_password:
+    sent:
+        meta:
+            title: "Email envoyé"
+
+        title: "Email envoyé"
+
+        text:
+            line_1: "Si un compte correspond à cette adresse email, un lien de réinitialisation vient d’être envoyé. Ce lien expirera dans"
+            line_2: "Pensez à vérifier vos courriers indésirables."
+
+        actions:
+            resend: "Renvoyer un lien"
+            back_login: "Retour connexion"
+
+    new:
+        meta:
+            title: "Nouveau mot de passe"
+
+        title: "Nouveau mot de passe"
+
+        subtitle: "Choisissez un nouveau mot de passe sécurisé pour votre compte AgentBoost."
+
+        form:
+            password: "Nouveau mot de passe"
+            confirm_password: "Confirmer le nouveau mot de passe"
+            password_placeholder: "Votre nouveau mot de passe"
+            confirm_password_placeholder: "Confirmez le mot de passe"
+            show_password: "Afficher le mot de passe"
+            password_strength: "Sécurité du mot de passe"
+            submit: "Réinitialiser le mot de passe"
+
+        back_login: "Retour à la connexion"
+
+email:
+    verify:
+        meta:
+            title: "Confirmation email"
+
+        header:
+            subtitle: "Bienvenue sur AgentBoost"
+
+        title: "Confirmez votre adresse email"
+
+        text:
+            line_1: "Merci de votre inscription sur AgentBoost."
+            line_2: "Afin d’activer votre compte et sécuriser votre accès, veuillez confirmer votre adresse email en cliquant sur le bouton ci-dessous."
+
+        button: "Confirmer mon email"
+
+        notice: "Si vous n’êtes pas à l’origine de cette inscription, vous pouvez ignorer cet email."
+
+        footer: "AgentBoost — estimations immobilières, génération de documents et automatisation IA pour les professionnels de l’immobilier."
+
+    reset_password:
+        meta:
+            title: "Réinitialisation mot de passe"
+
+        header:
+            subtitle: "Estimation immobilière rapide et exploitable"
+
+        title: "Réinitialisez votre mot de passe"
+
+        text:
+            line_1: "Une demande de réinitialisation vient d’être effectuée pour votre compte AgentBoost."
+            line_2: "Cliquez sur le bouton ci-dessous pour définir un nouveau mot de passe sécurisé."
+
+        button: "Réinitialiser mon mot de passe"
+
+        expiration: "Ce lien expirera dans"
+
+        notice: "Si vous n’êtes pas à l’origine de cette demande, ignorez simplement cet email. Votre mot de passe actuel reste inchangé."
+
+        footer: "AgentBoost — sécurisez vos estimations, vos annonces et vos documents immobiliers."
+
+    password_changed:
+        meta:
+            title: "Mot de passe modifié"
+
+        header:
+            subtitle: "Sécurité et gestion de votre compte"
+
+        title: "Votre mot de passe a été modifié"
+
+        greeting: "Bonjour,"
+
+        text: "Le mot de passe de votre compte AgentBoost vient d’être modifié avec succès."
+
+        success_notice: "Si vous êtes à l’origine de cette modification, aucune action supplémentaire n’est nécessaire."
+
+        security_notice: "Si vous n’êtes pas à l’origine de cette action, changez immédiatement votre mot de passe et contactez le support AgentBoost."
+
+        footer: "AgentBoost — sécurisez vos estimations, vos annonces et vos documents immobiliers."

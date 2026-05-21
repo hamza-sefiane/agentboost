@@ -92,7 +92,6 @@ contact:
         email: "Correo electrónico"
         subject: "Asunto"
         message: "Mensaje"
-
         name_placeholder: "Su nombre"
         email_placeholder: "Su dirección de correo electrónico"
         message_placeholder: "Describa su solicitud..."
@@ -106,60 +105,177 @@ contact:
         ai: "Función IA"
         other: "Otro"
 
-home:
+pricing:
     meta:
-        title: "AgentBoost – Valoraciones, anuncios y documentos para agentes inmobiliarios"
+        title: "Precios – AgentBoost"
 
-    hero:
-        kicker: "Herramienta profesional para agentes inmobiliarios"
-        title_line_1: "Valoraciones, anuncios y documentos."
-        title_line_2: "Desde una sola herramienta."
-        text: "AgentBoost ayuda a los agentes inmobiliarios a crear valoraciones, generar anuncios asistidos y producir documentos profesionales sin perder horas en tareas administrativas."
-        note: "Pensado para independientes, agencias y profesionales de campo."
+    title: "Elija su plan"
 
-    actions:
-        open_dashboard: "Abrir mi panel"
-        access_dashboard: "Acceder al panel"
-        choose_access: "Elegir mi acceso"
-        create_estimation: "Crear una valoración"
-        view_offers: "Ver ofertas"
+    subtitle_line_1: "Acceso completo a AgentBoost."
+    subtitle_line_2: "La misma herramienta y funcionalidades. Solo cambia la facturación."
 
-    preview:
-        estimations: "valoraciones"
-        listings: "anuncios"
-        pdf_ready: "PDF listos"
-        apartment: "Apartamento"
-        generate_listing: "Generar anuncio"
-        pdf_estimation: "PDF valoración"
+    monthly:
+        title: "Mensual"
+        period: "por mes"
+
+    yearly:
+        title: "Anual"
+        period: "por año"
+        discount: "(2 meses gratis)"
 
     features:
-        estimation:
-            title: "Valoración rápida"
-            text: "Introduzca la información clave de la propiedad y obtenga una valoración estructurada en pocos instantes."
-        listings:
-            title: "Anuncios asistidos"
-            text: "Genere textos de anuncios claros, útiles y adaptados a la propiedad presentada."
-        pdf:
-            title: "PDF profesional"
-            text: "Presente sus valoraciones con documentos limpios, legibles y creíbles."
-        dashboard:
-            title: "Panel centralizado"
-            text: "Encuentre sus propiedades, valoraciones, anuncios y documentos en un solo lugar."
+        full_access: "Acceso completo a la plataforma"
+        no_commitment: "Sin compromiso"
+        cancel_anytime: "Cancelación en cualquier momento"
+        instant_saving: "Ahorro inmediato"
+        yearly_billing: "Facturación anual"
 
-    workflow:
-        title: "Un flujo simple, pensado para el terreno."
-        text: "AgentBoost no reemplaza su experiencia. Le ayuda a ahorrar tiempo en tareas repetitivas para centrarse en clientes y mandatos."
-        step_1:
-            title: "Añada la propiedad"
-            text: "Tipo, superficie, ciudad, habitaciones, fotos y detalles útiles."
-        step_2:
-            title: "Genere el contenido"
-            text: "Anuncio asistido, valoración, formato y materiales comerciales."
-        step_3:
-            title: "Utilice sus documentos"
-            text: "PDF, anuncios, difusión y seguimiento desde su espacio AgentBoost."
+    actions:
+        dashboard: "Acceder al panel"
+        choose_monthly: "Elegir mensual"
+        choose_yearly: "Elegir anual"
+        create_account: "Crear una cuenta"
 
-    final_cta:
-        title_line_1: "Dedique menos tiempo a producir."
-        title_line_2: "Más tiempo a vender."
-        text: "Cree su primera valoración y descubra un flujo de trabajo más limpio para sus propiedades."              
+    footer:
+        line_1: "Sin compromiso. Cancelación posible en cualquier momento."
+        line_2: "Pago seguro con Stripe."
+
+    errors:
+        payment: "Error durante el pago"
+
+verify_email:
+    meta:
+        title: "Verificación de correo"
+
+    title: "Verifique su correo electrónico"
+
+    text:
+        line_1: "Su cuenta ha sido creada. Se le ha enviado un correo electrónico."
+        line_2: "Debe verificar su correo antes de elegir una suscripción."
+
+register:
+    meta:
+        title: "Registrarse"
+
+    title: "Registro"
+
+    form:
+        email: "Correo electrónico"
+        password: "Contraseña"
+        confirm_password: "Confirmar contraseña"
+        show_password: "Mostrar contraseña"
+        password_helper: "Mínimo 8 caracteres"
+        confirm_password_helper: "Vuelva a escribir su contraseña"
+        submit: "Crear mi cuenta"
+
+    footer:
+        already_registered: "¿Ya está registrado?"
+        login: "Iniciar sesión"
+
+forgot_password:
+    meta:
+        title: "Contraseña olvidada"
+
+    title: "Contraseña olvidada"
+
+    helper: "Ingrese su dirección de correo electrónico. Le enviaremos un enlace seguro para restablecer su contraseña."
+
+    form:
+        email: "Correo electrónico"
+        submit: "Enviar enlace"
+
+    back_login: "Volver al inicio de sesión"
+
+reset_password:
+    sent:
+        meta:
+            title: "Correo enviado"
+
+        title: "Correo enviado"
+
+        text:
+            line_1: "Si existe una cuenta asociada a esta dirección de correo, se ha enviado un enlace de restablecimiento. Este enlace expirará en"
+            line_2: "Recuerde revisar su carpeta de spam."
+
+        actions:
+            resend: "Reenviar enlace"
+            back_login: "Volver al inicio de sesión"
+
+    new:
+        meta:
+            title: "Nueva contraseña"
+
+        title: "Nueva contraseña"
+
+        subtitle: "Elija una nueva contraseña segura para su cuenta AgentBoost."
+
+        form:
+            password: "Nueva contraseña"
+            confirm_password: "Confirmar nueva contraseña"
+            password_placeholder: "Su nueva contraseña"
+            confirm_password_placeholder: "Confirme la contraseña"
+            show_password: "Mostrar contraseña"
+            password_strength: "Seguridad de la contraseña"
+            submit: "Restablecer contraseña"
+
+        back_login: "Volver al inicio de sesión"
+
+email:
+    verify:
+        meta:
+            title: "Confirmación de correo"
+
+        header:
+            subtitle: "Bienvenido a AgentBoost"
+
+        title: "Confirme su dirección de correo"
+
+        text:
+            line_1: "Gracias por registrarse en AgentBoost."
+            line_2: "Para activar su cuenta y asegurar su acceso, confirme su dirección de correo haciendo clic en el botón inferior."
+
+        button: "Confirmar mi correo"
+
+        notice: "Si usted no es el origen de este registro, puede ignorar este correo."
+
+        footer: "AgentBoost — valoraciones inmobiliarias, generación de documentos y automatización IA para profesionales inmobiliarios."
+
+    reset_password:
+        meta:
+            title: "Restablecimiento de contraseña"
+
+        header:
+            subtitle: "Valoración inmobiliaria rápida y útil"
+
+        title: "Restablezca su contraseña"
+
+        text:
+            line_1: "Se ha solicitado un restablecimiento de contraseña para su cuenta AgentBoost."
+            line_2: "Haga clic en el botón inferior para definir una nueva contraseña segura."
+
+        button: "Restablecer mi contraseña"
+
+        expiration: "Este enlace expirará en"
+
+        notice: "Si usted no es el origen de esta solicitud, simplemente ignore este correo. Su contraseña actual permanecerá sin cambios."
+
+        footer: "AgentBoost — asegure sus valoraciones, anuncios y documentos inmobiliarios."
+
+    password_changed:
+        meta:
+            title: "Contraseña modificada"
+
+        header:
+            subtitle: "Seguridad y gestión de su cuenta"
+
+        title: "Su contraseña ha sido modificada"
+
+        greeting: "Hola,"
+
+        text: "La contraseña de su cuenta AgentBoost se ha modificado correctamente."
+
+        success_notice: "Si usted realizó esta modificación, no necesita hacer nada más."
+
+        security_notice: "Si usted no realizó esta acción, cambie su contraseña inmediatamente y contacte con el soporte de AgentBoost."
+
+        footer: "AgentBoost — asegure sus valoraciones, anuncios y documentos inmobiliarios." 

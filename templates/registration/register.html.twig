@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-	S'inscrire
+	{{ 'register.meta.title'|trans }}
 {% endblock %}
 
 {% block stylesheets %}
@@ -17,7 +17,9 @@
 {% block body %}
 	<div class="auth-page">
 		<div class="auth-card">
-			<h1 class="auth-title">Inscription</h1>
+			<h1 class="auth-title">
+				{{ 'register.title'|trans }}
+			</h1>
 
 			{% for message in app.flashes('error') %}
 				<div class="auth-flash">
@@ -27,18 +29,24 @@
 
 			<form method="post" action="{{ path('app_register') }}" id="registerForm" novalidate>
 				<div class="auth-field">
-					<label for="email" class="auth-label">Email</label>
+					<label for="email" class="auth-label">
+						{{ 'register.form.email'|trans }}
+					</label>
+
 					<input type="email" id="email" name="email" class="auth-input" autocomplete="email" required autofocus>
+
 					<div id="emailError" class="auth-error"></div>
 				</div>
 
 				<div class="auth-field">
-					<label for="password" class="auth-label">Mot de passe</label>
+					<label for="password" class="auth-label">
+						{{ 'register.form.password'|trans }}
+					</label>
 
 					<div class="auth-password-wrapper">
 						<input type="password" id="password" name="password" class="auth-input" autocomplete="new-password" required>
 
-						<button type="button" id="togglePassword1" class="auth-toggle-password" aria-label="Afficher le mot de passe">
+						<button type="button" id="togglePassword1" class="auth-toggle-password" aria-label="{{ 'register.form.show_password'|trans }}">
 							<svg id="eyeOpen" xmlns="http://www.w3.org/2000/svg" fill="none" viewbox="0 0 24 24" stroke="currentColor">
 								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
 								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
@@ -51,7 +59,7 @@
 					</div>
 
 					<div class="auth-helper">
-						Minimum 8 caractères
+						{{ 'register.form.password_helper'|trans }}
 					</div>
 
 					<div id="passwordError" class="auth-error"></div>
@@ -59,13 +67,13 @@
 
 				<div class="auth-field">
 					<label for="confirmPassword" class="auth-label">
-						Confirmer le mot de passe
+						{{ 'register.form.confirm_password'|trans }}
 					</label>
 
 					<div class="auth-password-wrapper">
 						<input type="password" id="confirmPassword" name="confirm_password" class="auth-input" autocomplete="new-password" required>
 
-						<button type="button" id="togglePassword2" class="auth-toggle-password" aria-label="Afficher le mot de passe">
+						<button type="button" id="togglePassword2" class="auth-toggle-password" aria-label="{{ 'register.form.show_password'|trans }}">
 							<svg id="confirmEyeOpen" xmlns="http://www.w3.org/2000/svg" fill="none" viewbox="0 0 24 24" stroke="currentColor">
 								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
 								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
@@ -78,20 +86,22 @@
 					</div>
 
 					<div class="auth-helper">
-						Retapez votre mot de passe
+						{{ 'register.form.confirm_password_helper'|trans }}
 					</div>
 
 					<div id="confirmPasswordError" class="auth-error"></div>
 				</div>
 
 				<button type="submit" class="auth-submit" id="submitButton">
-					Créer mon compte
+					{{ 'register.form.submit'|trans }}
 				</button>
 			</form>
 
 			<div class="auth-footer">
-				Déjà inscrit ?
-				<a href="{{ path('app_login') }}">Se connecter</a>
+				{{ 'register.footer.already_registered'|trans }}
+				<a href="{{ path('app_login') }}">
+					{{ 'register.footer.login'|trans }}
+				</a>
 			</div>
 		</div>
 	</div>
