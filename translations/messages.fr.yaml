@@ -1,0 +1,108 @@
+navbar:
+    pricing: "Tarifs"
+    login: "Connexion"
+    register: "Inscription"
+    logout: "Déconnexion"
+    dashboard: "Dashboard"
+    account: "Mon compte"
+    language: "Français"
+    properties: "Biens estimés"
+    listings: "Annonces"
+    documents: "Documents"
+    company_profile: "Modifier mes coordonnées"
+    subscription_manage: "Gérer mon abonnement"
+    delete_account: "Supprimer mon compte"
+    delete_account_confirm: "Supprimer définitivement votre compte ?"
+
+footer:
+    rights: "Tous droits réservés"
+    privacy: "Confidentialité"
+    contact: "Contact"
+
+dashboard:
+    title: "Nouvelle estimation"
+    subtitle: "Créez une estimation immobilière rapide et exploitable grâce à AgentBoost."
+    help: "Besoin d’aide ?"
+
+    subscription:
+        pro: "Offre actuelle"
+        active: "Accès premium actif"
+
+    stats:
+        estimated_properties: "Biens estimés"
+        current_total: "Total actuel"
+        estimations: "Estimations"
+        unlimited_offer: "Illimitées avec votre offre"
+        free_estimations: "Estimations gratuites"
+        remaining: "restante(s)"
+        ai_ads: "Annonces IA"
+        free_ai_ad: "Annonce IA gratuite"
+        current_offer: "Offre actuelle"
+        premium_active: "Accès premium actif"
+        upgrade: "Passer premium"
+
+    form:
+        property_info: "Informations du bien"
+        property_type: "Type de bien"
+        apartment: "Appartement"
+        house: "Maison"
+        land: "Terrain"
+        parking: "Parking"
+        address: "Adresse du bien"
+        full_address: "Adresse complète"
+        postal_code: "Code postal"
+        city: "Ville"
+        surface: "Surface (m²)"
+        rooms: "Nombre de pièces"
+        without_parking: "Sans parking"
+        with_parking: "Avec parking"
+        extra_details: "Détails supplémentaires"
+        optional: "(optionnel)"
+        extra_placeholder: "Ex : balcon, vue dégagée, cuisine équipée, proche gare, lumineux..."
+        photos: "Photos du bien"
+        upload_title: "Déposez vos photos ici"
+        upload_text: "JPG, PNG, WEBP. Maximum 5 photos."
+        estimate_button: "Estimer le bien"
+
+    ai:
+        title: "↯ Estimation rapide & IA"
+        text: "Obtenez une estimation structurée et des supports exploitables pour vos clients."
+        market_analysis: "Analyse du marché local"
+        clear_estimation: "Estimation claire"
+        pdf_report: "Rapport PDF généré"
+        ready_listing: "Annonce prête à retravailler"
+
+    security:
+        text: "Vos données sont sécurisées et ne sont jamais partagées."
+
+    annual:
+        title: "Passez à l’annuel et diffusez plus vite"
+        text: "Facebook, Leboncoin et PDF Premium inclus pour gagner du temps sur vos annonces."
+        button: "Passer à l’annuel"
+
+    properties:
+        title: "Mes biens estimés"
+
+contact:
+    title: "Contacter AgentBoost"
+    subtitle: "Une question concernant votre abonnement, un problème technique ou une fonctionnalité ? Notre équipe vous répond rapidement."
+
+    form:
+        name: "Nom"
+        email: "Email"
+        subject: "Sujet"
+        message: "Message"
+
+        name_placeholder: "Votre nom"
+        email_placeholder: "Votre adresse email"
+        message_placeholder: "Décrivez votre demande..."
+
+        submit: "Envoyer le message"
+
+    subject:
+        subscription: "Abonnement"
+        billing: "Facturation"
+        bug: "Bug technique"
+        valuation: "Estimation immobilière"
+        ai: "Fonctionnalité IA"
+        other: "Autre"

@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-	Contact
+	{{ 'contact.title'|trans }}
 {% endblock %}
 
 {% block stylesheets %}
@@ -12,12 +12,14 @@
 {% block body %}
 	<div class="contact-page">
 		<div class="contact-container">
+
 			<div class="contact-header">
-				<h1>Contacter AgentBoost</h1>
+				<h1>
+					{{ 'contact.title'|trans }}
+				</h1>
 
 				<p>
-					Une question concernant votre abonnement, un problème technique ou une fonctionnalité ?
-										Notre équipe vous répond rapidement.
+					{{ 'contact.subtitle'|trans }}
 				</p>
 			</div>
 
@@ -28,56 +30,66 @@
 			{% endfor %}
 
 			<div class="contact-card">
+
 				{{ form_start(contactForm) }}
 
 				<div class="mb-4">
 					{{ form_label(contactForm.name) }}
+
 					{{ form_widget(contactForm.name, {
 						attr: {
 							class: 'form-control',
-							placeholder: 'Votre nom'
+							placeholder: 'contact.form.name_placeholder'|trans
 						}
 					}) }}
+
 					{{ form_errors(contactForm.name) }}
 				</div>
 
 				<div class="mb-4">
 					{{ form_label(contactForm.email) }}
+
 					{{ form_widget(contactForm.email, {
 						attr: {
 							class: 'form-control',
-							placeholder: 'Votre adresse email'
+							placeholder: 'contact.form.email_placeholder'|trans
 						}
 					}) }}
+
 					{{ form_errors(contactForm.email) }}
 				</div>
 
 				<div class="mb-4">
 					{{ form_label(contactForm.subject) }}
+
 					{{ form_widget(contactForm.subject, {
 						attr: {
 							class: 'form-select'
 						}
 					}) }}
+
 					{{ form_errors(contactForm.subject) }}
 				</div>
 
 				<div class="mb-4">
 					{{ form_label(contactForm.message) }}
+
 					{{ form_widget(contactForm.message, {
 						attr: {
 							class: 'form-control',
-							placeholder: 'Décrivez votre demande...'
+							placeholder: 'contact.form.message_placeholder'|trans
 						}
 					}) }}
+
 					{{ form_errors(contactForm.message) }}
 				</div>
 
 				<button type="submit" class="contact-submit-btn">
-					Envoyer le message
+					{{ 'contact.form.submit'|trans }}
 				</button>
 
 				{{ form_end(contactForm) }}
+
 			</div>
 		</div>
 	</div>
