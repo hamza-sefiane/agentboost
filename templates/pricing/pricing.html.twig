@@ -1,127 +1,144 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Tarifs – AgentBoost{% endblock %}
+{% block title %}
+	{{ 'pricing.meta.title'|trans }}
+{% endblock %}
 
 {% block body %}
 
-<section class="container py-5 text-center">
-    <h1 class="fw-bold mb-3">Choisissez votre formule</h1>
-    <p class="lead">
-        Accès complet à AgentBoost.<br>
-        Même outil, mêmes fonctionnalités. Seule la facturation change.
-    </p>
-</section>
+	<section class="container py-5 text-center">
+		<h1 class="fw-bold mb-3">
+			{{ 'pricing.title'|trans }}
+		</h1>
 
-<section class="container py-5">
-    <div class="row justify-content-center g-4">
+		<p class="lead">
+			{{ 'pricing.subtitle_line_1'|trans }}<br>
+			{{ 'pricing.subtitle_line_2'|trans }}
+		</p>
+	</section>
 
-        <!-- MENSUEL -->
-        <div class="col-md-4">
-            <div class="card h-100 text-center shadow-sm">
-                <div class="card-body p-4">
-                    <h4 class="mb-3">Mensuel</h4>
-                    <div class="display-6 fw-bold">29 €</div>
-                    <p class="text-muted">par mois</p>
+	<section class="container py-5">
+		<div class="row justify-content-center g-4">
 
-                    <ul class="list-unstyled my-4">
-                        <li>✔️ Accès complet à l’outil</li>
-                        <li>✔️ Sans engagement</li>
-                        <li>✔️ Résiliable à tout moment</li>
-                    </ul>
-                    {% if app.user and app.user.isActive %}
-                        <a href="{{ path('dashboard') }}" class="btn btn-outline-secondary w-100">
-                            Accéder au dashboard
-                        </a>
-                    {% elseif app.user %}
-                        <button class="btn btn-outline-success w-100"
-                                data-plan="monthly">
-                            Choisir mensuel
-                        </button>
-                    {% else %}
-                        <a href="{{ path('app_register') }}" class="btn btn-outline-success w-100">
-                            Créer un compte
-                        </a>
-                    {% endif %}
-                </div>
-            </div>
-        </div>
+			<div class="col-md-4">
+				<div class="card h-100 text-center shadow-sm">
+					<div class="card-body p-4">
+						<h4 class="mb-3">{{ 'pricing.monthly.title'|trans }}</h4>
 
-        <!-- ANNUEL -->
-        <div class="col-md-4">
-            <div class="card h-100 text-center shadow border-success">
-                <div class="card-body p-4">
-                    <h4 class="mb-3">Annuel</h4>
-                    <div class="display-6 fw-bold">290 €</div>
-                    <p class="text-muted">par an<br><small>(2 mois offerts)</small></p>
+						<div class="display-6 fw-bold">29 €</div>
 
-                    <ul class="list-unstyled my-4">
-                        <li>✔️ Accès complet à l’outil</li>
-                        <li>✔️ Économie immédiate</li>
-                        <li>✔️ Facturation annuelle</li>
-                    </ul>
+						<p class="text-muted">
+							{{ 'pricing.monthly.period'|trans }}
+						</p>
 
-                    {% if app.user and app.user.isActive %}
-                        <a href="{{ path('dashboard') }}" class="btn btn-secondary w-100">
-                            Accéder au dashboard
-                        </a>
-                    {% elseif app.user %}
-                        <button class="btn btn-success w-100"
-                                data-plan="yearly">
-                            Choisir annuel
-                        </button>
-                    {% else %}
-                        <a href="{{ path('app_register') }}" class="btn btn-success w-100">
-                            Créer un compte
-                        </a>
-                    {% endif %}
-                </div>
-            </div>
-        </div>
+						<ul class="list-unstyled my-4">
+							<li>✔️
+								{{ 'pricing.features.full_access'|trans }}</li>
+							<li>✔️
+								{{ 'pricing.features.no_commitment'|trans }}</li>
+							<li>✔️
+								{{ 'pricing.features.cancel_anytime'|trans }}</li>
+						</ul>
 
-    </div>
-</section>
+						{% if app.user and app.user.isActive %}
+							<a href="{{ path('dashboard') }}" class="btn btn-outline-secondary w-100">
+								{{ 'pricing.actions.dashboard'|trans }}
+							</a>
+						{% elseif app.user %}
+							<button class="btn btn-outline-success w-100" data-plan="monthly">
+								{{ 'pricing.actions.choose_monthly'|trans }}
+							</button>
+						{% else %}
+							<a href="{{ path('app_register') }}" class="btn btn-outline-success w-100">
+								{{ 'pricing.actions.create_account'|trans }}
+							</a>
+						{% endif %}
+					</div>
+				</div>
+			</div>
 
-<section class="container py-5 text-center">
-    <p class="text-muted">
-        Aucun engagement. Annulation possible à tout moment.<br>
-        Paiement sécurisé via Stripe.
-    </p>
-</section>
+			<div class="col-md-4">
+				<div class="card h-100 text-center shadow border-success">
+					<div class="card-body p-4">
+						<h4 class="mb-3">{{ 'pricing.yearly.title'|trans }}</h4>
 
-{% if app.user %}
-    <script src="https://js.stripe.com/v3/"></script>
-    <script>
-        const stripe = Stripe("{{ stripe_public_key }}");
+						<div class="display-6 fw-bold">290 €</div>
 
-        document.querySelectorAll('[data-plan]').forEach(button => {
-            button.addEventListener('click', async () => {
-                const plan = button.dataset.plan;
+						<p class="text-muted">
+							{{ 'pricing.yearly.period'|trans }}<br>
+							<small>{{ 'pricing.yearly.discount'|trans }}</small>
+						</p>
 
-                try {
-                    const response = await fetch(`/subscribe/${plan}/checkout`, {
-                        method: 'POST',
-                        headers: { 'Accept': 'application/json' }
-                    });
+						<ul class="list-unstyled my-4">
+							<li>✔️
+								{{ 'pricing.features.full_access'|trans }}</li>
+							<li>✔️
+								{{ 'pricing.features.instant_saving'|trans }}</li>
+							<li>✔️
+								{{ 'pricing.features.yearly_billing'|trans }}</li>
+						</ul>
 
-                    if (!response.ok) {
-                        throw new Error('Erreur serveur');
-                    }
+						{% if app.user and app.user.isActive %}
+							<a href="{{ path('dashboard') }}" class="btn btn-secondary w-100">
+								{{ 'pricing.actions.dashboard'|trans }}
+							</a>
+						{% elseif app.user %}
+							<button class="btn btn-success w-100" data-plan="yearly">
+								{{ 'pricing.actions.choose_yearly'|trans }}
+							</button>
+						{% else %}
+							<a href="{{ path('app_register') }}" class="btn btn-success w-100">
+								{{ 'pricing.actions.create_account'|trans }}
+							</a>
+						{% endif %}
+					</div>
+				</div>
+			</div>
 
-                    const data = await response.json();
+		</div>
+	</section>
 
-                    if (!data.id) {
-                        throw new Error('Session Stripe invalide');
-                    }
+	<section class="container py-5 text-center">
+		<p class="text-muted">
+			{{ 'pricing.footer.line_1'|trans }}<br>
+			{{ 'pricing.footer.line_2'|trans }}
+		</p>
+	</section>
 
-                    await stripe.redirectToCheckout({ sessionId: data.id });
-
-                } catch (e) {
-                    console.error(e);
-                    alert('Erreur lors du paiement');
-                }
-            });
-        });
-    </script>
-{% endif %}
+	{% if app.user %} <script src="https://js.stripe.com/v3/"></script>
+		 <script>
+				const stripe = Stripe("{{ stripe_public_key }}");
+		
+				document.querySelectorAll('[data-plan]').forEach((button) => {
+					button.addEventListener('click', async () => {
+						const plan = button.dataset.plan;
+		
+						try {
+							const response = await fetch(`/subscribe/${plan}/checkout`, {
+								method: 'POST',
+								headers: {
+									'Accept': 'application/json'
+								}
+							});
+		
+							if (!response.ok) {
+								throw new Error('Server error');
+							}
+		
+							const data = await response.json();
+		
+							if (!data.id) {
+								throw new Error('Invalid Stripe session');
+							}
+		
+							await stripe.redirectToCheckout({ sessionId: data.id });
+						} catch (error) {
+							console.error(error);
+							alert('{{ 'pricing.errors.payment'|trans }}');
+						}
+					});
+				});
+			</script>
+	{% endif %}
 
 {% endblock %}

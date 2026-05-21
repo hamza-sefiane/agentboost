@@ -92,7 +92,6 @@ contact:
         email: "Email"
         subject: "Subject"
         message: "Message"
-
         name_placeholder: "Your name"
         email_placeholder: "Your email address"
         message_placeholder: "Describe your request..."
@@ -106,60 +105,177 @@ contact:
         ai: "AI feature"
         other: "Other"
 
-home:
+pricing:
     meta:
-        title: "AgentBoost – Valuations, listings and documents for real estate agents"
+        title: "Pricing – AgentBoost"
 
-    hero:
-        kicker: "Professional tool for real estate agents"
-        title_line_1: "Valuations, listings and documents."
-        title_line_2: "From one single tool."
-        text: "AgentBoost helps real estate agents create valuations, generate assisted listings and produce professional documents without wasting hours on administration."
-        note: "Designed for independents, agencies and field professionals."
+    title: "Choose your plan"
 
-    actions:
-        open_dashboard: "Open my dashboard"
-        access_dashboard: "Access dashboard"
-        choose_access: "Choose my access"
-        create_estimation: "Create a valuation"
-        view_offers: "View pricing"
+    subtitle_line_1: "Full access to AgentBoost."
+    subtitle_line_2: "Same tool, same features. Only the billing changes."
 
-    preview:
-        estimations: "valuations"
-        listings: "listings"
-        pdf_ready: "ready PDFs"
-        apartment: "Apartment"
-        generate_listing: "Generate listing"
-        pdf_estimation: "Valuation PDF"
+    monthly:
+        title: "Monthly"
+        period: "per month"
+
+    yearly:
+        title: "Yearly"
+        period: "per year"
+        discount: "(2 months free)"
 
     features:
-        estimation:
-            title: "Fast valuation"
-            text: "Enter the key property details and get a structured valuation within seconds."
-        listings:
-            title: "Assisted listings"
-            text: "Generate clear, usable listing texts adapted to the presented property."
-        pdf:
-            title: "Professional PDF"
-            text: "Present your valuations with clean, readable and credible documents."
-        dashboard:
-            title: "Centralized dashboard"
-            text: "Find your properties, valuations, listings and documents in one place."
+        full_access: "Full access to the platform"
+        no_commitment: "No commitment"
+        cancel_anytime: "Cancel anytime"
+        instant_saving: "Instant savings"
+        yearly_billing: "Yearly billing"
 
-    workflow:
-        title: "A simple workflow built for the field."
-        text: "AgentBoost does not replace your expertise. It helps you save time on repetitive tasks so you can focus on clients and mandates."
-        step_1:
-            title: "Add the property"
-            text: "Type, surface area, city, rooms, photos and useful details."
-        step_2:
-            title: "Generate content"
-            text: "Assisted listing, valuation, formatting and sales materials."
-        step_3:
-            title: "Use your documents"
-            text: "PDFs, listings, publishing and tracking from your AgentBoost space."
+    actions:
+        dashboard: "Access dashboard"
+        choose_monthly: "Choose monthly"
+        choose_yearly: "Choose yearly"
+        create_account: "Create an account"
 
-    final_cta:
-        title_line_1: "Spend less time producing."
-        title_line_2: "More time selling."
-        text: "Create your first valuation and discover a cleaner workflow for your properties."        
+    footer:
+        line_1: "No commitment. Cancel anytime."
+        line_2: "Secure payment with Stripe."
+
+    errors:
+        payment: "Payment error"
+
+verify_email:
+    meta:
+        title: "Email verification"
+
+    title: "Verify your email"
+
+    text:
+        line_1: "Your account has been created. An email has just been sent to you."
+        line_2: "You must verify your email before choosing a subscription."
+
+register:
+    meta:
+        title: "Sign up"
+
+    title: "Sign up"
+
+    form:
+        email: "Email"
+        password: "Password"
+        confirm_password: "Confirm password"
+        show_password: "Show password"
+        password_helper: "Minimum 8 characters"
+        confirm_password_helper: "Retype your password"
+        submit: "Create my account"
+
+    footer:
+        already_registered: "Already registered?"
+        login: "Log in"
+
+forgot_password:
+    meta:
+        title: "Forgot password"
+
+    title: "Forgot password"
+
+    helper: "Enter your email address. We will send you a secure link to reset your password."
+
+    form:
+        email: "Email address"
+        submit: "Send link"
+
+    back_login: "Back to login"
+
+reset_password:
+    sent:
+        meta:
+            title: "Email sent"
+
+        title: "Email sent"
+
+        text:
+            line_1: "If an account matches this email address, a reset link has just been sent. This link will expire in"
+            line_2: "Remember to check your spam folder."
+
+        actions:
+            resend: "Resend link"
+            back_login: "Back to login"
+
+    new:
+        meta:
+            title: "New password"
+
+        title: "New password"
+
+        subtitle: "Choose a new secure password for your AgentBoost account."
+
+        form:
+            password: "New password"
+            confirm_password: "Confirm new password"
+            password_placeholder: "Your new password"
+            confirm_password_placeholder: "Confirm password"
+            show_password: "Show password"
+            password_strength: "Password strength"
+            submit: "Reset password"
+
+        back_login: "Back to login"
+
+email:
+    verify:
+        meta:
+            title: "Email confirmation"
+
+        header:
+            subtitle: "Welcome to AgentBoost"
+
+        title: "Confirm your email address"
+
+        text:
+            line_1: "Thank you for registering on AgentBoost."
+            line_2: "To activate your account and secure your access, please confirm your email address by clicking the button below."
+
+        button: "Confirm my email"
+
+        notice: "If you are not the origin of this registration, you can ignore this email."
+
+        footer: "AgentBoost — real estate valuations, document generation and AI automation for real estate professionals."
+
+    reset_password:
+        meta:
+            title: "Password reset"
+
+        header:
+            subtitle: "Fast and actionable real estate valuation"
+
+        title: "Reset your password"
+
+        text:
+            line_1: "A password reset request has been made for your AgentBoost account."
+            line_2: "Click the button below to define a new secure password."
+
+        button: "Reset my password"
+
+        expiration: "This link will expire in"
+
+        notice: "If you are not the origin of this request, simply ignore this email. Your current password remains unchanged."
+
+        footer: "AgentBoost — secure your valuations, listings and real estate documents."
+
+    password_changed:
+        meta:
+            title: "Password changed"
+
+        header:
+            subtitle: "Account security and management"
+
+        title: "Your password has been changed"
+
+        greeting: "Hello,"
+
+        text: "The password for your AgentBoost account has been successfully changed."
+
+        success_notice: "If you made this change, no further action is required."
+
+        security_notice: "If you did not make this change, change your password immediately and contact AgentBoost support."
+
+        footer: "AgentBoost — secure your valuations, listings and real estate documents."

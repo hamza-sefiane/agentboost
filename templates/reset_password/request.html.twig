@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-	Mot de passe oublié
+	{{ 'forgot_password.meta.title'|trans }}
 {% endblock %}
 
 {% block stylesheets %}
@@ -12,7 +12,10 @@
 {% block body %}
 	<div class="auth-wrapper">
 		<div class="auth-card">
-			<h1 class="auth-title">Mot de passe oublié</h1>
+
+			<h1 class="auth-title">
+				{{ 'forgot_password.title'|trans }}
+			</h1>
 
 			{% for flash_error in app.flashes('reset_password_error') %}
 				<div class="auth-error">
@@ -21,7 +24,7 @@
 			{% endfor %}
 
 			<p class="auth-helper text-center mb-4">
-				Entrez votre adresse email. Nous vous enverrons un lien sécurisé pour réinitialiser votre mot de passe.
+				{{ 'forgot_password.helper'|trans }}
 			</p>
 
 			{{ form_start(requestForm, {
@@ -31,7 +34,8 @@
 			}) }}
 
 			<div class="auth-field">
-				{{ form_label(requestForm.email, 'Adresse email', {
+
+				{{ form_label(requestForm.email, 'forgot_password.form.email'|trans, {
 					label_attr: {
 						class: 'auth-label'
 					}
@@ -45,19 +49,21 @@
 				}) }}
 
 				{{ form_errors(requestForm.email) }}
+
 			</div>
 
 			<button type="submit" class="auth-submit">
-				Envoyer le lien
+				{{ 'forgot_password.form.submit'|trans }}
 			</button>
 
 			{{ form_end(requestForm) }}
 
 			<div class="auth-link">
 				<a href="{{ path('app_login') }}">
-					Retour à la connexion
+					{{ 'forgot_password.back_login'|trans }}
 				</a>
 			</div>
+
 		</div>
 	</div>
 {% endblock %}

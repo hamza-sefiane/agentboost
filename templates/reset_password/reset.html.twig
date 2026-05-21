@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-	Nouveau mot de passe
+	{{ 'reset_password.new.meta.title'|trans }}
 {% endblock %}
 
 {% block stylesheets %}
@@ -17,12 +17,17 @@
 {% block body %}
 	<div class="auth-wrapper">
 		<div class="auth-card">
-			<div class="auth-badge">🔒</div>
 
-			<h1 class="auth-title">Nouveau mot de passe</h1>
+			<div class="auth-badge">
+				🔒
+			</div>
+
+			<h1 class="auth-title">
+				{{ 'reset_password.new.title'|trans }}
+			</h1>
 
 			<p class="auth-subtitle">
-				Choisissez un nouveau mot de passe sécurisé pour votre compte AgentBoost.
+				{{ 'reset_password.new.subtitle'|trans }}
 			</p>
 
 			{{ form_start(resetForm, {
@@ -34,22 +39,25 @@
 			{{ form_errors(resetForm) }}
 
 			<div class="auth-field">
+
 				<label class="auth-label">
-					Nouveau mot de passe
+					{{ 'reset_password.new.form.password'|trans }}
 				</label>
 
 				<div class="password-wrapper">
+
 					{{ form_widget(resetForm.plainPassword.first, {
 						attr: {
 							autocomplete: 'new-password',
 							class: 'password-input js-password-input',
-							placeholder: 'Votre nouveau mot de passe'
+							placeholder: 'reset_password.new.form.password_placeholder'|trans
 						}
 					}) }}
 
-					<button type="button" class="password-toggle" aria-label="Afficher le mot de passe">
+					<button type="button" class="password-toggle" aria-label="{{ 'reset_password.new.form.show_password'|trans }}">
 						<i class="bi bi-eye"></i>
 					</button>
+
 				</div>
 
 				<div class="password-strength">
@@ -60,47 +68,54 @@
 				</div>
 
 				<div class="password-strength-label" id="password-strength-label">
-					Sécurité du mot de passe
+					{{ 'reset_password.new.form.password_strength'|trans }}
 				</div>
 
 				<div class="auth-errors">
 					{{ form_errors(resetForm.plainPassword.first) }}
 				</div>
+
 			</div>
 
 			<div class="auth-field">
+
 				<label class="auth-label">
-					Confirmer le nouveau mot de passe
+					{{ 'reset_password.new.form.confirm_password'|trans }}
 				</label>
 
 				<div class="password-wrapper">
+
 					{{ form_widget(resetForm.plainPassword.second, {
 						attr: {
 							autocomplete: 'new-password',
 							class: 'password-input',
-							placeholder: 'Confirmez le mot de passe'
+							placeholder: 'reset_password.new.form.confirm_password_placeholder'|trans
 						}
 					}) }}
 
-					<button type="button" class="password-toggle" aria-label="Afficher le mot de passe">
+					<button type="button" class="password-toggle" aria-label="{{ 'reset_password.new.form.show_password'|trans }}">
 						<i class="bi bi-eye"></i>
 					</button>
+
 				</div>
 
 				<div class="auth-errors">
 					{{ form_errors(resetForm.plainPassword.second) }}
 				</div>
+
 			</div>
 
 			<button type="submit" class="auth-submit">
-				Réinitialiser le mot de passe
+				{{ 'reset_password.new.form.submit'|trans }}
 			</button>
 
 			{{ form_end(resetForm) }}
 
 			<a href="{{ path('app_login') }}" class="auth-back">
-				← Retour à la connexion
+				←
+				{{ 'reset_password.new.back_login'|trans }}
 			</a>
+
 		</div>
 	</div>
 {% endblock %}
