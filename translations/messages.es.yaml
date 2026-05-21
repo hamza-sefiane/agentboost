@@ -104,4 +104,62 @@ contact:
         bug: "Error técnico"
         valuation: "Valoración inmobiliaria"
         ai: "Función IA"
-        other: "Otro"      
+        other: "Otro"
+
+home:
+    meta:
+        title: "AgentBoost – Valoraciones, anuncios y documentos para agentes inmobiliarios"
+
+    hero:
+        kicker: "Herramienta profesional para agentes inmobiliarios"
+        title_line_1: "Valoraciones, anuncios y documentos."
+        title_line_2: "Desde una sola herramienta."
+        text: "AgentBoost ayuda a los agentes inmobiliarios a crear valoraciones, generar anuncios asistidos y producir documentos profesionales sin perder horas en tareas administrativas."
+        note: "Pensado para independientes, agencias y profesionales de campo."
+
+    actions:
+        open_dashboard: "Abrir mi panel"
+        access_dashboard: "Acceder al panel"
+        choose_access: "Elegir mi acceso"
+        create_estimation: "Crear una valoración"
+        view_offers: "Ver ofertas"
+
+    preview:
+        estimations: "valoraciones"
+        listings: "anuncios"
+        pdf_ready: "PDF listos"
+        apartment: "Apartamento"
+        generate_listing: "Generar anuncio"
+        pdf_estimation: "PDF valoración"
+
+    features:
+        estimation:
+            title: "Valoración rápida"
+            text: "Introduzca la información clave de la propiedad y obtenga una valoración estructurada en pocos instantes."
+        listings:
+            title: "Anuncios asistidos"
+            text: "Genere textos de anuncios claros, útiles y adaptados a la propiedad presentada."
+        pdf:
+            title: "PDF profesional"
+            text: "Presente sus valoraciones con documentos limpios, legibles y creíbles."
+        dashboard:
+            title: "Panel centralizado"
+            text: "Encuentre sus propiedades, valoraciones, anuncios y documentos en un solo lugar."
+
+    workflow:
+        title: "Un flujo simple, pensado para el terreno."
+        text: "AgentBoost no reemplaza su experiencia. Le ayuda a ahorrar tiempo en tareas repetitivas para centrarse en clientes y mandatos."
+        step_1:
+            title: "Añada la propiedad"
+            text: "Tipo, superficie, ciudad, habitaciones, fotos y detalles útiles."
+        step_2:
+            title: "Genere el contenido"
+            text: "Anuncio asistido, valoración, formato y materiales comerciales."
+        step_3:
+            title: "Utilice sus documentos"
+            text: "PDF, anuncios, difusión y seguimiento desde su espacio AgentBoost."
+
+    final_cta:
+        title_line_1: "Dedique menos tiempo a producir."
+        title_line_2: "Más tiempo a vender."
+        text: "Cree su primera valoración y descubra un flujo de trabajo más limpio para sus propiedades."              

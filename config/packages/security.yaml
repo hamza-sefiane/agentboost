@@ -31,7 +31,8 @@ security:
 
     access_control:
         - { path: ^/stripe/webhook, roles: PUBLIC_ACCESS }
-
+        
+        - { path: ^/change-locale, roles: PUBLIC_ACCESS }
         - { path: ^/$, roles: PUBLIC_ACCESS }
         - { path: ^/pricing, roles: PUBLIC_ACCESS }
         - { path: ^/login, roles: PUBLIC_ACCESS }

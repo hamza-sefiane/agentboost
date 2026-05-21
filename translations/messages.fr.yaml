@@ -106,3 +106,61 @@ contact:
         valuation: "Estimation immobilière"
         ai: "Fonctionnalité IA"
         other: "Autre"
+
+home:
+    meta:
+        title: "AgentBoost – Estimations, annonces et documents pour agents immobiliers"
+
+    hero:
+        kicker: "Outil métier pour agents immobiliers"
+        title_line_1: "Estimations, annonces et documents."
+        title_line_2: "Depuis un seul outil."
+        text: "AgentBoost aide les agents immobiliers à créer des estimations, générer des annonces assistées et produire des documents professionnels sans perdre des heures sur l’administratif."
+        note: "Pensé pour les indépendants, agences et professionnels terrain."
+
+    actions:
+        open_dashboard: "Ouvrir mon dashboard"
+        access_dashboard: "Accéder au dashboard"
+        choose_access: "Choisir mon accès"
+        create_estimation: "Créer une estimation"
+        view_offers: "Voir les offres"
+
+    preview:
+        estimations: "estimations"
+        listings: "annonces"
+        pdf_ready: "PDF prêts"
+        apartment: "Appartement"
+        generate_listing: "Générer annonce"
+        pdf_estimation: "PDF estimation"
+
+    features:
+        estimation:
+            title: "Estimation rapide"
+            text: "Renseignez les informations clés du bien et obtenez une estimation structurée en quelques instants."
+        listings:
+            title: "Annonces assistées"
+            text: "Générez des textes d’annonces exploitables, clairs et adaptés au bien présenté."
+        pdf:
+            title: "PDF professionnel"
+            text: "Présentez vos estimations avec des documents propres, lisibles et crédibles."
+        dashboard:
+            title: "Dashboard centralisé"
+            text: "Retrouvez vos biens, estimations, annonces et documents au même endroit."
+
+    workflow:
+        title: "Un flux simple, pensé pour le terrain."
+        text: "AgentBoost ne remplace pas votre expertise. Il vous aide à gagner du temps sur les tâches répétitives pour vous concentrer sur les clients et les mandats."
+        step_1:
+            title: "Ajoutez le bien"
+            text: "Type, surface, ville, pièces, photos et détails utiles."
+        step_2:
+            title: "Générez le contenu"
+            text: "Annonce assistée, estimation, mise en forme et supports commerciaux."
+        step_3:
+            title: "Exploitez vos documents"
+            text: "PDF, annonce, diffusion et suivi depuis votre espace AgentBoost."
+
+    final_cta:
+        title_line_1: "Passez moins de temps à produire."
+        title_line_2: "Plus de temps à vendre."
+        text: "Créez votre première estimation et découvrez un workflow plus propre pour vos biens."        
