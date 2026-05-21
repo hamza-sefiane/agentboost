@@ -9,38 +9,40 @@ use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
-
-
 final class ContactType extends AbstractType
 {
-   public function buildForm(FormBuilderInterface $builder, array $options): void
-{
-    $builder
-        ->add('name', TextType::class, [
-            'label' => 'Nom',
-        ])
+    public function buildForm(FormBuilderInterface $builder, array $options): void
+    {
+        $builder
+            ->add('name', TextType::class, [
+                'label' => 'contact.form.name',
+            ])
 
-        ->add('email', EmailType::class, [
-            'label' => 'Email',
-        ])
+            ->add('email', EmailType::class, [
+                'label' => 'contact.form.email',
+            ])
 
-        ->add('subject', ChoiceType::class, [
-            'label' => 'Sujet',
-            'choices' => [
-                'Abonnement' => 'Abonnement',
-                'Facturation' => 'Facturation',
-                'Bug technique' => 'Bug technique',
-                'Estimation immobilière' => 'Estimation immobilière',
-                'Fonctionnalité IA' => 'Fonctionnalité IA',
-                'Autre' => 'Autre',
-            ],
-        ])
+            ->add('subject', ChoiceType::class, [
+                'label' => 'contact.form.subject',
 
-        ->add('message', TextareaType::class, [
-            'label' => 'Message',
-            'attr' => [
-                'rows' => 8,
-            ],
-        ]);
-}
+                'choices' => [
+                    'contact.subject.subscription' => 'subscription',
+                    'contact.subject.billing' => 'billing',
+                    'contact.subject.bug' => 'bug',
+                    'contact.subject.valuation' => 'valuation',
+                    'contact.subject.ai' => 'ai',
+                    'contact.subject.other' => 'other',
+                ],
+
+                'translation_domain' => 'messages',
+            ])
+
+            ->add('message', TextareaType::class, [
+                'label' => 'contact.form.message',
+
+                'attr' => [
+                    'rows' => 8,
+                ],
+            ]);
+    }
 }

@@ -1,6 +1,8 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Dashboard – AgentBoost
+{% block title %}
+	{{ 'navbar.dashboard'|trans }}
+	– AgentBoost
 {% endblock %}
 
 {% block stylesheets %}
@@ -20,27 +22,30 @@
 		<div class="dashboard-top">
 			<div class="dashboard-heading">
 				<div class="dashboard-icon">↯</div>
+
 				<div>
-					<h1 class="dashboard-title">Nouvelle estimation</h1>
+					<h1 class="dashboard-title">
+						{{ 'dashboard.title'|trans }}
+					</h1>
+
 					<p class="dashboard-subtitle">
-						Créez une estimation immobilière rapide et exploitable grâce à AgentBoost.
+						{{ 'dashboard.subtitle'|trans }}
 					</p>
 				</div>
 			</div>
 
 			<a href="{{ path('home') }}" class="help-btn">
-				Besoin d’aide ?
+				{{ 'dashboard.help'|trans }}
 			</a>
 		</div>
-
 
 		<div class="stats-grid">
 			<div class="stat-card">
 				<div class="stat-icon">🏠</div>
 				<div>
 					<div class="stat-value">{{ properties|length }}</div>
-					<div class="stat-label">Biens estimés</div>
-					<div class="stat-note">Total actuel</div>
+					<div class="stat-label">{{ 'dashboard.stats.estimated_properties'|trans }}</div>
+					<div class="stat-note">{{ 'dashboard.stats.current_total'|trans }}</div>
 				</div>
 			</div>
 
@@ -49,13 +54,16 @@
 				<div style="width: 100%;">
 					{% if usage.isPremium %}
 						<div class="stat-value">∞</div>
-						<div class="stat-label">Estimations</div>
-						<div class="stat-note">Illimitées avec votre offre</div>
+						<div class="stat-label">{{ 'dashboard.stats.estimations'|trans }}</div>
+						<div class="stat-note">{{ 'dashboard.stats.unlimited_offer'|trans }}</div>
 					{% else %}
 						<div class="stat-value">{{ usage.estimationsUsed }}/{{ usage.estimationsLimit }}</div>
-						<div class="stat-label">Estimations gratuites</div>
-						<div class="stat-note">{{ usage.estimationsRemaining }}
-							restante(s)</div>
+						<div class="stat-label">{{ 'dashboard.stats.free_estimations'|trans }}</div>
+						<div class="stat-note">
+							{{ usage.estimationsRemaining }}
+							{{ 'dashboard.stats.remaining'|trans }}
+						</div>
+
 						<div class="usage-progress">
 							<div class="usage-progress-fill" style="width: {{ min(100, (usage.estimationsUsed / usage.estimationsLimit * 100)|round) }}%;"></div>
 						</div>
@@ -68,13 +76,16 @@
 				<div style="width: 100%;">
 					{% if usage.isPremium %}
 						<div class="stat-value">∞</div>
-						<div class="stat-label">Annonces IA</div>
-						<div class="stat-note">Illimitées avec votre offre</div>
+						<div class="stat-label">{{ 'dashboard.stats.ai_ads'|trans }}</div>
+						<div class="stat-note">{{ 'dashboard.stats.unlimited_offer'|trans }}</div>
 					{% else %}
 						<div class="stat-value">{{ usage.aiUsed }}/{{ usage.aiLimit }}</div>
-						<div class="stat-label">Annonce IA gratuite</div>
-						<div class="stat-note">{{ usage.aiRemaining }}
-							restante(s)</div>
+						<div class="stat-label">{{ 'dashboard.stats.free_ai_ad'|trans }}</div>
+						<div class="stat-note">
+							{{ usage.aiRemaining }}
+							{{ 'dashboard.stats.remaining'|trans }}
+						</div>
+
 						<div class="usage-progress">
 							<div class="usage-progress-fill" style="width: {{ min(100, (usage.aiUsed / usage.aiLimit * 100)|round) }}%;"></div>
 						</div>
@@ -92,12 +103,16 @@
 							Free
 						{% endif %}
 					</div>
-					<div class="stat-label">Offre actuelle</div>
+
+					<div class="stat-label">{{ 'dashboard.stats.current_offer'|trans }}</div>
+
 					<div class="stat-note">
 						{% if usage.isPremium %}
-							Accès premium actif
+							{{ 'dashboard.stats.premium_active'|trans }}
 						{% else %}
-							<a href="{{ path('pricing') }}" class="usage-upgrade">Passer premium</a>
+							<a href="{{ path('pricing') }}" class="usage-upgrade">
+								{{ 'dashboard.stats.upgrade'|trans }}
+							</a>
 						{% endif %}
 					</div>
 				</div>
@@ -108,69 +123,105 @@
 			<form method="post" action="{{ path('dashboard') }}" enctype="multipart/form-data">
 				<div class="form-layout">
 					<div>
-						<div class="form-section-title">Informations du bien</div>
+						<div class="form-section-title">
+							{{ 'dashboard.form.property_info'|trans }}
+						</div>
 
 						<div class="row g-3">
 							<div class="col-md-4">
-								<label class="field-label" for="property-type">Type de bien</label>
+								<label class="field-label" for="property-type">
+									{{ 'dashboard.form.property_type'|trans }}
+								</label>
+
 								<select name="type" id="property-type" class="form-select" required>
-									<option value="Appartement">Appartement</option>
-									<option value="Maison">Maison</option>
-									<option value="Terrain">Terrain</option>
-									<option value="Parking">Parking</option>
+									<option value="Appartement">{{ 'dashboard.form.apartment'|trans }}</option>
+									<option value="Maison">{{ 'dashboard.form.house'|trans }}</option>
+									<option value="Terrain">{{ 'dashboard.form.land'|trans }}</option>
+									<option value="Parking">{{ 'dashboard.form.parking'|trans }}</option>
 								</select>
 							</div>
 
 							<div class="col-md-5 address-autocomplete-wrapper">
-								<label class="field-label" for="address-input">Adresse du bien</label>
-								<input name="address" id="address-input" type="text" class="form-control" placeholder="Adresse complète" maxlength="255" autocomplete="off">
+								<label class="field-label" for="address-input">
+									{{ 'dashboard.form.address'|trans }}
+								</label>
+
+								<input name="address" id="address-input" type="text" class="form-control" placeholder="{{ 'dashboard.form.full_address'|trans }}" maxlength="255" autocomplete="off">
+
 								<div id="address-results" class="address-results"></div>
 							</div>
 
 							<div class="col-md-3">
-								<label class="field-label" for="postal-code-input">Code postal</label>
-								<input name="postalCode" id="postal-code-input" type="text" class="form-control" placeholder="Code postal" maxlength="5" pattern="[0-9]{5}" inputmode="numeric" required>
+								<label class="field-label" for="postal-code-input">
+									{{ 'dashboard.form.postal_code'|trans }}
+								</label>
+
+								<input name="postalCode" id="postal-code-input" type="text" class="form-control" placeholder="{{ 'dashboard.form.postal_code'|trans }}" maxlength="5" pattern="[0-9]{5}" inputmode="numeric" required>
 							</div>
 
 							<div class="col-md-4">
-								<label class="field-label" for="city-input">Ville</label>
-								<input name="city" id="city-input" class="form-control" placeholder="Ville" required>
+								<label class="field-label" for="city-input">
+									{{ 'dashboard.form.city'|trans }}
+								</label>
+
+								<input name="city" id="city-input" class="form-control" placeholder="{{ 'dashboard.form.city'|trans }}" required>
 							</div>
 
 							<div class="col-md-4">
-								<label class="field-label">Surface (m²)</label>
+								<label class="field-label">
+									{{ 'dashboard.form.surface'|trans }}
+								</label>
+
 								<input name="surface" type="number" min="1" class="form-control" placeholder="Ex : 72" required>
 							</div>
 
 							<div class="col-md-4" id="rooms-wrapper">
-								<label class="field-label" for="rooms-input">Nombre de pièces</label>
+								<label class="field-label" for="rooms-input">
+									{{ 'dashboard.form.rooms'|trans }}
+								</label>
+
 								<input name="rooms" id="rooms-input" type="number" min="1" class="form-control" placeholder="Ex : 3">
 							</div>
 
 							<div class="col-md-4" id="parking-wrapper">
-								<label class="field-label" for="parking-input">Parking</label>
+								<label class="field-label" for="parking-input">
+									{{ 'dashboard.form.parking'|trans }}
+								</label>
+
 								<select name="parking" id="parking-input" class="form-select">
-									<option value="0">Sans parking</option>
-									<option value="1">Avec parking</option>
+									<option value="0">{{ 'dashboard.form.without_parking'|trans }}</option>
+									<option value="1">{{ 'dashboard.form.with_parking'|trans }}</option>
 								</select>
 							</div>
 
 							<div class="col-12">
-								<label class="field-label">Détails supplémentaires
-									<span class="text-muted fw-normal">(optionnel)</span>
+								<label class="field-label">
+									{{ 'dashboard.form.extra_details'|trans }}
+									<span class="text-muted fw-normal">
+										{{ 'dashboard.form.optional'|trans }}
+									</span>
 								</label>
-								<textarea name="extraDetails" class="form-control" rows="2" placeholder="Ex : balcon, vue dégagée, cuisine équipée, proche gare, lumineux..."></textarea>
+
+								<textarea name="extraDetails" class="form-control" rows="2" placeholder="{{ 'dashboard.form.extra_placeholder'|trans }}"></textarea>
 							</div>
 
 							<div class="col-12">
-								<label class="field-label">Photos du bien</label>
+								<label class="field-label">
+									{{ 'dashboard.form.photos'|trans }}
+								</label>
 
 								<div class="upload-zone">
 									<div class="upload-left">
 										<div class="upload-icon">🖼️</div>
+
 										<div>
-											<div class="upload-title">Déposez vos photos ici</div>
-											<div class="upload-text">JPG, PNG, WEBP. Maximum 5 photos.</div>
+											<div class="upload-title">
+												{{ 'dashboard.form.upload_title'|trans }}
+											</div>
+
+											<div class="upload-text">
+												{{ 'dashboard.form.upload_text'|trans }}
+											</div>
 										</div>
 									</div>
 
@@ -182,7 +233,7 @@
 
 							<div class="col-12">
 								<button type="submit" class="estimate-submit">
-									Estimer le bien
+									{{ 'dashboard.form.estimate_button'|trans }}
 								</button>
 							</div>
 						</div>
@@ -190,23 +241,25 @@
 
 					<aside class="ai-panel">
 						<div class="ai-box">
-							<div class="ai-title">↯ Estimation rapide & IA</div>
+							<div class="ai-title">
+								{{ 'dashboard.ai.title'|trans }}
+							</div>
 
 							<p class="ai-text">
-								Obtenez une estimation structurée et des supports exploitables pour vos clients.
+								{{ 'dashboard.ai.text'|trans }}
 							</p>
 
 							<ul class="ai-list">
-								<li>Analyse du marché local</li>
-								<li>Estimation claire</li>
-								<li>Rapport PDF généré</li>
-								<li>Annonce prête à retravailler</li>
+								<li>{{ 'dashboard.ai.market_analysis'|trans }}</li>
+								<li>{{ 'dashboard.ai.clear_estimation'|trans }}</li>
+								<li>{{ 'dashboard.ai.pdf_report'|trans }}</li>
+								<li>{{ 'dashboard.ai.ready_listing'|trans }}</li>
 							</ul>
 						</div>
 
 						<div class="security-box">
 							<strong>🔒</strong>
-							<span>Vos données sont sécurisées et ne sont jamais partagées.</span>
+							<span>{{ 'dashboard.security.text'|trans }}</span>
 						</div>
 					</aside>
 				</div>
@@ -217,25 +270,30 @@
 			<div class="annual-upsell">
 				<div class="annual-upsell-content">
 					<div class="annual-upsell-icon">↗</div>
+
 					<div>
-						<p class="annual-upsell-title">Passez à l’annuel et diffusez plus vite</p>
+						<p class="annual-upsell-title">
+							{{ 'dashboard.annual.title'|trans }}
+						</p>
+
 						<p class="annual-upsell-text">
-							Facebook, Leboncoin et PDF Premium inclus pour gagner du temps sur vos annonces.
+							{{ 'dashboard.annual.text'|trans }}
 						</p>
 					</div>
 				</div>
 
 				<a href="{{ path('subscription_manage') }}" class="annual-upsell-button">
-					Passer à l’annuel
+					{{ 'dashboard.annual.button'|trans }}
 				</a>
 			</div>
 		{% endif %}
 
 		<div class="properties-section" id="properties-section">
 			<div class="properties-header">
-				<h2>Mes biens estimés</h2>
+				<h2>{{ 'dashboard.properties.title'|trans }}</h2>
 			</div>
 
 			{% include 'dashboard/_list.html.twig' with { properties: properties } %}
 		</div>
-	{% endblock %}
+	</div>
+{% endblock %}
