@@ -105,3 +105,61 @@ contact:
         valuation: "Property valuation"
         ai: "AI feature"
         other: "Other"
+
+home:
+    meta:
+        title: "AgentBoost – Valuations, listings and documents for real estate agents"
+
+    hero:
+        kicker: "Professional tool for real estate agents"
+        title_line_1: "Valuations, listings and documents."
+        title_line_2: "From one single tool."
+        text: "AgentBoost helps real estate agents create valuations, generate assisted listings and produce professional documents without wasting hours on administration."
+        note: "Designed for independents, agencies and field professionals."
+
+    actions:
+        open_dashboard: "Open my dashboard"
+        access_dashboard: "Access dashboard"
+        choose_access: "Choose my access"
+        create_estimation: "Create a valuation"
+        view_offers: "View pricing"
+
+    preview:
+        estimations: "valuations"
+        listings: "listings"
+        pdf_ready: "ready PDFs"
+        apartment: "Apartment"
+        generate_listing: "Generate listing"
+        pdf_estimation: "Valuation PDF"
+
+    features:
+        estimation:
+            title: "Fast valuation"
+            text: "Enter the key property details and get a structured valuation within seconds."
+        listings:
+            title: "Assisted listings"
+            text: "Generate clear, usable listing texts adapted to the presented property."
+        pdf:
+            title: "Professional PDF"
+            text: "Present your valuations with clean, readable and credible documents."
+        dashboard:
+            title: "Centralized dashboard"
+            text: "Find your properties, valuations, listings and documents in one place."
+
+    workflow:
+        title: "A simple workflow built for the field."
+        text: "AgentBoost does not replace your expertise. It helps you save time on repetitive tasks so you can focus on clients and mandates."
+        step_1:
+            title: "Add the property"
+            text: "Type, surface area, city, rooms, photos and useful details."
+        step_2:
+            title: "Generate content"
+            text: "Assisted listing, valuation, formatting and sales materials."
+        step_3:
+            title: "Use your documents"
+            text: "PDFs, listings, publishing and tracking from your AgentBoost space."
+
+    final_cta:
+        title_line_1: "Spend less time producing."
+        title_line_2: "More time selling."
+        text: "Create your first valuation and discover a cleaner workflow for your properties."        

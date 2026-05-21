@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-	AgentBoost – Estimations, annonces et documents pour agents immobiliers
+	{{ 'home.meta.title'|trans }}
 {% endblock %}
 
 {% block stylesheets %}
@@ -19,41 +19,41 @@
 			<div>
 				<div class="hero-kicker">
 					<span>●</span>
-					Outil métier pour agents immobiliers
+					{{ 'home.hero.kicker'|trans }}
 				</div>
 
 				<h1 class="hero-title">
-					Estimations, annonces et documents.
+					{{ 'home.hero.title_line_1'|trans }}
 					<br>
-					Depuis un seul outil.
+					{{ 'home.hero.title_line_2'|trans }}
 				</h1>
 
 				<p class="hero-text">
-					AgentBoost aide les agents immobiliers à créer des estimations, générer des annonces assistées et produire des documents professionnels sans perdre des heures sur l’administratif.
+					{{ 'home.hero.text'|trans }}
 				</p>
 
 				<div class="hero-actions">
 					{% if is_granted('ACCESS_DASHBOARD') %}
 						<a href="{{ path('dashboard') }}" class="hero-btn-primary">
-							Ouvrir mon dashboard
+							{{ 'home.actions.open_dashboard'|trans }}
 						</a>
 					{% elseif app.user %}
 						<a href="{{ path('pricing') }}" class="hero-btn-primary">
-							Choisir mon accès
+							{{ 'home.actions.choose_access'|trans }}
 						</a>
 					{% else %}
 						<a href="{{ path('app_register') }}" class="hero-btn-primary">
-							Créer une estimation
+							{{ 'home.actions.create_estimation'|trans }}
 						</a>
 					{% endif %}
 
 					<a href="{{ path('pricing') }}" class="hero-btn-secondary">
-						Voir les offres
+						{{ 'home.actions.view_offers'|trans }}
 					</a>
 				</div>
 
 				<div class="hero-note">
-					Pensé pour les indépendants, agences et professionnels terrain.
+					{{ 'home.hero.note'|trans }}
 				</div>
 			</div>
 
@@ -69,23 +69,23 @@
 						<div class="preview-stat-grid">
 							<div class="preview-stat">
 								<strong>12</strong>
-								<span>estimations</span>
+								<span>{{ 'home.preview.estimations'|trans }}</span>
 							</div>
 
 							<div class="preview-stat">
 								<strong>8</strong>
-								<span>annonces</span>
+								<span>{{ 'home.preview.listings'|trans }}</span>
 							</div>
 
 							<div class="preview-stat">
 								<strong>5</strong>
-								<span>PDF prêts</span>
+								<span>{{ 'home.preview.pdf_ready'|trans }}</span>
 							</div>
 						</div>
 
 						<div class="preview-card">
 							<div class="preview-card-head">
-								<span class="preview-badge">Appartement</span>
+								<span class="preview-badge">{{ 'home.preview.apartment'|trans }}</span>
 								<span class="preview-price">312 000 €</span>
 							</div>
 
@@ -95,11 +95,11 @@
 
 							<div class="preview-actions">
 								<div class="preview-action primary">
-									Générer annonce
+									{{ 'home.preview.generate_listing'|trans }}
 								</div>
 
 								<div class="preview-action secondary">
-									PDF estimation
+									{{ 'home.preview.pdf_estimation'|trans }}
 								</div>
 							</div>
 						</div>
@@ -113,26 +113,26 @@
 		<div class="feature-grid">
 			<div class="feature-card">
 				<div class="feature-icon">🏡</div>
-				<h3>Estimation rapide</h3>
-				<p>Renseignez les informations clés du bien et obtenez une estimation structurée en quelques instants.</p>
+				<h3>{{ 'home.features.estimation.title'|trans }}</h3>
+				<p>{{ 'home.features.estimation.text'|trans }}</p>
 			</div>
 
 			<div class="feature-card">
 				<div class="feature-icon">✍️</div>
-				<h3>Annonces assistées</h3>
-				<p>Générez des textes d’annonces exploitables, clairs et adaptés au bien présenté.</p>
+				<h3>{{ 'home.features.listings.title'|trans }}</h3>
+				<p>{{ 'home.features.listings.text'|trans }}</p>
 			</div>
 
 			<div class="feature-card">
 				<div class="feature-icon">📄</div>
-				<h3>PDF professionnel</h3>
-				<p>Présentez vos estimations avec des documents propres, lisibles et crédibles.</p>
+				<h3>{{ 'home.features.pdf.title'|trans }}</h3>
+				<p>{{ 'home.features.pdf.text'|trans }}</p>
 			</div>
 
 			<div class="feature-card">
 				<div class="feature-icon">📊</div>
-				<h3>Dashboard centralisé</h3>
-				<p>Retrouvez vos biens, estimations, annonces et documents au même endroit.</p>
+				<h3>{{ 'home.features.dashboard.title'|trans }}</h3>
+				<p>{{ 'home.features.dashboard.text'|trans }}</p>
 			</div>
 		</div>
 	</section>
@@ -140,31 +140,31 @@
 	<section class="workflow-section">
 		<div>
 			<h2 class="section-title">
-				Un flux simple, pensé pour le terrain.
+				{{ 'home.workflow.title'|trans }}
 			</h2>
 
 			<p class="section-text">
-				AgentBoost ne remplace pas votre expertise. Il vous aide à gagner du temps sur les tâches répétitives pour vous concentrer sur les clients et les mandats.
+				{{ 'home.workflow.text'|trans }}
 			</p>
 		</div>
 
 		<div class="workflow-grid">
 			<div class="workflow-step">
 				<span>1</span>
-				<h3>Ajoutez le bien</h3>
-				<p>Type, surface, ville, pièces, photos et détails utiles.</p>
+				<h3>{{ 'home.workflow.step_1.title'|trans }}</h3>
+				<p>{{ 'home.workflow.step_1.text'|trans }}</p>
 			</div>
 
 			<div class="workflow-step">
 				<span>2</span>
-				<h3>Générez le contenu</h3>
-				<p>Annonce assistée, estimation, mise en forme et supports commerciaux.</p>
+				<h3>{{ 'home.workflow.step_2.title'|trans }}</h3>
+				<p>{{ 'home.workflow.step_2.text'|trans }}</p>
 			</div>
 
 			<div class="workflow-step">
 				<span>3</span>
-				<h3>Exploitez vos documents</h3>
-				<p>PDF, annonce, diffusion et suivi depuis votre espace AgentBoost.</p>
+				<h3>{{ 'home.workflow.step_3.title'|trans }}</h3>
+				<p>{{ 'home.workflow.step_3.text'|trans }}</p>
 			</div>
 		</div>
 	</section>
@@ -172,28 +172,29 @@
 	<section class="final-cta">
 		<div class="final-cta-card">
 			<h2>
-				Passez moins de temps à produire.
+				{{ 'home.final_cta.title_line_1'|trans }}
 				<br>
-				Plus de temps à vendre.
+				{{ 'home.final_cta.title_line_2'|trans }}
 			</h2>
 
 			<p>
-				Créez votre première estimation et découvrez un workflow plus propre pour vos biens.
+				{{ 'home.final_cta.text'|trans }}
 			</p>
 
 			{% if is_granted('ACCESS_DASHBOARD') %}
 				<a href="{{ path('dashboard') }}" class="hero-btn-primary">
-					Accéder au dashboard
+					{{ 'home.actions.access_dashboard'|trans }}
 				</a>
 			{% elseif app.user %}
 				<a href="{{ path('pricing') }}" class="hero-btn-primary">
-					Choisir mon accès
+					{{ 'home.actions.choose_access'|trans }}
 				</a>
 			{% else %}
 				<a href="{{ path('app_register') }}" class="hero-btn-primary">
-					Créer une estimation
+					{{ 'home.actions.create_estimation'|trans }}
 				</a>
 			{% endif %}
 		</div>
 	</section>
+
 {% endblock %}
