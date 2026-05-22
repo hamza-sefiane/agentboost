@@ -19,6 +19,77 @@ footer:
     privacy: "Confidentialité"
     contact: "Contact"
 
+home:
+    meta:
+        title: "AgentBoost — Estimations immobilières et annonces IA"
+
+    hero:
+        kicker: "Outil métier pour agents immobiliers"
+
+        title_line_1: "Estimations, annonces"
+        title_line_2: "et documents."
+
+        text: "AgentBoost aide les agents immobiliers à créer des estimations, générer des annonces assistées et produire des documents professionnels."
+
+        note: "Pensé pour les indépendants, agences et professionnels terrain."
+
+    actions:
+        create_estimation: "Créer une estimation"
+        view_offers: "Voir les offres"
+
+    preview:
+        estimations: "estimations"
+        listings: "annonces"
+        pdf_ready: "PDF prêts"
+
+        apartment: "Appartement"
+
+        generate_listing: "Générer annonce"
+
+        pdf_estimation: "PDF estimation"
+
+    features:
+        estimation:
+            title: "Estimations immobilières précises"
+            text: "Générez des estimations rapides et structurées."
+
+        listings:
+            title: "Annonces générées par IA"
+            text: "Créez des annonces optimisées en quelques secondes."
+
+        pdf:
+            title: "Documents PDF professionnels"
+            text: "Exportez des rapports propres et prêts pour vos clients."
+
+        dashboard:
+            title: "Dashboard centralisé"
+            text: "Gérez vos estimations, annonces et documents depuis un seul espace."
+
+    workflow:
+        title: "Un flux simple"
+
+        text: "Pensé pour faire gagner du temps aux professionnels de l’immobilier."
+
+        step_1:
+            title: "Créer une estimation"
+            text: "Renseignez les informations du bien en quelques minutes."
+
+        step_2:
+            title: "Générer les documents"
+            text: "AgentBoost prépare vos PDF et contenus automatiquement."
+
+        step_3:
+            title: "Envoyer aux clients"
+            text: "Transmettez des documents professionnels plus rapidement."
+
+    final_cta:
+        title_line_1: "Commencez à créer"
+        title_line_2: "des estimations professionnelles."
+
+        text: "Rejoignez AgentBoost et gagnez des heures chaque semaine."
+
+        button: "Créer une estimation"
+
 dashboard:
     title: "Nouvelle estimation"
     subtitle: "Créez une estimation immobilière rapide et exploitable grâce à AgentBoost."
@@ -85,6 +156,7 @@ dashboard:
 
 contact:
     title: "Contacter AgentBoost"
+
     subtitle: "Une question concernant votre abonnement, un problème technique ou une fonctionnalité ? Notre équipe vous répond rapidement."
 
     form:
@@ -92,9 +164,11 @@ contact:
         email: "Email"
         subject: "Sujet"
         message: "Message"
+
         name_placeholder: "Votre nom"
         email_placeholder: "Votre adresse email"
         message_placeholder: "Décrivez votre demande..."
+
         submit: "Envoyer le message"
 
     subject:
@@ -104,6 +178,15 @@ contact:
         valuation: "Estimation immobilière"
         ai: "Fonctionnalité IA"
         other: "Autre"
+
+subscription:
+    active: "Abonnement actif"
+    switching_to: "Passage en"
+    yearly: "annuel"
+    monthly: "mensuel"
+    next_renewal: "au prochain renouvellement"
+    cancel_scheduled: "Résiliation programmée le"
+    ended: "Accès terminé"
 
 pricing:
     meta:
@@ -141,189 +224,43 @@ pricing:
         line_2: "Paiement sécurisé via Stripe."
 
     errors:
-        payment: "Erreur lors du paiement"
+        payment: "Erreur lors du paiement."
 
-verify_email:
+subscription_checkout:
     meta:
-        title: "Vérification email"
+        title: "Souscription – AgentBoost"
 
-    title: "Vérifiez votre email"
+    title: "Activer mon abonnement"
 
-    text:
-        line_1: "Votre compte a été créé. Un email vient de vous être envoyé."
-        line_2: "Vous devez valider votre email avant de choisir un abonnement."
+    selected_plan: "Vous avez choisi la formule"
 
-register:
-    meta:
-        title: "S'inscrire"
+    button: "Procéder au paiement sécurisé"
 
-    title: "Inscription"
+    footer: "Paiement sécurisé via Stripe • Résiliable à tout moment"
 
-    form:
-        email: "Email"
-        password: "Mot de passe"
-        confirm_password: "Confirmer le mot de passe"
-        show_password: "Afficher le mot de passe"
-        password_helper: "Minimum 8 caractères"
-        confirm_password_helper: "Retapez votre mot de passe"
-        submit: "Créer mon compte"
-
-    footer:
-        already_registered: "Déjà inscrit ?"
-        login: "Se connecter"
-
-forgot_password:
-    meta:
-        title: "Mot de passe oublié"
-
-    title: "Mot de passe oublié"
-
-    helper: "Entrez votre adresse email. Nous vous enverrons un lien sécurisé pour réinitialiser votre mot de passe."
-
-    form:
-        email: "Adresse email"
-        submit: "Envoyer le lien"
-
-    back_login: "Retour à la connexion"
-
-reset_password:
-    sent:
-        meta:
-            title: "Email envoyé"
-
-        title: "Email envoyé"
-
-        text:
-            line_1: "Si un compte correspond à cette adresse email, un lien de réinitialisation vient d’être envoyé. Ce lien expirera dans"
-            line_2: "Pensez à vérifier vos courriers indésirables."
-
-        actions:
-            resend: "Renvoyer un lien"
-            back_login: "Retour connexion"
-
-    new:
-        meta:
-            title: "Nouveau mot de passe"
-
-        title: "Nouveau mot de passe"
-
-        subtitle: "Choisissez un nouveau mot de passe sécurisé pour votre compte AgentBoost."
-
-        form:
-            password: "Nouveau mot de passe"
-            confirm_password: "Confirmer le nouveau mot de passe"
-            password_placeholder: "Votre nouveau mot de passe"
-            confirm_password_placeholder: "Confirmez le mot de passe"
-            show_password: "Afficher le mot de passe"
-            password_strength: "Sécurité du mot de passe"
-            submit: "Réinitialiser le mot de passe"
-
-        back_login: "Retour à la connexion"
-
-email:
-    verify:
-        meta:
-            title: "Confirmation email"
-
-        header:
-            subtitle: "Bienvenue sur AgentBoost"
-
-        title: "Confirmez votre adresse email"
-
-        text:
-            line_1: "Merci de votre inscription sur AgentBoost."
-            line_2: "Afin d’activer votre compte et sécuriser votre accès, veuillez confirmer votre adresse email en cliquant sur le bouton ci-dessous."
-
-        button: "Confirmer mon email"
-
-        notice: "Si vous n’êtes pas à l’origine de cette inscription, vous pouvez ignorer cet email."
-
-        footer: "AgentBoost — estimations immobilières, génération de documents et automatisation IA pour les professionnels de l’immobilier."
-
-    reset_password:
-        meta:
-            title: "Réinitialisation mot de passe"
-
-        header:
-            subtitle: "Estimation immobilière rapide et exploitable"
-
-        title: "Réinitialisez votre mot de passe"
-
-        text:
-            line_1: "Une demande de réinitialisation vient d’être effectuée pour votre compte AgentBoost."
-            line_2: "Cliquez sur le bouton ci-dessous pour définir un nouveau mot de passe sécurisé."
-
-        button: "Réinitialiser mon mot de passe"
-
-        expiration: "Ce lien expirera dans"
-
-        notice: "Si vous n’êtes pas à l’origine de cette demande, ignorez simplement cet email. Votre mot de passe actuel reste inchangé."
-
-        footer: "AgentBoost — sécurisez vos estimations, vos annonces et vos documents immobiliers."
-
-    password_changed:
-        meta:
-            title: "Mot de passe modifié"
-
-        header:
-            subtitle: "Sécurité et gestion de votre compte"
-
-        title: "Votre mot de passe a été modifié"
-
-        greeting: "Bonjour,"
-
-        text: "Le mot de passe de votre compte AgentBoost vient d’être modifié avec succès."
-
-        success_notice: "Si vous êtes à l’origine de cette modification, aucune action supplémentaire n’est nécessaire."
-
-        security_notice: "Si vous n’êtes pas à l’origine de cette action, changez immédiatement votre mot de passe et contactez le support AgentBoost."
-
-        footer: "AgentBoost — sécurisez vos estimations, vos annonces et vos documents immobiliers."
-
-goodbye:
-    meta:
-        title: "Compte supprimé – AgentBoost"
-
-    title: "Compte supprimé"
-
-    subtitle: "Votre compte AgentBoost a bien été supprimé."
-
-    alert:
-        line_1: "Vos accès ont été désactivés et votre session a été fermée."
-        line_2: "Merci d’avoir utilisé AgentBoost pour vos estimations et vos automatisations immobilières."
-
-    actions:
-        home: "Retour à l’accueil"
-        pricing: "Voir les offres"
-
-login:
-    meta:
-        title: "Connexion"
-
-    title: "Connexion"
-
-    form:
-        email: "Email"
-        password: "Mot de passe"
-        show_password: "Afficher le mot de passe"
-        submit: "Continuer"
-
-    forgot_password: "Mot de passe oublié ?"
-
-    footer:
-        not_registered: "Pas encore inscrit ?"
-        create_account: "Créer un compte"
-
-subscription:
-    active: "Abonnement actif"
-    switching_to: "Passage en"
-    yearly: "annuel"
-    monthly: "mensuel"
-    next_renewal: "au prochain renouvellement"
-    cancel_scheduled: "Résiliation programmée le"
-    ended: "Accès terminé"
+    errors:
+        server: "Erreur serveur lors de la création du paiement."
+        session: "Erreur lors de la création de la session de paiement."
+        generic: "Une erreur est survenue."
 
 payment:
+    success:
+        meta:
+            title: "Validation de votre abonnement"
+
+        title: "Validation en cours…"
+
+        text:
+            line_1: "Votre paiement a été reçu."
+            line_2: "L’accès à votre dashboard est en cours d’activation."
+            line_3: "Cela peut prendre quelques secondes."
+            line_4: "Si l’accès n’est pas encore actif, réessayez dans quelques secondes."
+
+        loading: "Chargement…"
+
+        actions:
+            dashboard: "Accéder au dashboard"
+
     cancel:
         meta:
             title: "Paiement annulé – AgentBoost"
@@ -340,7 +277,7 @@ payment:
             dashboard: "Retour au dashboard"
             home: "Retour à l’accueil"
 
-        footer: "Paiement sécurisé par Stripe"
+        footer: "Paiement sécurisé via Stripe"
 
 subscription_manage:
     meta:
@@ -348,7 +285,7 @@ subscription_manage:
 
     title: "Gestion de l’abonnement"
 
-    subtitle: "Informations, changements de formule et résiliation."
+    subtitle: "Informations, changement de formule et résiliation."
 
     history:
         title: "Historique"
@@ -357,11 +294,12 @@ subscription_manage:
         title: "Statut actuel"
 
         account_deletion: "Suppression du compte programmée"
+
         account_deleted_after: "Votre compte sera supprimé après le"
 
         cancellation_scheduled: "Résiliation programmée"
 
-        access_until: "Accès conservé jusqu’au"
+        access_until: "Accès disponible jusqu’au"
 
         active: "Abonnement actif"
 
@@ -374,10 +312,10 @@ subscription_manage:
 
         text: "La suppression de votre compte est programmée."
 
-        cancel: "Annuler la suppression de mon compte"
+        cancel: "Annuler la suppression du compte"
 
     pending_change:
-        title: "Changement prévu :"
+        title: "Changement programmé :"
 
         from: "à partir du"
 
@@ -398,69 +336,9 @@ subscription_manage:
         cancel: "Annuler la résiliation"
 
     danger_zone:
-        title: "Zone sensible"
+        title: "Zone dangereuse"
 
-        text: "La résiliation est définitive à la fin de la période."
+        text: "La résiliation devient définitive à la fin de la période de facturation."
 
         button: "Résilier mon abonnement"
-
-    payment:
-    success:
-        meta:
-            title: "Validation de votre abonnement"
-
-        title: "Validation en cours…"
-
-        text:
-            line_1: "Votre paiement a été reçu."
-            line_2: "L’accès à votre dashboard est en cours d’activation."
-            line_3: "Cela peut prendre quelques secondes."
-            line_4: "Si l’accès n’est pas encore actif, réessayez dans quelques secondes."
-
-        loading: "Chargement…"
-
-        actions:
-            dashboard: "Accéder au dashboard"
-
-subscription_checkout:
-    meta:
-        title: "Souscription – AgentBoost"
-
-    title: "Activer mon abonnement"
-
-    selected_plan: "Vous avez choisi la formule"
-
-    button: "Procéder au paiement sécurisé"
-
-    footer: "Paiement sécurisé via Stripe • Résiliable à tout moment"
-
-    errors:
-        server: "Erreur serveur lors de la création du paiement."
-        session: "Erreur lors de la création de la session de paiement."
-        generic: "Une erreur est survenue."
-
-home:
-    hero:
-        kicker: "Outil métier pour agents immobiliers"
-
-        title_line_1: "Estimations, annonces"
-        title_line_2: "et documents."
-
-        text: "AgentBoost aide les agents immobiliers à créer des estimations, générer des annonces assistées et produire des documents professionnels."
-
-        note: "Pensé pour les indépendants, agences et professionnels terrain."
-
-    actions:
-        create_estimation: "Créer une estimation"
-        view_offers: "Voir les offres"
-
-    preview:
-        estimations: "estimations"
-        listings: "annonces"
-        pdf_ready: "PDF prêts"
-
-        apartment: "Appartement"
-
-        generate_listing: "Générer annonce"
-
-        pdf_estimation: "PDF estimation"                                                            
+        

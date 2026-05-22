@@ -1,13 +1,52 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Paiement réussi - AgentBoost{% endblock %}
+{% block title %}
+	{{ 'payment.success_page.meta.title'|trans }}
+{% endblock %}
 
 {% block body %}
-    <div style="text-align: center; margin-top: 50px;">
-        <h2 style="color: #2E8B57;">Merci !</h2>
-        <p>Votre abonnement à AgentBoost est actif. Vous avez maintenant accès à tous nos services immobiliers.</p>
-        <a href="{{ path('home') }}" style="display: inline-block; margin-top: 20px; padding: 10px 20px; background-color: #2E8B57; color: #fff; text-decoration: none; border-radius: 5px;">
-            Retour à l'accueil
-        </a>
-    </div>
+	<div class="container py-5">
+		<div class="mx-auto text-center" style="max-width: 720px;">
+
+			<div class="mb-4">
+				<div class="d-inline-flex align-items-center justify-content-center rounded-circle bg-success bg-opacity-10" style="width: 90px; height: 90px;">
+
+					<span style="font-size: 42px; color: #198754;">
+						✓
+					</span>
+				</div>
+			</div>
+
+			<h1 class="fw-bold mb-4">
+				{{ 'payment.success_page.title'|trans }}
+			</h1>
+
+			<p class="lead text-muted mb-3">
+				{{ 'payment.success_page.text.line_1'|trans }}
+			</p>
+
+			<p class="text-muted mb-5">
+				{{ 'payment.success_page.text.line_2'|trans }}
+			</p>
+
+			<div class="d-flex flex-column flex-sm-row justify-content-center gap-3">
+				<a href="{{ path('dashboard') }}" class="btn btn-success btn-lg px-4">
+
+					{{ 'payment.success_page.actions.dashboard'|trans }}
+				</a>
+
+				<a href="{{ path('home') }}" class="btn btn-outline-secondary btn-lg px-4">
+
+					{{ 'payment.success_page.actions.home'|trans }}
+				</a>
+			</div>
+
+			<div class="mt-5">
+				<p class="small text-muted mb-0">
+					{{ 'payment.success_page.footer'|trans }}
+				</p>
+			</div>
+
+		</div>
+	</div>
 {% endblock %}

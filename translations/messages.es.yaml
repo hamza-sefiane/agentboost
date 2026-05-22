@@ -19,9 +19,80 @@ footer:
     privacy: "Privacidad"
     contact: "Contacto"
 
+home:
+    meta:
+        title: "AgentBoost — Valoraciones inmobiliarias y anuncios IA"
+
+    hero:
+        kicker: "Herramienta profesional para agentes inmobiliarios"
+
+        title_line_1: "Valoraciones, anuncios"
+        title_line_2: "y documentos."
+
+        text: "AgentBoost ayuda a los agentes inmobiliarios a crear valoraciones, generar anuncios asistidos y producir documentos profesionales."
+
+        note: "Pensado para independientes, agencias y profesionales de campo."
+
+    actions:
+        create_estimation: "Crear una valoración"
+        view_offers: "Ver planes"
+
+    preview:
+        estimations: "valoraciones"
+        listings: "anuncios"
+        pdf_ready: "PDF listos"
+
+        apartment: "Apartamento"
+
+        generate_listing: "Generar anuncio"
+
+        pdf_estimation: "PDF valoración"
+
+    features:
+        estimation:
+            title: "Valoraciones inmobiliarias precisas"
+            text: "Genere valoraciones rápidas y estructuradas."
+
+        listings:
+            title: "Anuncios generados con IA"
+            text: "Cree anuncios optimizados en segundos."
+
+        pdf:
+            title: "Documentos PDF profesionales"
+            text: "Exporte informes PDF limpios y listos para clientes."
+
+        dashboard:
+            title: "Panel centralizado"
+            text: "Gestione valoraciones, anuncios y documentos desde un solo lugar."
+
+    workflow:
+        title: "Un flujo de trabajo simple"
+
+        text: "Diseñado para ahorrar tiempo a los profesionales inmobiliarios."
+
+        step_1:
+            title: "Crear una valoración"
+            text: "Complete la información de la propiedad en minutos."
+
+        step_2:
+            title: "Generar documentos"
+            text: "AgentBoost prepara sus PDF y contenidos automáticamente."
+
+        step_3:
+            title: "Enviar a clientes"
+            text: "Entregue documentos profesionales más rápido."
+
+    final_cta:
+        title_line_1: "Empiece a crear"
+        title_line_2: "valoraciones profesionales."
+
+        text: "Únase a AgentBoost y ahorre horas cada semana."
+
+        button: "Crear una valoración"
+
 dashboard:
-    title: "Nueva estimación"
-    subtitle: "Cree una estimación inmobiliaria rápida y útil con AgentBoost."
+    title: "Nueva valoración"
+    subtitle: "Cree una valoración inmobiliaria rápida y útil con AgentBoost."
     help: "¿Necesita ayuda?"
 
     subscription:
@@ -31,9 +102,9 @@ dashboard:
     stats:
         estimated_properties: "Propiedades estimadas"
         current_total: "Total actual"
-        estimations: "Estimaciones"
+        estimations: "Valoraciones"
         unlimited_offer: "Ilimitadas con su plan"
-        free_estimations: "Estimaciones gratuitas"
+        free_estimations: "Valoraciones gratuitas"
         remaining: "restante(s)"
         ai_ads: "Anuncios IA"
         free_ai_ad: "Anuncio IA gratuito"
@@ -65,10 +136,10 @@ dashboard:
         estimate_button: "Estimar la propiedad"
 
     ai:
-        title: "↯ Estimación rápida e IA"
-        text: "Obtenga una estimación estructurada y materiales útiles para sus clientes."
+        title: "↯ Valoración rápida e IA"
+        text: "Obtenga una valoración estructurada y materiales útiles para sus clientes."
         market_analysis: "Análisis del mercado local"
-        clear_estimation: "Estimación clara"
+        clear_estimation: "Valoración clara"
         pdf_report: "Informe PDF generado"
         ready_listing: "Anuncio listo para editar"
 
@@ -85,6 +156,7 @@ dashboard:
 
 contact:
     title: "Contactar con AgentBoost"
+
     subtitle: "¿Tiene alguna pregunta sobre su suscripción, un problema técnico o una funcionalidad? Nuestro equipo le responderá rápidamente."
 
     form:
@@ -92,9 +164,11 @@ contact:
         email: "Correo electrónico"
         subject: "Asunto"
         message: "Mensaje"
+
         name_placeholder: "Su nombre"
         email_placeholder: "Su dirección de correo electrónico"
         message_placeholder: "Describa su solicitud..."
+
         submit: "Enviar mensaje"
 
     subject:
@@ -105,225 +179,45 @@ contact:
         ai: "Función IA"
         other: "Otro"
 
-pricing:
+subscription:
+    monthly: "mensual"
+    yearly: "anual"
+
+subscription_checkout:
     meta:
-        title: "Precios – AgentBoost"
+        title: "Suscripción – AgentBoost"
 
-    title: "Elija su plan"
+    title: "Activar mi suscripción"
 
-    subtitle_line_1: "Acceso completo a AgentBoost."
-    subtitle_line_2: "La misma herramienta y funcionalidades. Solo cambia la facturación."
+    selected_plan: "Ha elegido el plan"
 
-    monthly:
-        title: "Mensual"
-        period: "por mes"
+    button: "Proceder al pago seguro"
 
-    yearly:
-        title: "Anual"
-        period: "por año"
-        discount: "(2 meses gratis)"
-
-    features:
-        full_access: "Acceso completo a la plataforma"
-        no_commitment: "Sin compromiso"
-        cancel_anytime: "Cancelación en cualquier momento"
-        instant_saving: "Ahorro inmediato"
-        yearly_billing: "Facturación anual"
-
-    actions:
-        dashboard: "Acceder al panel"
-        choose_monthly: "Elegir mensual"
-        choose_yearly: "Elegir anual"
-        create_account: "Crear una cuenta"
-
-    footer:
-        line_1: "Sin compromiso. Cancelación posible en cualquier momento."
-        line_2: "Pago seguro con Stripe."
+    footer: "Pago seguro mediante Stripe • Cancelación en cualquier momento"
 
     errors:
-        payment: "Error durante el pago"
-
-verify_email:
-    meta:
-        title: "Verificación de correo"
-
-    title: "Verifique su correo electrónico"
-
-    text:
-        line_1: "Su cuenta ha sido creada. Se le ha enviado un correo electrónico."
-        line_2: "Debe verificar su correo antes de elegir una suscripción."
-
-register:
-    meta:
-        title: "Registrarse"
-
-    title: "Registro"
-
-    form:
-        email: "Correo electrónico"
-        password: "Contraseña"
-        confirm_password: "Confirmar contraseña"
-        show_password: "Mostrar contraseña"
-        password_helper: "Mínimo 8 caracteres"
-        confirm_password_helper: "Vuelva a escribir su contraseña"
-        submit: "Crear mi cuenta"
-
-    footer:
-        already_registered: "¿Ya está registrado?"
-        login: "Iniciar sesión"
-
-forgot_password:
-    meta:
-        title: "Contraseña olvidada"
-
-    title: "Contraseña olvidada"
-
-    helper: "Ingrese su dirección de correo electrónico. Le enviaremos un enlace seguro para restablecer su contraseña."
-
-    form:
-        email: "Correo electrónico"
-        submit: "Enviar enlace"
-
-    back_login: "Volver al inicio de sesión"
-
-reset_password:
-    sent:
-        meta:
-            title: "Correo enviado"
-
-        title: "Correo enviado"
-
-        text:
-            line_1: "Si existe una cuenta asociada a esta dirección de correo, se ha enviado un enlace de restablecimiento. Este enlace expirará en"
-            line_2: "Recuerde revisar su carpeta de spam."
-
-        actions:
-            resend: "Reenviar enlace"
-            back_login: "Volver al inicio de sesión"
-
-    new:
-        meta:
-            title: "Nueva contraseña"
-
-        title: "Nueva contraseña"
-
-        subtitle: "Elija una nueva contraseña segura para su cuenta AgentBoost."
-
-        form:
-            password: "Nueva contraseña"
-            confirm_password: "Confirmar nueva contraseña"
-            password_placeholder: "Su nueva contraseña"
-            confirm_password_placeholder: "Confirme la contraseña"
-            show_password: "Mostrar contraseña"
-            password_strength: "Seguridad de la contraseña"
-            submit: "Restablecer contraseña"
-
-        back_login: "Volver al inicio de sesión"
-
-email:
-    verify:
-        meta:
-            title: "Confirmación de correo"
-
-        header:
-            subtitle: "Bienvenido a AgentBoost"
-
-        title: "Confirme su dirección de correo"
-
-        text:
-            line_1: "Gracias por registrarse en AgentBoost."
-            line_2: "Para activar su cuenta y asegurar su acceso, confirme su dirección de correo haciendo clic en el botón inferior."
-
-        button: "Confirmar mi correo"
-
-        notice: "Si usted no es el origen de este registro, puede ignorar este correo."
-
-        footer: "AgentBoost — valoraciones inmobiliarias, generación de documentos y automatización IA para profesionales inmobiliarios."
-
-    reset_password:
-        meta:
-            title: "Restablecimiento de contraseña"
-
-        header:
-            subtitle: "Valoración inmobiliaria rápida y útil"
-
-        title: "Restablezca su contraseña"
-
-        text:
-            line_1: "Se ha solicitado un restablecimiento de contraseña para su cuenta AgentBoost."
-            line_2: "Haga clic en el botón inferior para definir una nueva contraseña segura."
-
-        button: "Restablecer mi contraseña"
-
-        expiration: "Este enlace expirará en"
-
-        notice: "Si usted no es el origen de esta solicitud, simplemente ignore este correo. Su contraseña actual permanecerá sin cambios."
-
-        footer: "AgentBoost — asegure sus valoraciones, anuncios y documentos inmobiliarios."
-
-    password_changed:
-        meta:
-            title: "Contraseña modificada"
-
-        header:
-            subtitle: "Seguridad y gestión de su cuenta"
-
-        title: "Su contraseña ha sido modificada"
-
-        greeting: "Hola,"
-
-        text: "La contraseña de su cuenta AgentBoost se ha modificado correctamente."
-
-        success_notice: "Si usted realizó esta modificación, no necesita hacer nada más."
-
-        security_notice: "Si usted no realizó esta acción, cambie su contraseña inmediatamente y contacte con el soporte de AgentBoost."
-
-        footer: "AgentBoost — asegure sus valoraciones, anuncios y documentos inmobiliarios."
-
-goodbye:
-    meta:
-        title: "Cuenta eliminada – AgentBoost"
-
-    title: "Cuenta eliminada"
-
-    subtitle: "Su cuenta de AgentBoost ha sido eliminada."
-
-    alert:
-        line_1: "Sus accesos han sido desactivados y su sesión ha sido cerrada."
-        line_2: "Gracias por utilizar AgentBoost para sus valoraciones y automatizaciones inmobiliarias."
-
-    actions:
-        home: "Volver al inicio"
-        pricing: "Ver planes"
-
-login:
-    meta:
-        title: "Iniciar sesión"
-
-    title: "Iniciar sesión"
-
-    form:
-        email: "Correo electrónico"
-        password: "Contraseña"
-        show_password: "Mostrar contraseña"
-        submit: "Continuar"
-
-    forgot_password: "¿Contraseña olvidada?"
-
-    footer:
-        not_registered: "¿Aún no está registrado?"
-        create_account: "Crear una cuenta"
-
-subscription:
-    active: "Suscripción activa"
-    switching_to: "Cambio a"
-    yearly: "anual"
-    monthly: "mensual"
-    next_renewal: "en la próxima renovación"
-    cancel_scheduled: "Cancelación programada para el"
-    ended: "Acceso finalizado"         
+        server: "Error del servidor al crear el pago."
+        session: "Error al crear la sesión de pago."
+        generic: "Se ha producido un error."
 
 payment:
+    success:
+        meta:
+            title: "Validación de su suscripción"
+
+        title: "Validación en curso…"
+
+        text:
+            line_1: "Su pago ha sido recibido."
+            line_2: "El acceso a su panel está siendo activado."
+            line_3: "Esto puede tardar unos segundos."
+            line_4: "Si el acceso aún no está activo, inténtelo nuevamente en unos segundos."
+
+        loading: "Cargando…"
+
+        actions:
+            dashboard: "Acceder al panel"
+
     cancel:
         meta:
             title: "Pago cancelado – AgentBoost"
@@ -348,7 +242,7 @@ subscription_manage:
 
     title: "Gestión de la suscripción"
 
-    subtitle: "Información, cambios de plan y cancelación."
+    subtitle: "Información, cambio de plan y cancelación."
 
     history:
         title: "Historial"
@@ -357,6 +251,7 @@ subscription_manage:
         title: "Estado actual"
 
         account_deletion: "Eliminación de cuenta programada"
+
         account_deleted_after: "Su cuenta será eliminada después del"
 
         cancellation_scheduled: "Cancelación programada"
@@ -370,11 +265,11 @@ subscription_manage:
         no_subscription: "No hay suscripción activa"
 
     account_delete:
-        title: "Eliminación de cuenta"
+        title: "Eliminación de la cuenta"
 
         text: "La eliminación de su cuenta está programada."
 
-        cancel: "Cancelar eliminación de mi cuenta"
+        cancel: "Cancelar eliminación de la cuenta"
 
     pending_change:
         title: "Cambio programado:"
@@ -386,81 +281,21 @@ subscription_manage:
     change_plan:
         title: "Cambiar plan"
 
-        yearly: "Pasar al plan anual"
+        yearly: "Cambiar a anual"
 
-        monthly: "Pasar al plan mensual"
+        monthly: "Cambiar a mensual"
 
     cancelled:
         title: "Cancelación programada"
 
-        text: "Su suscripción está siendo cancelada. Todavía puede cancelar esta cancelación antes del final del período."
+        text: "Su suscripción está en proceso de cancelación. Todavía puede cancelar esta cancelación antes del final del período."
 
         cancel: "Cancelar cancelación"
 
     danger_zone:
-        title: "Zona sensible"
+        title: "Zona peligrosa"
 
-        text: "La cancelación será definitiva al final del período."
+        text: "La cancelación será definitiva al final del período de facturación."
 
         button: "Cancelar mi suscripción"
 
-    payment:
-    success:
-        meta:
-            title: "Validación de su suscripción"
-
-        title: "Validación en curso…"
-
-        text:
-            line_1: "Su pago ha sido recibido."
-            line_2: "El acceso a su panel está siendo activado."
-            line_3: "Esto puede tardar unos segundos."
-            line_4: "Si el acceso aún no está activo, inténtelo nuevamente en unos segundos."
-
-        loading: "Cargando…"
-
-        actions:
-            dashboard: "Acceder al panel"
-
-subscription_checkout:
-    meta:
-        title: "Suscripción – AgentBoost"
-
-    title: "Activar mi suscripción"
-
-    selected_plan: "Ha elegido el plan"
-
-    button: "Proceder al pago seguro"
-
-    footer: "Pago seguro mediante Stripe • Cancelación en cualquier momento"
-
-    errors:
-        server: "Error del servidor al crear el pago."
-        session: "Error al crear la sesión de pago."
-        generic: "Se ha producido un error."
-
-home:
-    hero:
-        kicker: "Herramienta profesional para agentes inmobiliarios"
-
-        title_line_1: "Valoraciones, anuncios"
-        title_line_2: "y documentos."
-
-        text: "AgentBoost ayuda a los agentes inmobiliarios a crear valoraciones, generar anuncios asistidos y producir documentos profesionales."
-
-        note: "Pensado para independientes, agencias y profesionales de campo."
-
-    actions:
-        create_estimation: "Crear una valoración"
-        view_offers: "Ver planes"
-
-    preview:
-        estimations: "valoraciones"
-        listings: "anuncios"
-        pdf_ready: "PDF listos"
-
-        apartment: "Apartamento"
-
-        generate_listing: "Generar anuncio"
-
-        pdf_estimation: "PDF valoración"                                                    

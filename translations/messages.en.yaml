@@ -19,6 +19,63 @@ footer:
     privacy: "Privacy"
     contact: "Contact"
 
+home:
+    meta:
+        title: "AgentBoost — Real estate valuations and AI listings"
+
+    hero:
+        kicker: "Professional tool for real estate agents"
+        title_line_1: "Valuations, listings"
+        title_line_2: "and documents."
+        text: "AgentBoost helps real estate agents create valuations, generate assisted listings and produce professional documents."
+        note: "Designed for independents, agencies and field professionals."
+
+    actions:
+        create_estimation: "Create a valuation"
+        view_offers: "View pricing"
+
+    preview:
+        estimations: "valuations"
+        listings: "listings"
+        pdf_ready: "ready PDFs"
+        apartment: "Apartment"
+        generate_listing: "Generate listing"
+        pdf_estimation: "Valuation PDF"
+
+    features:
+        estimation:
+            title: "Accurate property valuations"
+            text: "Generate fast and structured real estate valuations."
+        listings:
+            title: "AI-generated listings"
+            text: "Create optimized property listings in seconds."
+        pdf:
+            title: "Professional PDF documents"
+            text: "Export clean and client-ready PDF reports."
+        dashboard:
+            title: "Centralized dashboard"
+            text: "Manage valuations, listings and documents from one place."
+
+    workflow:
+        title: "A simple workflow"
+        text: "Designed to save time for real estate professionals."
+
+        step_1:
+            title: "Create a valuation"
+            text: "Fill in the property information in minutes."
+        step_2:
+            title: "Generate documents"
+            text: "AgentBoost prepares your PDFs and listing content."
+        step_3:
+            title: "Send to clients"
+            text: "Deliver professional documents faster."
+
+    final_cta:
+        title_line_1: "Start creating"
+        title_line_2: "professional valuations."
+        text: "Join AgentBoost and save hours every week."
+        button: "Create a valuation"
+
 dashboard:
     title: "New valuation"
     subtitle: "Create a fast and actionable real estate valuation with AgentBoost."
@@ -105,12 +162,19 @@ contact:
         ai: "AI feature"
         other: "Other"
 
+subscription:
+    active: "Subscription active"
+    switching_to: "Switching to"
+    yearly: "yearly"
+    monthly: "monthly"
+    next_renewal: "at next renewal"
+    cancel_scheduled: "Cancellation scheduled on"
+    ended: "Access ended"
+
 pricing:
     meta:
         title: "Pricing – AgentBoost"
-
     title: "Choose your plan"
-
     subtitle_line_1: "Full access to AgentBoost."
     subtitle_line_2: "Same tool, same features. Only the billing changes."
 
@@ -143,295 +207,12 @@ pricing:
     errors:
         payment: "Payment error"
 
-verify_email:
-    meta:
-        title: "Email verification"
-
-    title: "Verify your email"
-
-    text:
-        line_1: "Your account has been created. An email has just been sent to you."
-        line_2: "You must verify your email before choosing a subscription."
-
-register:
-    meta:
-        title: "Sign up"
-
-    title: "Sign up"
-
-    form:
-        email: "Email"
-        password: "Password"
-        confirm_password: "Confirm password"
-        show_password: "Show password"
-        password_helper: "Minimum 8 characters"
-        confirm_password_helper: "Retype your password"
-        submit: "Create my account"
-
-    footer:
-        already_registered: "Already registered?"
-        login: "Log in"
-
-forgot_password:
-    meta:
-        title: "Forgot password"
-
-    title: "Forgot password"
-
-    helper: "Enter your email address. We will send you a secure link to reset your password."
-
-    form:
-        email: "Email address"
-        submit: "Send link"
-
-    back_login: "Back to login"
-
-reset_password:
-    sent:
-        meta:
-            title: "Email sent"
-
-        title: "Email sent"
-
-        text:
-            line_1: "If an account matches this email address, a reset link has just been sent. This link will expire in"
-            line_2: "Remember to check your spam folder."
-
-        actions:
-            resend: "Resend link"
-            back_login: "Back to login"
-
-    new:
-        meta:
-            title: "New password"
-
-        title: "New password"
-
-        subtitle: "Choose a new secure password for your AgentBoost account."
-
-        form:
-            password: "New password"
-            confirm_password: "Confirm new password"
-            password_placeholder: "Your new password"
-            confirm_password_placeholder: "Confirm password"
-            show_password: "Show password"
-            password_strength: "Password strength"
-            submit: "Reset password"
-
-        back_login: "Back to login"
-
-email:
-    verify:
-        meta:
-            title: "Email confirmation"
-
-        header:
-            subtitle: "Welcome to AgentBoost"
-
-        title: "Confirm your email address"
-
-        text:
-            line_1: "Thank you for registering on AgentBoost."
-            line_2: "To activate your account and secure your access, please confirm your email address by clicking the button below."
-
-        button: "Confirm my email"
-
-        notice: "If you are not the origin of this registration, you can ignore this email."
-
-        footer: "AgentBoost — real estate valuations, document generation and AI automation for real estate professionals."
-
-    reset_password:
-        meta:
-            title: "Password reset"
-
-        header:
-            subtitle: "Fast and actionable real estate valuation"
-
-        title: "Reset your password"
-
-        text:
-            line_1: "A password reset request has been made for your AgentBoost account."
-            line_2: "Click the button below to define a new secure password."
-
-        button: "Reset my password"
-
-        expiration: "This link will expire in"
-
-        notice: "If you are not the origin of this request, simply ignore this email. Your current password remains unchanged."
-
-        footer: "AgentBoost — secure your valuations, listings and real estate documents."
-
-    password_changed:
-        meta:
-            title: "Password changed"
-
-        header:
-            subtitle: "Account security and management"
-
-        title: "Your password has been changed"
-
-        greeting: "Hello,"
-
-        text: "The password for your AgentBoost account has been successfully changed."
-
-        success_notice: "If you made this change, no further action is required."
-
-        security_notice: "If you did not make this change, change your password immediately and contact AgentBoost support."
-
-        footer: "AgentBoost — secure your valuations, listings and real estate documents."
-
-goodbye:
-    meta:
-        title: "Account deleted – AgentBoost"
-
-    title: "Account deleted"
-
-    subtitle: "Your AgentBoost account has been deleted."
-
-    alert:
-        line_1: "Your access has been disabled and your session has been closed."
-        line_2: "Thank you for using AgentBoost for your real estate valuations and automations."
-
-    actions:
-        home: "Back to home"
-        pricing: "View pricing"
-
-login:
-    meta:
-        title: "Login"
-
-    title: "Login"
-
-    form:
-        email: "Email"
-        password: "Password"
-        show_password: "Show password"
-        submit: "Continue"
-
-    forgot_password: "Forgot password?"
-
-    footer:
-        not_registered: "Not registered yet?"
-        create_account: "Create an account"
-
-subscription:
-    active: "Subscription active"
-    switching_to: "Switching to"
-    yearly: "yearly"
-    monthly: "monthly"
-    next_renewal: "at next renewal"
-    cancel_scheduled: "Cancellation scheduled on"
-    ended: "Access ended"
-
-payment:
-    cancel:
-        meta:
-            title: "Payment cancelled – AgentBoost"
-
-        title: "Payment cancelled"
-
-        text:
-            line_1: "The payment has been interrupted."
-            line_2: "No subscription has been created."
-            line_3: "You can try again at any time."
-
-        actions:
-            pricing: "View pricing"
-            dashboard: "Back to dashboard"
-            home: "Back to home"
-
-        footer: "Secure payment powered by Stripe"
-
-subscription_manage:
-    meta:
-        title: "Manage subscription"
-
-    title: "Subscription management"
-
-    subtitle: "Information, plan changes and cancellation."
-
-    history:
-        title: "History"
-
-    status:
-        title: "Current status"
-
-        account_deletion: "Account deletion scheduled"
-        account_deleted_after: "Your account will be deleted after"
-
-        cancellation_scheduled: "Cancellation scheduled"
-
-        access_until: "Access available until"
-
-        active: "Subscription active"
-
-        next_renewal: "Next renewal:"
-
-        no_subscription: "No active subscription"
-
-    account_delete:
-        title: "Account deletion"
-
-        text: "Your account deletion is scheduled."
-
-        cancel: "Cancel account deletion"
-
-    pending_change:
-        title: "Scheduled change:"
-
-        from: "starting from"
-
-        cancel: "Cancel change"
-
-    change_plan:
-        title: "Change plan"
-
-        yearly: "Switch to yearly"
-
-        monthly: "Switch to monthly"
-
-    cancelled:
-        title: "Cancellation scheduled"
-
-        text: "Your subscription is being cancelled. You can still cancel this cancellation before the end of the billing period."
-
-        cancel: "Cancel cancellation"
-
-    danger_zone:
-        title: "Danger zone"
-
-        text: "The cancellation becomes final at the end of the billing period."
-
-        button: "Cancel my subscription"
-
-    payment:
-    success:
-        meta:
-            title: "Subscription validation"
-
-        title: "Validation in progress…"
-
-        text:
-            line_1: "Your payment has been received."
-            line_2: "Access to your dashboard is being activated."
-            line_3: "This may take a few seconds."
-            line_4: "If access is not active yet, try again in a few seconds."
-
-        loading: "Loading…"
-
-        actions:
-            dashboard: "Access dashboard"
-
 subscription_checkout:
     meta:
         title: "Subscription – AgentBoost"
-
     title: "Activate my subscription"
-
     selected_plan: "You have selected the"
-
     button: "Proceed to secure payment"
-
     footer: "Secure payment via Stripe • Cancel anytime"
 
     errors:
@@ -439,28 +220,75 @@ subscription_checkout:
         session: "Error while creating the payment session."
         generic: "An error occurred."
 
-home:
-    hero:
-        kicker: "Professional tool for real estate agents"
+payment:
+    success:
+        meta:
+            title: "Subscription validation"
+        title: "Validation in progress…"
+        text:
+            line_1: "Your payment has been received."
+            line_2: "Access to your dashboard is being activated."
+            line_3: "This may take a few seconds."
+            line_4: "If access is not active yet, try again in a few seconds."
+        loading: "Loading…"
+        actions:
+            dashboard: "Access dashboard"
 
-        title_line_1: "Valuations, listings"
-        title_line_2: "and documents."
+    cancel:
+        meta:
+            title: "Payment cancelled – AgentBoost"
+        title: "Payment cancelled"
+        text:
+            line_1: "The payment has been interrupted."
+            line_2: "No subscription has been created."
+            line_3: "You can try again at any time."
+        actions:
+            pricing: "View pricing"
+            dashboard: "Back to dashboard"
+            home: "Back to home"
+        footer: "Secure payment powered by Stripe"
 
-        text: "AgentBoost helps real estate agents create valuations, generate assisted listings and produce professional documents."
+subscription_manage:
+    meta:
+        title: "Manage subscription"
 
-        note: "Designed for independents, agencies and field professionals."
+    title: "Subscription management"
+    subtitle: "Information, plan changes and cancellation."
 
-    actions:
-        create_estimation: "Create a valuation"
-        view_offers: "View pricing"
+    history:
+        title: "History"
 
-    preview:
-        estimations: "valuations"
-        listings: "listings"
-        pdf_ready: "ready PDFs"
+    status:
+        title: "Current status"
+        account_deletion: "Account deletion scheduled"
+        account_deleted_after: "Your account will be deleted after"
+        cancellation_scheduled: "Cancellation scheduled"
+        access_until: "Access available until"
+        active: "Subscription active"
+        next_renewal: "Next renewal:"
+        no_subscription: "No active subscription"
 
-        apartment: "Apartment"
+    account_delete:
+        title: "Account deletion"
+        text: "Your account deletion is scheduled."
+        cancel: "Cancel account deletion"
 
-        generate_listing: "Generate listing"
+    pending_change:
+        title: "Scheduled change:"
+        from: "starting from"
+        cancel: "Cancel change"
 
-        pdf_estimation: "Valuation PDF"                                                            
+    change_plan:
+        title: "Change plan"
+        yearly: "Switch to yearly"
+        monthly: "Switch to monthly"
+
+    cancelled:
+        title: "Cancellation scheduled"
+        text: "Your subscription is being cancelled. You can still cancel this cancellation before the end of the billing period."
+        cancel: "Cancel cancellation"
+
+    danger_zone:
+        title: "Danger zone"
+        text: "The cancellation becomes final at the end of the billing period."
+        button: "Cancel my subscription"  
