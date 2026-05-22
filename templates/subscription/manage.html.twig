@@ -1,6 +1,7 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Gérer mon abonnement
+{% block title %}
+	{{ 'subscription_manage.meta.title'|trans }}
 {% endblock %}
 
 {% block body %}
@@ -10,164 +11,244 @@
 	<div class="container my-5" style="max-width: 900px">
 
 		{% for message in app.flashes('success') %}
-			<div class="alert alert-success mt-3">{{ message }}</div>
+			<div class="alert alert-success mt-3">
+				{{ message }}
+			</div>
 		{% endfor %}
 
 		{% for message in app.flashes('danger') %}
-			<div class="alert alert-danger mt-3">{{ message }}</div>
+			<div class="alert alert-danger mt-3">
+				{{ message }}
+			</div>
 		{% endfor %}
 
 		{% for message in app.flashes('error') %}
-			<div class="alert alert-danger mt-3">{{ message }}</div>
+			<div class="alert alert-danger mt-3">
+				{{ message }}
+			</div>
 		{% endfor %}
 
 		<div class="mb-5 p-4 border rounded-3" style="background:#f9fafb;border-left:5px solid #064663">
-			<h1 class="h4 mb-1 text-dark">Gestion de l’abonnement</h1>
-			<p class="text-muted mb-0">Informations, changements de formule et résiliation.</p>
+			<h1 class="h4 mb-1 text-dark">
+				{{ 'subscription_manage.title'|trans }}
+			</h1>
+
+			<p class="text-muted mb-0">
+				{{ 'subscription_manage.subtitle'|trans }}
+			</p>
 		</div>
 
 		<section class="mb-5">
-			<h2 class="h6 text-secondary mb-3">Historique</h2>
+			<h2 class="h6 text-secondary mb-3">
+				{{ 'subscription_manage.history.title'|trans }}
+			</h2>
+
 			<div class="border rounded-3 p-4 bg-white">
 				{% include 'subscription/_timeline.html.twig' %}
 			</div>
 		</section>
 
 		<section class="mb-5">
-			<h2 class="h6 text-secondary mb-3">Statut actuel</h2>
+			<h2 class="h6 text-secondary mb-3">
+				{{ 'subscription_manage.status.title'|trans }}
+			</h2>
 
 			<div class="p-4 rounded-3" style="background:#f8f9fa;border:1px solid #e5e7eb">
 
 				{% if isAccountDeletionScheduled %}
+
 					<p class="mb-1 text-danger">
-						<strong>Suppression du compte programmée</strong>
+						<strong>
+							{{ 'subscription_manage.status.account_deletion'|trans }}
+						</strong>
 					</p>
+
 					<small class="text-muted">
-						Votre compte sera supprimé après le
+						{{ 'subscription_manage.status.account_deleted_after'|trans }}
+
 						{{ user.nextBillingDate|date('d/m/Y') }}.
 					</small>
 
 				{% elseif isCancellationScheduled %}
+
 					<p class="mb-1 text-warning">
-						<strong>Résiliation programmée</strong>
+						<strong>
+							{{ 'subscription_manage.status.cancellation_scheduled'|trans }}
+						</strong>
+
 						—
-						{{ user.currentPlan == 'yearly' ? 'Annuel' : 'Mensuel' }}
+
+						{{ user.currentPlan == 'yearly'
+							? 'subscription.yearly'|trans
+							: 'subscription.monthly'|trans
+						}}
 					</p>
+
 					<small class="text-muted">
-						Accès conservé jusqu’au
+						{{ 'subscription_manage.status.access_until'|trans }}
+
 						{{ user.nextBillingDate|date('d/m/Y') }}.
 					</small>
 
 				{% elseif user.subscriptionStatus == 'active' %}
+
 					<p class="mb-1">
-						<strong class="text-success">Abonnement actif</strong>
+						<strong class="text-success">
+							{{ 'subscription_manage.status.active'|trans }}
+						</strong>
+
 						—
-						{{ user.currentPlan == 'yearly' ? 'Annuel' : 'Mensuel' }}
+
+						{{ user.currentPlan == 'yearly'
+							? 'subscription.yearly'|trans
+							: 'subscription.monthly'|trans
+						}}
 					</p>
+
 					<small class="text-muted">
-						Prochain renouvellement :
+						{{ 'subscription_manage.status.next_renewal'|trans }}
+
 						{{ user.nextBillingDate|date('d/m/Y') }}
 					</small>
 
 				{% else %}
-					<p class="text-muted mb-0">Aucun abonnement actif</p>
+
+					<p class="text-muted mb-0">
+						{{ 'subscription_manage.status.no_subscription'|trans }}
+					</p>
+
 				{% endif %}
 			</div>
 		</section>
 
 		{% if isAccountDeletionScheduled %}
 			<section class="mb-5">
-				<h2 class="h6 text-danger mb-3">Suppression du compte</h2>
+
+				<h2 class="h6 text-danger mb-3">
+					{{ 'subscription_manage.account_delete.title'|trans }}
+				</h2>
 
 				<div class="p-4 rounded-3" style="background:#fff5f5;border:1px solid #fecaca">
+
 					<p class="mb-3 text-danger">
-						La suppression de votre compte est programmée.
+						{{ 'subscription_manage.account_delete.text'|trans }}
 					</p>
 
 					<form method="post" action="{{ path('account_delete_cancel') }}">
 						<input type="hidden" name="_token" value="{{ csrf_token('cancel_account_deletion') }}">
 
 						<button type="submit" class="btn btn-outline-danger">
-							Annuler la suppression de mon compte
+							{{ 'subscription_manage.account_delete.cancel'|trans }}
 						</button>
 					</form>
+
 				</div>
 			</section>
 		{% endif %}
 
 		{% if user.pendingPlan and not isAccountDeletionScheduled %}
 			<section class="mb-5">
+
 				<div class="p-4 rounded-3 border" style="background:#fffaf0;border-color:#facc15">
+
 					<p class="mb-2">
-						Changement prévu :
-						<strong>{{ user.pendingPlan == 'yearly' ? 'Annuel' : 'Mensuel' }}</strong>
-						à partir du
+						{{ 'subscription_manage.pending_change.title'|trans }}
+
+						<strong>
+							{{ user.pendingPlan == 'yearly'
+								? 'subscription.yearly'|trans
+								: 'subscription.monthly'|trans
+							}}
+						</strong>
+
+						{{ 'subscription_manage.pending_change.from'|trans }}
+
 						{{ user.nextBillingDate|date('d/m/Y') }}
 					</p>
 
 					<form method="post" action="{{ path('subscription_cancel_pending_plan') }}">
 						<button type="submit" class="btn btn-sm btn-outline-secondary">
-							Annuler le changement
+							{{ 'subscription_manage.pending_change.cancel'|trans }}
 						</button>
 					</form>
+
 				</div>
 			</section>
 		{% endif %}
 
 		{% if user.subscriptionStatus == 'active' and user.pendingPlan is null and not isAccountDeletionScheduled and not isCancellationScheduled %}
 			<section class="mb-5">
-				<h2 class="h6 text-secondary mb-3">Changer de formule</h2>
+
+				<h2 class="h6 text-secondary mb-3">
+					{{ 'subscription_manage.change_plan.title'|trans }}
+				</h2>
 
 				<div class="border rounded-3 p-4 bg-white">
+
 					{% if user.currentPlan == 'yearly' %}
+
 						<form method="post" action="{{ path('subscription_change_plan', { plan: 'monthly' }) }}">
 							<button type="submit" class="btn btn-outline-secondary">
-								Passer en mensuel
+								{{ 'subscription_manage.change_plan.monthly'|trans }}
 							</button>
 						</form>
+
 					{% else %}
+
 						<form method="post" action="{{ path('subscription_change_plan', { plan: 'yearly' }) }}">
 							<button type="submit" class="btn btn-primary">
-								Passer en annuel
+								{{ 'subscription_manage.change_plan.yearly'|trans }}
 							</button>
 						</form>
+
 					{% endif %}
+
 				</div>
 			</section>
 		{% endif %}
 
 		{% if isCancellationScheduled and not isAccountDeletionScheduled %}
 			<section class="mb-5">
-				<h2 class="h6 text-secondary mb-3">Résiliation programmée</h2>
+
+				<h2 class="h6 text-secondary mb-3">
+					{{ 'subscription_manage.cancelled.title'|trans }}
+				</h2>
 
 				<div class="p-4 rounded-3 border" style="background:#f0fdf4;border-color:#22c55e">
+
 					<p class="mb-3 text-success">
-						Votre abonnement est en cours de résiliation.
-												                    Vous pouvez encore annuler cette résiliation avant la fin de la période.
+						{{ 'subscription_manage.cancelled.text'|trans }}
 					</p>
 
 					<form method="post" action="{{ path('subscription_cancel_cancellation') }}">
 						<button type="submit" class="btn btn-success">
-							Annuler la résiliation
+							{{ 'subscription_manage.cancelled.cancel'|trans }}
 						</button>
 					</form>
+
 				</div>
 			</section>
 
 		{% elseif user.subscriptionStatus == 'active' and not isAccountDeletionScheduled %}
+
 			<section class="mb-5">
-				<h2 class="h6 text-danger mb-3">Zone sensible</h2>
+
+				<h2 class="h6 text-danger mb-3">
+					{{ 'subscription_manage.danger_zone.title'|trans }}
+				</h2>
 
 				<div class="p-4 rounded-3" style="background:#fff5f5;border:1px solid #fecaca">
+
 					<p class="mb-3 text-danger">
-						La résiliation est définitive à la fin de la période.
+						{{ 'subscription_manage.danger_zone.text'|trans }}
 					</p>
 
 					<form method="post" action="{{ path('subscription_cancel') }}">
 						<button type="submit" class="btn btn-danger">
-							Résilier mon abonnement
+							{{ 'subscription_manage.danger_zone.button'|trans }}
 						</button>
 					</form>
+
 				</div>
 			</section>
 		{% endif %}

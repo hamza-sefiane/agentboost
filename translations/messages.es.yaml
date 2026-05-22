@@ -278,4 +278,189 @@ email:
 
         security_notice: "Si usted no realizó esta acción, cambie su contraseña inmediatamente y contacte con el soporte de AgentBoost."
 
-        footer: "AgentBoost — asegure sus valoraciones, anuncios y documentos inmobiliarios." 
+        footer: "AgentBoost — asegure sus valoraciones, anuncios y documentos inmobiliarios."
+
+goodbye:
+    meta:
+        title: "Cuenta eliminada – AgentBoost"
+
+    title: "Cuenta eliminada"
+
+    subtitle: "Su cuenta de AgentBoost ha sido eliminada."
+
+    alert:
+        line_1: "Sus accesos han sido desactivados y su sesión ha sido cerrada."
+        line_2: "Gracias por utilizar AgentBoost para sus valoraciones y automatizaciones inmobiliarias."
+
+    actions:
+        home: "Volver al inicio"
+        pricing: "Ver planes"
+
+login:
+    meta:
+        title: "Iniciar sesión"
+
+    title: "Iniciar sesión"
+
+    form:
+        email: "Correo electrónico"
+        password: "Contraseña"
+        show_password: "Mostrar contraseña"
+        submit: "Continuar"
+
+    forgot_password: "¿Contraseña olvidada?"
+
+    footer:
+        not_registered: "¿Aún no está registrado?"
+        create_account: "Crear una cuenta"
+
+subscription:
+    active: "Suscripción activa"
+    switching_to: "Cambio a"
+    yearly: "anual"
+    monthly: "mensual"
+    next_renewal: "en la próxima renovación"
+    cancel_scheduled: "Cancelación programada para el"
+    ended: "Acceso finalizado"         
+
+payment:
+    cancel:
+        meta:
+            title: "Pago cancelado – AgentBoost"
+
+        title: "Pago cancelado"
+
+        text:
+            line_1: "El pago ha sido interrumpido."
+            line_2: "No se ha creado ninguna suscripción."
+            line_3: "Puede intentarlo nuevamente en cualquier momento."
+
+        actions:
+            pricing: "Ver planes"
+            dashboard: "Volver al panel"
+            home: "Volver al inicio"
+
+        footer: "Pago seguro con Stripe"
+
+subscription_manage:
+    meta:
+        title: "Gestionar suscripción"
+
+    title: "Gestión de la suscripción"
+
+    subtitle: "Información, cambios de plan y cancelación."
+
+    history:
+        title: "Historial"
+
+    status:
+        title: "Estado actual"
+
+        account_deletion: "Eliminación de cuenta programada"
+        account_deleted_after: "Su cuenta será eliminada después del"
+
+        cancellation_scheduled: "Cancelación programada"
+
+        access_until: "Acceso disponible hasta"
+
+        active: "Suscripción activa"
+
+        next_renewal: "Próxima renovación:"
+
+        no_subscription: "No hay suscripción activa"
+
+    account_delete:
+        title: "Eliminación de cuenta"
+
+        text: "La eliminación de su cuenta está programada."
+
+        cancel: "Cancelar eliminación de mi cuenta"
+
+    pending_change:
+        title: "Cambio programado:"
+
+        from: "a partir del"
+
+        cancel: "Cancelar cambio"
+
+    change_plan:
+        title: "Cambiar plan"
+
+        yearly: "Pasar al plan anual"
+
+        monthly: "Pasar al plan mensual"
+
+    cancelled:
+        title: "Cancelación programada"
+
+        text: "Su suscripción está siendo cancelada. Todavía puede cancelar esta cancelación antes del final del período."
+
+        cancel: "Cancelar cancelación"
+
+    danger_zone:
+        title: "Zona sensible"
+
+        text: "La cancelación será definitiva al final del período."
+
+        button: "Cancelar mi suscripción"
+
+    payment:
+    success:
+        meta:
+            title: "Validación de su suscripción"
+
+        title: "Validación en curso…"
+
+        text:
+            line_1: "Su pago ha sido recibido."
+            line_2: "El acceso a su panel está siendo activado."
+            line_3: "Esto puede tardar unos segundos."
+            line_4: "Si el acceso aún no está activo, inténtelo nuevamente en unos segundos."
+
+        loading: "Cargando…"
+
+        actions:
+            dashboard: "Acceder al panel"
+
+subscription_checkout:
+    meta:
+        title: "Suscripción – AgentBoost"
+
+    title: "Activar mi suscripción"
+
+    selected_plan: "Ha elegido el plan"
+
+    button: "Proceder al pago seguro"
+
+    footer: "Pago seguro mediante Stripe • Cancelación en cualquier momento"
+
+    errors:
+        server: "Error del servidor al crear el pago."
+        session: "Error al crear la sesión de pago."
+        generic: "Se ha producido un error."
+
+home:
+    hero:
+        kicker: "Herramienta profesional para agentes inmobiliarios"
+
+        title_line_1: "Valoraciones, anuncios"
+        title_line_2: "y documentos."
+
+        text: "AgentBoost ayuda a los agentes inmobiliarios a crear valoraciones, generar anuncios asistidos y producir documentos profesionales."
+
+        note: "Pensado para independientes, agencias y profesionales de campo."
+
+    actions:
+        create_estimation: "Crear una valoración"
+        view_offers: "Ver planes"
+
+    preview:
+        estimations: "valoraciones"
+        listings: "anuncios"
+        pdf_ready: "PDF listos"
+
+        apartment: "Apartamento"
+
+        generate_listing: "Generar anuncio"
+
+        pdf_estimation: "PDF valoración"                                                    

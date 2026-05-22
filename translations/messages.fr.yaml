@@ -279,3 +279,188 @@ email:
         security_notice: "Si vous n’êtes pas à l’origine de cette action, changez immédiatement votre mot de passe et contactez le support AgentBoost."
 
         footer: "AgentBoost — sécurisez vos estimations, vos annonces et vos documents immobiliers."
+
+goodbye:
+    meta:
+        title: "Compte supprimé – AgentBoost"
+
+    title: "Compte supprimé"
+
+    subtitle: "Votre compte AgentBoost a bien été supprimé."
+
+    alert:
+        line_1: "Vos accès ont été désactivés et votre session a été fermée."
+        line_2: "Merci d’avoir utilisé AgentBoost pour vos estimations et vos automatisations immobilières."
+
+    actions:
+        home: "Retour à l’accueil"
+        pricing: "Voir les offres"
+
+login:
+    meta:
+        title: "Connexion"
+
+    title: "Connexion"
+
+    form:
+        email: "Email"
+        password: "Mot de passe"
+        show_password: "Afficher le mot de passe"
+        submit: "Continuer"
+
+    forgot_password: "Mot de passe oublié ?"
+
+    footer:
+        not_registered: "Pas encore inscrit ?"
+        create_account: "Créer un compte"
+
+subscription:
+    active: "Abonnement actif"
+    switching_to: "Passage en"
+    yearly: "annuel"
+    monthly: "mensuel"
+    next_renewal: "au prochain renouvellement"
+    cancel_scheduled: "Résiliation programmée le"
+    ended: "Accès terminé"
+
+payment:
+    cancel:
+        meta:
+            title: "Paiement annulé – AgentBoost"
+
+        title: "Paiement annulé"
+
+        text:
+            line_1: "Le paiement a été interrompu."
+            line_2: "Aucun abonnement n’a été créé."
+            line_3: "Vous pouvez réessayer à tout moment."
+
+        actions:
+            pricing: "Voir les formules"
+            dashboard: "Retour au dashboard"
+            home: "Retour à l’accueil"
+
+        footer: "Paiement sécurisé par Stripe"
+
+subscription_manage:
+    meta:
+        title: "Gérer mon abonnement"
+
+    title: "Gestion de l’abonnement"
+
+    subtitle: "Informations, changements de formule et résiliation."
+
+    history:
+        title: "Historique"
+
+    status:
+        title: "Statut actuel"
+
+        account_deletion: "Suppression du compte programmée"
+        account_deleted_after: "Votre compte sera supprimé après le"
+
+        cancellation_scheduled: "Résiliation programmée"
+
+        access_until: "Accès conservé jusqu’au"
+
+        active: "Abonnement actif"
+
+        next_renewal: "Prochain renouvellement :"
+
+        no_subscription: "Aucun abonnement actif"
+
+    account_delete:
+        title: "Suppression du compte"
+
+        text: "La suppression de votre compte est programmée."
+
+        cancel: "Annuler la suppression de mon compte"
+
+    pending_change:
+        title: "Changement prévu :"
+
+        from: "à partir du"
+
+        cancel: "Annuler le changement"
+
+    change_plan:
+        title: "Changer de formule"
+
+        yearly: "Passer en annuel"
+
+        monthly: "Passer en mensuel"
+
+    cancelled:
+        title: "Résiliation programmée"
+
+        text: "Votre abonnement est en cours de résiliation. Vous pouvez encore annuler cette résiliation avant la fin de la période."
+
+        cancel: "Annuler la résiliation"
+
+    danger_zone:
+        title: "Zone sensible"
+
+        text: "La résiliation est définitive à la fin de la période."
+
+        button: "Résilier mon abonnement"
+
+    payment:
+    success:
+        meta:
+            title: "Validation de votre abonnement"
+
+        title: "Validation en cours…"
+
+        text:
+            line_1: "Votre paiement a été reçu."
+            line_2: "L’accès à votre dashboard est en cours d’activation."
+            line_3: "Cela peut prendre quelques secondes."
+            line_4: "Si l’accès n’est pas encore actif, réessayez dans quelques secondes."
+
+        loading: "Chargement…"
+
+        actions:
+            dashboard: "Accéder au dashboard"
+
+subscription_checkout:
+    meta:
+        title: "Souscription – AgentBoost"
+
+    title: "Activer mon abonnement"
+
+    selected_plan: "Vous avez choisi la formule"
+
+    button: "Procéder au paiement sécurisé"
+
+    footer: "Paiement sécurisé via Stripe • Résiliable à tout moment"
+
+    errors:
+        server: "Erreur serveur lors de la création du paiement."
+        session: "Erreur lors de la création de la session de paiement."
+        generic: "Une erreur est survenue."
+
+home:
+    hero:
+        kicker: "Outil métier pour agents immobiliers"
+
+        title_line_1: "Estimations, annonces"
+        title_line_2: "et documents."
+
+        text: "AgentBoost aide les agents immobiliers à créer des estimations, générer des annonces assistées et produire des documents professionnels."
+
+        note: "Pensé pour les indépendants, agences et professionnels terrain."
+
+    actions:
+        create_estimation: "Créer une estimation"
+        view_offers: "Voir les offres"
+
+    preview:
+        estimations: "estimations"
+        listings: "annonces"
+        pdf_ready: "PDF prêts"
+
+        apartment: "Appartement"
+
+        generate_listing: "Générer annonce"
+
+        pdf_estimation: "PDF estimation"                                                            
