@@ -1,131 +1,126 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Mon agence{% endblock %}
+{% block title %}
+	{{ 'meta.title'|trans({}, 'company') }}
+{% endblock %}
 
 {% block body %}
-<div class="container py-5" style="max-width: 820px;">
-    <div class="mb-4">
-        <h1 class="h3 fw-bold mb-1">Informations agence</h1>
-        <p class="text-muted mb-0">
-            Ces informations apparaîtront sur vos estimations et PDF.
-        </p>
-    </div>
+	<div class="container py-5" style="max-width: 820px;">
 
-    <div class="card border-0 shadow-sm rounded-4">
-        <div class="card-body p-4 p-md-5">
-            <form method="post" enctype="multipart/form-data">
-                <div class="mb-4 text-center">
-                    {% if user.companyLogo %}
-                        <img
-                            src="{{ asset('uploads/logos/' ~ user.companyLogo) }}"
-                            alt="Logo de l’agence"
-                            class="rounded-3 border bg-white p-2 shadow-sm"
-                            style="max-height: 120px; max-width: 180px; object-fit: contain;"
-                        >
-                    {% else %}
-                        <div class="mx-auto rounded-3 border bg-light d-flex align-items-center justify-content-center"
-                             style="height: 120px; width: 180px;">
-                            <span class="text-muted small">Aucun logo</span>
-                        </div>
-                    {% endif %}
-                </div>
+		<div class="mb-4">
+			<h1 class="h3 fw-bold mb-1">
+				{{ 'title'|trans({}, 'company') }}
+			</h1>
 
-                <div class="mb-3">
-                    <label class="form-label fw-semibold">Nom de l’agence</label>
-                    <input
-                        name="company_name"
-                        class="form-control form-control-lg"
-                        placeholder="Ex : AgentBoost Immobilier"
-                        value="{{ user.companyName }}"
-                    >
-                </div>
+			<p class="text-muted mb-0">
+				{{ 'subtitle'|trans({}, 'company') }}
+			</p>
+		</div>
 
-                <div class="mb-3">
-                    <label class="form-label fw-semibold">Rue</label>
-                    <input
-                        name="agency_street"
-                        class="form-control form-control-lg"
-                        placeholder="Ex : 10 rue de Paris"
-                        value="{{ user.agencyStreet }}"
-                    >
-                </div>
+		<div class="card border-0 shadow-sm rounded-4">
+			<div class="card-body p-4 p-md-5">
 
-                <div class="mb-3">
-                    <label class="form-label fw-semibold">Complément d’adresse</label>
-                    <input
-                        name="agency_address_complement"
-                        class="form-control form-control-lg"
-                        placeholder="Ex : Bâtiment B, 2e étage"
-                        value="{{ user.agencyAddressComplement }}"
-                    >
-                </div>
+				<form method="post" enctype="multipart/form-data">
 
-                <div class="row">
-                    <div class="col-md-4 mb-3">
-                        <label class="form-label fw-semibold">Code postal</label>
-                        <input
-                            name="agency_postal_code"
-                            class="form-control form-control-lg"
-                            placeholder="Ex : 75000"
-                            value="{{ user.agencyPostalCode }}"
-                        >
-                    </div>
+					<div class="mb-4 text-center">
 
-                    <div class="col-md-8 mb-3">
-                        <label class="form-label fw-semibold">Ville</label>
-                        <input
-                            name="agency_city"
-                            class="form-control form-control-lg"
-                            placeholder="Ex : Paris"
-                            value="{{ user.agencyCity }}"
-                        >
-                    </div>
-                </div>
+						{% if user.companyLogo %}
+							<img src="{{ asset('uploads/logos/' ~ user.companyLogo) }}" alt="{{ 'logo.alt'|trans({}, 'company') }}" class="rounded-3 border bg-white p-2 shadow-sm" style="max-height: 120px; max-width: 180px; object-fit: contain;">
+						{% else %}
+							<div class="mx-auto rounded-3 border bg-light d-flex align-items-center justify-content-center" style="height: 120px; width: 180px;">
 
-                <div class="mb-3">
-                    <label class="form-label fw-semibold">Téléphone</label>
-                    <input
-                        name="company_phone"
-                        class="form-control form-control-lg"
-                        placeholder="Ex : 06 12 34 56 78"
-                        value="{{ user.companyPhone }}"
-                    >
-                </div>
+								<span class="text-muted small">
+									{{ 'logo.empty'|trans({}, 'company') }}
+								</span>
+							</div>
+						{% endif %}
+					</div>
 
-                <div class="mb-3">
-                    <label class="form-label fw-semibold">Email agence</label>
-                    <input
-                        type="email"
-                        name="agency_email"
-                        class="form-control form-control-lg"
-                        placeholder="Ex : contact@agence.fr"
-                        value="{{ user.agencyEmail }}"
-                    >
-                </div>
+					<div class="mb-3">
+						<label class="form-label fw-semibold">
+							{{ 'form.company_name.label'|trans({}, 'company') }}
+						</label>
 
-                <div class="mb-4">
-                    <label class="form-label fw-semibold">Site web</label>
-                    <input
-                        name="agency_website"
-                        class="form-control form-control-lg"
-                        placeholder="Ex : https://www.agence.fr"
-                        value="{{ user.agencyWebsite }}"
-                    >
-                </div>
+						<input name="company_name" class="form-control form-control-lg" placeholder="{{ 'form.company_name.placeholder'|trans({}, 'company') }}" value="{{ user.companyName }}">
+					</div>
 
-                <div class="mb-4">
-                    <label class="form-label fw-semibold">Logo</label>
-                    <input type="file" name="company_logo" class="form-control">
-                    <small class="text-muted">
-                        Formats recommandés : PNG ou JPG. Le logo sera utilisé dans vos PDF.
-                    </small>
-                </div>
+					<div class="mb-3">
+						<label class="form-label fw-semibold">
+							{{ 'form.street.label'|trans({}, 'company') }}
+						</label>
 
-                <button type="submit" class="btn btn-success btn-lg w-100">
-                    Enregistrer les informations
-                </button>
-            </form>
-        </div>
-    </div>
-</div>
+						<input name="agency_street" class="form-control form-control-lg" placeholder="{{ 'form.street.placeholder'|trans({}, 'company') }}" value="{{ user.agencyStreet }}">
+					</div>
+
+					<div class="mb-3">
+						<label class="form-label fw-semibold">
+							{{ 'form.address_complement.label'|trans({}, 'company') }}
+						</label>
+
+						<input name="agency_address_complement" class="form-control form-control-lg" placeholder="{{ 'form.address_complement.placeholder'|trans({}, 'company') }}" value="{{ user.agencyAddressComplement }}">
+					</div>
+
+					<div class="row">
+
+						<div class="col-md-4 mb-3">
+							<label class="form-label fw-semibold">
+								{{ 'form.postal_code.label'|trans({}, 'company') }}
+							</label>
+
+							<input name="agency_postal_code" class="form-control form-control-lg" placeholder="{{ 'form.postal_code.placeholder'|trans({}, 'company') }}" value="{{ user.agencyPostalCode }}">
+						</div>
+
+						<div class="col-md-8 mb-3">
+							<label class="form-label fw-semibold">
+								{{ 'form.city.label'|trans({}, 'company') }}
+							</label>
+
+							<input name="agency_city" class="form-control form-control-lg" placeholder="{{ 'form.city.placeholder'|trans({}, 'company') }}" value="{{ user.agencyCity }}">
+						</div>
+					</div>
+
+					<div class="mb-3">
+						<label class="form-label fw-semibold">
+							{{ 'form.phone.label'|trans({}, 'company') }}
+						</label>
+
+						<input name="company_phone" class="form-control form-control-lg" placeholder="{{ 'form.phone.placeholder'|trans({}, 'company') }}" value="{{ user.companyPhone }}">
+					</div>
+
+					<div class="mb-3">
+						<label class="form-label fw-semibold">
+							{{ 'form.email.label'|trans({}, 'company') }}
+						</label>
+
+						<input type="email" name="agency_email" class="form-control form-control-lg" placeholder="{{ 'form.email.placeholder'|trans({}, 'company') }}" value="{{ user.agencyEmail }}">
+					</div>
+
+					<div class="mb-4">
+						<label class="form-label fw-semibold">
+							{{ 'form.website.label'|trans({}, 'company') }}
+						</label>
+
+						<input name="agency_website" class="form-control form-control-lg" placeholder="{{ 'form.website.placeholder'|trans({}, 'company') }}" value="{{ user.agencyWebsite }}">
+					</div>
+
+					<div class="mb-4">
+						<label class="form-label fw-semibold">
+							{{ 'form.logo.label'|trans({}, 'company') }}
+						</label>
+
+						<input type="file" name="company_logo" class="form-control">
+
+						<small class="text-muted">
+							{{ 'form.logo.help'|trans({}, 'company') }}
+						</small>
+					</div>
+
+					<button type="submit" class="btn btn-success btn-lg w-100">
+						{{ 'actions.save'|trans({}, 'company') }}
+					</button>
+
+				</form>
+			</div>
+		</div>
+	</div>
 {% endblock %}
