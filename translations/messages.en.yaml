@@ -279,3 +279,188 @@ email:
         security_notice: "If you did not make this change, change your password immediately and contact AgentBoost support."
 
         footer: "AgentBoost — secure your valuations, listings and real estate documents."
+
+goodbye:
+    meta:
+        title: "Account deleted – AgentBoost"
+
+    title: "Account deleted"
+
+    subtitle: "Your AgentBoost account has been deleted."
+
+    alert:
+        line_1: "Your access has been disabled and your session has been closed."
+        line_2: "Thank you for using AgentBoost for your real estate valuations and automations."
+
+    actions:
+        home: "Back to home"
+        pricing: "View pricing"
+
+login:
+    meta:
+        title: "Login"
+
+    title: "Login"
+
+    form:
+        email: "Email"
+        password: "Password"
+        show_password: "Show password"
+        submit: "Continue"
+
+    forgot_password: "Forgot password?"
+
+    footer:
+        not_registered: "Not registered yet?"
+        create_account: "Create an account"
+
+subscription:
+    active: "Subscription active"
+    switching_to: "Switching to"
+    yearly: "yearly"
+    monthly: "monthly"
+    next_renewal: "at next renewal"
+    cancel_scheduled: "Cancellation scheduled on"
+    ended: "Access ended"
+
+payment:
+    cancel:
+        meta:
+            title: "Payment cancelled – AgentBoost"
+
+        title: "Payment cancelled"
+
+        text:
+            line_1: "The payment has been interrupted."
+            line_2: "No subscription has been created."
+            line_3: "You can try again at any time."
+
+        actions:
+            pricing: "View pricing"
+            dashboard: "Back to dashboard"
+            home: "Back to home"
+
+        footer: "Secure payment powered by Stripe"
+
+subscription_manage:
+    meta:
+        title: "Manage subscription"
+
+    title: "Subscription management"
+
+    subtitle: "Information, plan changes and cancellation."
+
+    history:
+        title: "History"
+
+    status:
+        title: "Current status"
+
+        account_deletion: "Account deletion scheduled"
+        account_deleted_after: "Your account will be deleted after"
+
+        cancellation_scheduled: "Cancellation scheduled"
+
+        access_until: "Access available until"
+
+        active: "Subscription active"
+
+        next_renewal: "Next renewal:"
+
+        no_subscription: "No active subscription"
+
+    account_delete:
+        title: "Account deletion"
+
+        text: "Your account deletion is scheduled."
+
+        cancel: "Cancel account deletion"
+
+    pending_change:
+        title: "Scheduled change:"
+
+        from: "starting from"
+
+        cancel: "Cancel change"
+
+    change_plan:
+        title: "Change plan"
+
+        yearly: "Switch to yearly"
+
+        monthly: "Switch to monthly"
+
+    cancelled:
+        title: "Cancellation scheduled"
+
+        text: "Your subscription is being cancelled. You can still cancel this cancellation before the end of the billing period."
+
+        cancel: "Cancel cancellation"
+
+    danger_zone:
+        title: "Danger zone"
+
+        text: "The cancellation becomes final at the end of the billing period."
+
+        button: "Cancel my subscription"
+
+    payment:
+    success:
+        meta:
+            title: "Subscription validation"
+
+        title: "Validation in progress…"
+
+        text:
+            line_1: "Your payment has been received."
+            line_2: "Access to your dashboard is being activated."
+            line_3: "This may take a few seconds."
+            line_4: "If access is not active yet, try again in a few seconds."
+
+        loading: "Loading…"
+
+        actions:
+            dashboard: "Access dashboard"
+
+subscription_checkout:
+    meta:
+        title: "Subscription – AgentBoost"
+
+    title: "Activate my subscription"
+
+    selected_plan: "You have selected the"
+
+    button: "Proceed to secure payment"
+
+    footer: "Secure payment via Stripe • Cancel anytime"
+
+    errors:
+        server: "Server error while creating the payment."
+        session: "Error while creating the payment session."
+        generic: "An error occurred."
+
+home:
+    hero:
+        kicker: "Professional tool for real estate agents"
+
+        title_line_1: "Valuations, listings"
+        title_line_2: "and documents."
+
+        text: "AgentBoost helps real estate agents create valuations, generate assisted listings and produce professional documents."
+
+        note: "Designed for independents, agencies and field professionals."
+
+    actions:
+        create_estimation: "Create a valuation"
+        view_offers: "View pricing"
+
+    preview:
+        estimations: "valuations"
+        listings: "listings"
+        pdf_ready: "ready PDFs"
+
+        apartment: "Apartment"
+
+        generate_listing: "Generate listing"
+
+        pdf_estimation: "Valuation PDF"                                                            

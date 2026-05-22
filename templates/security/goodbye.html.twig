@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-	Compte supprimé – AgentBoost
+	{{ 'goodbye.meta.title'|trans }}
 {% endblock %}
 
 {% block stylesheets %}
@@ -12,33 +12,39 @@
 {% block body %}
 	<div class="goodbye-wrapper">
 		<div class="goodbye-card">
+
 			<div class="goodbye-icon">
 				✓
 			</div>
 
 			<h1 class="goodbye-title">
-				Compte supprimé
+				{{ 'goodbye.title'|trans }}
 			</h1>
 
 			<p class="goodbye-subtitle">
-				Votre compte AgentBoost a bien été supprimé.
+				{{ 'goodbye.subtitle'|trans }}
 			</p>
 
 			<div class="goodbye-alert">
-				Vos accès ont été désactivés et votre session a été fermée.
+				{{ 'goodbye.alert.line_1'|trans }}
+
 				<br><br>
-				Merci d’avoir utilisé AgentBoost pour vos estimations et vos automatisations immobilières.
+
+				{{ 'goodbye.alert.line_2'|trans }}
 			</div>
 
 			<div class="goodbye-actions">
+
 				<a href="{{ path('home') }}" class="goodbye-btn-primary">
-					Retour à l’accueil
+					{{ 'goodbye.actions.home'|trans }}
 				</a>
 
 				<a href="{{ path('pricing') }}" class="goodbye-btn-secondary">
-					Voir les offres
+					{{ 'goodbye.actions.pricing'|trans }}
 				</a>
+
 			</div>
+
 		</div>
 	</div>
 {% endblock %}

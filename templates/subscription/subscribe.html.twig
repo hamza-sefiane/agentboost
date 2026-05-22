@@ -1,67 +1,71 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Souscription – AgentBoost{% endblock %}
+{% block title %}
+	{{ 'subscription_checkout.meta.title'|trans }}
+{% endblock %}
 
 {% block body %}
-<div class="container" style="max-width: 600px; margin: 80px auto; text-align: center;">
+	<div class="container" style="max-width: 600px; margin: 80px auto; text-align: center;">
 
-    <h1 class="mb-3">Activer mon abonnement</h1>
+		<h1 class="mb-3">
+			{{ 'subscription_checkout.title'|trans }}
+		</h1>
 
-    <p class="lead mb-4">
-        Vous avez choisi la formule
-        <strong>{{ plan == 'monthly' ? 'mensuelle' : 'annuelle' }}</strong>.
-    </p>
+		<p class="lead mb-4">
+			{{ 'subscription_checkout.selected_plan'|trans }}
 
-    <button
-        id="checkout-button"
-        class="btn btn-success btn-lg px-5"
-    >
-        Procéder au paiement sécurisé
-    </button>
+			<strong>
+				{{ plan == 'monthly'
+					? 'subscription.monthly'|trans
+					: 'subscription.yearly'|trans
+				}}
+			</strong>.
+		</p>
 
-    <p class="text-muted mt-3">
-        Paiement sécurisé via Stripe • Résiliable à tout moment
-    </p>
-</div>
+		<button id="checkout-button" class="btn btn-success btn-lg px-5">
+			{{ 'subscription_checkout.button'|trans }}
+		</button>
 
-<script src="https://js.stripe.com/v3/"></script>
-<script>
-    // Initialisation Stripe
-    const stripe = Stripe('{{ stripe_public_key }}');
-    const button = document.getElementById('checkout-button');
+		<p class="text-muted mt-3">
+			{{ 'subscription_checkout.footer'|trans }}
+		</p>
+	</div>
 
-    // URL calculée UNE FOIS côté Twig (clé de la robustesse)
-    const checkoutUrl = "{{ path('create_checkout_session', { plan: plan }) }}";
+	 <script src="https://js.stripe.com/v3/"></script>
 
-    button.addEventListener('click', async () => {
-        try {
-            const response = await fetch(checkoutUrl, {
-                method: 'POST',
-                headers: {
-                    'Accept': 'application/json'
-                }
-            });
-
-            if (!response.ok) {
-                const text = await response.text();
-                console.error('Checkout error', response.status, text);
-                alert('Erreur serveur lors de la création du paiement.');
-                return;
-            }
-
-            const data = await response.json();
-
-            if (!data.id) {
-                alert(data.error ?? 'Erreur lors de la création de la session de paiement.');
-                return;
-            }
-
-            await stripe.redirectToCheckout({ sessionId: data.id });
-
-        } catch (e) {
-            console.error(e);
-            alert('Une erreur est survenue.');
-        }
-    });
-</script>
+	 <script>
+			const stripe = Stripe('{{ stripe_public_key }}');
+			const button = document.getElementById('checkout-button');
+			const checkoutUrl = "{{ path('create_checkout_session', { plan: plan }) }}";
+	
+			button.addEventListener('click', async () => {
+				try {
+					const response = await fetch(checkoutUrl, {
+						method: 'POST',
+						headers: {
+							'Accept': 'application/json'
+						}
+					});
+	
+					if (!response.ok) {
+						const text = await response.text();
+						console.error('Checkout error', response.status, text);
+						alert('{{ 'subscription_checkout.errors.server'|trans }}');
+						return;
+					}
+	
+					const data = await response.json();
+	
+					if (!data.id) {
+						alert(data.error ?? '{{ 'subscription_checkout.errors.session'|trans }}');
+						return;
+					}
+	
+					await stripe.redirectToCheckout({ sessionId: data.id });
+				} catch (error) {
+					console.error(error);
+					alert('{{ 'subscription_checkout.errors.generic'|trans }}');
+				}
+			});
+		</script>
 {% endblock %}

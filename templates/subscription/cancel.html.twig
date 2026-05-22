@@ -1,44 +1,49 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Paiement annulé – AgentBoost{% endblock %}
+{% block title %}
+	{{ 'payment.cancel.meta.title'|trans }}
+{% endblock %}
 
 {% block body %}
-<div class="container"
-     style="max-width: 600px; margin: 4rem auto; text-align: center;">
+	<div class="container" style="max-width: 600px; margin: 4rem auto; text-align: center;">
 
-    <h1 style="color: #b22222;">Paiement annulé</h1>
+		<h1 style="color: #b22222;">
+			{{ 'payment.cancel.title'|trans }}
+		</h1>
 
-    <p style="margin-top: 1.5rem;">
-        Le paiement a été interrompu.<br>
-        <strong>Aucun abonnement n’a été créé</strong>.
-    </p>
+		<p style="margin-top: 1.5rem;">
+			{{ 'payment.cancel.text.line_1'|trans }}<br>
 
-    <p style="margin-top: 1rem; color: #666;">
-        Vous pouvez réessayer à tout moment.
-    </p>
+			<strong>
+				{{ 'payment.cancel.text.line_2'|trans }}
+			</strong>
+		</p>
 
-    <div style="margin-top: 2.5rem;">
-        <a href="{{ path('pricing') }}"
-           class="btn btn-success"
-           style="margin-right: 1rem;">
-            Voir les formules
-        </a>
+		<p style="margin-top: 1rem; color: #666;">
+			{{ 'payment.cancel.text.line_3'|trans }}
+		</p>
 
-        {% if app.user %}
-            <a href="{{ path('dashboard') }}"
-               class="btn btn-outline-secondary">
-                Retour au dashboard
-            </a>
-        {% else %}
-            <a href="{{ path('home') }}"
-               class="btn btn-outline-secondary">
-                Retour à l’accueil
-            </a>
-        {% endif %}
-    </div>
+		<div style="margin-top: 2.5rem;">
 
-    <p style="margin-top: 3rem; font-size: 0.85rem; color: #999;">
-        Paiement sécurisé par Stripe
-    </p>
-</div>
+			<a href="{{ path('pricing') }}" class="btn btn-success" style="margin-right: 1rem;">
+				{{ 'payment.cancel.actions.pricing'|trans }}
+			</a>
+
+			{% if app.user %}
+				<a href="{{ path('dashboard') }}" class="btn btn-outline-secondary">
+					{{ 'payment.cancel.actions.dashboard'|trans }}
+				</a>
+			{% else %}
+				<a href="{{ path('home') }}" class="btn btn-outline-secondary">
+					{{ 'payment.cancel.actions.home'|trans }}
+				</a>
+			{% endif %}
+
+		</div>
+
+		<p style="margin-top: 3rem; font-size: 0.85rem; color: #999;">
+			{{ 'payment.cancel.footer'|trans }}
+		</p>
+
+	</div>
 {% endblock %}
