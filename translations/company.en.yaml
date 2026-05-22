@@ -1,0 +1,50 @@
+meta:
+    title: "My agency"
+
+title: "Agency information"
+
+subtitle: "This information will appear on your valuations and PDF documents."
+
+logo:
+    alt: "Agency logo"
+    empty: "No logo"
+
+form:
+    company_name:
+        label: "Agency name"
+        placeholder: "Example: AgentBoost Real Estate"
+
+    street:
+        label: "Street"
+        placeholder: "Example: 10 Paris Street"
+
+    address_complement:
+        label: "Address complement"
+        placeholder: "Example: Building B, 2nd floor"
+
+    postal_code:
+        label: "Postal code"
+        placeholder: "Example: 75000"
+
+    city:
+        label: "City"
+        placeholder: "Example: Paris"
+
+    phone:
+        label: "Phone"
+        placeholder: "Example: +33 6 12 34 56 78"
+
+    email:
+        label: "Agency email"
+        placeholder: "Example: contact@agency.com"
+
+    website:
+        label: "Website"
+        placeholder: "Example: https://www.agency.com"
+
+    logo:
+        label: "Logo"
+        help: "Recommended formats: PNG or JPG. The logo will be used in your PDF documents."
+
+actions:
+    save: "Save information"

@@ -1,0 +1,50 @@
+meta:
+    title: "Mon agence"
+
+title: "Informations agence"
+
+subtitle: "Ces informations apparaîtront sur vos estimations et PDF."
+
+logo:
+    alt: "Logo de l’agence"
+    empty: "Aucun logo"
+
+form:
+    company_name:
+        label: "Nom de l’agence"
+        placeholder: "Ex : AgentBoost Immobilier"
+
+    street:
+        label: "Rue"
+        placeholder: "Ex : 10 rue de Paris"
+
+    address_complement:
+        label: "Complément d’adresse"
+        placeholder: "Ex : Bâtiment B, 2e étage"
+
+    postal_code:
+        label: "Code postal"
+        placeholder: "Ex : 75000"
+
+    city:
+        label: "Ville"
+        placeholder: "Ex : Paris"
+
+    phone:
+        label: "Téléphone"
+        placeholder: "Ex : 06 12 34 56 78"
+
+    email:
+        label: "Email agence"
+        placeholder: "Ex : contact@agence.fr"
+
+    website:
+        label: "Site web"
+        placeholder: "Ex : https://www.agence.fr"
+
+    logo:
+        label: "Logo"
+        help: "Formats recommandés : PNG ou JPG. Le logo sera utilisé dans vos PDF."
+
+actions:
+    save: "Enregistrer les informations"

@@ -1,0 +1,50 @@
+meta:
+    title: "Mi agencia"
+
+title: "Información de la agencia"
+
+subtitle: "Esta información aparecerá en sus valoraciones y documentos PDF."
+
+logo:
+    alt: "Logo de la agencia"
+    empty: "Sin logo"
+
+form:
+    company_name:
+        label: "Nombre de la agencia"
+        placeholder: "Ejemplo: AgentBoost Inmobiliaria"
+
+    street:
+        label: "Calle"
+        placeholder: "Ejemplo: Calle de París 10"
+
+    address_complement:
+        label: "Complemento de dirección"
+        placeholder: "Ejemplo: Edificio B, 2.º piso"
+
+    postal_code:
+        label: "Código postal"
+        placeholder: "Ejemplo: 75000"
+
+    city:
+        label: "Ciudad"
+        placeholder: "Ejemplo: París"
+
+    phone:
+        label: "Teléfono"
+        placeholder: "Ejemplo: +33 6 12 34 56 78"
+
+    email:
+        label: "Correo electrónico de la agencia"
+        placeholder: "Ejemplo: contacto@agencia.com"
+
+    website:
+        label: "Sitio web"
+        placeholder: "Ejemplo: https://www.agencia.com"
+
+    logo:
+        label: "Logo"
+        help: "Formatos recomendados: PNG o JPG. El logo se utilizará en sus documentos PDF."
+
+actions:
+    save: "Guardar información"
