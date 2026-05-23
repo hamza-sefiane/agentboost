@@ -67,68 +67,122 @@ final class OpenAiPropertyAdGenerator
 
     public function __construct(
         private readonly AiClientInterface $aiClient,
-    ) {
-    }
+    ) {}
 
-    public function generate(Property $property): string
+    public function generate(Property $property, string $locale = 'fr'): string
     {
-        $prompt = $this->buildPrompt($property);
+        $prompt = $this->buildPrompt($property, $locale);
         $text = $this->aiClient->generateText($prompt);
         $text = $this->cleanGeneratedText($text);
 
         if (!$this->isSafeGeneratedText($text, $property)) {
-            return $this->buildFallbackAd($property);
+            return $this->buildFallbackAd($property, $locale);
         }
 
         return $text;
     }
 
-    private function buildPrompt(Property $property): string
+    private function buildPrompt(Property $property, string $locale): string
     {
+        $lang = $this->getLanguageConfig($locale);
+
         return sprintf(
             <<<PROMPT
-Tu es un rédacteur immobilier senior pour une agence française.
+You are a senior real estate copywriter.
 
-Rédige une annonce immobilière courte et professionnelle.
+Generate the response ONLY in %s.
 
-Données autorisées :
-- Type de bien : %s
-- Adresse : %s
-- Ville : %s
-- Code postal : %s
-- Surface : %d m²
-- Nombre de pièces : %d
-- Parking : %s
-- Détails fournis par l'utilisateur : %s
+Write a short, professional real estate listing.
 
-Règles absolues :
-- Utiliser uniquement les données autorisées.
-- Ne jamais inventer une information absente.
-- Si une information n'est pas écrite dans les détails fournis, ne pas la mentionner.
-- Ne pas mentionner le prix ni l'estimation.
-- Ne pas écrire de liste.
-- Ne pas utiliser d'emojis.
-- Ne pas employer de superlatifs.
-- Ne pas utiliser de phrases commerciales clichées.
-- Phrases courtes.
-- Ton professionnel, sobre et crédible.
-- Maximum 480 caractères espaces compris.
-- 3 paragraphes courts maximum.
-- Terminer par une phrase simple de contact.
+Allowed data:
+- Property type: %s
+- Address: %s
+- City: %s
+- Postal code: %s
+- Surface: %d sqm
+- Rooms: %d
+- Parking: %s
+- User details: %s
 
-Important :
-Tu dois éviter toute mention de quartier, école, commerce, gare, transport, balcon, terrasse, jardin, cave, ascenseur, résidence, vue, luminosité, travaux ou cuisine équipée si ce n'est pas explicitement présent dans les détails fournis.
+Absolute rules:
+- Use ONLY the allowed data.
+- Never invent missing information.
+- If information is not explicitly provided, do not mention it.
+- Do not mention the price or valuation.
+- Do not write a list.
+- Do not use emojis.
+- Do not use superlatives.
+- Do not use cliché sales phrases.
+- Use short sentences.
+- Keep a professional, sober and credible tone.
+- Maximum 480 characters including spaces.
+- Maximum 3 short paragraphs.
+- End with a simple contact sentence.
+
+Important:
+Avoid mentioning neighborhood, school, shops, station, transport, balcony, terrace, garden, cellar, elevator, residence, view, brightness, renovation work or fitted kitchen unless explicitly present in the user details.
 
 PROMPT,
+            $lang['language'],
             $property->getType(),
-            $property->getAddress() ?: 'Non renseignée',
+            $property->getAddress() ?: $lang['not_provided'],
             $property->getCity(),
             $property->getPostalCode(),
             $property->getSurface(),
             $property->getRooms(),
-            $property->hasParking() ? 'Oui' : 'Non',
-            $property->getExtraDetails() ?: 'Aucun détail supplémentaire'
+            $property->hasParking() ? $lang['yes'] : $lang['no'],
+            $property->getExtraDetails() ?: $lang['no_details']
         );
+    }
+
+    private function getLanguageConfig(string $locale): array
+    {
+        return match ($locale) {
+            'en' => [
+                'language' => 'English',
+                'yes' => 'Yes',
+                'no' => 'No',
+                'not_provided' => 'Not provided',
+                'no_details' => 'No additional details',
+                'fallback_parking' => 'The property includes a parking space.',
+                'fallback_summary' => 'This property offers a simple residential layout.',
+                'fallback_contact' => 'Contact our agency for more information.',
+                'fallback_location_at' => 'located at',
+                'fallback_location_in' => 'located in',
+                'rooms' => 'rooms',
+                'sqm' => 'sqm',
+            ],
+
+            'es' => [
+                'language' => 'Spanish',
+                'yes' => 'Sí',
+                'no' => 'No',
+                'not_provided' => 'No especificado',
+                'no_details' => 'Sin detalles adicionales',
+                'fallback_parking' => 'El inmueble dispone de una plaza de aparcamiento.',
+                'fallback_summary' => 'Este inmueble ofrece una distribución residencial sencilla.',
+                'fallback_contact' => 'Contacte con nuestra agencia para más información.',
+                'fallback_location_at' => 'situado en',
+                'fallback_location_in' => 'situado en',
+                'rooms' => 'habitaciones',
+                'sqm' => 'm²',
+            ],
+
+            default => [
+                'language' => 'French',
+                'yes' => 'Oui',
+                'no' => 'Non',
+                'not_provided' => 'Non renseignée',
+                'no_details' => 'Aucun détail supplémentaire',
+                'fallback_parking' => 'Le bien dispose d’un stationnement.',
+                'fallback_summary' => 'Ce bien présente une configuration simple à présenter et adaptée à un usage résidentiel.',
+                'fallback_contact' => 'Contactez notre agence pour plus d’informations.',
+                'fallback_location_at' => 'situé au',
+                'fallback_location_in' => 'situé à',
+                'rooms' => 'pièces',
+                'sqm' => 'm²',
+            ],
+        };
     }
 
     private function cleanGeneratedText(string $text): string
@@ -183,8 +237,10 @@ PROMPT,
         return true;
     }
 
-    private function buildFallbackAd(Property $property): string
+    private function buildFallbackAd(Property $property, string $locale): string
     {
+        $lang = $this->getLanguageConfig($locale);
+
         $location = trim(sprintf(
             '%s %s',
             $property->getPostalCode(),
@@ -192,20 +248,24 @@ PROMPT,
         ));
 
         $addressLine = $property->getAddress()
-            ? sprintf(' situé au %s, %s.', $property->getAddress(), $location)
-            : sprintf(' situé à %s.', $location);
+            ? sprintf('%s %s, %s.', $lang['fallback_location_at'], $property->getAddress(), $location)
+            : sprintf('%s %s.', $lang['fallback_location_in'], $location);
 
         $parkingLine = $property->hasParking()
-            ? "\n\nLe bien dispose d’un stationnement."
+            ? "\n\n" . $lang['fallback_parking']
             : '';
 
         return sprintf(
-            "%s %d pièces de %d m²%s%s\n\nCe bien présente une configuration simple à présenter et adaptée à un usage résidentiel.\n\nContactez notre agence pour plus d’informations.",
+            "%s %d %s de %d %s %s%s\n\n%s\n\n%s",
             $property->getType(),
             $property->getRooms(),
+            $lang['rooms'],
             $property->getSurface(),
+            $lang['sqm'],
             $addressLine,
-            $parkingLine
+            $parkingLine,
+            $lang['fallback_summary'],
+            $lang['fallback_contact']
         );
     }
 }

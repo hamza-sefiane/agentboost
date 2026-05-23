@@ -1,0 +1,86 @@
+meta:
+    title: "Real estate valuation report"
+
+premium:
+    meta:
+        title: "Premium real estate valuation report"
+
+cover:
+    badge: "PREMIUM VALUATION"
+    title_line_1: "VALUATION REPORT"
+    title_line_2: "REAL ESTATE"
+
+    estimated_value: "Estimated value"
+
+    ai_score: "AI score"
+
+    generated_on: "Generated on"
+
+company:
+    label: "Real estate agency"
+
+gallery:
+    title: "Property gallery"
+    attached_photos: "attached photo(s)"
+
+estimate:
+    target: "Target valuation"
+
+    range:
+        available: "Low / high range"
+        unavailable: "Range unavailable"
+
+property:
+    title: "Estimated property"
+
+    type: "Type"
+    surface: "Surface"
+    rooms: "Rooms"
+    parking: "Parking"
+    location: "Location"
+
+    yes: "Yes"
+    no: "No"
+
+summary:
+    title: "Valuation summary"
+
+    estimated_price_m2: "Estimated price per m²"
+
+    reliability: "Reliability"
+
+    estimated_delay: "Estimated selling delay"
+
+    based_on_target: "Calculated from the target valuation"
+
+    reliability_index: "Index based on the provided information"
+
+    indicative_projection: "Indicative market projection"
+
+comparables:
+    title: "Market comparison analysis"
+
+    comparable: "Comparable"
+
+    note: "Comparative data generated for informational purposes based on the characteristics of the estimated property."
+
+strategy:
+    title: "Recommended selling strategy"
+
+    recommended_price: "Recommended listing price"
+
+    negotiation_threshold: "Negotiation threshold"
+
+advices:
+    title: "Advice before listing"
+
+ad:
+    title: "AI listing"
+
+signature:
+    presented_by: "Document presented by"
+
+footer:
+    confidential: "Confidential real estate valuation — Generated with AgentBoost."
+
+    non_contractual: "Non-contractual document — Reference:"

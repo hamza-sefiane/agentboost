@@ -1,0 +1,86 @@
+meta:
+    title: "Dossier d’estimation immobilière"
+
+premium:
+    meta:
+        title: "Dossier d’estimation immobilière premium"
+
+cover:
+    badge: "ESTIMATION PREMIUM"
+    title_line_1: "DOSSIER D’ESTIMATION"
+    title_line_2: "IMMOBILIÈRE"
+
+    estimated_value: "Valeur estimée"
+
+    ai_score: "Score IA"
+
+    generated_on: "Généré le"
+
+company:
+    label: "Agence immobilière"
+
+gallery:
+    title: "Galerie du bien"
+    attached_photos: "photo(s) jointe(s)"
+
+estimate:
+    target: "Estimation cible"
+
+    range:
+        available: "Fourchette basse / haute"
+        unavailable: "Fourchette non disponible"
+
+property:
+    title: "Bien estimé"
+
+    type: "Type"
+    surface: "Surface"
+    rooms: "Pièces"
+    parking: "Parking"
+    location: "Localisation"
+
+    yes: "Oui"
+    no: "Non"
+
+summary:
+    title: "Synthèse de l’estimation"
+
+    estimated_price_m2: "Prix estimé au m²"
+
+    reliability: "Fiabilité"
+
+    estimated_delay: "Délai estimé"
+
+    based_on_target: "Calculé à partir de l’estimation cible"
+
+    reliability_index: "Indice basé sur les informations renseignées"
+
+    indicative_projection: "Projection indicative de mise en vente"
+
+comparables:
+    title: "Analyse comparative du marché"
+
+    comparable: "Comparable"
+
+    note: "Données comparatives générées à titre indicatif à partir des caractéristiques du bien estimé."
+
+strategy:
+    title: "Stratégie de mise en vente recommandée"
+
+    recommended_price: "Prix d’affichage conseillé"
+
+    negotiation_threshold: "Seuil de négociation"
+
+advices:
+    title: "Conseils avant mise en vente"
+
+ad:
+    title: "Annonce IA"
+
+signature:
+    presented_by: "Document présenté par"
+
+footer:
+    confidential: "Estimation immobilière confidentielle — Générée via AgentBoost."
+
+    non_contractual: "Document non contractuel — Référence :"

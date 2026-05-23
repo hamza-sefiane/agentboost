@@ -1,0 +1,86 @@
+meta:
+    title: "Informe de valoración inmobiliaria"
+
+premium:
+    meta:
+        title: "Informe premium de valoración inmobiliaria"
+
+cover:
+    badge: "VALORACIÓN PREMIUM"
+    title_line_1: "INFORME DE VALORACIÓN"
+    title_line_2: "INMOBILIARIA"
+
+    estimated_value: "Valor estimado"
+
+    ai_score: "Puntuación IA"
+
+    generated_on: "Generado el"
+
+company:
+    label: "Agencia inmobiliaria"
+
+gallery:
+    title: "Galería del inmueble"
+    attached_photos: "foto(s) adjunta(s)"
+
+estimate:
+    target: "Valoración objetivo"
+
+    range:
+        available: "Rango bajo / alto"
+        unavailable: "Rango no disponible"
+
+property:
+    title: "Inmueble valorado"
+
+    type: "Tipo"
+    surface: "Superficie"
+    rooms: "Habitaciones"
+    parking: "Parking"
+    location: "Ubicación"
+
+    yes: "Sí"
+    no: "No"
+
+summary:
+    title: "Resumen de la valoración"
+
+    estimated_price_m2: "Precio estimado por m²"
+
+    reliability: "Fiabilidad"
+
+    estimated_delay: "Plazo estimado de venta"
+
+    based_on_target: "Calculado a partir de la valoración objetivo"
+
+    reliability_index: "Índice basado en la información proporcionada"
+
+    indicative_projection: "Proyección indicativa de venta"
+
+comparables:
+    title: "Análisis comparativo del mercado"
+
+    comparable: "Comparable"
+
+    note: "Datos comparativos generados únicamente con fines informativos según las características del inmueble valorado."
+
+strategy:
+    title: "Estrategia de venta recomendada"
+
+    recommended_price: "Precio de publicación recomendado"
+
+    negotiation_threshold: "Margen de negociación"
+
+advices:
+    title: "Consejos antes de la venta"
+
+ad:
+    title: "Anuncio IA"
+
+signature:
+    presented_by: "Documento presentado por"
+
+footer:
+    confidential: "Valoración inmobiliaria confidencial — Generada con AgentBoost."
+
+    non_contractual: "Documento no contractual — Referencia:"

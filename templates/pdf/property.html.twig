@@ -1,355 +1,417 @@
 <!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <title>Dossier d’estimation immobilière</title>
+<html lang="{{ app.request.locale|default('fr') }}">
+	<head>
+		<meta charset="UTF-8">
+		<title>{{ 'meta.title'|trans({}, 'pdf') }}</title>
 
-    <style>
-        {{ source('pdf/property_pdf.css') }}
-    </style>
-</head>
+		<style>
+			{{source('pdf/property_pdf.css')}}</style>
+	</head>
 
-<body>
+	<body>
 
-{% set currentUser = app.user %}
-{% set agencyName = currentUser.companyName|default('') ?: 'AgentBoost Immobilier' %}
-{% set agencyPhone = currentUser.companyPhone|default(null) %}
-{% set agencyEmail = currentUser.agencyEmail|default(null) %}
-{% set agencyWebsite = currentUser.agencyWebsite|default(null) %}
-{% set agencyStreet = currentUser.agencyStreet|default(null) %}
-{% set agencyAddressComplement = currentUser.agencyAddressComplement|default(null) %}
-{% set agencyPostalCode = currentUser.agencyPostalCode|default(null) %}
-{% set agencyCity = currentUser.agencyCity|default(null) %}
-{% set agencyLegacyAddress = currentUser.companyAddress|default(null) %}
-{% set photos = photoDataUris is defined and photoDataUris is iterable ? photoDataUris : [] %}
-{% set surface = property.surface > 0 ? property.surface : 1 %}
+		{% set currentUser = app.user %}
+		{% set agencyName = currentUser.companyName|default('') ?: 'AgentBoost Immobilier' %}
+		{% set agencyPhone = currentUser.companyPhone|default(null) %}
+		{% set agencyEmail = currentUser.agencyEmail|default(null) %}
+		{% set agencyWebsite = currentUser.agencyWebsite|default(null) %}
+		{% set agencyStreet = currentUser.agencyStreet|default(null) %}
+		{% set agencyAddressComplement = currentUser.agencyAddressComplement|default(null) %}
+		{% set agencyPostalCode = currentUser.agencyPostalCode|default(null) %}
+		{% set agencyCity = currentUser.agencyCity|default(null) %}
+		{% set agencyLegacyAddress = currentUser.companyAddress|default(null) %}
+		{% set photos = photoDataUris is defined and photoDataUris is iterable ? photoDataUris : [] %}
+		{% set surface = property.surface > 0 ? property.surface : 1 %}
 
-<div class="cover">
-    <div class="cover-logo">
-        {% if logoDataUri is defined and logoDataUri %}
-            <img src="{{ logoDataUri }}" alt="Logo">
-        {% endif %}
-    </div>
+		<div class="cover">
+			<div class="cover-logo">
+				{% if logoDataUri is defined and logoDataUri %}
+					<img src="{{ logoDataUri }}" alt="{{ 'company.label'|trans({}, 'pdf') }}">
+				{% endif %}
+			</div>
 
-    <div class="cover-title">Dossier d’estimation immobilière</div>
+			<div class="cover-title">
+				{{ 'meta.title'|trans({}, 'pdf') }}
+			</div>
 
-    <div class="cover-city">
-        {% if property.address %}
-            {{ property.address }}<br>
-        {% endif %}
-        {{ property.postalCode }} {{ property.city|upper }}
-    </div>
+			<div class="cover-city">
+				{% if property.address %}
+					{{ property.address }}<br>
+				{% endif %}
+				{{ property.postalCode }}
+				{{ property.city|upper }}
+			</div>
 
-    <div class="cover-price-box">
-        <div class="cover-price-label">Valeur estimée</div>
+			<div class="cover-price-box">
+				<div class="cover-price-label">
+					{{ 'cover.estimated_value'|trans({}, 'pdf') }}
+				</div>
 
-        <div class="cover-price">
-            {{ property.estimate|number_format(0, ',', ' ') }} €
-        </div>
+				<div class="cover-price">
+					{{ property.estimate|number_format(0, ',', ' ') }}
+					€
+				</div>
 
-        {% if property.lowEstimate and property.highEstimate %}
-            <div class="cover-range">
-                Fourchette estimative<br>
-                <strong>
-                    {{ property.lowEstimate|number_format(0, ',', ' ') }} €
-                    —
-                    {{ property.highEstimate|number_format(0, ',', ' ') }} €
-                </strong>
-            </div>
-        {% endif %}
-    </div>
+				{% if property.lowEstimate and property.highEstimate %}
+					<div class="cover-range">
+						{{ 'estimate.range.available'|trans({}, 'pdf') }}<br>
+						<strong>
+							{{ property.lowEstimate|number_format(0, ',', ' ') }}
+							€
+							                    —
+							{{ property.highEstimate|number_format(0, ',', ' ') }}
+							€
+						</strong>
+					</div>
+				{% endif %}
+			</div>
 
-    <div class="cover-footer">
-        <table class="cover-footer-table">
-            <tr>
-                <td>Généré le {{ "now"|date('d/m/Y à H:i') }}</td>
-                <td>{{ agencyName }}</td>
-            </tr>
-        </table>
-    </div>
-</div>
+			<div class="cover-footer">
+				<table class="cover-footer-table">
+					<tr>
+						<td>
+							{{ 'cover.generated_on'|trans({}, 'pdf') }}
+							{{ "now"|date('d/m/Y à H:i') }}
+						</td>
+						<td>{{ agencyName }}</td>
+					</tr>
+				</table>
+			</div>
+		</div>
 
-<div class="page-break"></div>
+		<div class="page-break"></div>
 
-<div class="page">
-    <div class="header">
-        <div class="company-label">Agence immobilière</div>
+		<div class="page">
+			<div class="header">
+				<div class="company-label">
+					{{ 'company.label'|trans({}, 'pdf') }}
+				</div>
 
-        <div class="company-name">
-            {{ agencyName }}
-        </div>
+				<div class="company-name">
+					{{ agencyName }}
+				</div>
 
-        <div class="company-info">
-            {% if agencyStreet %}
-                {{ agencyStreet }}{% if agencyAddressComplement %} — {{ agencyAddressComplement }}{% endif %}<br>
-            {% elseif agencyAddressComplement %}
-                {{ agencyAddressComplement }}<br>
-            {% endif %}
+				<div class="company-info">
+					{% if agencyStreet %}
+						{{ agencyStreet }}
+						{% if agencyAddressComplement %}
+							—
+							{{ agencyAddressComplement }}
+						{% endif %}<br>
+					{% elseif agencyAddressComplement %}
+						{{ agencyAddressComplement }}<br>
+					{% endif %}
 
-            {% if agencyPostalCode or agencyCity %}
-                {{ agencyPostalCode }} {{ agencyCity }}<br>
-            {% elseif agencyLegacyAddress %}
-                {{ agencyLegacyAddress|nl2br }}<br>
-            {% else %}
-                Adresse non renseignée<br>
-            {% endif %}
+					{% if agencyPostalCode or agencyCity %}
+						{{ agencyPostalCode }}
+						{{ agencyCity }}<br>
+					{% elseif agencyLegacyAddress %}
+						{{ agencyLegacyAddress|nl2br }}<br>
+					{% else %}
+						Adresse non renseignée<br>
+					{% endif %}
 
-            {% if agencyPhone %}
-                Tél : {{ agencyPhone }}<br>
-            {% endif %}
+					{% if agencyPhone %}
+						Tél :
+						{{ agencyPhone }}<br>
+					{% endif %}
 
-            {% if agencyEmail %}
-                {{ agencyEmail }}<br>
-            {% endif %}
+					{% if agencyEmail %}
+						{{ agencyEmail }}<br>
+					{% endif %}
 
-            {% if agencyWebsite %}
-                {{ agencyWebsite }}
-            {% endif %}
-        </div>
-    </div>
+					{% if agencyWebsite %}
+						{{ agencyWebsite }}
+					{% endif %}
+				</div>
+			</div>
 
-    {% if photos|length > 0 %}
-        <div class="section">
-            <div class="section-title">Galerie du bien</div>
+			{% if photos|length > 0 %}
+				<div class="section">
+					<div class="section-title">
+						{{ 'gallery.title'|trans({}, 'pdf') }}
+					</div>
 
-            <div class="photo-hero-wrapper">
-                <img src="{{ photos[0] }}" class="photo-hero" alt="Photo principale du bien">
-            </div>
+					<div class="photo-hero-wrapper">
+						<img src="{{ photos[0] }}" class="photo-hero" alt="{{ 'gallery.title'|trans({}, 'pdf') }}">
+					</div>
 
-            {% if photos|length > 1 %}
-                <table class="photo-table">
-                    <tr>
-                        {% for photoDataUri in photos|slice(1, 4) %}
-                            <td class="photo-thumb-cell">
-                                <img src="{{ photoDataUri }}" class="photo-thumb" alt="Photo du bien">
-                            </td>
-                        {% endfor %}
-                    </tr>
-                </table>
-            {% endif %}
+					{% if photos|length > 1 %}
+						<table class="photo-table">
+							<tr>
+								{% for photoDataUri in photos|slice(1, 4) %}
+									<td class="photo-thumb-cell">
+										<img src="{{ photoDataUri }}" class="photo-thumb" alt="{{ 'gallery.title'|trans({}, 'pdf') }}">
+									</td>
+								{% endfor %}
+							</tr>
+						</table>
+					{% endif %}
 
-            <div class="gallery-count">
-                {{ photos|length }} photo(s) jointe(s)
-            </div>
-        </div>
-    {% endif %}
+					<div class="gallery-count">
+						{{ photos|length }}
+						{{ 'gallery.attached_photos'|trans({}, 'pdf') }}
+					</div>
+				</div>
+			{% endif %}
 
-    <div class="estimate-summary">
-        <table class="estimate-summary-table">
-            <tr>
-                <td>
-                    <div class="estimate-main-label">Estimation cible</div>
-                    <div class="estimate-main-value">
-                        {{ property.estimate|number_format(0, ',', ' ') }} €
-                    </div>
-                </td>
+			<div class="estimate-summary">
+				<table class="estimate-summary-table">
+					<tr>
+						<td>
+							<div class="estimate-main-label">
+								{{ 'estimate.target'|trans({}, 'pdf') }}
+							</div>
 
-                <td class="estimate-range-box">
-                    {% if property.lowEstimate and property.highEstimate %}
-                        Fourchette basse / haute<br>
-                        <strong>
-                            {{ property.lowEstimate|number_format(0, ',', ' ') }} €
-                            —
-                            {{ property.highEstimate|number_format(0, ',', ' ') }} €
-                        </strong>
-                    {% else %}
-                        Fourchette non disponible
-                    {% endif %}
-                </td>
-            </tr>
-        </table>
-    </div>
+							<div class="estimate-main-value">
+								{{ property.estimate|number_format(0, ',', ' ') }}
+								€
+							</div>
+						</td>
 
-    <div class="section">
-        <div class="section-title">Bien estimé</div>
+						<td class="estimate-range-box">
+							{% if property.lowEstimate and property.highEstimate %}
+								{{ 'estimate.range.available'|trans({}, 'pdf') }}<br>
+								<strong>
+									{{ property.lowEstimate|number_format(0, ',', ' ') }}
+									€
+									                            —
+									{{ property.highEstimate|number_format(0, ',', ' ') }}
+									€
+								</strong>
+							{% else %}
+								{{ 'estimate.range.unavailable'|trans({}, 'pdf') }}
+							{% endif %}
+						</td>
+					</tr>
+				</table>
+			</div>
 
-        <table class="property-grid-table">
-            <tr>
-                <td class="property-card">
-                    <div class="property-card-label">Type</div>
-                    <div class="property-card-value">{{ property.type }}</div>
-                </td>
+			<div class="section">
+				<div class="section-title">
+					{{ 'property.title'|trans({}, 'pdf') }}
+				</div>
 
-                <td class="property-card">
-                    <div class="property-card-label">Surface</div>
-                    <div class="property-card-value">{{ property.surface }} m²</div>
-                </td>
-            </tr>
+				<table class="property-grid-table">
+					<tr>
+						<td class="property-card">
+							<div class="property-card-label">{{ 'property.type'|trans({}, 'pdf') }}</div>
+							<div class="property-card-value">{{ property.type }}</div>
+						</td>
 
-            <tr>
-                <td class="property-card">
-                    <div class="property-card-label">Pièces</div>
-                    <div class="property-card-value">
-                        {{ property.type|lower == 'parking' or property.type|lower == 'terrain' ? '—' : property.rooms }}
-                    </div>
-                </td>
+						<td class="property-card">
+							<div class="property-card-label">{{ 'property.surface'|trans({}, 'pdf') }}</div>
+							<div class="property-card-value">{{ property.surface }}
+								m²</div>
+						</td>
+					</tr>
 
-                <td class="property-card">
-                    <div class="property-card-label">Parking</div>
-                    <div class="property-card-value">
-                        {{ property.parking ? 'Oui' : 'Non' }}
-                    </div>
-                </td>
-            </tr>
+					<tr>
+						<td class="property-card">
+							<div class="property-card-label">{{ 'property.rooms'|trans({}, 'pdf') }}</div>
+							<div class="property-card-value">
+								{{ property.type|lower == 'parking' or property.type|lower == 'terrain' ? '—' : property.rooms }}
+							</div>
+						</td>
 
-            <tr>
-                <td colspan="2" class="property-card property-card-full">
-                    <div class="property-card-label">Localisation</div>
+						<td class="property-card">
+							<div class="property-card-label">{{ 'property.parking'|trans({}, 'pdf') }}</div>
+							<div class="property-card-value">
+								{{ property.parking ? 'property.yes'|trans({}, 'pdf') : 'property.no'|trans({}, 'pdf') }}
+							</div>
+						</td>
+					</tr>
 
-                    <div class="property-card-value">
-                        {% if property.address %}
-                            {{ property.address }}<br>
-                        {% endif %}
-                        {{ property.postalCode }} {{ property.city|upper }}
-                    </div>
-                </td>
-            </tr>
-        </table>
-    </div>
+					<tr>
+						<td colspan="2" class="property-card property-card-full">
+							<div class="property-card-label">{{ 'property.location'|trans({}, 'pdf') }}</div>
 
-    <div class="section no-break">
-        <div class="section-title">Synthèse de l’estimation</div>
+							<div class="property-card-value">
+								{% if property.address %}
+									{{ property.address }}<br>
+								{% endif %}
+								{{ property.postalCode }}
+								{{ property.city|upper }}
+							</div>
+						</td>
+					</tr>
+				</table>
+			</div>
 
-        <table class="market-table">
-            <tr>
-                <td class="market-card">
-                    <div class="market-title">Prix estimé au m²</div>
-                    <div class="market-value">
-                        {{ (property.estimate / surface)|round(0, 'floor')|number_format(0, ',', ' ') }} €/m²
-                    </div>
-                    <div class="market-sub">Calculé à partir de l’estimation cible</div>
-                </td>
+			<div class="section no-break">
+				<div class="section-title">
+					{{ 'summary.title'|trans({}, 'pdf') }}
+				</div>
 
-                <td class="market-card">
-                    <div class="market-title">Fiabilité</div>
-                    <div class="market-value">
-                        {{ confidenceScore|default(80) }} %
-                    </div>
-                    <div class="market-sub">Indice basé sur les informations renseignées</div>
-                </td>
+				<table class="market-table">
+					<tr>
+						<td class="market-card">
+							<div class="market-title">{{ 'summary.estimated_price_m2'|trans({}, 'pdf') }}</div>
 
-                <td class="market-card">
-                    <div class="market-title">Délai estimé</div>
-                    <div class="market-value">
-                        {{ estimatedSaleDelay|default('45 à 60 jours') }}
-                    </div>
-                    <div class="market-sub">Projection indicative de mise en vente</div>
-                </td>
-            </tr>
-        </table>
-    </div>
+							<div class="market-value">
+								{{ (property.estimate / surface)|round(0, 'floor')|number_format(0, ',', ' ') }}
+								€/m²
+							</div>
 
-    <div class="section no-break">
-        <div class="strategy-card">
-            <div class="strategy-title">Stratégie de mise en vente recommandée</div>
+							<div class="market-sub">{{ 'summary.based_on_target'|trans({}, 'pdf') }}</div>
+						</td>
 
-            <table class="strategy-metrics">
-                <tr>
-                    <td class="strategy-metric">
-                        <div class="strategy-metric-label">Prix d’affichage conseillé</div>
-                        <div class="strategy-metric-value">
-                            {{ property.highEstimate ? property.highEstimate|number_format(0, ',', ' ') ~ ' €' : property.estimate|number_format(0, ',', ' ') ~ ' €' }}
-                        </div>
-                    </td>
+						<td class="market-card">
+							<div class="market-title">{{ 'summary.reliability'|trans({}, 'pdf') }}</div>
 
-                    <td class="strategy-metric">
-                        <div class="strategy-metric-label">Seuil de négociation</div>
-                        <div class="strategy-metric-value">
-                            {{ property.lowEstimate ? property.lowEstimate|number_format(0, ',', ' ') ~ ' €' : property.estimate|number_format(0, ',', ' ') ~ ' €' }}
-                        </div>
-                    </td>
-                </tr>
-            </table>
+							<div class="market-value">
+								{{ confidenceScore|default(80) }}
+								%
+							</div>
 
-            {% if sellingStrategy is defined and sellingStrategy is iterable and sellingStrategy is not empty %}
-                <ul class="strategy-list">
-                    {% for item in sellingStrategy %}
-                        <li>{{ item }}</li>
-                    {% endfor %}
-                </ul>
-            {% endif %}
-        </div>
-    </div>
+							<div class="market-sub">{{ 'summary.reliability_index'|trans({}, 'pdf') }}</div>
+						</td>
 
-    {% if (sellingAdvices is defined and sellingAdvices is iterable and sellingAdvices is not empty) or property.adText %}
-        <table class="two-column-table no-break">
-            <tr>
-                {% if sellingAdvices is defined and sellingAdvices is iterable and sellingAdvices is not empty %}
-                    <td class="two-column-cell">
-                        <div class="section">
-                            <div class="section-title">Conseils avant mise en vente</div>
+						<td class="market-card">
+							<div class="market-title">{{ 'summary.estimated_delay'|trans({}, 'pdf') }}</div>
 
-                            <div class="advice-box">
-                                <ul class="advice-list">
-                                    {% for advice in sellingAdvices %}
-                                        <li>{{ advice }}</li>
-                                    {% endfor %}
-                                </ul>
-                            </div>
-                        </div>
-                    </td>
-                {% endif %}
+							<div class="market-value">
+								{{ estimatedSaleDelay|default('45 à 60 jours') }}
+							</div>
 
-                {% if property.adText %}
-                    <td class="two-column-cell">
-                        <div class="section">
-                            <div class="section-title">Annonce IA</div>
+							<div class="market-sub">{{ 'summary.indicative_projection'|trans({}, 'pdf') }}</div>
+						</td>
+					</tr>
+				</table>
+			</div>
 
-                            <div class="ad-box">
-                                {{ property.adText|nl2br }}
-                            </div>
-                        </div>
-                    </td>
-                {% endif %}
-            </tr>
-        </table>
-    {% endif %}
+			<div class="section no-break">
+				<div class="strategy-card">
+					<div class="strategy-title">
+						{{ 'strategy.title'|trans({}, 'pdf') }}
+					</div>
 
-    <table class="signature-table no-break">
-        <tr>
-            <td class="signature-card">
-                <div class="signature-label">Document présenté par</div>
+					<table class="strategy-metrics">
+						<tr>
+							<td class="strategy-metric">
+								<div class="strategy-metric-label">
+									{{ 'strategy.recommended_price'|trans({}, 'pdf') }}
+								</div>
 
-                <div class="signature-name">
-                    {{ agencyName }}
-                </div>
+								<div class="strategy-metric-value">
+									{{ property.highEstimate ? property.highEstimate|number_format(0, ',', ' ') ~ ' €' : property.estimate|number_format(0, ',', ' ') ~ ' €' }}
+								</div>
+							</td>
 
-                <div class="company-info">
-                    {% if agencyStreet %}
-                        {{ agencyStreet }}{% if agencyAddressComplement %} — {{ agencyAddressComplement }}{% endif %}<br>
-                    {% elseif agencyAddressComplement %}
-                        {{ agencyAddressComplement }}<br>
-                    {% endif %}
+							<td class="strategy-metric">
+								<div class="strategy-metric-label">
+									{{ 'strategy.negotiation_threshold'|trans({}, 'pdf') }}
+								</div>
 
-                    {% if agencyPostalCode or agencyCity %}
-                        {{ agencyPostalCode }} {{ agencyCity }}<br>
-                    {% elseif agencyLegacyAddress %}
-                        {{ agencyLegacyAddress|nl2br }}<br>
-                    {% endif %}
+								<div class="strategy-metric-value">
+									{{ property.lowEstimate ? property.lowEstimate|number_format(0, ',', ' ') ~ ' €' : property.estimate|number_format(0, ',', ' ') ~ ' €' }}
+								</div>
+							</td>
+						</tr>
+					</table>
 
-                    {% if agencyPhone %}
-                        Tél : {{ agencyPhone }}<br>
-                    {% endif %}
+					{% if sellingStrategy is defined and sellingStrategy is iterable and sellingStrategy is not empty %}
+						<ul class="strategy-list">
+							{% for item in sellingStrategy %}
+								<li>{{ item }}</li>
+							{% endfor %}
+						</ul>
+					{% endif %}
+				</div>
+			</div>
 
-                    {% if agencyEmail %}
-                        {{ agencyEmail }}<br>
-                    {% endif %}
+			{% if (sellingAdvices is defined and sellingAdvices is iterable and sellingAdvices is not empty) or property.adText %}
+				<table class="two-column-table no-break">
+					<tr>
+						{% if sellingAdvices is defined and sellingAdvices is iterable and sellingAdvices is not empty %}
+							<td class="two-column-cell">
+								<div class="section">
+									<div class="section-title">
+										{{ 'advices.title'|trans({}, 'pdf') }}
+									</div>
 
-                    {% if agencyWebsite %}
-                        {{ agencyWebsite }}
-                    {% endif %}
-                </div>
+									<div class="advice-box">
+										<ul class="advice-list">
+											{% for advice in sellingAdvices %}
+												<li>{{ advice }}</li>
+											{% endfor %}
+										</ul>
+									</div>
+								</div>
+							</td>
+						{% endif %}
 
-                <div class="signature-line"></div>
-            </td>
-        </tr>
-    </table>
+						{% if property.adText %}
+							<td class="two-column-cell">
+								<div class="section">
+									<div class="section-title">
+										{{ 'ad.title'|trans({}, 'pdf') }}
+									</div>
 
-    <div class="footer">
-        Estimation immobilière confidentielle — Générée via AgentBoost.<br>
-        Document non contractuel — Référence : AB-{{ property.id }}-{{ "now"|date('Ymd') }}
-    </div>
-</div>
+									<div class="ad-box">
+										{{ property.adText|nl2br }}
+									</div>
+								</div>
+							</td>
+						{% endif %}
+					</tr>
+				</table>
+			{% endif %}
 
-</body>
+			<table class="signature-table no-break">
+				<tr>
+					<td class="signature-card">
+						<div class="signature-label">
+							{{ 'signature.presented_by'|trans({}, 'pdf') }}
+						</div>
+
+						<div class="signature-name">
+							{{ agencyName }}
+						</div>
+
+						<div class="company-info">
+							{% if agencyStreet %}
+								{{ agencyStreet }}
+								{% if agencyAddressComplement %}
+									—
+									{{ agencyAddressComplement }}
+								{% endif %}<br>
+							{% elseif agencyAddressComplement %}
+								{{ agencyAddressComplement }}<br>
+							{% endif %}
+
+							{% if agencyPostalCode or agencyCity %}
+								{{ agencyPostalCode }}
+								{{ agencyCity }}<br>
+							{% elseif agencyLegacyAddress %}
+								{{ agencyLegacyAddress|nl2br }}<br>
+							{% endif %}
+
+							{% if agencyPhone %}
+								Tél :
+								{{ agencyPhone }}<br>
+							{% endif %}
+
+							{% if agencyEmail %}
+								{{ agencyEmail }}<br>
+							{% endif %}
+
+							{% if agencyWebsite %}
+								{{ agencyWebsite }}
+							{% endif %}
+						</div>
+
+						<div class="signature-line"></div>
+					</td>
+				</tr>
+			</table>
+
+			<div class="footer">
+				{{ 'footer.confidential'|trans({}, 'pdf') }}<br>
+				{{ 'footer.non_contractual'|trans({}, 'pdf') }}
+				AB-{{ property.id }}-{{ "now"|date('Ymd') }}
+			</div>
+		</div>
+
+	</body>
 </html>
