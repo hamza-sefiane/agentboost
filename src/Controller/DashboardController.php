@@ -34,8 +34,7 @@ final class DashboardController extends AbstractController
     public function __construct(
         private readonly EntityManagerInterface $em,
         private readonly SubscriptionLimiter $subscriptionLimiter,
-    ) {
-    }
+    ) {}
 
     #[Route('', name: 'dashboard', methods: ['GET', 'POST'])]
     public function index(Request $request, PropertyEstimator $estimator): Response
@@ -141,7 +140,10 @@ final class DashboardController extends AbstractController
         }
 
         try {
-            $property->setAdText($adGenerator->generate($property));
+            $property->setAdText(
+                $adGenerator->generate($property, $request->getLocale())
+            );
+
             $this->subscriptionLimiter->incrementAiGenerations($user);
 
             $this->em->flush();
@@ -155,20 +157,24 @@ final class DashboardController extends AbstractController
     }
 
     #[Route('/pdf/{id}', name: 'property_pdf', methods: ['GET'])]
-    public function pdf(Property $property, PropertySellingAdviceGenerator $adviceGenerator): Response
-    {
+    public function pdf(
+        Property $property,
+        Request $request,
+        PropertySellingAdviceGenerator $adviceGenerator,
+    ): Response {
         $this->denyAccessUnlessGranted('OWNER', $property);
 
         $user = $this->getAuthenticatedUser();
+        $locale = $request->getLocale();
 
         $html = $this->renderView('pdf/property.html.twig', [
             'property' => $property,
             'logoDataUri' => $this->getLogoDataUri($user),
             'photoDataUris' => $this->getPhotoDataUris($property),
-            'sellingAdvices' => $adviceGenerator->generate($property),
-            'sellingStrategy' => $adviceGenerator->generateSellingStrategy($property),
+            'sellingAdvices' => $adviceGenerator->generate($property, $locale),
+            'sellingStrategy' => $adviceGenerator->generateSellingStrategy($property, $locale),
             'confidenceScore' => $adviceGenerator->generateConfidenceScore($property),
-            'estimatedSaleDelay' => $adviceGenerator->generateEstimatedSaleDelay($property),
+            'estimatedSaleDelay' => $adviceGenerator->generateEstimatedSaleDelay($property, $locale),
         ]);
 
         $options = new Options();
@@ -191,12 +197,14 @@ final class DashboardController extends AbstractController
     #[Route('/pdf/{id}/premium', name: 'property_pdf_premium', methods: ['GET'])]
     public function premiumPdf(
         Property $property,
+        Request $request,
         PropertySellingAdviceGenerator $adviceGenerator,
         PropertyComparableGenerator $comparableGenerator,
     ): Response {
         $this->denyAccessUnlessGranted('OWNER', $property);
 
         $user = $this->getAuthenticatedUser();
+        $locale = $request->getLocale();
 
         if ($user->getSubscriptionStatus() !== User::STATUS_ACTIVE || $user->getCurrentPlan() !== User::PLAN_YEARLY) {
             $this->addFlash('error', 'Le PDF premium est réservé aux abonnements annuels.');
@@ -208,10 +216,10 @@ final class DashboardController extends AbstractController
             'property' => $property,
             'logoDataUri' => $this->getLogoDataUri($user),
             'photoDataUris' => $this->getPhotoDataUris($property),
-            'sellingAdvices' => $adviceGenerator->generate($property),
-            'sellingStrategy' => $adviceGenerator->generateSellingStrategy($property),
+            'sellingAdvices' => $adviceGenerator->generate($property, $locale),
+            'sellingStrategy' => $adviceGenerator->generateSellingStrategy($property, $locale),
             'confidenceScore' => $adviceGenerator->generateConfidenceScore($property),
-            'estimatedSaleDelay' => $adviceGenerator->generateEstimatedSaleDelay($property),
+            'estimatedSaleDelay' => $adviceGenerator->generateEstimatedSaleDelay($property, $locale),
             'comparables' => $comparableGenerator->generate($property),
             'marketPosition' => $comparableGenerator->generateMarketPosition($property),
         ]);
@@ -290,7 +298,7 @@ final class DashboardController extends AbstractController
 
         $ids = array_values(array_unique(array_filter(
             array_map('intval', $request->request->all('property_ids')),
-            static fn (int $id): bool => $id > 0,
+            static fn(int $id): bool => $id > 0,
         )));
 
         if ($ids === []) {
@@ -405,7 +413,7 @@ final class DashboardController extends AbstractController
     {
         $validPhotos = array_values(array_filter(
             $photos,
-            static fn (mixed $photo): bool => $photo instanceof UploadedFile,
+            static fn(mixed $photo): bool => $photo instanceof UploadedFile,
         ));
 
         if ($validPhotos === []) {
