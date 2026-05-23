@@ -19,6 +19,41 @@ footer:
     privacy: "Confidentialité"
     contact: "Contact"
 
+login:
+    meta:
+        title: "Connexion"
+
+    title: "Connexion"
+
+    form:
+        email: "Adresse email"
+        password: "Mot de passe"
+        submit: "Se connecter"
+
+    forgot_password: "Mot de passe oublié ?"
+
+    footer:
+        not_registered: "Pas encore inscrit ?"
+        create_account: "Créer un compte"
+
+register:
+    meta:
+        title: "Inscription"
+
+    title: "Créer un compte"
+
+    form:
+        email: "Adresse email"
+        password: "Mot de passe"
+        password_helper: "Minimum 8 caractères."
+        confirm_password: "Confirmer le mot de passe"
+        confirm_password_helper: "Répétez le même mot de passe."
+        submit: "Créer mon compte"
+
+    footer:
+        already_registered: "Déjà inscrit ?"
+        login: "Se connecter"
+
 home:
     meta:
         title: "AgentBoost — Estimations immobilières et annonces IA"
@@ -341,4 +376,3 @@ subscription_manage:
         text: "La résiliation devient définitive à la fin de la période de facturation."
 
         button: "Résilier mon abonnement"
-        
