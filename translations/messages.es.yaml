@@ -1,23 +1,58 @@
 navbar:
-    pricing: "Precios"
+    pricing: "Tarifas"
     login: "Iniciar sesión"
     register: "Registrarse"
     logout: "Cerrar sesión"
     dashboard: "Panel"
     account: "Mi cuenta"
     language: "Español"
-    properties: "Propiedades estimadas"
+    properties: "Propiedades valoradas"
     listings: "Anuncios"
     documents: "Documentos"
-    company_profile: "Modificar mis datos"
+    company_profile: "Editar datos de la empresa"
     subscription_manage: "Gestionar suscripción"
-    delete_account: "Eliminar mi cuenta"
-    delete_account_confirm: "¿Eliminar definitivamente su cuenta?"
+    delete_account: "Eliminar cuenta"
+    delete_account_confirm: "¿Eliminar permanentemente su cuenta?"
 
 footer:
     rights: "Todos los derechos reservados"
     privacy: "Privacidad"
     contact: "Contacto"
+
+login:
+    meta:
+        title: "Iniciar sesión"
+
+    title: "Iniciar sesión"
+
+    form:
+        email: "Correo electrónico"
+        password: "Contraseña"
+        submit: "Entrar"
+
+    forgot_password: "¿Olvidaste tu contraseña?"
+
+    footer:
+        not_registered: "¿Aún no tienes cuenta?"
+        create_account: "Crear una cuenta"
+
+register:
+    meta:
+        title: "Registro"
+
+    title: "Crear una cuenta"
+
+    form:
+        email: "Correo electrónico"
+        password: "Contraseña"
+        password_helper: "Mínimo 8 caracteres."
+        confirm_password: "Confirmar contraseña"
+        confirm_password_helper: "Repite la misma contraseña."
+        submit: "Crear cuenta"
+
+    footer:
+        already_registered: "¿Ya tienes cuenta?"
+        login: "Iniciar sesión"
 
 home:
     meta:
@@ -29,13 +64,13 @@ home:
         title_line_1: "Valoraciones, anuncios"
         title_line_2: "y documentos."
 
-        text: "AgentBoost ayuda a los agentes inmobiliarios a crear valoraciones, generar anuncios asistidos y producir documentos profesionales."
+        text: "AgentBoost ayuda a los agentes inmobiliarios a crear valoraciones, generar anuncios asistidos por IA y producir documentos profesionales."
 
-        note: "Pensado para independientes, agencias y profesionales de campo."
+        note: "Diseñado para agentes independientes, agencias y profesionales del sector."
 
     actions:
-        create_estimation: "Crear una valoración"
-        view_offers: "Ver planes"
+        create_estimation: "Crear valoración"
+        view_offers: "Ver tarifas"
 
     preview:
         estimations: "valoraciones"
@@ -54,32 +89,32 @@ home:
             text: "Genere valoraciones rápidas y estructuradas."
 
         listings:
-            title: "Anuncios generados con IA"
+            title: "Anuncios generados por IA"
             text: "Cree anuncios optimizados en segundos."
 
         pdf:
             title: "Documentos PDF profesionales"
-            text: "Exporte informes PDF limpios y listos para clientes."
+            text: "Exporte informes limpios y listos para sus clientes."
 
         dashboard:
             title: "Panel centralizado"
             text: "Gestione valoraciones, anuncios y documentos desde un solo lugar."
 
     workflow:
-        title: "Un flujo de trabajo simple"
+        title: "Un flujo simple"
 
-        text: "Diseñado para ahorrar tiempo a los profesionales inmobiliarios."
+        text: "Pensado para ahorrar tiempo a los profesionales inmobiliarios."
 
         step_1:
             title: "Crear una valoración"
-            text: "Complete la información de la propiedad en minutos."
+            text: "Complete la información de la propiedad en pocos minutos."
 
         step_2:
             title: "Generar documentos"
-            text: "AgentBoost prepara sus PDF y contenidos automáticamente."
+            text: "AgentBoost prepara automáticamente sus PDF y contenidos."
 
         step_3:
-            title: "Enviar a clientes"
+            title: "Enviar a los clientes"
             text: "Entregue documentos profesionales más rápido."
 
     final_cta:
@@ -88,7 +123,7 @@ home:
 
         text: "Únase a AgentBoost y ahorre horas cada semana."
 
-        button: "Crear una valoración"
+        button: "Crear valoración"
 
 dashboard:
     title: "Nueva valoración"
@@ -100,7 +135,7 @@ dashboard:
         active: "Acceso premium activo"
 
     stats:
-        estimated_properties: "Propiedades estimadas"
+        estimated_properties: "Propiedades valoradas"
         current_total: "Total actual"
         estimations: "Valoraciones"
         unlimited_offer: "Ilimitadas con su plan"
@@ -124,24 +159,24 @@ dashboard:
         postal_code: "Código postal"
         city: "Ciudad"
         surface: "Superficie (m²)"
-        rooms: "Número de habitaciones"
+        rooms: "Habitaciones"
         without_parking: "Sin parking"
         with_parking: "Con parking"
         extra_details: "Detalles adicionales"
         optional: "(opcional)"
-        extra_placeholder: "Ej.: balcón, vista despejada, cocina equipada, cerca de la estación, luminoso..."
+        extra_placeholder: "Ejemplo: balcón, vista despejada, cocina equipada, cerca de estación, luminoso..."
         photos: "Fotos de la propiedad"
         upload_title: "Suelte sus fotos aquí"
         upload_text: "JPG, PNG, WEBP. Máximo 5 fotos."
-        estimate_button: "Estimar la propiedad"
+        estimate_button: "Valorar propiedad"
 
     ai:
         title: "↯ Valoración rápida e IA"
-        text: "Obtenga una valoración estructurada y materiales útiles para sus clientes."
+        text: "Obtenga una valoración estructurada y materiales listos para sus clientes."
         market_analysis: "Análisis del mercado local"
         clear_estimation: "Valoración clara"
         pdf_report: "Informe PDF generado"
-        ready_listing: "Anuncio listo para editar"
+        ready_listing: "Anuncio listo para mejorar"
 
     security:
         text: "Sus datos están seguros y nunca se comparten."
@@ -149,15 +184,15 @@ dashboard:
     annual:
         title: "Cambie al plan anual y publique más rápido"
         text: "Facebook, Leboncoin y PDF Premium incluidos para ahorrar tiempo en sus anuncios."
-        button: "Cambiar al anual"
+        button: "Cambiar al plan anual"
 
     properties:
-        title: "Mis propiedades estimadas"
+        title: "Mis propiedades valoradas"
 
 contact:
-    title: "Contactar con AgentBoost"
+    title: "Contactar AgentBoost"
 
-    subtitle: "¿Tiene alguna pregunta sobre su suscripción, un problema técnico o una funcionalidad? Nuestro equipo le responderá rápidamente."
+    subtitle: "¿Una pregunta sobre su suscripción, un problema técnico o una función? Nuestro equipo le responderá rápidamente."
 
     form:
         name: "Nombre"
@@ -166,7 +201,7 @@ contact:
         message: "Mensaje"
 
         name_placeholder: "Su nombre"
-        email_placeholder: "Su dirección de correo electrónico"
+        email_placeholder: "Su correo electrónico"
         message_placeholder: "Describa su solicitud..."
 
         submit: "Enviar mensaje"
@@ -178,124 +213,3 @@ contact:
         valuation: "Valoración inmobiliaria"
         ai: "Función IA"
         other: "Otro"
-
-subscription:
-    monthly: "mensual"
-    yearly: "anual"
-
-subscription_checkout:
-    meta:
-        title: "Suscripción – AgentBoost"
-
-    title: "Activar mi suscripción"
-
-    selected_plan: "Ha elegido el plan"
-
-    button: "Proceder al pago seguro"
-
-    footer: "Pago seguro mediante Stripe • Cancelación en cualquier momento"
-
-    errors:
-        server: "Error del servidor al crear el pago."
-        session: "Error al crear la sesión de pago."
-        generic: "Se ha producido un error."
-
-payment:
-    success:
-        meta:
-            title: "Validación de su suscripción"
-
-        title: "Validación en curso…"
-
-        text:
-            line_1: "Su pago ha sido recibido."
-            line_2: "El acceso a su panel está siendo activado."
-            line_3: "Esto puede tardar unos segundos."
-            line_4: "Si el acceso aún no está activo, inténtelo nuevamente en unos segundos."
-
-        loading: "Cargando…"
-
-        actions:
-            dashboard: "Acceder al panel"
-
-    cancel:
-        meta:
-            title: "Pago cancelado – AgentBoost"
-
-        title: "Pago cancelado"
-
-        text:
-            line_1: "El pago ha sido interrumpido."
-            line_2: "No se ha creado ninguna suscripción."
-            line_3: "Puede intentarlo nuevamente en cualquier momento."
-
-        actions:
-            pricing: "Ver planes"
-            dashboard: "Volver al panel"
-            home: "Volver al inicio"
-
-        footer: "Pago seguro con Stripe"
-
-subscription_manage:
-    meta:
-        title: "Gestionar suscripción"
-
-    title: "Gestión de la suscripción"
-
-    subtitle: "Información, cambio de plan y cancelación."
-
-    history:
-        title: "Historial"
-
-    status:
-        title: "Estado actual"
-
-        account_deletion: "Eliminación de cuenta programada"
-
-        account_deleted_after: "Su cuenta será eliminada después del"
-
-        cancellation_scheduled: "Cancelación programada"
-
-        access_until: "Acceso disponible hasta"
-
-        active: "Suscripción activa"
-
-        next_renewal: "Próxima renovación:"
-
-        no_subscription: "No hay suscripción activa"
-
-    account_delete:
-        title: "Eliminación de la cuenta"
-
-        text: "La eliminación de su cuenta está programada."
-
-        cancel: "Cancelar eliminación de la cuenta"
-
-    pending_change:
-        title: "Cambio programado:"
-
-        from: "a partir del"
-
-        cancel: "Cancelar cambio"
-
-    change_plan:
-        title: "Cambiar plan"
-
-        yearly: "Cambiar a anual"
-
-        monthly: "Cambiar a mensual"
-
-    cancelled:
-        title: "Cancelación programada"
-
-        text: "Su suscripción está en proceso de cancelación. Todavía puede cancelar esta cancelación antes del final del período."
-
-        cancel: "Cancelar cancelación"
-
-    danger_zone:
-        title: "Zona peligrosa"
-
-        text: "La cancelación será definitiva al final del período de facturación."
-
-        button: "Cancelar mi suscripción"
-
