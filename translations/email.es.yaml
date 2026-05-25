@@ -1,0 +1,33 @@
+reset_password:
+    header:
+        subtitle: "Restablecimiento de contraseña"
+
+    title: "Restablecer contraseña"
+
+    text:
+        line_1: "Has solicitado restablecer tu contraseña."
+        line_2: "Haz clic en el botón siguiente para elegir una nueva contraseña."
+
+    button: "Restablecer mi contraseña"
+
+    expiration: "Este enlace expirará en"
+
+    notice: "Si no solicitaste esto, puedes ignorar este correo."
+
+    footer: "Correo enviado automáticamente por AgentBoost."
+
+password_changed:
+    header:
+        subtitle: "Seguridad de la cuenta"
+
+    title: "Contraseña modificada"
+
+    greeting: "Hola,"
+
+    text: "Tu contraseña de AgentBoost acaba de ser modificada."
+
+    success_notice: "Si realizaste este cambio, no necesitas hacer nada más."
+
+    security_notice: "Si no realizaste este cambio, contacta inmediatamente con soporte."
+
+    footer: "Correo enviado automáticamente por AgentBoost."

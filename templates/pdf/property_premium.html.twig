@@ -23,6 +23,13 @@
 		{% set photos = photoDataUris is defined and photoDataUris is iterable ? photoDataUris : [] %}
 		{% set surface = property.surface > 0 ? property.surface : 1 %}
 
+		{% set propertyTypeLabels = {
+			'Appartement': 'types.apartment',
+			'Maison': 'types.house',
+			'Terrain': 'types.land',
+			'Parking': 'types.parking'
+		} %}
+
 		<div class="premium-cover">
 			{% if photos|length > 0 %}
 				<img src="{{ photos[0] }}" class="premium-cover-image" alt="{{ 'property.title'|trans({}, 'pdf') }}">
@@ -41,6 +48,7 @@
 					<div class="premium-cover-badge">
 						{{ 'cover.badge'|trans({}, 'pdf') }}
 					</div>
+
 					<div class="premium-cover-document-type">
 						{{ 'premium.meta.title'|trans({}, 'pdf') }}
 					</div>
@@ -72,7 +80,7 @@
 							<div class="premium-cover-range">
 								{{ property.lowEstimate|number_format(0, ',', ' ') }}
 								€
-																																								                        —
+																—
 								{{ property.highEstimate|number_format(0, ',', ' ') }}
 								€
 							</div>
@@ -123,7 +131,7 @@
 					{% elseif agencyLegacyAddress %}
 						{{ agencyLegacyAddress|nl2br }}<br>
 					{% else %}
-						Adresse non renseignée<br>
+						{{ 'company.address_missing'|trans({}, 'pdf') }}<br>
 					{% endif %}
 
 					{% if agencyPhone %}
@@ -190,7 +198,7 @@
 								<strong>
 									{{ property.lowEstimate|number_format(0, ',', ' ') }}
 									€
-																																													                            —
+																		—
 									{{ property.highEstimate|number_format(0, ',', ' ') }}
 									€
 								</strong>
@@ -211,13 +219,17 @@
 					<tr>
 						<td class="property-card">
 							<div class="property-card-label">{{ 'property.type'|trans({}, 'pdf') }}</div>
-							<div class="property-card-value">{{ property.type }}</div>
+							<div class="property-card-value">
+								{{ propertyTypeLabels[property.type]|default(property.type)|trans({}, 'pdf') }}
+							</div>
 						</td>
 
 						<td class="property-card">
 							<div class="property-card-label">{{ 'property.surface'|trans({}, 'pdf') }}</div>
-							<div class="property-card-value">{{ property.surface }}
-								m²</div>
+							<div class="property-card-value">
+								{{ property.surface }}
+								m²
+							</div>
 						</td>
 					</tr>
 
@@ -304,6 +316,8 @@
 					<table class="comparable-table">
 						<tr>
 							{% for comparable in comparables %}
+								{% set comparableType = comparable.type|default(property.type) %}
+
 								<td class="comparable-card">
 									<div class="comparable-label">
 										{{ 'comparables.comparable'|trans({}, 'pdf') }}
@@ -311,7 +325,7 @@
 									</div>
 
 									<div class="comparable-type">
-										{{ comparable.type|default(property.type) }}
+										{{ propertyTypeLabels[comparableType]|default(comparableType)|trans({}, 'pdf') }}
 									</div>
 
 									<div class="comparable-location">
@@ -326,7 +340,7 @@
 									<div class="comparable-price">
 										{{ comparable.lowPrice|default(property.lowEstimate)|number_format(0, ',', ' ') }}
 										€
-																																																		                                —
+																				—
 										{{ comparable.highPrice|default(property.highEstimate)|number_format(0, ',', ' ') }}
 										€
 									</div>

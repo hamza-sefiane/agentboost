@@ -1,0 +1,153 @@
+properties:
+    empty:
+        title: "Aucune estimation pour le moment"
+        text: "Ajoutez votre premier bien pour générer une estimation."
+
+    count: "estimation(s)"
+
+    photo_alt: "Photo du bien"
+
+    meta:
+        rooms: "pièces"
+        parking: "Parking"
+        yes: "Oui"
+        no: "Non"
+        photos: "photo(s)"
+
+    ad:
+        none: "Aucune annonce"
+
+    premium:
+        leboncoin_locked: "Leboncoin — Premium annuel"
+        facebook_locked: "Facebook — Premium annuel"
+        note: "Passez à l’annuel pour débloquer les outils de diffusion."
+
+    modal:
+        title: "Annonce générée"
+        close: "Fermer"
+
+    confirm:
+        delete_one: "Supprimer cette estimation ?"
+
+    actions:
+        label: "Actions"
+        generate_ad: "Générer une annonce"
+        copy_ad: "Copier l’annonce"
+        leboncoin_format: "Format Leboncoin"
+        facebook_publish: "Publier sur Facebook"
+        pdf_classic: "PDF classique"
+        pdf_premium: "PDF Premium"
+        pdf: "PDF"
+        edit: "Modifier"
+        delete: "Supprimer"
+        delete_selection: "Supprimer la sélection"
+        generate: "Générer"
+        copy: "Copier"
+        select: "Sélectionner"
+        selection: "sélection"
+        select_aria: "Sélectionner cette estimation"
+        view_ad: "Voir annonce"
+
+edit:
+    meta:
+        title: "Modifier estimation"
+
+    title: "Modifier l’estimation"
+
+    property_type:
+        appartement: "Appartement"
+        maison: "Maison"
+        terrain: "Terrain"
+        parking: "Parking"
+
+    form:
+        address: "Adresse du bien"
+        postal_code: "Code postal"
+        city: "Ville"
+        surface: "Surface"
+        rooms: "Pièces"
+
+        parking:
+            no: "Sans parking"
+            yes: "Avec parking"
+
+        extra_details_placeholder: "Détails supplémentaires : balcon, vue dégagée, cuisine équipée, proche gare, lumineux..."
+
+    photos:
+        add: "Ajouter des photos"
+        help: "Maximum 5 photos au total. En production Vercel, les photos sont ignorées sans stockage externe."
+        current: "Photos actuelles"
+        alt: "Photo du bien"
+        unavailable: "Photo indisponible"
+        empty: "Aucune photo."
+        delete_confirm: "Supprimer cette photo ?"
+
+    actions:
+        save: "Enregistrer"
+        back: "Retour"
+        delete: "Supprimer"
+
+dashboard:
+    meta:
+        title: "Dashboard – AgentBoost"
+
+    title: "Nouvelle estimation"
+
+    subtitle: "Créez une estimation immobilière rapide et exploitable grâce à AgentBoost."
+
+    help: "Besoin d’aide ?"
+
+    stats:
+        estimated_properties: "Biens estimés"
+        current_total: "Total actuel"
+        estimations: "Estimations"
+        unlimited_offer: "Illimitées avec votre offre"
+        free_estimations: "Estimations gratuites"
+        remaining: "restante(s)"
+        ai_ads: "Annonces IA"
+        free_ai_ad: "Annonce IA gratuite"
+        current_offer: "Offre actuelle"
+        premium_active: "Accès premium actif"
+        upgrade: "Passer premium"
+
+    form:
+        property_info: "Informations du bien"
+        property_type: "Type de bien"
+        apartment: "Appartement"
+        house: "Maison"
+        land: "Terrain"
+        parking: "Parking"
+        address: "Adresse du bien"
+        full_address: "Adresse complète"
+        postal_code: "Code postal"
+        city: "Ville"
+        surface: "Surface (m²)"
+        rooms: "Nombre de pièces"
+        without_parking: "Sans parking"
+        with_parking: "Avec parking"
+        extra_details: "Détails supplémentaires"
+        optional: "(optionnel)"
+        extra_placeholder: "Ex : balcon, vue dégagée, cuisine équipée, proche gare, lumineux..."
+        photos: "Photos du bien"
+        upload_title: "Déposez vos photos ici"
+        upload_text: "JPG, PNG, WEBP. Maximum 5 photos."
+        estimate_button: "Estimer le bien"
+
+    ai:
+        title: "↯ Estimation rapide & IA"
+        text: "Obtenez une estimation structurée et des supports exploitables pour vos clients."
+        market_analysis: "Analyse du marché local"
+        clear_estimation: "Estimation claire"
+        pdf_report: "Rapport PDF généré"
+        ready_listing: "Annonce prête à retravailler"
+
+    security:
+        text: "Vos données sont sécurisées et ne sont jamais partagées."
+
+    annual:
+        title: "Passez à l’annuel et diffusez plus vite"
+        text: "Facebook, Leboncoin et PDF Premium inclus pour gagner du temps sur vos annonces."
+        button: "Passer à l’annuel"
+
+    properties:
+        title: "Mes biens estimés"                

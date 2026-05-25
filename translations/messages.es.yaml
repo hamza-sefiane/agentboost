@@ -1,86 +1,47 @@
 navbar:
     pricing: "Tarifas"
-    login: "Iniciar sesión"
-    register: "Registrarse"
+    login: "Conexión"
+    register: "Registro"
     logout: "Cerrar sesión"
-    dashboard: "Panel"
+    dashboard: "Dashboard"
     account: "Mi cuenta"
     language: "Español"
     properties: "Propiedades valoradas"
-    listings: "Anuncios"
+    listings: "Presentaciones"
     documents: "Documentos"
-    company_profile: "Editar datos de la empresa"
+    company_profile: "Modificar datos de empresa"
     subscription_manage: "Gestionar suscripción"
     delete_account: "Eliminar cuenta"
-    delete_account_confirm: "¿Eliminar permanentemente su cuenta?"
+    delete_account_confirm: "¿Eliminar definitivamente su cuenta?"
 
 footer:
     rights: "Todos los derechos reservados"
     privacy: "Privacidad"
     contact: "Contacto"
 
-login:
-    meta:
-        title: "Iniciar sesión"
-
-    title: "Iniciar sesión"
-
-    form:
-        email: "Correo electrónico"
-        password: "Contraseña"
-        submit: "Entrar"
-
-    forgot_password: "¿Olvidaste tu contraseña?"
-
-    footer:
-        not_registered: "¿Aún no tienes cuenta?"
-        create_account: "Crear una cuenta"
-
-register:
-    meta:
-        title: "Registro"
-
-    title: "Crear una cuenta"
-
-    form:
-        email: "Correo electrónico"
-        password: "Contraseña"
-        password_helper: "Mínimo 8 caracteres."
-        confirm_password: "Confirmar contraseña"
-        confirm_password_helper: "Repite la misma contraseña."
-        submit: "Crear cuenta"
-
-    footer:
-        already_registered: "¿Ya tienes cuenta?"
-        login: "Iniciar sesión"
-
 home:
     meta:
-        title: "AgentBoost — Valoraciones inmobiliarias y anuncios IA"
+        title: "AgentBoost — Valoraciones inmobiliarias y documentos profesionales"
 
     hero:
         kicker: "Herramienta profesional para agentes inmobiliarios"
-
-        title_line_1: "Valoraciones, anuncios"
+        title_line_1: "Valoraciones, presentaciones"
         title_line_2: "y documentos."
-
-        text: "AgentBoost ayuda a los agentes inmobiliarios a crear valoraciones, generar anuncios asistidos por IA y producir documentos profesionales."
-
-        note: "Diseñado para agentes independientes, agencias y profesionales del sector."
+        text: "AgentBoost ayuda a los profesionales inmobiliarios a crear valoraciones, preparar presentaciones de propiedades y generar documentos profesionales."
+        note: "Diseñado para independientes, agencias y profesionales del sector."
 
     actions:
         create_estimation: "Crear valoración"
-        view_offers: "Ver tarifas"
+        view_offers: "Ver planes"
+        open_dashboard: "Acceder al dashboard"
+        access_dashboard: "Acceder al dashboard"
 
     preview:
         estimations: "valoraciones"
-        listings: "anuncios"
+        listings: "presentaciones"
         pdf_ready: "PDF listos"
-
         apartment: "Apartamento"
-
-        generate_listing: "Generar anuncio"
-
+        generate_listing: "Generar presentación"
         pdf_estimation: "PDF valoración"
 
     features:
@@ -89,127 +50,41 @@ home:
             text: "Genere valoraciones rápidas y estructuradas."
 
         listings:
-            title: "Anuncios generados por IA"
-            text: "Cree anuncios optimizados en segundos."
+            title: "Presentaciones inmobiliarias profesionales"
+            text: "Cree presentaciones claras y utilizables en segundos."
 
         pdf:
             title: "Documentos PDF profesionales"
             text: "Exporte informes limpios y listos para sus clientes."
 
         dashboard:
-            title: "Panel centralizado"
-            text: "Gestione valoraciones, anuncios y documentos desde un solo lugar."
-
-    workflow:
-        title: "Un flujo simple"
-
-        text: "Pensado para ahorrar tiempo a los profesionales inmobiliarios."
-
-        step_1:
-            title: "Crear una valoración"
-            text: "Complete la información de la propiedad en pocos minutos."
-
-        step_2:
-            title: "Generar documentos"
-            text: "AgentBoost prepara automáticamente sus PDF y contenidos."
-
-        step_3:
-            title: "Enviar a los clientes"
-            text: "Entregue documentos profesionales más rápido."
-
-    final_cta:
-        title_line_1: "Empiece a crear"
-        title_line_2: "valoraciones profesionales."
-
-        text: "Únase a AgentBoost y ahorre horas cada semana."
-
-        button: "Crear valoración"
-
-dashboard:
-    title: "Nueva valoración"
-    subtitle: "Cree una valoración inmobiliaria rápida y útil con AgentBoost."
-    help: "¿Necesita ayuda?"
-
-    subscription:
-        pro: "Plan actual"
-        active: "Acceso premium activo"
-
-    stats:
-        estimated_properties: "Propiedades valoradas"
-        current_total: "Total actual"
-        estimations: "Valoraciones"
-        unlimited_offer: "Ilimitadas con su plan"
-        free_estimations: "Valoraciones gratuitas"
-        remaining: "restante(s)"
-        ai_ads: "Anuncios IA"
-        free_ai_ad: "Anuncio IA gratuito"
-        current_offer: "Plan actual"
-        premium_active: "Acceso premium activo"
-        upgrade: "Pasar a premium"
-
-    form:
-        property_info: "Información de la propiedad"
-        property_type: "Tipo de propiedad"
-        apartment: "Apartamento"
-        house: "Casa"
-        land: "Terreno"
-        parking: "Parking"
-        address: "Dirección de la propiedad"
-        full_address: "Dirección completa"
-        postal_code: "Código postal"
-        city: "Ciudad"
-        surface: "Superficie (m²)"
-        rooms: "Habitaciones"
-        without_parking: "Sin parking"
-        with_parking: "Con parking"
-        extra_details: "Detalles adicionales"
-        optional: "(opcional)"
-        extra_placeholder: "Ejemplo: balcón, vista despejada, cocina equipada, cerca de estación, luminoso..."
-        photos: "Fotos de la propiedad"
-        upload_title: "Suelte sus fotos aquí"
-        upload_text: "JPG, PNG, WEBP. Máximo 5 fotos."
-        estimate_button: "Valorar propiedad"
-
-    ai:
-        title: "↯ Valoración rápida e IA"
-        text: "Obtenga una valoración estructurada y materiales listos para sus clientes."
-        market_analysis: "Análisis del mercado local"
-        clear_estimation: "Valoración clara"
-        pdf_report: "Informe PDF generado"
-        ready_listing: "Anuncio listo para mejorar"
-
-    security:
-        text: "Sus datos están seguros y nunca se comparten."
-
-    annual:
-        title: "Cambie al plan anual y publique más rápido"
-        text: "Facebook, Leboncoin y PDF Premium incluidos para ahorrar tiempo en sus anuncios."
-        button: "Cambiar al plan anual"
-
-    properties:
-        title: "Mis propiedades valoradas"
+            title: "Dashboard centralizado"
+            text: "Gestione valoraciones, presentaciones y documentos desde un solo lugar."
 
 contact:
     title: "Contactar AgentBoost"
 
-    subtitle: "¿Una pregunta sobre su suscripción, un problema técnico o una función? Nuestro equipo le responderá rápidamente."
-
-    form:
-        name: "Nombre"
-        email: "Correo electrónico"
-        subject: "Asunto"
-        message: "Mensaje"
-
-        name_placeholder: "Su nombre"
-        email_placeholder: "Su correo electrónico"
-        message_placeholder: "Describa su solicitud..."
-
-        submit: "Enviar mensaje"
-
     subject:
-        subscription: "Suscripción"
-        billing: "Facturación"
-        bug: "Error técnico"
-        valuation: "Valoración inmobiliaria"
-        ai: "Función IA"
-        other: "Otro"
+        ai: "Herramienta de presentación"
+
+dashboard:
+    stats:
+        ai_ads: "Presentaciones"
+        free_ai_ad: "Presentaciones disponibles"
+
+    ai:
+        title: "↯ Asistente profesional"
+        text: "Herramientas avanzadas para acelerar sus valoraciones y documentos."
+        market_analysis: "Análisis del mercado"
+        clear_estimation: "Valoraciones estructuradas"
+        pdf_report: "Informes PDF profesionales"
+        ready_listing: "Presentaciones listas para compartir"
+
+subscription:
+    active: "Suscripción activa"
+    switching_to: "Cambio a"
+    yearly: "anual"
+    monthly: "mensual"
+    next_renewal: "en la próxima renovación"
+    cancel_scheduled: "Cancelación programada para"
+    ended: "Acceso finalizado"    

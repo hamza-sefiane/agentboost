@@ -23,6 +23,13 @@
 		{% set photos = photoDataUris is defined and photoDataUris is iterable ? photoDataUris : [] %}
 		{% set surface = property.surface > 0 ? property.surface : 1 %}
 
+		{% set propertyTypeLabels = {
+            'Appartement': 'types.apartment',
+            'Maison': 'types.house',
+            'Terrain': 'types.land',
+            'Parking': 'types.parking'
+        } %}
+
 		<div class="cover">
 			<div class="cover-logo">
 				{% if logoDataUri is defined and logoDataUri %}
@@ -58,7 +65,7 @@
 						<strong>
 							{{ property.lowEstimate|number_format(0, ',', ' ') }}
 							€
-							                    —
+							                            —
 							{{ property.highEstimate|number_format(0, ',', ' ') }}
 							€
 						</strong>
@@ -71,8 +78,9 @@
 					<tr>
 						<td>
 							{{ 'cover.generated_on'|trans({}, 'pdf') }}
-							{{ "now"|date('d/m/Y à H:i') }}
+							{{ "now"|date('d/m/Y H:i') }}
 						</td>
+
 						<td>{{ agencyName }}</td>
 					</tr>
 				</table>
@@ -108,7 +116,7 @@
 					{% elseif agencyLegacyAddress %}
 						{{ agencyLegacyAddress|nl2br }}<br>
 					{% else %}
-						Adresse non renseignée<br>
+						{{ 'company.address_missing'|trans({}, 'pdf') }}<br>
 					{% endif %}
 
 					{% if agencyPhone %}
@@ -172,10 +180,11 @@
 						<td class="estimate-range-box">
 							{% if property.lowEstimate and property.highEstimate %}
 								{{ 'estimate.range.available'|trans({}, 'pdf') }}<br>
+
 								<strong>
 									{{ property.lowEstimate|number_format(0, ',', ' ') }}
 									€
-									                            —
+									                                    —
 									{{ property.highEstimate|number_format(0, ',', ' ') }}
 									€
 								</strong>
@@ -196,19 +205,26 @@
 					<tr>
 						<td class="property-card">
 							<div class="property-card-label">{{ 'property.type'|trans({}, 'pdf') }}</div>
-							<div class="property-card-value">{{ property.type }}</div>
+
+							<div class="property-card-value">
+								{{ propertyTypeLabels[property.type]|default(property.type)|trans({}, 'pdf') }}
+							</div>
 						</td>
 
 						<td class="property-card">
 							<div class="property-card-label">{{ 'property.surface'|trans({}, 'pdf') }}</div>
-							<div class="property-card-value">{{ property.surface }}
-								m²</div>
+
+							<div class="property-card-value">
+								{{ property.surface }}
+								m²
+							</div>
 						</td>
 					</tr>
 
 					<tr>
 						<td class="property-card">
 							<div class="property-card-label">{{ 'property.rooms'|trans({}, 'pdf') }}</div>
+
 							<div class="property-card-value">
 								{{ property.type|lower == 'parking' or property.type|lower == 'terrain' ? '—' : property.rooms }}
 							</div>
@@ -216,6 +232,7 @@
 
 						<td class="property-card">
 							<div class="property-card-label">{{ 'property.parking'|trans({}, 'pdf') }}</div>
+
 							<div class="property-card-value">
 								{{ property.parking ? 'property.yes'|trans({}, 'pdf') : 'property.no'|trans({}, 'pdf') }}
 							</div>

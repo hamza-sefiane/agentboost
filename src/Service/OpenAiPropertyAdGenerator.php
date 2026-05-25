@@ -85,6 +85,7 @@ final class OpenAiPropertyAdGenerator
     private function buildPrompt(Property $property, string $locale): string
     {
         $lang = $this->getLanguageConfig($locale);
+        $propertyType = $lang['property_types'][$property->getType()] ?? $property->getType();
 
         return sprintf(
             <<<PROMPT
@@ -124,7 +125,7 @@ Avoid mentioning neighborhood, school, shops, station, transport, balcony, terra
 
 PROMPT,
             $lang['language'],
-            $property->getType(),
+            $propertyType,
             $property->getAddress() ?: $lang['not_provided'],
             $property->getCity(),
             $property->getPostalCode(),
@@ -135,6 +136,9 @@ PROMPT,
         );
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     private function getLanguageConfig(string $locale): array
     {
         return match ($locale) {
@@ -151,6 +155,12 @@ PROMPT,
                 'fallback_location_in' => 'located in',
                 'rooms' => 'rooms',
                 'sqm' => 'sqm',
+                'property_types' => [
+                    'Appartement' => 'Apartment',
+                    'Maison' => 'House',
+                    'Terrain' => 'Land',
+                    'Parking' => 'Parking',
+                ],
             ],
 
             'es' => [
@@ -166,6 +176,12 @@ PROMPT,
                 'fallback_location_in' => 'situado en',
                 'rooms' => 'habitaciones',
                 'sqm' => 'm²',
+                'property_types' => [
+                    'Appartement' => 'Apartamento',
+                    'Maison' => 'Casa',
+                    'Terrain' => 'Terreno',
+                    'Parking' => 'Parking',
+                ],
             ],
 
             default => [
@@ -181,6 +197,12 @@ PROMPT,
                 'fallback_location_in' => 'situé à',
                 'rooms' => 'pièces',
                 'sqm' => 'm²',
+                'property_types' => [
+                    'Appartement' => 'Appartement',
+                    'Maison' => 'Maison',
+                    'Terrain' => 'Terrain',
+                    'Parking' => 'Parking',
+                ],
             ],
         };
     }
@@ -240,6 +262,7 @@ PROMPT,
     private function buildFallbackAd(Property $property, string $locale): string
     {
         $lang = $this->getLanguageConfig($locale);
+        $propertyType = $lang['property_types'][$property->getType()] ?? $property->getType();
 
         $location = trim(sprintf(
             '%s %s',
@@ -257,7 +280,7 @@ PROMPT,
 
         return sprintf(
             "%s %d %s de %d %s %s%s\n\n%s\n\n%s",
-            $property->getType(),
+            $propertyType,
             $property->getRooms(),
             $lang['rooms'],
             $property->getSurface(),

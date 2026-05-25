@@ -1,0 +1,77 @@
+manage:
+    meta:
+        title: "Subscription management"
+
+    title: "Subscription management"
+
+    subtitle: "Manage your AgentBoost subscription and view your history."
+
+    history:
+        title: "History"
+
+    status:
+        title: "Current status"
+
+        active: "Active subscription"
+
+        cancellation_scheduled: "Cancellation scheduled"
+
+        access_until: "Access available until"
+
+        next_renewal: "Next renewal"
+
+        no_subscription: "No active subscription"
+
+        account_deletion: "Account deletion scheduled"
+
+        account_deleted_after: "Your account will be permanently deleted after"
+
+    account_delete:
+        title: "Account deletion"
+
+        text: "Your account is scheduled for deletion."
+
+        cancel: "Cancel deletion"
+
+    pending_change:
+        title: "Scheduled subscription change"
+
+        from: "Planned switch to"
+
+        cancel: "Cancel change"
+
+    change_plan:
+        title: "Change subscription"
+
+        monthly: "Monthly"
+
+        yearly: "Yearly"
+
+    cancelled:
+        title: "Subscription cancelled"
+
+        text: "Your subscription has been cancelled."
+
+        cancel: "Reactivate subscription"
+
+    danger_zone:
+        title: "Danger zone"
+
+        text: "Cancellation becomes final at the end of the billing period."
+
+        button: "Cancel my subscription"
+
+timeline:
+    active: "Active subscription"
+
+    switching_to: "Switching to"
+
+    next_renewal: "Next renewal"
+
+    cancel_scheduled: "Cancellation scheduled"
+
+    ended: "Subscription ended"
+
+monthly: "Monthly"
+
+yearly: "Yearly"

@@ -3,9 +3,14 @@
 namespace App\Service;
 
 use App\Entity\Property;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 final class PropertyComparableGenerator
 {
+    public function __construct(
+        private readonly TranslatorInterface $translator,
+    ) {}
+
     /**
      * @return array<int, array<string, mixed>>
      */
@@ -41,13 +46,25 @@ final class PropertyComparableGenerator
         $surface = $property->getSurface();
 
         if ($surface <= 45) {
-            return 'Le bien se positionne sur un segment dynamique avec une demande généralement soutenue.';
+            return $this->translator->trans(
+                'comparables.market.small',
+                [],
+                'pdf'
+            );
         }
 
         if ($surface <= 100) {
-            return 'Le bien se situe dans une fourchette cohérente avec les valeurs observées sur des surfaces comparables.';
+            return $this->translator->trans(
+                'comparables.market.medium',
+                [],
+                'pdf'
+            );
         }
 
-        return 'Le bien se positionne sur un marché plus sélectif nécessitant une stratégie de commercialisation adaptée.';
+        return $this->translator->trans(
+            'comparables.market.large',
+            [],
+            'pdf'
+        );
     }
 }

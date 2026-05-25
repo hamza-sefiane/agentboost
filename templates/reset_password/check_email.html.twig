@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-	{{ 'reset_password.sent.meta.title'|trans }}
+	{{ 'sent.meta.title'|trans({}, 'reset_password') }}
 {% endblock %}
 
 {% block stylesheets %}
@@ -18,27 +18,30 @@
 			</div>
 
 			<h1 class="auth-title">
-				{{ 'reset_password.sent.title'|trans }}
+				{{ 'sent.title'|trans({}, 'reset_password') }}
 			</h1>
 
 			<p class="auth-text">
-				{{ 'reset_password.sent.text.line_1'|trans }}
+				{{ 'sent.text.line_1'|trans({}, 'reset_password') }}
 
-				{{ resetToken.expirationMessageKey|trans(resetToken.expirationMessageData, 'ResetPasswordBundle') }}.
+				{{ resetToken.expirationMessageKey|trans(
+                    resetToken.expirationMessageData,
+                    'ResetPasswordBundle'
+                ) }}.
 			</p>
 
 			<p class="auth-text mt-3">
-				{{ 'reset_password.sent.text.line_2'|trans }}
+				{{ 'sent.text.line_2'|trans({}, 'reset_password') }}
 			</p>
 
 			<div class="auth-actions">
 
 				<a href="{{ path('app_forgot_password_request') }}" class="btn btn-outline-success">
-					{{ 'reset_password.sent.actions.resend'|trans }}
+					{{ 'sent.actions.resend'|trans({}, 'reset_password') }}
 				</a>
 
 				<a href="{{ path('app_login') }}" class="btn btn-success">
-					{{ 'reset_password.sent.actions.back_login'|trans }}
+					{{ 'sent.actions.back_login'|trans({}, 'reset_password') }}
 				</a>
 
 			</div>

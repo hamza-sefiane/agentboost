@@ -1,8 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-	{{ 'navbar.dashboard'|trans }}
-	– AgentBoost
+	{{ 'dashboard.meta.title'|trans({}, 'dashboard') }}
 {% endblock %}
 
 {% block stylesheets %}
@@ -25,43 +24,46 @@
 
 				<div>
 					<h1 class="dashboard-title">
-						{{ 'dashboard.title'|trans }}
+						{{ 'dashboard.title'|trans({}, 'dashboard') }}
 					</h1>
 
 					<p class="dashboard-subtitle">
-						{{ 'dashboard.subtitle'|trans }}
+						{{ 'dashboard.subtitle'|trans({}, 'dashboard') }}
 					</p>
 				</div>
 			</div>
 
 			<a href="{{ path('home') }}" class="help-btn">
-				{{ 'dashboard.help'|trans }}
+				{{ 'dashboard.help'|trans({}, 'dashboard') }}
 			</a>
 		</div>
 
 		<div class="stats-grid">
 			<div class="stat-card">
 				<div class="stat-icon">🏠</div>
+
 				<div>
 					<div class="stat-value">{{ properties|length }}</div>
-					<div class="stat-label">{{ 'dashboard.stats.estimated_properties'|trans }}</div>
-					<div class="stat-note">{{ 'dashboard.stats.current_total'|trans }}</div>
+					<div class="stat-label">{{ 'dashboard.stats.estimated_properties'|trans({}, 'dashboard') }}</div>
+					<div class="stat-note">{{ 'dashboard.stats.current_total'|trans({}, 'dashboard') }}</div>
 				</div>
 			</div>
 
 			<div class="stat-card usage-card">
 				<div class="stat-icon">📈</div>
+
 				<div style="width: 100%;">
 					{% if usage.isPremium %}
 						<div class="stat-value">∞</div>
-						<div class="stat-label">{{ 'dashboard.stats.estimations'|trans }}</div>
-						<div class="stat-note">{{ 'dashboard.stats.unlimited_offer'|trans }}</div>
+						<div class="stat-label">{{ 'dashboard.stats.estimations'|trans({}, 'dashboard') }}</div>
+						<div class="stat-note">{{ 'dashboard.stats.unlimited_offer'|trans({}, 'dashboard') }}</div>
 					{% else %}
 						<div class="stat-value">{{ usage.estimationsUsed }}/{{ usage.estimationsLimit }}</div>
-						<div class="stat-label">{{ 'dashboard.stats.free_estimations'|trans }}</div>
+						<div class="stat-label">{{ 'dashboard.stats.free_estimations'|trans({}, 'dashboard') }}</div>
+
 						<div class="stat-note">
 							{{ usage.estimationsRemaining }}
-							{{ 'dashboard.stats.remaining'|trans }}
+							{{ 'dashboard.stats.remaining'|trans({}, 'dashboard') }}
 						</div>
 
 						<div class="usage-progress">
@@ -73,17 +75,19 @@
 
 			<div class="stat-card usage-card">
 				<div class="stat-icon">✍️</div>
+
 				<div style="width: 100%;">
 					{% if usage.isPremium %}
 						<div class="stat-value">∞</div>
-						<div class="stat-label">{{ 'dashboard.stats.ai_ads'|trans }}</div>
-						<div class="stat-note">{{ 'dashboard.stats.unlimited_offer'|trans }}</div>
+						<div class="stat-label">{{ 'dashboard.stats.ai_ads'|trans({}, 'dashboard') }}</div>
+						<div class="stat-note">{{ 'dashboard.stats.unlimited_offer'|trans({}, 'dashboard') }}</div>
 					{% else %}
 						<div class="stat-value">{{ usage.aiUsed }}/{{ usage.aiLimit }}</div>
-						<div class="stat-label">{{ 'dashboard.stats.free_ai_ad'|trans }}</div>
+						<div class="stat-label">{{ 'dashboard.stats.free_ai_ad'|trans({}, 'dashboard') }}</div>
+
 						<div class="stat-note">
 							{{ usage.aiRemaining }}
-							{{ 'dashboard.stats.remaining'|trans }}
+							{{ 'dashboard.stats.remaining'|trans({}, 'dashboard') }}
 						</div>
 
 						<div class="usage-progress">
@@ -95,6 +99,7 @@
 
 			<div class="stat-card">
 				<div class="stat-icon">⭐</div>
+
 				<div>
 					<div class="stat-value">
 						{% if usage.isPremium %}
@@ -104,14 +109,14 @@
 						{% endif %}
 					</div>
 
-					<div class="stat-label">{{ 'dashboard.stats.current_offer'|trans }}</div>
+					<div class="stat-label">{{ 'dashboard.stats.current_offer'|trans({}, 'dashboard') }}</div>
 
 					<div class="stat-note">
 						{% if usage.isPremium %}
-							{{ 'dashboard.stats.premium_active'|trans }}
+							{{ 'dashboard.stats.premium_active'|trans({}, 'dashboard') }}
 						{% else %}
 							<a href="{{ path('pricing') }}" class="usage-upgrade">
-								{{ 'dashboard.stats.upgrade'|trans }}
+								{{ 'dashboard.stats.upgrade'|trans({}, 'dashboard') }}
 							</a>
 						{% endif %}
 					</div>
@@ -124,52 +129,52 @@
 				<div class="form-layout">
 					<div>
 						<div class="form-section-title">
-							{{ 'dashboard.form.property_info'|trans }}
+							{{ 'dashboard.form.property_info'|trans({}, 'dashboard') }}
 						</div>
 
 						<div class="row g-3">
 							<div class="col-md-4">
 								<label class="field-label" for="property-type">
-									{{ 'dashboard.form.property_type'|trans }}
+									{{ 'dashboard.form.property_type'|trans({}, 'dashboard') }}
 								</label>
 
 								<select name="type" id="property-type" class="form-select" required>
-									<option value="Appartement">{{ 'dashboard.form.apartment'|trans }}</option>
-									<option value="Maison">{{ 'dashboard.form.house'|trans }}</option>
-									<option value="Terrain">{{ 'dashboard.form.land'|trans }}</option>
-									<option value="Parking">{{ 'dashboard.form.parking'|trans }}</option>
+									<option value="Appartement">{{ 'dashboard.form.apartment'|trans({}, 'dashboard') }}</option>
+									<option value="Maison">{{ 'dashboard.form.house'|trans({}, 'dashboard') }}</option>
+									<option value="Terrain">{{ 'dashboard.form.land'|trans({}, 'dashboard') }}</option>
+									<option value="Parking">{{ 'dashboard.form.parking'|trans({}, 'dashboard') }}</option>
 								</select>
 							</div>
 
 							<div class="col-md-5 address-autocomplete-wrapper">
 								<label class="field-label" for="address-input">
-									{{ 'dashboard.form.address'|trans }}
+									{{ 'dashboard.form.address'|trans({}, 'dashboard') }}
 								</label>
 
-								<input name="address" id="address-input" type="text" class="form-control" placeholder="{{ 'dashboard.form.full_address'|trans }}" maxlength="255" autocomplete="off">
+								<input name="address" id="address-input" type="text" class="form-control" placeholder="{{ 'dashboard.form.full_address'|trans({}, 'dashboard') }}" maxlength="255" autocomplete="off">
 
 								<div id="address-results" class="address-results"></div>
 							</div>
 
 							<div class="col-md-3">
 								<label class="field-label" for="postal-code-input">
-									{{ 'dashboard.form.postal_code'|trans }}
+									{{ 'dashboard.form.postal_code'|trans({}, 'dashboard') }}
 								</label>
 
-								<input name="postalCode" id="postal-code-input" type="text" class="form-control" placeholder="{{ 'dashboard.form.postal_code'|trans }}" maxlength="5" pattern="[0-9]{5}" inputmode="numeric" required>
+								<input name="postalCode" id="postal-code-input" type="text" class="form-control" placeholder="{{ 'dashboard.form.postal_code'|trans({}, 'dashboard') }}" maxlength="5" pattern="[0-9]{5}" inputmode="numeric" required>
 							</div>
 
 							<div class="col-md-4">
 								<label class="field-label" for="city-input">
-									{{ 'dashboard.form.city'|trans }}
+									{{ 'dashboard.form.city'|trans({}, 'dashboard') }}
 								</label>
 
-								<input name="city" id="city-input" class="form-control" placeholder="{{ 'dashboard.form.city'|trans }}" required>
+								<input name="city" id="city-input" class="form-control" placeholder="{{ 'dashboard.form.city'|trans({}, 'dashboard') }}" required>
 							</div>
 
 							<div class="col-md-4">
 								<label class="field-label">
-									{{ 'dashboard.form.surface'|trans }}
+									{{ 'dashboard.form.surface'|trans({}, 'dashboard') }}
 								</label>
 
 								<input name="surface" type="number" min="1" class="form-control" placeholder="Ex : 72" required>
@@ -177,7 +182,7 @@
 
 							<div class="col-md-4" id="rooms-wrapper">
 								<label class="field-label" for="rooms-input">
-									{{ 'dashboard.form.rooms'|trans }}
+									{{ 'dashboard.form.rooms'|trans({}, 'dashboard') }}
 								</label>
 
 								<input name="rooms" id="rooms-input" type="number" min="1" class="form-control" placeholder="Ex : 3">
@@ -185,29 +190,30 @@
 
 							<div class="col-md-4" id="parking-wrapper">
 								<label class="field-label" for="parking-input">
-									{{ 'dashboard.form.parking'|trans }}
+									{{ 'dashboard.form.parking'|trans({}, 'dashboard') }}
 								</label>
 
 								<select name="parking" id="parking-input" class="form-select">
-									<option value="0">{{ 'dashboard.form.without_parking'|trans }}</option>
-									<option value="1">{{ 'dashboard.form.with_parking'|trans }}</option>
+									<option value="0">{{ 'dashboard.form.without_parking'|trans({}, 'dashboard') }}</option>
+									<option value="1">{{ 'dashboard.form.with_parking'|trans({}, 'dashboard') }}</option>
 								</select>
 							</div>
 
 							<div class="col-12">
 								<label class="field-label">
-									{{ 'dashboard.form.extra_details'|trans }}
+									{{ 'dashboard.form.extra_details'|trans({}, 'dashboard') }}
+
 									<span class="text-muted fw-normal">
-										{{ 'dashboard.form.optional'|trans }}
+										{{ 'dashboard.form.optional'|trans({}, 'dashboard') }}
 									</span>
 								</label>
 
-								<textarea name="extraDetails" class="form-control" rows="2" placeholder="{{ 'dashboard.form.extra_placeholder'|trans }}"></textarea>
+								<textarea name="extraDetails" class="form-control" rows="2" placeholder="{{ 'dashboard.form.extra_placeholder'|trans({}, 'dashboard') }}"></textarea>
 							</div>
 
 							<div class="col-12">
 								<label class="field-label">
-									{{ 'dashboard.form.photos'|trans }}
+									{{ 'dashboard.form.photos'|trans({}, 'dashboard') }}
 								</label>
 
 								<div class="upload-zone">
@@ -216,11 +222,11 @@
 
 										<div>
 											<div class="upload-title">
-												{{ 'dashboard.form.upload_title'|trans }}
+												{{ 'dashboard.form.upload_title'|trans({}, 'dashboard') }}
 											</div>
 
 											<div class="upload-text">
-												{{ 'dashboard.form.upload_text'|trans }}
+												{{ 'dashboard.form.upload_text'|trans({}, 'dashboard') }}
 											</div>
 										</div>
 									</div>
@@ -233,7 +239,7 @@
 
 							<div class="col-12">
 								<button type="submit" class="estimate-submit">
-									{{ 'dashboard.form.estimate_button'|trans }}
+									{{ 'dashboard.form.estimate_button'|trans({}, 'dashboard') }}
 								</button>
 							</div>
 						</div>
@@ -242,24 +248,24 @@
 					<aside class="ai-panel">
 						<div class="ai-box">
 							<div class="ai-title">
-								{{ 'dashboard.ai.title'|trans }}
+								{{ 'dashboard.ai.title'|trans({}, 'dashboard') }}
 							</div>
 
 							<p class="ai-text">
-								{{ 'dashboard.ai.text'|trans }}
+								{{ 'dashboard.ai.text'|trans({}, 'dashboard') }}
 							</p>
 
 							<ul class="ai-list">
-								<li>{{ 'dashboard.ai.market_analysis'|trans }}</li>
-								<li>{{ 'dashboard.ai.clear_estimation'|trans }}</li>
-								<li>{{ 'dashboard.ai.pdf_report'|trans }}</li>
-								<li>{{ 'dashboard.ai.ready_listing'|trans }}</li>
+								<li>{{ 'dashboard.ai.market_analysis'|trans({}, 'dashboard') }}</li>
+								<li>{{ 'dashboard.ai.clear_estimation'|trans({}, 'dashboard') }}</li>
+								<li>{{ 'dashboard.ai.pdf_report'|trans({}, 'dashboard') }}</li>
+								<li>{{ 'dashboard.ai.ready_listing'|trans({}, 'dashboard') }}</li>
 							</ul>
 						</div>
 
 						<div class="security-box">
 							<strong>🔒</strong>
-							<span>{{ 'dashboard.security.text'|trans }}</span>
+							<span>{{ 'dashboard.security.text'|trans({}, 'dashboard') }}</span>
 						</div>
 					</aside>
 				</div>
@@ -273,24 +279,26 @@
 
 					<div>
 						<p class="annual-upsell-title">
-							{{ 'dashboard.annual.title'|trans }}
+							{{ 'dashboard.annual.title'|trans({}, 'dashboard') }}
 						</p>
 
 						<p class="annual-upsell-text">
-							{{ 'dashboard.annual.text'|trans }}
+							{{ 'dashboard.annual.text'|trans({}, 'dashboard') }}
 						</p>
 					</div>
 				</div>
 
 				<a href="{{ path('subscription_manage') }}" class="annual-upsell-button">
-					{{ 'dashboard.annual.button'|trans }}
+					{{ 'dashboard.annual.button'|trans({}, 'dashboard') }}
 				</a>
 			</div>
 		{% endif %}
 
 		<div class="properties-section" id="properties-section">
 			<div class="properties-header">
-				<h2>{{ 'dashboard.properties.title'|trans }}</h2>
+				<h2>
+					{{ 'dashboard.properties.title'|trans({}, 'dashboard') }}
+				</h2>
 			</div>
 
 			{% include 'dashboard/_list.html.twig' with { properties: properties } %}

@@ -1,0 +1,77 @@
+manage:
+    meta:
+        title: "Gestión de suscripción"
+
+    title: "Gestión de suscripción"
+
+    subtitle: "Gestiona tu suscripción de AgentBoost y consulta tu historial."
+
+    history:
+        title: "Historial"
+
+    status:
+        title: "Estado actual"
+
+        active: "Suscripción activa"
+
+        cancellation_scheduled: "Cancelación programada"
+
+        access_until: "Acceso disponible hasta"
+
+        next_renewal: "Próxima renovación"
+
+        no_subscription: "No hay suscripción activa"
+
+        account_deletion: "Eliminación de cuenta programada"
+
+        account_deleted_after: "Tu cuenta será eliminada permanentemente después de"
+
+    account_delete:
+        title: "Eliminación de cuenta"
+
+        text: "Tu cuenta está programada para eliminación."
+
+        cancel: "Cancelar eliminación"
+
+    pending_change:
+        title: "Cambio de suscripción programado"
+
+        from: "Cambio previsto hacia"
+
+        cancel: "Cancelar cambio"
+
+    change_plan:
+        title: "Cambiar suscripción"
+
+        monthly: "Mensual"
+
+        yearly: "Anual"
+
+    cancelled:
+        title: "Suscripción cancelada"
+
+        text: "Tu suscripción ha sido cancelada."
+
+        cancel: "Reactivar suscripción"
+
+    danger_zone:
+        title: "Zona peligrosa"
+
+        text: "La cancelación será definitiva al final del período de facturación."
+
+        button: "Cancelar mi suscripción"
+
+timeline:
+    active: "Suscripción activa"
+
+    switching_to: "Cambio previsto hacia"
+
+    next_renewal: "Próxima renovación"
+
+    cancel_scheduled: "Cancelación programada"
+
+    ended: "Suscripción finalizada"
+
+monthly: "Mensual"
+
+yearly: "Anual"

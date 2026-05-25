@@ -1,44 +1,37 @@
-<ul
-	class="list-group">
+<ul class="list-group">
 
-	{# ÉTAPE 1 — ACTIVATION #}
 	<li class="list-group-item d-flex justify-content-between">
 		<span>
-			{{ 'subscription.active'|trans }}
+			{{ 'timeline.active'|trans({}, 'subscription') }}
 		</span>
 
 		<span class="badge bg-success">✔</span>
 	</li>
 
-	{# ÉTAPE 2 — CHANGEMENT DE PLAN #}
 	{% if app.user.pendingPlan %}
 		<li class="list-group-item d-flex justify-content-between">
-
 			<span>
-				{{ 'subscription.switching_to'|trans }}
+				{{ 'timeline.switching_to'|trans({}, 'subscription') }}
 
 				<strong>
 					{{
                         app.user.pendingPlan == 'yearly'
-                            ? 'subscription.yearly'|trans
-                            : 'subscription.monthly'|trans
+                            ? 'yearly'|trans({}, 'subscription')
+                            : 'monthly'|trans({}, 'subscription')
                     }}
 				</strong>
 
-				{{ 'subscription.next_renewal'|trans }}
+				{{ 'timeline.next_renewal'|trans({}, 'subscription') }}
 			</span>
 
 			<span class="badge bg-warning">⏳</span>
 		</li>
 	{% endif %}
 
-	{# ÉTAPE 3 — RÉSILIATION PROGRAMMÉE #}
 	{% if app.user.subscriptionStatus == 'grace' %}
 		<li class="list-group-item d-flex justify-content-between">
-
 			<span>
-				{{ 'subscription.cancel_scheduled'|trans }}
-
+				{{ 'timeline.cancel_scheduled'|trans({}, 'subscription') }}
 				{{ app.user.nextBillingDate|date('d/m/Y') }}
 			</span>
 
@@ -46,12 +39,10 @@
 		</li>
 	{% endif %}
 
-	{# ÉTAPE 4 — FIN D’ACCÈS #}
 	{% if app.user.subscriptionStatus == 'inactive' %}
 		<li class="list-group-item d-flex justify-content-between">
-
 			<span>
-				{{ 'subscription.ended'|trans }}
+				{{ 'timeline.ended'|trans({}, 'subscription') }}
 			</span>
 
 			<span class="badge bg-secondary">✖</span>

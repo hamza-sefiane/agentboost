@@ -1,0 +1,153 @@
+properties:
+    empty:
+        title: "No valuation yet"
+        text: "Add your first property to generate a valuation."
+
+    count: "valuation(s)"
+
+    photo_alt: "Property photo"
+
+    meta:
+        rooms: "rooms"
+        parking: "Parking"
+        yes: "Yes"
+        no: "No"
+        photos: "photo(s)"
+
+    ad:
+        none: "No listing"
+
+    premium:
+        leboncoin_locked: "Leboncoin — Yearly Premium"
+        facebook_locked: "Facebook — Yearly Premium"
+        note: "Upgrade to yearly to unlock publishing tools."
+
+    modal:
+        title: "Generated listing"
+        close: "Close"
+
+    confirm:
+        delete_one: "Delete this valuation?"
+
+    actions:
+        label: "Actions"
+        generate_ad: "Generate listing"
+        copy_ad: "Copy listing"
+        leboncoin_format: "Leboncoin format"
+        facebook_publish: "Publish on Facebook"
+        pdf_classic: "Classic PDF"
+        pdf_premium: "Premium PDF"
+        pdf: "PDF"
+        edit: "Edit"
+        delete: "Delete"
+        delete_selection: "Delete selection"
+        generate: "Generate"
+        copy: "Copy"
+        select: "Select"
+        selection: "selected"
+        select_aria: "Select this valuation"
+        view_ad: "View listing"
+
+edit:
+    meta:
+        title: "Edit valuation"
+
+    title: "Edit valuation"
+
+    property_type:
+        appartement: "Apartment"
+        maison: "House"
+        terrain: "Land"
+        parking: "Parking"
+
+    form:
+        address: "Property address"
+        postal_code: "Postal code"
+        city: "City"
+        surface: "Surface area"
+        rooms: "Rooms"
+
+        parking:
+            no: "Without parking"
+            yes: "With parking"
+
+        extra_details_placeholder: "Additional details: balcony, open view, fitted kitchen, near station, bright..."
+
+    photos:
+        add: "Add photos"
+        help: "Maximum 5 photos in total. On Vercel production, photos are ignored without external storage."
+        current: "Current photos"
+        alt: "Property photo"
+        unavailable: "Photo unavailable"
+        empty: "No photos."
+        delete_confirm: "Delete this photo?"
+
+    actions:
+        save: "Save"
+        back: "Back"
+        delete: "Delete"
+
+dashboard:
+    meta:
+        title: "Dashboard – AgentBoost"
+
+    title: "New valuation"
+
+    subtitle: "Create fast and actionable real estate valuations with AgentBoost."
+
+    help: "Need help?"
+
+    stats:
+        estimated_properties: "Estimated properties"
+        current_total: "Current total"
+        estimations: "Valuations"
+        unlimited_offer: "Unlimited with your plan"
+        free_estimations: "Free valuations"
+        remaining: "remaining"
+        ai_ads: "AI listings"
+        free_ai_ad: "Free AI listing"
+        current_offer: "Current plan"
+        premium_active: "Premium access active"
+        upgrade: "Upgrade to premium"
+
+    form:
+        property_info: "Property information"
+        property_type: "Property type"
+        apartment: "Apartment"
+        house: "House"
+        land: "Land"
+        parking: "Parking"
+        address: "Property address"
+        full_address: "Full address"
+        postal_code: "Postal code"
+        city: "City"
+        surface: "Surface area (m²)"
+        rooms: "Number of rooms"
+        without_parking: "Without parking"
+        with_parking: "With parking"
+        extra_details: "Additional details"
+        optional: "(optional)"
+        extra_placeholder: "Example: balcony, open view, equipped kitchen, near station, bright..."
+        photos: "Property photos"
+        upload_title: "Drop your photos here"
+        upload_text: "JPG, PNG, WEBP. Maximum 5 photos."
+        estimate_button: "Estimate property"
+
+    ai:
+        title: "↯ Fast valuation & AI"
+        text: "Get a structured valuation and ready-to-use assets for your clients."
+        market_analysis: "Local market analysis"
+        clear_estimation: "Clear valuation"
+        pdf_report: "Generated PDF report"
+        ready_listing: "Ready-to-edit listing"
+
+    security:
+        text: "Your data is secure and never shared."
+
+    annual:
+        title: "Switch to yearly and publish faster"
+        text: "Facebook, Leboncoin and Premium PDF included to save time on your listings."
+        button: "Switch to yearly"
+
+    properties:
+        title: "My estimated properties"                
