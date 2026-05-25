@@ -12,12 +12,13 @@ cover:
 
     estimated_value: "Valeur estimée"
 
-    ai_score: "Score IA"
+    ai_score: "Indice de confiance"
 
     generated_on: "Généré le"
 
 company:
     label: "Agence immobilière"
+    address_missing: "Adresse non renseignée"
 
 gallery:
     title: "Galerie du bien"
@@ -64,6 +65,11 @@ comparables:
 
     note: "Données comparatives générées à titre indicatif à partir des caractéristiques du bien estimé."
 
+    market:
+        small: "Le bien se positionne sur un segment dynamique avec une demande généralement soutenue."
+        medium: "Le bien se situe dans une fourchette cohérente avec les valeurs observées sur des surfaces comparables."
+        large: "Le bien se positionne sur un marché plus sélectif nécessitant une stratégie de commercialisation adaptée."
+
 strategy:
     title: "Stratégie de mise en vente recommandée"
 
@@ -75,7 +81,7 @@ advices:
     title: "Conseils avant mise en vente"
 
 ad:
-    title: "Annonce IA"
+    title: "Annonce de présentation"
 
 signature:
     presented_by: "Document présenté par"
@@ -84,3 +90,9 @@ footer:
     confidential: "Estimation immobilière confidentielle — Générée via AgentBoost."
 
     non_contractual: "Document non contractuel — Référence :"
+
+types:
+    apartment: "Appartement"
+    house: "Maison"
+    land: "Terrain"
+    parking: "Parking"

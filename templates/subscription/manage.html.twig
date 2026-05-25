@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-	{{ 'subscription_manage.meta.title'|trans }}
+	{{ 'manage.meta.title'|trans({}, 'subscription') }}
 {% endblock %}
 
 {% block body %}
@@ -11,36 +11,30 @@
 	<div class="container my-5" style="max-width: 900px">
 
 		{% for message in app.flashes('success') %}
-			<div class="alert alert-success mt-3">
-				{{ message }}
-			</div>
+			<div class="alert alert-success mt-3">{{ message }}</div>
 		{% endfor %}
 
 		{% for message in app.flashes('danger') %}
-			<div class="alert alert-danger mt-3">
-				{{ message }}
-			</div>
+			<div class="alert alert-danger mt-3">{{ message }}</div>
 		{% endfor %}
 
 		{% for message in app.flashes('error') %}
-			<div class="alert alert-danger mt-3">
-				{{ message }}
-			</div>
+			<div class="alert alert-danger mt-3">{{ message }}</div>
 		{% endfor %}
 
 		<div class="mb-5 p-4 border rounded-3" style="background:#f9fafb;border-left:5px solid #064663">
 			<h1 class="h4 mb-1 text-dark">
-				{{ 'subscription_manage.title'|trans }}
+				{{ 'manage.title'|trans({}, 'subscription') }}
 			</h1>
 
 			<p class="text-muted mb-0">
-				{{ 'subscription_manage.subtitle'|trans }}
+				{{ 'manage.subtitle'|trans({}, 'subscription') }}
 			</p>
 		</div>
 
 		<section class="mb-5">
 			<h2 class="h6 text-secondary mb-3">
-				{{ 'subscription_manage.history.title'|trans }}
+				{{ 'manage.history.title'|trans({}, 'subscription') }}
 			</h2>
 
 			<div class="border rounded-3 p-4 bg-white">
@@ -50,205 +44,171 @@
 
 		<section class="mb-5">
 			<h2 class="h6 text-secondary mb-3">
-				{{ 'subscription_manage.status.title'|trans }}
+				{{ 'manage.status.title'|trans({}, 'subscription') }}
 			</h2>
 
 			<div class="p-4 rounded-3" style="background:#f8f9fa;border:1px solid #e5e7eb">
 
 				{% if isAccountDeletionScheduled %}
-
 					<p class="mb-1 text-danger">
-						<strong>
-							{{ 'subscription_manage.status.account_deletion'|trans }}
-						</strong>
+						<strong>{{ 'manage.status.account_deletion'|trans({}, 'subscription') }}</strong>
 					</p>
 
 					<small class="text-muted">
-						{{ 'subscription_manage.status.account_deleted_after'|trans }}
-
+						{{ 'manage.status.account_deleted_after'|trans({}, 'subscription') }}
 						{{ user.nextBillingDate|date('d/m/Y') }}.
 					</small>
 
 				{% elseif isCancellationScheduled %}
-
 					<p class="mb-1 text-warning">
-						<strong>
-							{{ 'subscription_manage.status.cancellation_scheduled'|trans }}
-						</strong>
-
+						<strong>{{ 'manage.status.cancellation_scheduled'|trans({}, 'subscription') }}</strong>
 						—
-
-						{{ user.currentPlan == 'yearly'
-							? 'subscription.yearly'|trans
-							: 'subscription.monthly'|trans
-						}}
+						{{
+                            user.currentPlan == 'yearly'
+                                ? 'yearly'|trans({}, 'subscription')
+                                : 'monthly'|trans({}, 'subscription')
+                        }}
 					</p>
 
 					<small class="text-muted">
-						{{ 'subscription_manage.status.access_until'|trans }}
-
+						{{ 'manage.status.access_until'|trans({}, 'subscription') }}
 						{{ user.nextBillingDate|date('d/m/Y') }}.
 					</small>
 
 				{% elseif user.subscriptionStatus == 'active' %}
-
 					<p class="mb-1">
 						<strong class="text-success">
-							{{ 'subscription_manage.status.active'|trans }}
+							{{ 'manage.status.active'|trans({}, 'subscription') }}
 						</strong>
-
 						—
-
-						{{ user.currentPlan == 'yearly'
-							? 'subscription.yearly'|trans
-							: 'subscription.monthly'|trans
-						}}
+						{{
+                            user.currentPlan == 'yearly'
+                                ? 'yearly'|trans({}, 'subscription')
+                                : 'monthly'|trans({}, 'subscription')
+                        }}
 					</p>
 
 					<small class="text-muted">
-						{{ 'subscription_manage.status.next_renewal'|trans }}
-
+						{{ 'manage.status.next_renewal'|trans({}, 'subscription') }}
 						{{ user.nextBillingDate|date('d/m/Y') }}
 					</small>
 
 				{% else %}
-
 					<p class="text-muted mb-0">
-						{{ 'subscription_manage.status.no_subscription'|trans }}
+						{{ 'manage.status.no_subscription'|trans({}, 'subscription') }}
 					</p>
-
 				{% endif %}
 			</div>
 		</section>
 
 		{% if isAccountDeletionScheduled %}
 			<section class="mb-5">
-
 				<h2 class="h6 text-danger mb-3">
-					{{ 'subscription_manage.account_delete.title'|trans }}
+					{{ 'manage.account_delete.title'|trans({}, 'subscription') }}
 				</h2>
 
 				<div class="p-4 rounded-3" style="background:#fff5f5;border:1px solid #fecaca">
-
 					<p class="mb-3 text-danger">
-						{{ 'subscription_manage.account_delete.text'|trans }}
+						{{ 'manage.account_delete.text'|trans({}, 'subscription') }}
 					</p>
 
 					<form method="post" action="{{ path('account_delete_cancel') }}">
 						<input type="hidden" name="_token" value="{{ csrf_token('cancel_account_deletion') }}">
 
 						<button type="submit" class="btn btn-outline-danger">
-							{{ 'subscription_manage.account_delete.cancel'|trans }}
+							{{ 'manage.account_delete.cancel'|trans({}, 'subscription') }}
 						</button>
 					</form>
-
 				</div>
 			</section>
 		{% endif %}
 
 		{% if user.pendingPlan and not isAccountDeletionScheduled %}
 			<section class="mb-5">
-
 				<div class="p-4 rounded-3 border" style="background:#fffaf0;border-color:#facc15">
-
 					<p class="mb-2">
-						{{ 'subscription_manage.pending_change.title'|trans }}
+						{{ 'manage.pending_change.title'|trans({}, 'subscription') }}
 
 						<strong>
-							{{ user.pendingPlan == 'yearly'
-								? 'subscription.yearly'|trans
-								: 'subscription.monthly'|trans
-							}}
+							{{
+                                user.pendingPlan == 'yearly'
+                                    ? 'yearly'|trans({}, 'subscription')
+                                    : 'monthly'|trans({}, 'subscription')
+                            }}
 						</strong>
 
-						{{ 'subscription_manage.pending_change.from'|trans }}
-
+						{{ 'manage.pending_change.from'|trans({}, 'subscription') }}
 						{{ user.nextBillingDate|date('d/m/Y') }}
 					</p>
 
 					<form method="post" action="{{ path('subscription_cancel_pending_plan') }}">
 						<button type="submit" class="btn btn-sm btn-outline-secondary">
-							{{ 'subscription_manage.pending_change.cancel'|trans }}
+							{{ 'manage.pending_change.cancel'|trans({}, 'subscription') }}
 						</button>
 					</form>
-
 				</div>
 			</section>
 		{% endif %}
 
 		{% if user.subscriptionStatus == 'active' and user.pendingPlan is null and not isAccountDeletionScheduled and not isCancellationScheduled %}
 			<section class="mb-5">
-
 				<h2 class="h6 text-secondary mb-3">
-					{{ 'subscription_manage.change_plan.title'|trans }}
+					{{ 'manage.change_plan.title'|trans({}, 'subscription') }}
 				</h2>
 
 				<div class="border rounded-3 p-4 bg-white">
-
 					{% if user.currentPlan == 'yearly' %}
-
 						<form method="post" action="{{ path('subscription_change_plan', { plan: 'monthly' }) }}">
 							<button type="submit" class="btn btn-outline-secondary">
-								{{ 'subscription_manage.change_plan.monthly'|trans }}
+								{{ 'manage.change_plan.monthly'|trans({}, 'subscription') }}
 							</button>
 						</form>
-
 					{% else %}
-
 						<form method="post" action="{{ path('subscription_change_plan', { plan: 'yearly' }) }}">
 							<button type="submit" class="btn btn-primary">
-								{{ 'subscription_manage.change_plan.yearly'|trans }}
+								{{ 'manage.change_plan.yearly'|trans({}, 'subscription') }}
 							</button>
 						</form>
-
 					{% endif %}
-
 				</div>
 			</section>
 		{% endif %}
 
 		{% if isCancellationScheduled and not isAccountDeletionScheduled %}
 			<section class="mb-5">
-
 				<h2 class="h6 text-secondary mb-3">
-					{{ 'subscription_manage.cancelled.title'|trans }}
+					{{ 'manage.cancelled.title'|trans({}, 'subscription') }}
 				</h2>
 
 				<div class="p-4 rounded-3 border" style="background:#f0fdf4;border-color:#22c55e">
-
 					<p class="mb-3 text-success">
-						{{ 'subscription_manage.cancelled.text'|trans }}
+						{{ 'manage.cancelled.text'|trans({}, 'subscription') }}
 					</p>
 
 					<form method="post" action="{{ path('subscription_cancel_cancellation') }}">
 						<button type="submit" class="btn btn-success">
-							{{ 'subscription_manage.cancelled.cancel'|trans }}
+							{{ 'manage.cancelled.cancel'|trans({}, 'subscription') }}
 						</button>
 					</form>
-
 				</div>
 			</section>
 
 		{% elseif user.subscriptionStatus == 'active' and not isAccountDeletionScheduled %}
-
 			<section class="mb-5">
-
 				<h2 class="h6 text-danger mb-3">
-					{{ 'subscription_manage.danger_zone.title'|trans }}
+					{{ 'manage.danger_zone.title'|trans({}, 'subscription') }}
 				</h2>
 
 				<div class="p-4 rounded-3" style="background:#fff5f5;border:1px solid #fecaca">
-
 					<p class="mb-3 text-danger">
-						{{ 'subscription_manage.danger_zone.text'|trans }}
+						{{ 'manage.danger_zone.text'|trans({}, 'subscription') }}
 					</p>
 
 					<form method="post" action="{{ path('subscription_cancel') }}">
 						<button type="submit" class="btn btn-danger">
-							{{ 'subscription_manage.danger_zone.button'|trans }}
+							{{ 'manage.danger_zone.button'|trans({}, 'subscription') }}
 						</button>
 					</form>
-
 				</div>
 			</section>
 		{% endif %}

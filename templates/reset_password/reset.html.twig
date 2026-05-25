@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-	{{ 'reset_password.new.meta.title'|trans }}
+	{{ 'new.meta.title'|trans({}, 'reset_password') }}
 {% endblock %}
 
 {% block stylesheets %}
@@ -23,41 +23,38 @@
 			</div>
 
 			<h1 class="auth-title">
-				{{ 'reset_password.new.title'|trans }}
+				{{ 'new.title'|trans({}, 'reset_password') }}
 			</h1>
 
 			<p class="auth-subtitle">
-				{{ 'reset_password.new.subtitle'|trans }}
+				{{ 'new.subtitle'|trans({}, 'reset_password') }}
 			</p>
 
 			{{ form_start(resetForm, {
-				attr: {
-					class: 'auth-form'
-				}
-			}) }}
+                attr: {
+                    class: 'auth-form'
+                }
+            }) }}
 
 			{{ form_errors(resetForm) }}
 
 			<div class="auth-field">
-
 				<label class="auth-label">
-					{{ 'reset_password.new.form.password'|trans }}
+					{{ 'new.form.password'|trans({}, 'reset_password') }}
 				</label>
 
 				<div class="password-wrapper">
-
 					{{ form_widget(resetForm.plainPassword.first, {
-						attr: {
-							autocomplete: 'new-password',
-							class: 'password-input js-password-input',
-							placeholder: 'reset_password.new.form.password_placeholder'|trans
-						}
-					}) }}
+                        attr: {
+                            autocomplete: 'new-password',
+                            class: 'password-input js-password-input',
+                            placeholder: 'new.form.password_placeholder'|trans({}, 'reset_password')
+                        }
+                    }) }}
 
-					<button type="button" class="password-toggle" aria-label="{{ 'reset_password.new.form.show_password'|trans }}">
+					<button type="button" class="password-toggle" aria-label="{{ 'new.form.show_password'|trans({}, 'reset_password') }}">
 						<i class="bi bi-eye"></i>
 					</button>
-
 				</div>
 
 				<div class="password-strength">
@@ -68,52 +65,47 @@
 				</div>
 
 				<div class="password-strength-label" id="password-strength-label">
-					{{ 'reset_password.new.form.password_strength'|trans }}
+					{{ 'new.form.password_strength'|trans({}, 'reset_password') }}
 				</div>
 
 				<div class="auth-errors">
 					{{ form_errors(resetForm.plainPassword.first) }}
 				</div>
-
 			</div>
 
 			<div class="auth-field">
-
 				<label class="auth-label">
-					{{ 'reset_password.new.form.confirm_password'|trans }}
+					{{ 'new.form.confirm_password'|trans({}, 'reset_password') }}
 				</label>
 
 				<div class="password-wrapper">
-
 					{{ form_widget(resetForm.plainPassword.second, {
-						attr: {
-							autocomplete: 'new-password',
-							class: 'password-input',
-							placeholder: 'reset_password.new.form.confirm_password_placeholder'|trans
-						}
-					}) }}
+                        attr: {
+                            autocomplete: 'new-password',
+                            class: 'password-input',
+                            placeholder: 'new.form.confirm_password_placeholder'|trans({}, 'reset_password')
+                        }
+                    }) }}
 
-					<button type="button" class="password-toggle" aria-label="{{ 'reset_password.new.form.show_password'|trans }}">
+					<button type="button" class="password-toggle" aria-label="{{ 'new.form.show_password'|trans({}, 'reset_password') }}">
 						<i class="bi bi-eye"></i>
 					</button>
-
 				</div>
 
 				<div class="auth-errors">
 					{{ form_errors(resetForm.plainPassword.second) }}
 				</div>
-
 			</div>
 
 			<button type="submit" class="auth-submit">
-				{{ 'reset_password.new.form.submit'|trans }}
+				{{ 'new.form.submit'|trans({}, 'reset_password') }}
 			</button>
 
 			{{ form_end(resetForm) }}
 
 			<a href="{{ path('app_login') }}" class="auth-back">
 				←
-				{{ 'reset_password.new.back_login'|trans }}
+				{{ 'new.back_login'|trans({}, 'reset_password') }}
 			</a>
 
 		</div>

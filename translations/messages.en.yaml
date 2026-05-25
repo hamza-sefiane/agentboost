@@ -7,90 +7,51 @@ navbar:
     account: "My account"
     language: "English"
     properties: "Estimated properties"
-    listings: "Listings"
+    listings: "Presentations"
     documents: "Documents"
     company_profile: "Edit company details"
     subscription_manage: "Manage subscription"
     delete_account: "Delete account"
-    delete_account_confirm: "Permanently delete your account?"
+    delete_account_confirm: "Delete your account permanently?"
 
 footer:
     rights: "All rights reserved"
     privacy: "Privacy"
     contact: "Contact"
 
-login:
-    meta:
-        title: "Login"
-
-    title: "Login"
-
-    form:
-        email: "Email address"
-        password: "Password"
-        submit: "Sign in"
-
-    forgot_password: "Forgot password?"
-
-    footer:
-        not_registered: "Not registered yet?"
-        create_account: "Create an account"
-
-register:
-    meta:
-        title: "Register"
-
-    title: "Create an account"
-
-    form:
-        email: "Email address"
-        password: "Password"
-        password_helper: "Minimum 8 characters."
-        confirm_password: "Confirm password"
-        confirm_password_helper: "Repeat the same password."
-        submit: "Create account"
-
-    footer:
-        already_registered: "Already registered?"
-        login: "Sign in"
-
 home:
     meta:
-        title: "AgentBoost — Real estate valuations and AI listings"
+        title: "AgentBoost — Real estate valuations and professional documents"
 
     hero:
-        kicker: "Business tool for real estate agents"
-
-        title_line_1: "Valuations, listings"
+        kicker: "Professional tool for real estate agents"
+        title_line_1: "Valuations, presentations"
         title_line_2: "and documents."
-
-        text: "AgentBoost helps real estate agents create valuations, generate AI-assisted listings and produce professional documents."
-
+        text: "AgentBoost helps real estate professionals create valuations, prepare property presentations and generate professional documents."
         note: "Designed for independent agents, agencies and field professionals."
 
     actions:
         create_estimation: "Create valuation"
-        view_offers: "View pricing"
+        view_offers: "View plans"
+        open_dashboard: "Open dashboard"
+        access_dashboard: "Open dashboard"
 
     preview:
         estimations: "valuations"
-        listings: "listings"
-        pdf_ready: "ready PDFs"
-
+        listings: "presentations"
+        pdf_ready: "PDF ready"
         apartment: "Apartment"
-
-        generate_listing: "Generate listing"
-
+        generate_listing: "Generate presentation"
         pdf_estimation: "Valuation PDF"
 
     features:
         estimation:
             title: "Accurate property valuations"
-            text: "Generate fast and structured property valuations."
+            text: "Generate fast and structured valuations."
 
         listings:
-            title: "AI-generated listings"
-            text: "Create optimized listings in seconds."
+            title: "Professional property presentations"
+            text: "Create clear and usable property presentations in seconds."
 
         pdf:
             title: "Professional PDF documents"
@@ -98,118 +59,32 @@ home:
 
         dashboard:
             title: "Centralized dashboard"
-            text: "Manage valuations, listings and documents from one place."
-
-    workflow:
-        title: "A simple workflow"
-
-        text: "Built to save time for real estate professionals."
-
-        step_1:
-            title: "Create a valuation"
-            text: "Enter the property details in just a few minutes."
-
-        step_2:
-            title: "Generate documents"
-            text: "AgentBoost automatically prepares your PDFs and content."
-
-        step_3:
-            title: "Send to clients"
-            text: "Deliver professional documents faster."
-
-    final_cta:
-        title_line_1: "Start creating"
-        title_line_2: "professional valuations."
-
-        text: "Join AgentBoost and save hours every week."
-
-        button: "Create valuation"
-
-dashboard:
-    title: "New valuation"
-    subtitle: "Create a fast and actionable real estate valuation with AgentBoost."
-    help: "Need help?"
-
-    subscription:
-        pro: "Current plan"
-        active: "Premium access active"
-
-    stats:
-        estimated_properties: "Estimated properties"
-        current_total: "Current total"
-        estimations: "Valuations"
-        unlimited_offer: "Unlimited with your plan"
-        free_estimations: "Free valuations"
-        remaining: "remaining"
-        ai_ads: "AI listings"
-        free_ai_ad: "Free AI listing"
-        current_offer: "Current plan"
-        premium_active: "Premium access active"
-        upgrade: "Upgrade to premium"
-
-    form:
-        property_info: "Property information"
-        property_type: "Property type"
-        apartment: "Apartment"
-        house: "House"
-        land: "Land"
-        parking: "Parking"
-        address: "Property address"
-        full_address: "Full address"
-        postal_code: "Postal code"
-        city: "City"
-        surface: "Surface area (m²)"
-        rooms: "Rooms"
-        without_parking: "Without parking"
-        with_parking: "With parking"
-        extra_details: "Additional details"
-        optional: "(optional)"
-        extra_placeholder: "Example: balcony, open view, equipped kitchen, near station, bright..."
-        photos: "Property photos"
-        upload_title: "Drop your photos here"
-        upload_text: "JPG, PNG, WEBP. Maximum 5 photos."
-        estimate_button: "Estimate property"
-
-    ai:
-        title: "↯ Fast AI valuation"
-        text: "Get a structured valuation and ready-to-use client materials."
-        market_analysis: "Local market analysis"
-        clear_estimation: "Clear valuation"
-        pdf_report: "Generated PDF report"
-        ready_listing: "Listing ready to refine"
-
-    security:
-        text: "Your data is secure and never shared."
-
-    annual:
-        title: "Switch to yearly and publish faster"
-        text: "Facebook, Leboncoin and Premium PDF included to save time on your listings."
-        button: "Switch to yearly"
-
-    properties:
-        title: "My estimated properties"
+            text: "Manage valuations, presentations and documents from one place."
 
 contact:
     title: "Contact AgentBoost"
 
-    subtitle: "A question about your subscription, a technical issue or a feature request? Our team will get back to you quickly."
-
-    form:
-        name: "Name"
-        email: "Email"
-        subject: "Subject"
-        message: "Message"
-
-        name_placeholder: "Your name"
-        email_placeholder: "Your email address"
-        message_placeholder: "Describe your request..."
-
-        submit: "Send message"
-
     subject:
-        subscription: "Subscription"
-        billing: "Billing"
-        bug: "Technical issue"
-        valuation: "Property valuation"
-        ai: "AI feature"
-        other: "Other"
+        ai: "Presentation tool"
+
+dashboard:
+    stats:
+        ai_ads: "Presentations"
+        free_ai_ad: "Available presentations"
+
+    ai:
+        title: "↯ Professional assistant"
+        text: "Advanced tools to accelerate your valuations and documents."
+        market_analysis: "Market analysis"
+        clear_estimation: "Structured valuations"
+        pdf_report: "Professional PDF reports"
+        ready_listing: "Presentations ready to share"
+
+subscription:
+    active: "Active subscription"
+    switching_to: "Switching to"
+    yearly: "yearly"
+    monthly: "monthly"
+    next_renewal: "at next renewal"
+    cancel_scheduled: "Cancellation scheduled on"
+    ended: "Access ended"

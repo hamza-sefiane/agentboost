@@ -1,0 +1,33 @@
+reset_password:
+    header:
+        subtitle: "Réinitialisation de votre mot de passe"
+
+    title: "Réinitialiser votre mot de passe"
+
+    text:
+        line_1: "Vous avez demandé la réinitialisation de votre mot de passe."
+        line_2: "Cliquez sur le bouton ci-dessous pour choisir un nouveau mot de passe."
+
+    button: "Réinitialiser mon mot de passe"
+
+    expiration: "Ce lien expirera dans"
+
+    notice: "Si vous n’êtes pas à l’origine de cette demande, vous pouvez ignorer cet email."
+
+    footer: "Email envoyé automatiquement par AgentBoost."
+
+password_changed:
+    header:
+        subtitle: "Sécurité du compte"
+
+    title: "Mot de passe modifié"
+
+    greeting: "Bonjour,"
+
+    text: "Votre mot de passe AgentBoost vient d’être modifié."
+
+    success_notice: "Si vous êtes à l’origine de cette modification, aucune action n’est nécessaire."
+
+    security_notice: "Si vous n’avez pas effectué cette modification, contactez immédiatement le support."
+
+    footer: "Email envoyé automatiquement par AgentBoost."

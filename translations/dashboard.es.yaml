@@ -1,0 +1,153 @@
+properties:
+    empty:
+        title: "Aún no hay valoraciones"
+        text: "Añade tu primera propiedad para generar una valoración."
+
+    count: "valoración(es)"
+
+    photo_alt: "Foto de la propiedad"
+
+    meta:
+        rooms: "habitaciones"
+        parking: "Parking"
+        yes: "Sí"
+        no: "No"
+        photos: "foto(s)"
+
+    ad:
+        none: "Sin anuncio"
+
+    premium:
+        leboncoin_locked: "Leboncoin — Premium anual"
+        facebook_locked: "Facebook — Premium anual"
+        note: "Pásate al plan anual para desbloquear las herramientas de difusión."
+
+    modal:
+        title: "Anuncio generado"
+        close: "Cerrar"
+
+    confirm:
+        delete_one: "¿Eliminar esta valoración?"
+
+    actions:
+        label: "Acciones"
+        generate_ad: "Generar anuncio"
+        copy_ad: "Copiar anuncio"
+        leboncoin_format: "Formato Leboncoin"
+        facebook_publish: "Publicar en Facebook"
+        pdf_classic: "PDF clásico"
+        pdf_premium: "PDF Premium"
+        pdf: "PDF"
+        edit: "Modificar"
+        delete: "Eliminar"
+        delete_selection: "Eliminar selección"
+        generate: "Generar"
+        copy: "Copiar"
+        select: "Seleccionar"
+        selection: "selección"
+        select_aria: "Seleccionar esta valoración"
+        view_ad: "Ver anuncio"
+
+edit:
+    meta:
+        title: "Modificar valoración"
+
+    title: "Modificar la valoración"
+
+    property_type:
+        appartement: "Apartamento"
+        maison: "Casa"
+        terrain: "Terreno"
+        parking: "Parking"
+
+    form:
+        address: "Dirección de la propiedad"
+        postal_code: "Código postal"
+        city: "Ciudad"
+        surface: "Superficie"
+        rooms: "Habitaciones"
+
+        parking:
+            no: "Sin parking"
+            yes: "Con parking"
+
+        extra_details_placeholder: "Detalles adicionales: balcón, vista despejada, cocina equipada, cerca de la estación, luminoso..."
+
+    photos:
+        add: "Añadir fotos"
+        help: "Máximo 5 fotos en total. En producción Vercel, las fotos se ignoran sin almacenamiento externo."
+        current: "Fotos actuales"
+        alt: "Foto de la propiedad"
+        unavailable: "Foto no disponible"
+        empty: "No hay fotos."
+        delete_confirm: "¿Eliminar esta foto?"
+
+    actions:
+        save: "Guardar"
+        back: "Volver"
+        delete: "Eliminar"
+
+dashboard:
+    meta:
+        title: "Dashboard – AgentBoost"
+
+    title: "Nueva valoración"
+
+    subtitle: "Crea valoraciones inmobiliarias rápidas y útiles con AgentBoost."
+
+    help: "¿Necesitas ayuda?"
+
+    stats:
+        estimated_properties: "Propiedades valoradas"
+        current_total: "Total actual"
+        estimations: "Valoraciones"
+        unlimited_offer: "Ilimitadas con tu plan"
+        free_estimations: "Valoraciones gratuitas"
+        remaining: "restante(s)"
+        ai_ads: "Anuncios IA"
+        free_ai_ad: "Anuncio IA gratuito"
+        current_offer: "Plan actual"
+        premium_active: "Acceso premium activo"
+        upgrade: "Pasar a premium"
+
+    form:
+        property_info: "Información de la propiedad"
+        property_type: "Tipo de propiedad"
+        apartment: "Apartamento"
+        house: "Casa"
+        land: "Terreno"
+        parking: "Parking"
+        address: "Dirección de la propiedad"
+        full_address: "Dirección completa"
+        postal_code: "Código postal"
+        city: "Ciudad"
+        surface: "Superficie (m²)"
+        rooms: "Número de habitaciones"
+        without_parking: "Sin parking"
+        with_parking: "Con parking"
+        extra_details: "Detalles adicionales"
+        optional: "(opcional)"
+        extra_placeholder: "Ejemplo: balcón, vista despejada, cocina equipada, cerca de la estación, luminoso..."
+        photos: "Fotos de la propiedad"
+        upload_title: "Suelta tus fotos aquí"
+        upload_text: "JPG, PNG, WEBP. Máximo 5 fotos."
+        estimate_button: "Valorar propiedad"
+
+    ai:
+        title: "↯ Valoración rápida e IA"
+        text: "Obtén una valoración estructurada y recursos listos para tus clientes."
+        market_analysis: "Análisis del mercado local"
+        clear_estimation: "Valoración clara"
+        pdf_report: "Informe PDF generado"
+        ready_listing: "Anuncio listo para editar"
+
+    security:
+        text: "Tus datos están seguros y nunca se comparten."
+
+    annual:
+        title: "Pásate al plan anual y publica más rápido"
+        text: "Facebook, Leboncoin y PDF Premium incluidos para ahorrar tiempo en tus anuncios."
+        button: "Pasar al anual"
+
+    properties:
+        title: "Mis propiedades valoradas"                

@@ -1,0 +1,77 @@
+manage:
+    meta:
+        title: "Gestion de l’abonnement"
+
+    title: "Gestion de l’abonnement"
+
+    subtitle: "Gérez votre abonnement AgentBoost et consultez votre historique."
+
+    history:
+        title: "Historique"
+
+    status:
+        title: "Statut actuel"
+
+        active: "Abonnement actif"
+
+        cancellation_scheduled: "Résiliation programmée"
+
+        access_until: "Accès maintenu jusqu’au"
+
+        next_renewal: "Prochain renouvellement"
+
+        no_subscription: "Aucun abonnement actif"
+
+        account_deletion: "Suppression du compte programmée"
+
+        account_deleted_after: "Votre compte sera supprimé définitivement après"
+
+    account_delete:
+        title: "Suppression du compte"
+
+        text: "Votre compte est programmé pour suppression."
+
+        cancel: "Annuler la suppression"
+
+    pending_change:
+        title: "Changement d’abonnement programmé"
+
+        from: "Passage prévu vers"
+
+        cancel: "Annuler le changement"
+
+    change_plan:
+        title: "Changer d’abonnement"
+
+        monthly: "Mensuel"
+
+        yearly: "Annuel"
+
+    cancelled:
+        title: "Abonnement résilié"
+
+        text: "Votre abonnement a été résilié."
+
+        cancel: "Réactiver l’abonnement"
+
+    danger_zone:
+        title: "Zone dangereuse"
+
+        text: "La résiliation devient définitive à la fin de la période de facturation."
+
+        button: "Résilier mon abonnement"
+
+timeline:
+    active: "Abonnement actif"
+
+    switching_to: "Passage prévu vers"
+
+    next_renewal: "Prochain renouvellement"
+
+    cancel_scheduled: "Résiliation programmée"
+
+    ended: "Abonnement terminé"
+
+monthly: "Mensuel"
+
+yearly: "Annuel"

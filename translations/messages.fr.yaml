@@ -7,7 +7,7 @@ navbar:
     account: "Mon compte"
     language: "Français"
     properties: "Biens estimés"
-    listings: "Annonces"
+    listings: "Présentations"
     documents: "Documents"
     company_profile: "Modifier mes coordonnées"
     subscription_manage: "Gérer mon abonnement"
@@ -56,31 +56,27 @@ register:
 
 home:
     meta:
-        title: "AgentBoost — Estimations immobilières et annonces IA"
+        title: "AgentBoost — Estimations immobilières et documents professionnels"
 
     hero:
         kicker: "Outil métier pour agents immobiliers"
-
-        title_line_1: "Estimations, annonces"
+        title_line_1: "Estimations, présentations"
         title_line_2: "et documents."
-
-        text: "AgentBoost aide les agents immobiliers à créer des estimations, générer des annonces assistées et produire des documents professionnels."
-
+        text: "AgentBoost aide les agents immobiliers à créer des estimations, préparer des présentations de biens et produire des documents professionnels."
         note: "Pensé pour les indépendants, agences et professionnels terrain."
 
     actions:
         create_estimation: "Créer une estimation"
         view_offers: "Voir les offres"
+        open_dashboard: "Accéder au dashboard"
+        access_dashboard: "Accéder au dashboard"
 
     preview:
         estimations: "estimations"
-        listings: "annonces"
+        listings: "présentations"
         pdf_ready: "PDF prêts"
-
         apartment: "Appartement"
-
-        generate_listing: "Générer annonce"
-
+        generate_listing: "Générer présentation"
         pdf_estimation: "PDF estimation"
 
     features:
@@ -89,8 +85,8 @@ home:
             text: "Générez des estimations rapides et structurées."
 
         listings:
-            title: "Annonces générées par IA"
-            text: "Créez des annonces optimisées en quelques secondes."
+            title: "Présentations immobilières professionnelles"
+            text: "Créez des présentations de biens claires et exploitables en quelques secondes."
 
         pdf:
             title: "Documents PDF professionnels"
@@ -98,11 +94,10 @@ home:
 
         dashboard:
             title: "Dashboard centralisé"
-            text: "Gérez vos estimations, annonces et documents depuis un seul espace."
+            text: "Gérez vos estimations, présentations et documents depuis un seul espace."
 
     workflow:
         title: "Un flux simple"
-
         text: "Pensé pour faire gagner du temps aux professionnels de l’immobilier."
 
         step_1:
@@ -120,78 +115,11 @@ home:
     final_cta:
         title_line_1: "Commencez à créer"
         title_line_2: "des estimations professionnelles."
-
         text: "Rejoignez AgentBoost et gagnez des heures chaque semaine."
-
         button: "Créer une estimation"
-
-dashboard:
-    title: "Nouvelle estimation"
-    subtitle: "Créez une estimation immobilière rapide et exploitable grâce à AgentBoost."
-    help: "Besoin d’aide ?"
-
-    subscription:
-        pro: "Offre actuelle"
-        active: "Accès premium actif"
-
-    stats:
-        estimated_properties: "Biens estimés"
-        current_total: "Total actuel"
-        estimations: "Estimations"
-        unlimited_offer: "Illimitées avec votre offre"
-        free_estimations: "Estimations gratuites"
-        remaining: "restante(s)"
-        ai_ads: "Annonces IA"
-        free_ai_ad: "Annonce IA gratuite"
-        current_offer: "Offre actuelle"
-        premium_active: "Accès premium actif"
-        upgrade: "Passer premium"
-
-    form:
-        property_info: "Informations du bien"
-        property_type: "Type de bien"
-        apartment: "Appartement"
-        house: "Maison"
-        land: "Terrain"
-        parking: "Parking"
-        address: "Adresse du bien"
-        full_address: "Adresse complète"
-        postal_code: "Code postal"
-        city: "Ville"
-        surface: "Surface (m²)"
-        rooms: "Nombre de pièces"
-        without_parking: "Sans parking"
-        with_parking: "Avec parking"
-        extra_details: "Détails supplémentaires"
-        optional: "(optionnel)"
-        extra_placeholder: "Ex : balcon, vue dégagée, cuisine équipée, proche gare, lumineux..."
-        photos: "Photos du bien"
-        upload_title: "Déposez vos photos ici"
-        upload_text: "JPG, PNG, WEBP. Maximum 5 photos."
-        estimate_button: "Estimer le bien"
-
-    ai:
-        title: "↯ Estimation rapide & IA"
-        text: "Obtenez une estimation structurée et des supports exploitables pour vos clients."
-        market_analysis: "Analyse du marché local"
-        clear_estimation: "Estimation claire"
-        pdf_report: "Rapport PDF généré"
-        ready_listing: "Annonce prête à retravailler"
-
-    security:
-        text: "Vos données sont sécurisées et ne sont jamais partagées."
-
-    annual:
-        title: "Passez à l’annuel et diffusez plus vite"
-        text: "Facebook, Leboncoin et PDF Premium inclus pour gagner du temps sur vos annonces."
-        button: "Passer à l’annuel"
-
-    properties:
-        title: "Mes biens estimés"
 
 contact:
     title: "Contacter AgentBoost"
-
     subtitle: "Une question concernant votre abonnement, un problème technique ou une fonctionnalité ? Notre équipe vous répond rapidement."
 
     form:
@@ -199,11 +127,9 @@ contact:
         email: "Email"
         subject: "Sujet"
         message: "Message"
-
         name_placeholder: "Votre nom"
         email_placeholder: "Votre adresse email"
         message_placeholder: "Décrivez votre demande..."
-
         submit: "Envoyer le message"
 
     subject:
@@ -211,7 +137,7 @@ contact:
         billing: "Facturation"
         bug: "Bug technique"
         valuation: "Estimation immobilière"
-        ai: "Fonctionnalité IA"
+        ai: "Outil de présentation"
         other: "Autre"
 
 subscription:
@@ -312,67 +238,4 @@ payment:
             dashboard: "Retour au dashboard"
             home: "Retour à l’accueil"
 
-        footer: "Paiement sécurisé via Stripe"
-
-subscription_manage:
-    meta:
-        title: "Gérer mon abonnement"
-
-    title: "Gestion de l’abonnement"
-
-    subtitle: "Informations, changement de formule et résiliation."
-
-    history:
-        title: "Historique"
-
-    status:
-        title: "Statut actuel"
-
-        account_deletion: "Suppression du compte programmée"
-
-        account_deleted_after: "Votre compte sera supprimé après le"
-
-        cancellation_scheduled: "Résiliation programmée"
-
-        access_until: "Accès disponible jusqu’au"
-
-        active: "Abonnement actif"
-
-        next_renewal: "Prochain renouvellement :"
-
-        no_subscription: "Aucun abonnement actif"
-
-    account_delete:
-        title: "Suppression du compte"
-
-        text: "La suppression de votre compte est programmée."
-
-        cancel: "Annuler la suppression du compte"
-
-    pending_change:
-        title: "Changement programmé :"
-
-        from: "à partir du"
-
-        cancel: "Annuler le changement"
-
-    change_plan:
-        title: "Changer de formule"
-
-        yearly: "Passer en annuel"
-
-        monthly: "Passer en mensuel"
-
-    cancelled:
-        title: "Résiliation programmée"
-
-        text: "Votre abonnement est en cours de résiliation. Vous pouvez encore annuler cette résiliation avant la fin de la période."
-
-        cancel: "Annuler la résiliation"
-
-    danger_zone:
-        title: "Zone dangereuse"
-
-        text: "La résiliation devient définitive à la fin de la période de facturation."
-
-        button: "Résilier mon abonnement"
+        footer: "Paiement sécurisé via Stripe"        

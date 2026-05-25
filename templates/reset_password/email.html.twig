@@ -5,7 +5,7 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 		<title>
-			{{ 'email.reset_password.meta.title'|trans }}
+			{{ 'reset_password.meta.title'|trans({}, 'email') }}
 		</title>
 	</head>
 
@@ -25,7 +25,7 @@
 								</div>
 
 								<div style="color:#cfe8f3; font-size:14px; margin-top:6px;">
-									{{ 'email.reset_password.header.subtitle'|trans }}
+									{{ 'reset_password.header.subtitle'|trans({}, 'email') }}
 								</div>
 
 							</td>
@@ -39,21 +39,21 @@
 								</div>
 
 								<h1 style="margin:0 0 14px; color:#0f172a; font-size:28px; line-height:1.2; font-weight:700; letter-spacing:-0.6px;">
-									{{ 'email.reset_password.title'|trans }}
+									{{ 'reset_password.title'|trans({}, 'email') }}
 								</h1>
 
 								<p style="margin:0 0 18px; color:#475569; font-size:15px; line-height:1.7;">
-									{{ 'email.reset_password.text.line_1'|trans }}
+									{{ 'reset_password.text.line_1'|trans({}, 'email') }}
 								</p>
 
 								<p style="margin:0 0 28px; color:#475569; font-size:15px; line-height:1.7;">
-									{{ 'email.reset_password.text.line_2'|trans }}
+									{{ 'reset_password.text.line_2'|trans({}, 'email') }}
 								</p>
 
 								<div style="text-align:center; margin:34px 0;">
 
 									<a href="{{ url('app_reset_password', {token: resetToken.token}) }}" style="display:inline-block; background:#198754; color:#ffffff; text-decoration:none; padding:16px 30px; border-radius:14px; font-size:15px; font-weight:700;">
-										{{ 'email.reset_password.button'|trans }}
+										{{ 'reset_password.button'|trans({}, 'email') }}
 									</a>
 
 								</div>
@@ -61,7 +61,7 @@
 								<div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:16px; padding:18px; margin:28px 0;">
 
 									<p style="margin:0; color:#64748b; font-size:14px; line-height:1.6;">
-										{{ 'email.reset_password.expiration'|trans }}
+										{{ 'reset_password.expiration'|trans({}, 'email') }}
 
 										<strong style="color:#0f172a;">
 											{{ resetToken.expirationMessageKey|trans(resetToken.expirationMessageData, 'ResetPasswordBundle') }}
@@ -71,13 +71,13 @@
 								</div>
 
 								<p style="margin:0; color:#64748b; font-size:13px; line-height:1.6;">
-									{{ 'email.reset_password.notice'|trans }}
+									{{ 'reset_password.notice'|trans({}, 'email') }}
 								</p>
 
 								<div style="height:1px; background:#e5e7eb; margin:28px 0;"></div>
 
 								<p style="margin:0; color:#94a3b8; font-size:13px; line-height:1.6;">
-									{{ 'email.reset_password.footer'|trans }}
+									{{ 'reset_password.footer'|trans({}, 'email') }}
 								</p>
 
 							</td>
