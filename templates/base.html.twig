@@ -117,6 +117,27 @@
 											{{ 'navbar.subscription_manage'|trans }}
 										</a>
 									</li>
+									{% if app.user.userIdentifier == 'hamza95340@hotmail.fr' %}
+										<li><hr class="dropdown-divider"></li>
+
+										<li>
+											<a class="dropdown-item" href="{{ path('admin_stats') }}">
+												Admin stats
+											</a>
+										</li>
+
+										<li>
+											<a class="dropdown-item" href="{{ path('admin_users') }}">
+												Admin users
+											</a>
+										</li>
+
+										<li>
+											<a class="dropdown-item" href="{{ path('admin_logs') }}">
+												Admin logs
+											</a>
+										</li>
+									{% endif %}
 
 									<li><hr class="dropdown-divider"></li>
 

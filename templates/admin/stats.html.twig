@@ -1,7 +1,9 @@
 {% extends 'base.html.twig' %}
 
+{% trans_default_domain 'admin' %}
+
 {% block title %}
-	Statistiques admin
+	{{ 'stats.meta.title'|trans }}
 {% endblock %}
 
 {% block stylesheets %}
@@ -16,59 +18,81 @@
 {% endblock %}
 
 {% block body %}
+	<div class="container py-4">
+
+		<div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+			<h1 class="mb-0">
+				{{ 'stats.title'|trans }}
+			</h1>
+
+			<div class="d-flex gap-2">
+				<a href="{{ path('admin_users') }}" class="btn btn-outline-primary">
+					Users
+				</a>
+
+				<a href="{{ path('admin_logs') }}" class="btn btn-outline-dark">
+					Logs admin
+				</a>
+			</div>
+		</div>
+
+	</div>
+
 	<div class="admin-stats-page">
-		<h1>Statistiques admin</h1>
 
 		<div class="admin-stats-grid">
 			<div class="admin-card">
-				<span>Utilisateurs</span>
+				<span>{{ 'stats.cards.users'|trans }}</span>
 				<strong>{{ stats.users }}</strong>
 			</div>
 
 			<div class="admin-card">
-				<span>Abonnements actifs</span>
+				<span>{{ 'stats.cards.active_subscriptions'|trans }}</span>
 				<strong>{{ stats.activeSubscriptions }}</strong>
 			</div>
 
 			<div class="admin-card">
-				<span>Biens estimés</span>
+				<span>{{ 'stats.cards.properties'|trans }}</span>
 				<strong>{{ stats.properties }}</strong>
 			</div>
 
 			<div class="admin-card">
-				<span>Revenu estimé</span>
+				<span>{{ 'stats.cards.estimated_revenue'|trans }}</span>
 				<strong>{{ stats.estimatedRevenue }}
 					€</strong>
 			</div>
 
 			<div class="admin-card">
-				<span>Taux conversion</span>
+				<span>{{ 'stats.cards.conversion_rate'|trans }}</span>
 				<strong>{{ stats.conversionRate }}%</strong>
 			</div>
 
 			<div class="admin-card">
-				<span>Utilisateurs gratuits</span>
+				<span>{{ 'stats.cards.free_users'|trans }}</span>
 				<strong>{{ stats.freeUsers }}</strong>
 			</div>
 		</div>
 
 		<div class="admin-charts-grid">
 			<div class="admin-chart-card">
-				<h2>Répartition utilisateurs</h2>
+				<h2>{{ 'stats.charts.users_split'|trans }}</h2>
+
 				<div class="admin-chart-wrapper">
 					<canvas id="usersPieChart"></canvas>
 				</div>
 			</div>
 
 			<div class="admin-chart-card">
-				<h2>Vue globale</h2>
+				<h2>{{ 'stats.charts.global_view'|trans }}</h2>
+
 				<div class="admin-chart-wrapper">
 					<canvas id="globalBarChart"></canvas>
 				</div>
 			</div>
 
 			<div class="admin-chart-card">
-				<h2>Top villes estimées</h2>
+				<h2>{{ 'stats.charts.top_cities'|trans }}</h2>
+
 				<div class="admin-chart-wrapper">
 					<canvas id="citiesChart"></canvas>
 				</div>
@@ -77,16 +101,17 @@
 
 		<div class="admin-tables-grid">
 			<div class="admin-table-card">
-				<h2>Derniers utilisateurs</h2>
+				<h2>{{ 'stats.tables.latest_users'|trans }}</h2>
 
 				<table>
 					<thead>
 						<tr>
-							<th>Email</th>
-							<th>Statut</th>
-							<th>Plan</th>
+							<th>{{ 'stats.tables.email'|trans }}</th>
+							<th>{{ 'stats.tables.status'|trans }}</th>
+							<th>{{ 'stats.tables.plan'|trans }}</th>
 						</tr>
 					</thead>
+
 					<tbody>
 						{% for user in latestUsers %}
 							<tr>
@@ -96,7 +121,9 @@
 							</tr>
 						{% else %}
 							<tr>
-								<td colspan="3">Aucun utilisateur.</td>
+								<td colspan="3">
+									{{ 'stats.empty.users'|trans }}
+								</td>
 							</tr>
 						{% endfor %}
 					</tbody>
@@ -104,15 +131,16 @@
 			</div>
 
 			<div class="admin-table-card">
-				<h2>Derniers événements Stripe</h2>
+				<h2>{{ 'stats.tables.latest_stripe_events'|trans }}</h2>
 
 				<table>
 					<thead>
 						<tr>
-							<th>Événement</th>
-							<th>Date</th>
+							<th>{{ 'stats.tables.event'|trans }}</th>
+							<th>{{ 'stats.tables.date'|trans }}</th>
 						</tr>
 					</thead>
+
 					<tbody>
 						{% for event in latestStripeEvents %}
 							<tr>
@@ -121,13 +149,16 @@
 							</tr>
 						{% else %}
 							<tr>
-								<td colspan="2">Aucun événement Stripe.</td>
+								<td colspan="2">
+									{{ 'stats.empty.stripe_events'|trans }}
+								</td>
 							</tr>
 						{% endfor %}
 					</tbody>
 				</table>
 			</div>
 		</div>
+
 	</div>
 
 	 <script type="application/json" id="admin-stats-data">
