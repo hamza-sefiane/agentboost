@@ -64,7 +64,7 @@
 			<label class="form-label fw-semibold">Ajouter des photos</label>
 			<input type="file" name="photos[]" class="form-control" accept="image/jpeg,image/png,image/webp" multiple>
 			<small class="text-muted">
-				Maximum 5 photos au total. En production Vercel, les photos sont ignorées sans stockage externe.
+				Maximum 5 photos au total. Formats acceptés : JPG, PNG ou WEBP.
 			</small>
 		</div>
 
@@ -79,8 +79,7 @@
 	<div class="d-flex flex-wrap gap-3">
 		{% for photo in property.photos %}
 			<div>
-				<img src="{{ asset('uploads/properties/' ~ photo.filename) }}" alt="Photo du bien" class="property-photo-preview" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
-
+				<img src="{{ photo.displayUrl }}" alt="Photo du bien" class="property-photo-preview" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
 				<div class="text-muted small border rounded p-2 bg-light" style="display: none; width: 140px;">
 					Photo indisponible
 				</div>

@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Property;
 use App\Entity\PropertyPhoto;
 use App\Entity\User;
+use App\Service\CloudinaryUploader;
 use App\Service\OpenAiPropertyAdGenerator;
 use App\Service\PropertyComparableGenerator;
 use App\Service\PropertyEstimator;
@@ -34,21 +35,18 @@ final class DashboardController extends AbstractController
     public function __construct(
         private readonly EntityManagerInterface $em,
         private readonly SubscriptionLimiter $subscriptionLimiter,
+        private readonly CloudinaryUploader $cloudinaryUploader,
     ) {}
 
     #[Route('', name: 'dashboard', methods: ['GET', 'POST'])]
     public function index(Request $request, PropertyEstimator $estimator): Response
     {
         $user = $this->getAuthenticatedUser();
-
         $this->denyAccessUnlessGranted('ACCESS_DASHBOARD');
 
         if ($request->isMethod('POST')) {
             if (!$this->subscriptionLimiter->canCreateEstimation($user)) {
-                $this->addFlash(
-                    'error',
-                    'Vous avez atteint la limite gratuite de 3 estimations ce mois-ci. Passez à une offre premium pour continuer.'
-                );
+                $this->addFlash('error', 'Vous avez atteint la limite gratuite de 3 estimations ce mois-ci. Passez à une offre premium pour continuer.');
 
                 return $this->redirectToRoute('pricing');
             }
@@ -131,10 +129,7 @@ final class DashboardController extends AbstractController
         $user = $this->getAuthenticatedUser();
 
         if (!$this->subscriptionLimiter->canGenerateAd($user)) {
-            $this->addFlash(
-                'error',
-                'Vous avez atteint la limite gratuite de génération IA ce mois-ci. Passez à une offre premium pour continuer.'
-            );
+            $this->addFlash('error', 'Vous avez atteint la limite gratuite de génération IA ce mois-ci. Passez à une offre premium pour continuer.');
 
             return $this->redirectToRoute('pricing');
         }
@@ -179,7 +174,7 @@ final class DashboardController extends AbstractController
 
         $options = new Options();
         $options->set('defaultFont', 'DejaVu Sans');
-        $options->set('isRemoteEnabled', false);
+        $options->set('isRemoteEnabled', true);
         $options->set('isHtml5ParserEnabled', true);
         $options->set('dpi', 120);
 
@@ -226,7 +221,7 @@ final class DashboardController extends AbstractController
 
         $options = new Options();
         $options->set('defaultFont', 'DejaVu Sans');
-        $options->set('isRemoteEnabled', false);
+        $options->set('isRemoteEnabled', true);
         $options->set('isHtml5ParserEnabled', true);
         $options->set('dpi', 110);
 
@@ -256,8 +251,6 @@ final class DashboardController extends AbstractController
             throw $this->createAccessDeniedException('Token CSRF invalide.');
         }
 
-        $this->deleteFile($this->getPropertyUploadDir() . DIRECTORY_SEPARATOR . $photo->getFilename());
-
         $this->em->remove($photo);
         $this->em->flush();
 
@@ -277,7 +270,7 @@ final class DashboardController extends AbstractController
             throw $this->createAccessDeniedException('Token CSRF invalide.');
         }
 
-        $this->deletePhysicalPhotos($property);
+        $this->deletePropertyPhotos($property);
 
         $this->em->remove($property);
         $this->em->flush();
@@ -315,7 +308,7 @@ final class DashboardController extends AbstractController
         $deletedCount = 0;
 
         foreach ($properties as $property) {
-            $this->deletePhysicalPhotos($property);
+            $this->deletePropertyPhotos($property);
             $this->em->remove($property);
             $deletedCount++;
         }
@@ -420,15 +413,6 @@ final class DashboardController extends AbstractController
             return ['errors' => [], 'warnings' => []];
         }
 
-        if ($this->isVercelRuntime()) {
-            return [
-                'errors' => [],
-                'warnings' => [
-                    'Les photos ne sont pas enregistrées sur Vercel sans stockage externe. Estimation créée sans photo.',
-                ],
-            ];
-        }
-
         $remainingSlots = self::MAX_PHOTOS - $property->getPhotos()->count();
 
         if ($remainingSlots <= 0) {
@@ -442,15 +426,6 @@ final class DashboardController extends AbstractController
             return [
                 'errors' => [sprintf('Vous pouvez encore ajouter %d photo(s) maximum.', $remainingSlots)],
                 'warnings' => [],
-            ];
-        }
-
-        $uploadDir = $this->getPropertyUploadDir();
-
-        if (!$this->ensureWritableDirectory($uploadDir)) {
-            return [
-                'errors' => [],
-                'warnings' => ['Impossible d’enregistrer les photos. Estimation créée sans photo.'],
             ];
         }
 
@@ -481,7 +456,7 @@ final class DashboardController extends AbstractController
 
             try {
                 $filename = bin2hex(random_bytes(16)) . '.' . self::ALLOWED_IMAGE_MIME_TYPES[$mimeType];
-                $photo->move($uploadDir, $filename);
+                $uploadResult = $this->cloudinaryUploader->uploadPropertyPhoto($photo);
             } catch (\Throwable) {
                 $errors[] = sprintf('Impossible d’enregistrer le fichier "%s".', $originalName);
                 continue;
@@ -489,6 +464,8 @@ final class DashboardController extends AbstractController
 
             $propertyPhoto = (new PropertyPhoto())
                 ->setFilename($filename)
+                ->setCloudinaryUrl($uploadResult['url'])
+                ->setCloudinaryPublicId($uploadResult['publicId'])
                 ->setPosition($position++);
 
             $property->addPhoto($propertyPhoto);
@@ -505,23 +482,10 @@ final class DashboardController extends AbstractController
         );
     }
 
-    private function deletePhysicalPhotos(Property $property): void
+    private function deletePropertyPhotos(Property $property): void
     {
-        $uploadDir = $this->getPropertyUploadDir();
-
         foreach ($property->getPhotos() as $photo) {
-            $this->deleteFile($uploadDir . DIRECTORY_SEPARATOR . $photo->getFilename());
-        }
-    }
-
-    private function deleteFile(string $path): void
-    {
-        if ($this->isVercelRuntime()) {
-            return;
-        }
-
-        if (is_file($path)) {
-            @unlink($path);
+            $this->em->remove($photo);
         }
     }
 
@@ -554,56 +518,22 @@ final class DashboardController extends AbstractController
      */
     private function getPhotoDataUris(Property $property): array
     {
-        $uploadDir = $this->getPropertyUploadDir();
-        $dataUris = [];
+        $photoUrls = [];
 
         foreach ($property->getPhotos() as $photo) {
-            $path = $uploadDir . DIRECTORY_SEPARATOR . $photo->getFilename();
+            $url = $photo->getCloudinaryUrl();
 
-            if (!is_file($path)) {
-                continue;
+            if ($url) {
+                $photoUrls[] = $url;
             }
-
-            $mime = mime_content_type($path);
-
-            if (!is_string($mime) || !array_key_exists($mime, self::ALLOWED_IMAGE_MIME_TYPES)) {
-                continue;
-            }
-
-            $content = file_get_contents($path);
-
-            if ($content === false) {
-                continue;
-            }
-
-            $dataUris[] = 'data:' . $mime . ';base64,' . base64_encode($content);
         }
 
-        return $dataUris;
-    }
-
-    private function getPropertyUploadDir(): string
-    {
-        return $this->getProjectDir() . '/public/uploads/properties';
+        return $photoUrls;
     }
 
     private function getProjectDir(): string
     {
         return (string) $this->getParameter('kernel.project_dir');
-    }
-
-    private function ensureWritableDirectory(string $dir): bool
-    {
-        if (!is_dir($dir) && !@mkdir($dir, 0775, true) && !is_dir($dir)) {
-            return false;
-        }
-
-        return is_writable($dir);
-    }
-
-    private function isVercelRuntime(): bool
-    {
-        return getenv('VERCEL') === '1' || getenv('VERCEL_ENV') !== false;
     }
 
     private function getAuthenticatedUser(): User
