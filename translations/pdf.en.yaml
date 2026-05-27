@@ -12,7 +12,7 @@ cover:
 
     estimated_value: "Estimated value"
 
-    ai_score: "AI score"
+    ai_score: "Estimation reliability"
 
     generated_on: "Generated on"
 
@@ -75,7 +75,7 @@ advices:
     title: "Advice before listing"
 
 ad:
-    title: "AI listing"
+    title: "Property listing"
 
 signature:
     presented_by: "Document presented by"

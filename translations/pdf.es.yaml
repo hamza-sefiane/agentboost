@@ -12,7 +12,7 @@ cover:
 
     estimated_value: "Valor estimado"
 
-    ai_score: "Puntuación IA"
+    ai_score: "Fiabilidad de la estimación"
 
     generated_on: "Generado el"
 
@@ -75,7 +75,7 @@ advices:
     title: "Consejos antes de la venta"
 
 ad:
-    title: "Anuncio IA"
+    title: "Anuncio inmobiliario"
 
 signature:
     presented_by: "Documento presentado por"
