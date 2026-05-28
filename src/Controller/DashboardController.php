@@ -225,6 +225,24 @@ final class DashboardController extends AbstractController
         $user = $this->getAuthenticatedUser();
         $locale = $request->getLocale();
 
+        $propertyUrl = $request->getSchemeAndHttpHost() . $this->generateUrl('property_pdf', [
+            'id' => $property->getId(),
+        ]);
+
+        $qrCodeResult = (new Builder(
+            writer: new PngWriter(),
+            writerOptions: [],
+            validateResult: false,
+            data: $propertyUrl,
+            encoding: new Encoding('UTF-8'),
+            errorCorrectionLevel: ErrorCorrectionLevel::High,
+            size: 180,
+            margin: 10,
+            roundBlockSizeMode: RoundBlockSizeMode::Margin,
+        ))->build();
+
+        $qrCodeDataUri = $qrCodeResult->getDataUri();
+
         if ($user->getSubscriptionStatus() !== User::STATUS_ACTIVE || $user->getCurrentPlan() !== User::PLAN_YEARLY) {
             $this->addFlash('error', 'Le PDF premium est réservé aux abonnements annuels.');
 
@@ -239,6 +257,7 @@ final class DashboardController extends AbstractController
             'sellingStrategy' => $adviceGenerator->generateSellingStrategy($property, $locale),
             'confidenceScore' => $adviceGenerator->generateConfidenceScore($property),
             'estimatedSaleDelay' => $adviceGenerator->generateEstimatedSaleDelay($property, $locale),
+            'qrCodeDataUri' => $qrCodeDataUri,
             'comparables' => $comparableGenerator->generate($property),
             'marketPosition' => $comparableGenerator->generateMarketPosition($property),
         ]);

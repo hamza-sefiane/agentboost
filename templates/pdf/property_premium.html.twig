@@ -71,7 +71,7 @@
 						<div class="premium-cover-range">
 							{{ property.lowEstimate|number_format(0, ',', ' ') }}
 							€
-																					—
+														—
 							{{ property.highEstimate|number_format(0, ',', ' ') }}
 							€
 						</div>
@@ -178,7 +178,7 @@
 								<strong>
 									{{ property.lowEstimate|number_format(0, ',', ' ') }}
 									€
-																											—
+																		—
 									{{ property.highEstimate|number_format(0, ',', ' ') }}
 									€
 								</strong>
@@ -280,14 +280,16 @@
 										{{ 'comparables.comparable'|trans({}, 'pdf') }}
 										{{ loop.index }}
 									</div>
+
 									<div class="comparable-type">{{ comparable.type|default(property.type) }}</div>
 									<div class="comparable-location">{{ comparable.city|default(property.city)|upper }}</div>
 									<div class="comparable-surface">{{ comparable.surface|default(property.surface) }}
 										m²</div>
+
 									<div class="comparable-price">
 										{{ comparable.lowPrice|default(property.lowEstimate)|number_format(0, ',', ' ') }}
 										€
-																														—
+																				—
 										{{ comparable.highPrice|default(property.highEstimate)|number_format(0, ',', ' ') }}
 										€
 									</div>
@@ -347,6 +349,7 @@
 							<td class="two-column-cell">
 								<div class="section">
 									<div class="section-title">{{ 'advices.title'|trans({}, 'pdf') }}</div>
+
 									<div class="advice-box">
 										<ul class="advice-list">
 											{% for advice in sellingAdvices %}
@@ -362,6 +365,7 @@
 							<td class="two-column-cell">
 								<div class="section">
 									<div class="section-title">{{ 'ad.title'|trans({}, 'pdf') }}</div>
+
 									<div class="ad-box">
 										{{ property.adText|nl2br }}
 									</div>
@@ -374,45 +378,61 @@
 
 			<div class="signature-spacer"></div>
 
-			<table class="signature-table">
+			<table class="signature-table no-break">
 				<tr>
 					<td class="signature-card">
-						<div class="signature-label">{{ 'signature.presented_by'|trans({}, 'pdf') }}</div>
-						<div class="signature-name">{{ agencyName }}</div>
+						<table class="signature-inner-table">
+							<tr>
+								<td class="signature-info-cell">
+									<div class="signature-label">{{ 'signature.presented_by'|trans({}, 'pdf') }}</div>
+									<div class="signature-name">{{ agencyName }}</div>
 
-						<div class="company-info">
-							{% if agencyStreet %}
-								{{ agencyStreet }}
-								{% if agencyAddressComplement %}
-									—
-									{{ agencyAddressComplement }}
-								{% endif %}<br>
-							{% elseif agencyAddressComplement %}
-								{{ agencyAddressComplement }}<br>
-							{% endif %}
+									<div class="company-info">
+										{% if agencyStreet %}
+											{{ agencyStreet }}
+											{% if agencyAddressComplement %}
+												—
+												{{ agencyAddressComplement }}
+											{% endif %}<br>
+										{% elseif agencyAddressComplement %}
+											{{ agencyAddressComplement }}<br>
+										{% endif %}
 
-							{% if agencyPostalCode or agencyCity %}
-								{{ agencyPostalCode }}
-								{{ agencyCity }}<br>
-							{% elseif agencyLegacyAddress %}
-								{{ agencyLegacyAddress|nl2br }}<br>
-							{% endif %}
+										{% if agencyPostalCode or agencyCity %}
+											{{ agencyPostalCode }}
+											{{ agencyCity }}<br>
+										{% elseif agencyLegacyAddress %}
+											{{ agencyLegacyAddress|nl2br }}<br>
+										{% endif %}
 
-							{% if agencyPhone %}
-								Tél :
-								{{ agencyPhone }}<br>
-							{% endif %}
+										{% if agencyPhone %}
+											Tél :
+											{{ agencyPhone }}<br>
+										{% endif %}
 
-							{% if agencyEmail %}
-								{{ agencyEmail }}<br>
-							{% endif %}
+										{% if agencyEmail %}
+											{{ agencyEmail }}<br>
+										{% endif %}
 
-							{% if agencyWebsite %}
-								{{ agencyWebsite }}
-							{% endif %}
-						</div>
+										{% if agencyWebsite %}
+											{{ agencyWebsite }}
+										{% endif %}
+									</div>
 
-						<div class="signature-line"></div>
+									<div class="signature-line"></div>
+								</td>
+
+								{% if qrCodeDataUri is defined and qrCodeDataUri %}
+									<td class="signature-qr-cell">
+										<img src="{{ qrCodeDataUri }}" class="signature-qr" alt="QR Code">
+
+										<div class="signature-qr-label">
+											Scanner pour voir le bien
+										</div>
+									</td>
+								{% endif %}
+							</tr>
+						</table>
 					</td>
 				</tr>
 			</table>

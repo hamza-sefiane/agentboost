@@ -50,11 +50,11 @@ img {
 }
 
 .page {
-    padding: 46px 40px 34px 40px;
+    padding: 34px 40px 28px 40px;
 }
 
 .header {
-    margin-bottom: 24px;
+    margin-bottom: 14px;
 }
 
 .company-label,
@@ -62,9 +62,9 @@ img {
     font-size: 15px;
     font-weight: 700;
     color: #0f172a;
-    margin-top: 26px;
-    margin-bottom: 14px;
-    padding-bottom: 8px;
+    margin-top: 18px;
+    margin-bottom: 10px;
+    padding-bottom: 7px;
     border-bottom: 1px solid #e2e8f0;
 }
 
@@ -73,20 +73,20 @@ img {
 }
 
 .company-name {
-    font-size: 24px;
+    font-size: 22px;
     font-weight: 700;
     color: #0f172a;
-    margin-bottom: 6px;
+    margin-bottom: 4px;
 }
 
 .company-info {
     color: #64748b;
-    font-size: 11px;
-    line-height: 1.45;
+    font-size: 10px;
+    line-height: 1.35;
 }
 
 .section {
-    margin-bottom: 32px;
+    margin-bottom: 20px;
 }
 
 /* PREMIUM COVER */
@@ -247,17 +247,17 @@ img {
 
 .photo-hero-wrapper {
     width: 100%;
-    height: 205px;
+    height: 190px;
     overflow: hidden;
     border-radius: 16px;
     border: 1px solid #e2e8f0;
     background: #f8fafc;
-    margin-bottom: 16px;
+    margin-bottom: 12px;
 }
 
 .photo-hero {
     width: 100%;
-    height: 205px;
+    height: 190px;
     object-fit: cover;
 }
 
@@ -284,8 +284,8 @@ img {
 }
 
 .gallery-count {
-    margin-top: 8px;
-    margin-bottom: 20px;
+    margin-top: 6px;
+    margin-bottom: 12px;
     text-align: right;
     color: #64748b;
     font-size: 9px;
@@ -294,8 +294,8 @@ img {
 /* ESTIMATE */
 
 .estimate-summary {
-    padding: 15px;
-    margin-bottom: 20px;
+    padding: 13px 15px;
+    margin-bottom: 14px;
     border-radius: 14px;
     background: #ffffff;
     border: 1px solid #e2e8f0;
@@ -345,7 +345,7 @@ img {
 .property-card {
     width: 50%;
     vertical-align: top;
-    padding: 15px;
+    padding: 12px 14px;
     border-radius: 14px;
     background: #ffffff;
     border: 1px solid #e2e8f0;
@@ -417,7 +417,7 @@ img {
 }
 
 .comparable-page-start {
-    margin-top: 36px;
+    margin-top: 22px;
 }
 
 .comparable-page-start .section-title {
@@ -496,7 +496,7 @@ img {
     color: #ffffff;
     border-radius: 16px;
     padding: 18px;
-    margin: 28px 0 0 0;
+    margin: 20px 0 0 0;
     page-break-inside: avoid;
 }
 
@@ -553,7 +553,7 @@ img {
     table-layout: fixed;
     border-collapse: separate;
     border-spacing: 12px 0;
-    margin-top: 34px;
+    margin-top: 18px;
 }
 
 .two-column-cell {
@@ -563,12 +563,12 @@ img {
 
 .advice-box,
 .ad-box {
-    min-height: 280px;
-    padding: 22px;
+    min-height: 340px;
+    padding: 18px;
     border-radius: 14px;
     background: #ffffff;
     border: 1px solid #e2e8f0;
-    line-height: 1.6;
+    line-height: 1.55;
 }
 
 .advice-list {
@@ -594,17 +594,17 @@ img {
 
 .signature-table {
     width: 100%;
-    margin-top: 34px;
+    margin-top: 18px;
     border-collapse: collapse;
     page-break-inside: avoid;
 }
 
 .signature-spacer {
-    height: 70px;
+    height: 18px;
 }
 
 .signature-card {
-    width: 74%;
+    width: 100%;
     padding: 16px;
     vertical-align: top;
     border-radius: 14px;
@@ -637,11 +637,46 @@ img {
 /* FOOTER */
 
 .footer {
-    margin-top: 16px;
-    padding-top: 9px;
+    margin-top: 10px;
+    padding-top: 8px;
     border-top: 1px solid #e2e8f0;
     text-align: center;
     font-size: 10px;
-    line-height: 1.5;
+    line-height: 1.4;
     color: #94a3b8;
+}
+
+.signature-inner-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.signature-info-cell {
+    vertical-align: top;
+    padding-right: 24px;
+}
+
+.signature-qr-cell {
+    width: 190px;
+    text-align: center;
+    vertical-align: middle;
+    border-left: 1px solid #e2e8f0;
+    padding-left: 24px;
+}
+
+.signature-qr {
+    width: 155px;
+    height: 155px;
+    object-fit: contain;
+}
+
+.signature-qr-label {
+    margin-top: 10px;
+    padding: 10px;
+    border-radius: 10px;
+    background: #0f172a;
+    color: #ffffff;
+    font-size: 10px;
+    font-weight: 600;
+    text-align: center;
 }
