@@ -14,6 +14,11 @@ use App\Service\SubscriptionLimiter;
 use Doctrine\ORM\EntityManagerInterface;
 use Dompdf\Dompdf;
 use Dompdf\Options;
+use Endroid\QrCode\Builder\Builder;
+use Endroid\QrCode\Encoding\Encoding;
+use Endroid\QrCode\ErrorCorrectionLevel;
+use Endroid\QrCode\RoundBlockSizeMode;
+use Endroid\QrCode\Writer\PngWriter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
@@ -162,6 +167,24 @@ final class DashboardController extends AbstractController
         $user = $this->getAuthenticatedUser();
         $locale = $request->getLocale();
 
+        $propertyUrl = $request->getSchemeAndHttpHost() . $this->generateUrl('property_pdf', [
+            'id' => $property->getId(),
+        ]);
+
+        $qrCodeResult = (new Builder(
+            writer: new PngWriter(),
+            writerOptions: [],
+            validateResult: false,
+            data: $propertyUrl,
+            encoding: new Encoding('UTF-8'),
+            errorCorrectionLevel: ErrorCorrectionLevel::High,
+            size: 180,
+            margin: 10,
+            roundBlockSizeMode: RoundBlockSizeMode::Margin,
+        ))->build();
+
+        $qrCodeDataUri = $qrCodeResult->getDataUri();
+
         $html = $this->renderView('pdf/property.html.twig', [
             'property' => $property,
             'logoDataUri' => $this->getLogoDataUri($user),
@@ -170,6 +193,7 @@ final class DashboardController extends AbstractController
             'sellingStrategy' => $adviceGenerator->generateSellingStrategy($property, $locale),
             'confidenceScore' => $adviceGenerator->generateConfidenceScore($property),
             'estimatedSaleDelay' => $adviceGenerator->generateEstimatedSaleDelay($property, $locale),
+            'qrCodeDataUri' => $qrCodeDataUri,
         ]);
 
         $options = new Options();

@@ -9,7 +9,6 @@
 	</head>
 
 	<body>
-
 		{% set currentUser = app.user %}
 		{% set agencyName = currentUser.companyName|default('') ?: 'AgentBoost Immobilier' %}
 		{% set agencyPhone = currentUser.companyPhone|default(null) %}
@@ -58,7 +57,7 @@
 						<strong>
 							{{ property.lowEstimate|number_format(0, ',', ' ') }}
 							€
-							                    —
+																												—
 							{{ property.highEstimate|number_format(0, ',', ' ') }}
 							€
 						</strong>
@@ -175,7 +174,7 @@
 								<strong>
 									{{ property.lowEstimate|number_format(0, ',', ' ') }}
 									€
-									                            —
+																																				—
 									{{ property.highEstimate|number_format(0, ',', ' ') }}
 									€
 								</strong>
@@ -225,7 +224,6 @@
 					<tr>
 						<td colspan="2" class="property-card property-card-full">
 							<div class="property-card-label">{{ 'property.location'|trans({}, 'pdf') }}</div>
-
 							<div class="property-card-value">
 								{% if property.address %}
 									{{ property.address }}<br>
@@ -238,7 +236,7 @@
 				</table>
 			</div>
 
-			<div class="section no-break">
+			<div class="section no-break summary-section">
 				<div class="section-title">
 					{{ 'summary.title'|trans({}, 'pdf') }}
 				</div>
@@ -247,33 +245,27 @@
 					<tr>
 						<td class="market-card">
 							<div class="market-title">{{ 'summary.estimated_price_m2'|trans({}, 'pdf') }}</div>
-
 							<div class="market-value">
 								{{ (property.estimate / surface)|round(0, 'floor')|number_format(0, ',', ' ') }}
 								€/m²
 							</div>
-
 							<div class="market-sub">{{ 'summary.based_on_target'|trans({}, 'pdf') }}</div>
 						</td>
 
 						<td class="market-card">
 							<div class="market-title">{{ 'summary.reliability'|trans({}, 'pdf') }}</div>
-
 							<div class="market-value">
 								{{ confidenceScore|default(80) }}
 								%
 							</div>
-
 							<div class="market-sub">{{ 'summary.reliability_index'|trans({}, 'pdf') }}</div>
 						</td>
 
 						<td class="market-card">
 							<div class="market-title">{{ 'summary.estimated_delay'|trans({}, 'pdf') }}</div>
-
 							<div class="market-value">
 								{{ estimatedSaleDelay|default('45 à 60 jours') }}
 							</div>
-
 							<div class="market-sub">{{ 'summary.indicative_projection'|trans({}, 'pdf') }}</div>
 						</td>
 					</tr>
@@ -292,7 +284,6 @@
 								<div class="strategy-metric-label">
 									{{ 'strategy.recommended_price'|trans({}, 'pdf') }}
 								</div>
-
 								<div class="strategy-metric-value">
 									{{ property.highEstimate ? property.highEstimate|number_format(0, ',', ' ') ~ ' €' : property.estimate|number_format(0, ',', ' ') ~ ' €' }}
 								</div>
@@ -302,7 +293,6 @@
 								<div class="strategy-metric-label">
 									{{ 'strategy.negotiation_threshold'|trans({}, 'pdf') }}
 								</div>
-
 								<div class="strategy-metric-value">
 									{{ property.lowEstimate ? property.lowEstimate|number_format(0, ',', ' ') ~ ' €' : property.estimate|number_format(0, ',', ' ') ~ ' €' }}
 								</div>
@@ -361,47 +351,59 @@
 			<table class="signature-table no-break">
 				<tr>
 					<td class="signature-card">
-						<div class="signature-label">
-							{{ 'signature.presented_by'|trans({}, 'pdf') }}
-						</div>
+						<table class="signature-inner-table">
+							<tr>
+								<td class="signature-info">
+									<div class="signature-label">
+										{{ 'signature.presented_by'|trans({}, 'pdf') }}
+									</div>
 
-						<div class="signature-name">
-							{{ agencyName }}
-						</div>
+									<div class="signature-name">
+										{{ agencyName }}
+									</div>
 
-						<div class="company-info">
-							{% if agencyStreet %}
-								{{ agencyStreet }}
-								{% if agencyAddressComplement %}
-									—
-									{{ agencyAddressComplement }}
-								{% endif %}<br>
-							{% elseif agencyAddressComplement %}
-								{{ agencyAddressComplement }}<br>
-							{% endif %}
+									<div class="company-info">
+										{% if agencyStreet %}
+											{{ agencyStreet }}
+											{% if agencyAddressComplement %}
+												—
+												{{ agencyAddressComplement }}
+											{% endif %}<br>
+										{% elseif agencyAddressComplement %}
+											{{ agencyAddressComplement }}<br>
+										{% endif %}
 
-							{% if agencyPostalCode or agencyCity %}
-								{{ agencyPostalCode }}
-								{{ agencyCity }}<br>
-							{% elseif agencyLegacyAddress %}
-								{{ agencyLegacyAddress|nl2br }}<br>
-							{% endif %}
+										{% if agencyPostalCode or agencyCity %}
+											{{ agencyPostalCode }}
+											{{ agencyCity }}<br>
+										{% elseif agencyLegacyAddress %}
+											{{ agencyLegacyAddress|nl2br }}<br>
+										{% endif %}
 
-							{% if agencyPhone %}
-								Tél :
-								{{ agencyPhone }}<br>
-							{% endif %}
+										{% if agencyPhone %}
+											Tél :
+											{{ agencyPhone }}<br>
+										{% endif %}
 
-							{% if agencyEmail %}
-								{{ agencyEmail }}<br>
-							{% endif %}
+										{% if agencyEmail %}
+											{{ agencyEmail }}<br>
+										{% endif %}
 
-							{% if agencyWebsite %}
-								{{ agencyWebsite }}
-							{% endif %}
-						</div>
+										{% if agencyWebsite %}
+											{{ agencyWebsite }}
+										{% endif %}
+									</div>
 
-						<div class="signature-line"></div>
+									<div class="signature-line"></div>
+								</td>
+
+								{% if qrCodeDataUri is defined and qrCodeDataUri %}
+									<td class="signature-qr-cell">
+										<img src="{{ qrCodeDataUri }}" alt="QR Code" class="signature-qr">
+									</td>
+								{% endif %}
+							</tr>
+						</table>
 					</td>
 				</tr>
 			</table>
@@ -412,6 +414,5 @@
 				AB-{{ property.id }}-{{ "now"|date('Ymd') }}
 			</div>
 		</div>
-
 	</body>
 </html>
