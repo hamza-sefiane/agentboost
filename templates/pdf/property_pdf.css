@@ -431,7 +431,7 @@ img {
     table-layout: fixed;
     border-collapse: separate;
     border-spacing: 12px 0;
-    margin-top: 36px;
+    margin-top: 18px;
 }
 
 .two-column-cell {
@@ -442,7 +442,7 @@ img {
 .advice-box,
 .ad-box {
     min-height: 220px;
-    padding: 16px;
+    padding: 14px;
     border-radius: 12px;
     background: #f8fafc;
     border: 1px solid #e5e7eb;
@@ -465,14 +465,14 @@ img {
     white-space: pre-line;
     color: #374151;
     font-size: 11px;
-    line-height: 1.5;
+    line-height: 1.35;
 }
 
 /* SIGNATURE */
 
 .signature-table {
     width: 100%;
-    margin-top: 24px;
+    margin-top: 10px;
     border-collapse: collapse;
     page-break-inside: avoid;
 }
@@ -529,11 +529,11 @@ img {
 /* FOOTER */
 
 .footer {
-    margin-top: 10px;
-    padding-top: 10px;
+    margin-top: 6px;
+    padding-top: 6px;
     border-top: 1px solid #e5e7eb;
     text-align: center;
-    font-size: 10px;
+    font-size: 6px;
     line-height: 1.5;
     color: #9ca3af;
 }
