@@ -8,6 +8,7 @@ use App\Entity\User;
 use App\Service\CloudinaryUploader;
 use App\Service\OpenAiPropertyAdGenerator;
 use App\Service\PropertyComparableGenerator;
+use App\Service\DvfComparableService;
 use App\Service\PropertyEstimator;
 use App\Service\PropertySellingAdviceGenerator;
 use App\Service\SubscriptionLimiter;
@@ -219,6 +220,7 @@ final class DashboardController extends AbstractController
         Request $request,
         PropertySellingAdviceGenerator $adviceGenerator,
         PropertyComparableGenerator $comparableGenerator,
+        DvfComparableService $dvfComparableService,
     ): Response {
         $this->denyAccessUnlessGranted('OWNER', $property);
 
@@ -258,7 +260,7 @@ final class DashboardController extends AbstractController
             'confidenceScore' => $adviceGenerator->generateConfidenceScore($property),
             'estimatedSaleDelay' => $adviceGenerator->generateEstimatedSaleDelay($property, $locale),
             'qrCodeDataUri' => $qrCodeDataUri,
-            'comparables' => $comparableGenerator->generate($property),
+            'comparables' => $dvfComparableService->findComparables($property),
             'marketPosition' => $comparableGenerator->generateMarketPosition($property),
         ]);
 

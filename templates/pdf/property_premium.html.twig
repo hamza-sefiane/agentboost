@@ -71,7 +71,7 @@
 						<div class="premium-cover-range">
 							{{ property.lowEstimate|number_format(0, ',', ' ') }}
 							€
-														—
+																																																																													—
 							{{ property.highEstimate|number_format(0, ',', ' ') }}
 							€
 						</div>
@@ -178,7 +178,7 @@
 								<strong>
 									{{ property.lowEstimate|number_format(0, ',', ' ') }}
 									€
-																		—
+																																																																																																			—
 									{{ property.highEstimate|number_format(0, ',', ' ') }}
 									€
 								</strong>
@@ -271,7 +271,11 @@
 			{% if comparables is defined and comparables is iterable and comparables is not empty %}
 				<div class="section no-break comparable-section comparable-page-start">
 					<div class="section-title">{{ 'comparables.title'|trans({}, 'pdf') }}</div>
-
+					<div class="comparable-note">
+						Analyse réalisée à partir de 10 ventes DVF comparables sélectionnées selon la localisation, le type de bien et la surface.
+						
+						Les ventes présentées ci-dessous constituent un échantillon représentatif des références utilisées pour l'évaluation.
+					</div>
 					<table class="comparable-table">
 						<tr>
 							{% for comparable in comparables %}
@@ -283,16 +287,30 @@
 
 									<div class="comparable-type">{{ comparable.type|default(property.type) }}</div>
 									<div class="comparable-location">{{ comparable.city|default(property.city)|upper }}</div>
+									{% if comparable.address %}
+										<div class="comparable-address">
+											{{ comparable.address }}
+										</div>
+									{% endif %}
 									<div class="comparable-surface">{{ comparable.surface|default(property.surface) }}
 										m²</div>
 
 									<div class="comparable-price">
-										{{ comparable.lowPrice|default(property.lowEstimate)|number_format(0, ',', ' ') }}
-										€
-																				—
-										{{ comparable.highPrice|default(property.highEstimate)|number_format(0, ',', ' ') }}
+										{{ comparable.price|number_format(0, ',', ' ') }}
 										€
 									</div>
+
+									<div class="comparable-price-m2">
+										{{ comparable.pricePerSqm|number_format(0, ',', ' ') }}
+										€/m²
+									</div>
+
+									{% if comparable.saleDate %}
+										<div class="comparable-date">
+											Vente :
+											{{ comparable.saleDate }}
+										</div>
+									{% endif %}
 								</td>
 							{% endfor %}
 						</tr>

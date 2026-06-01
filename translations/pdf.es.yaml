@@ -62,7 +62,7 @@ comparables:
 
     comparable: "Comparable"
 
-    note: "Datos comparativos generados únicamente con fines informativos según las características del inmueble valorado."
+    note: "Comparables procedentes de la base DVF+ (Cerema / DGFiP), seleccionados según la ubicación y las características de la propiedad valorada."
 
 strategy:
     title: "Estrategia de venta recomendada"

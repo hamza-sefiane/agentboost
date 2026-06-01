@@ -37,8 +37,8 @@ body {
         sans-serif;
     color: #0f172a;
     background: #ffffff;
-    font-size: 12px;
-    line-height: 1.45;
+    font-size: 11px;
+    line-height: 1.38;
 }
 
 img {
@@ -50,21 +50,21 @@ img {
 }
 
 .page {
-    padding: 34px 40px 28px 40px;
+    padding: 24px 30px 18px 30px;
 }
 
 .header {
-    margin-bottom: 14px;
+    margin-bottom: 10px;
 }
 
 .company-label,
 .section-title {
-    font-size: 15px;
+    font-size: 14px;
     font-weight: 700;
     color: #0f172a;
-    margin-top: 18px;
-    margin-bottom: 10px;
-    padding-bottom: 7px;
+    margin-top: 12px;
+    margin-bottom: 8px;
+    padding-bottom: 6px;
     border-bottom: 1px solid #e2e8f0;
 }
 
@@ -73,20 +73,20 @@ img {
 }
 
 .company-name {
-    font-size: 22px;
+    font-size: 20px;
     font-weight: 700;
     color: #0f172a;
-    margin-bottom: 4px;
+    margin-bottom: 3px;
 }
 
 .company-info {
     color: #64748b;
-    font-size: 10px;
-    line-height: 1.35;
+    font-size: 9px;
+    line-height: 1.3;
 }
 
 .section {
-    margin-bottom: 20px;
+    margin-bottom: 12px;
 }
 
 /* PREMIUM COVER */
@@ -247,56 +247,56 @@ img {
 
 .photo-hero-wrapper {
     width: 100%;
-    height: 190px;
+    height: 170px;
     overflow: hidden;
-    border-radius: 16px;
+    border-radius: 14px;
     border: 1px solid #e2e8f0;
     background: #f8fafc;
-    margin-bottom: 12px;
+    margin-bottom: 8px;
 }
 
 .photo-hero {
     width: 100%;
-    height: 190px;
+    height: 170px;
     object-fit: cover;
 }
 
 .photo-table {
     width: 100%;
     border-collapse: separate;
-    border-spacing: 8px 0;
+    border-spacing: 7px 0;
     table-layout: fixed;
 }
 
 .photo-thumb-cell {
     width: 25%;
-    height: 50px;
+    height: 46px;
     overflow: hidden;
-    border-radius: 9px;
+    border-radius: 8px;
     border: 1px solid #e2e8f0;
     background: #f8fafc;
 }
 
 .photo-thumb {
     width: 100%;
-    height: 50px;
+    height: 46px;
     object-fit: cover;
 }
 
 .gallery-count {
-    margin-top: 6px;
-    margin-bottom: 12px;
+    margin-top: 5px;
+    margin-bottom: 8px;
     text-align: right;
     color: #64748b;
-    font-size: 9px;
+    font-size: 8px;
 }
 
 /* ESTIMATE */
 
 .estimate-summary {
-    padding: 13px 15px;
-    margin-bottom: 14px;
-    border-radius: 14px;
+    padding: 11px 13px;
+    margin-bottom: 10px;
+    border-radius: 13px;
     background: #ffffff;
     border: 1px solid #e2e8f0;
 }
@@ -308,15 +308,15 @@ img {
 
 .estimate-main-label {
     color: #64748b;
-    font-size: 9px;
+    font-size: 8px;
     text-transform: uppercase;
     letter-spacing: 0.9px;
-    margin-bottom: 5px;
+    margin-bottom: 4px;
     font-weight: 700;
 }
 
 .estimate-main-value {
-    font-size: 28px;
+    font-size: 26px;
     font-weight: 700;
     color: #0f172a;
 }
@@ -324,13 +324,13 @@ img {
 .estimate-range-box {
     text-align: right;
     color: #475569;
-    font-size: 11px;
-    line-height: 1.35;
+    font-size: 10px;
+    line-height: 1.3;
 }
 
 .estimate-range-box strong {
     color: #0f172a;
-    font-size: 13px;
+    font-size: 12px;
 }
 
 /* PROPERTY */
@@ -338,15 +338,15 @@ img {
 .property-grid-table {
     width: 100%;
     border-collapse: separate;
-    border-spacing: 7px;
+    border-spacing: 6px;
     table-layout: fixed;
 }
 
 .property-card {
     width: 50%;
     vertical-align: top;
-    padding: 12px 14px;
-    border-radius: 14px;
+    padding: 10px 12px;
+    border-radius: 13px;
     background: #ffffff;
     border: 1px solid #e2e8f0;
 }
@@ -356,16 +356,16 @@ img {
 }
 
 .property-card-label {
-    font-size: 9px;
+    font-size: 8px;
     text-transform: uppercase;
     letter-spacing: 0.9px;
     color: #64748b;
-    margin-bottom: 5px;
+    margin-bottom: 4px;
     font-weight: 700;
 }
 
 .property-card-value {
-    font-size: 16px;
+    font-size: 15px;
     font-weight: 700;
     color: #0f172a;
 }
@@ -375,68 +375,69 @@ img {
 .market-table {
     width: 100%;
     border-collapse: separate;
-    border-spacing: 10px 0;
+    border-spacing: 8px 0;
     table-layout: fixed;
 }
 
 .market-card {
     width: 33.33%;
-    padding: 15px;
+    padding: 12px;
     vertical-align: top;
-    border-radius: 14px;
+    border-radius: 13px;
     background: #ffffff;
     border: 1px solid #e2e8f0;
 }
 
 .market-title {
-    font-size: 9px;
+    font-size: 8px;
     text-transform: uppercase;
     color: #64748b;
-    margin-bottom: 6px;
+    margin-bottom: 5px;
     font-weight: 700;
 }
 
 .market-value {
-    font-size: 18px;
+    font-size: 17px;
     font-weight: 700;
     color: #0f172a;
-    margin-bottom: 4px;
+    margin-bottom: 3px;
 }
 
 .market-sub {
     color: #64748b;
-    font-size: 9px;
-    line-height: 1.3;
+    font-size: 8px;
+    line-height: 1.25;
 }
 
 /* COMPARABLES */
 
 .comparable-section {
-    margin-top: 22px;
+    margin-top: 12px;
     page-break-inside: avoid;
 }
 
 .comparable-page-start {
-    margin-top: 22px;
+    margin-top: 30px;
+    padding-top: 15px;
 }
 
 .comparable-page-start .section-title {
     margin-top: 0;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
 }
 
 .comparable-table {
     width: 100%;
     border-collapse: separate;
-    border-spacing: 10px 0;
+    border-spacing: 8px 0;
     table-layout: fixed;
 }
 
 .comparable-card {
     width: 33.33%;
-    padding: 15px;
+    padding: 12px;
     vertical-align: top;
-    border-radius: 16px;
+    border-radius: 14px;
     background: #ffffff;
     border: 1px solid #e2e8f0;
 }
@@ -446,47 +447,60 @@ img {
     text-transform: uppercase;
     letter-spacing: 1px;
     color: #64748b;
-    margin-bottom: 6px;
+    margin-bottom: 5px;
     font-weight: 700;
 }
 
 .comparable-type {
-    font-size: 16px;
+    font-size: 14px;
     font-weight: 700;
     color: #0f172a;
-    margin-bottom: 4px;
+    margin-bottom: 3px;
 }
 
 .comparable-location,
 .comparable-surface {
-    font-size: 10px;
+    font-size: 9px;
     color: #475569;
-    margin-bottom: 3px;
+    margin-bottom: 2px;
 }
 
 .comparable-price {
-    margin-top: 9px;
+    margin-top: 7px;
     font-size: 12px;
     font-weight: 700;
     color: #0f172a;
-    line-height: 1.35;
+    line-height: 1.3;
+}
+
+.comparable-price-m2,
+.comparable-date,
+.comparable-address {
+    font-size: 9px;
+    color: #475569;
+    line-height: 1.25;
 }
 
 .market-position-box {
-    margin-top: 16px;
-    padding: 16px;
-    border-radius: 14px;
+    margin-top: 10px;
+    padding: 12px;
+    border-radius: 13px;
     background: #0f172a;
     color: #ffffff;
-    font-size: 11px;
-    line-height: 1.55;
+    font-size: 10px;
+    line-height: 1.4;
 }
 
 .comparable-note {
-    margin-top: 9px;
-    font-size: 8px;
-    color: #94a3b8;
-    text-align: right;
+    margin: 8px 0 16px 0;
+    padding: 10px 14px;
+    border-left: 4px solid #0f172a;
+    background: #f8fafc;
+
+    font-size: 10px;
+    font-weight: 500;
+    color: #334155;
+    line-height: 1.5;
 }
 
 /* STRATEGY */
@@ -494,56 +508,56 @@ img {
 .strategy-card {
     background: #0f172a;
     color: #ffffff;
-    border-radius: 16px;
-    padding: 18px;
-    margin: 20px 0 0 0;
+    border-radius: 15px;
+    padding: 14px;
+    margin: 10px 0 0 0;
     page-break-inside: avoid;
 }
 
 .strategy-title {
-    font-size: 16px;
+    font-size: 15px;
     font-weight: 700;
-    margin-bottom: 12px;
+    margin-bottom: 9px;
 }
 
 .strategy-metrics {
     width: 100%;
     border-collapse: separate;
-    border-spacing: 10px 0;
-    margin-bottom: 12px;
+    border-spacing: 8px 0;
+    margin-bottom: 9px;
 }
 
 .strategy-metric {
     width: 50%;
-    padding: 12px;
+    padding: 10px;
     vertical-align: top;
-    border-radius: 12px;
+    border-radius: 11px;
     background: rgba(255, 255, 255, 0.08);
 }
 
 .strategy-metric-label {
-    font-size: 9px;
+    font-size: 8px;
     text-transform: uppercase;
     color: #cbd5e1;
-    margin-bottom: 5px;
+    margin-bottom: 4px;
     font-weight: 700;
 }
 
 .strategy-metric-value {
-    font-size: 18px;
+    font-size: 17px;
     font-weight: 700;
 }
 
 .strategy-list {
     margin: 0;
-    padding-left: 17px;
+    padding-left: 15px;
     color: #e5e7eb;
-    font-size: 11px;
-    line-height: 1.45;
+    font-size: 10px;
+    line-height: 1.35;
 }
 
 .strategy-list li {
-    margin-bottom: 3px;
+    margin-bottom: 2px;
 }
 
 /* ADVICE / AD */
@@ -552,8 +566,8 @@ img {
     width: 100%;
     table-layout: fixed;
     border-collapse: separate;
-    border-spacing: 12px 0;
-    margin-top: 18px;
+    border-spacing: 10px 0;
+    margin-top: 10px;
 }
 
 .two-column-cell {
@@ -563,87 +577,75 @@ img {
 
 .advice-box,
 .ad-box {
-    min-height: 340px;
-    padding: 18px;
-    border-radius: 14px;
+    min-height: 190px;
+    padding: 12px;
+    border-radius: 13px;
     background: #ffffff;
     border: 1px solid #e2e8f0;
-    line-height: 1.55;
+    line-height: 1.42;
 }
 
 .advice-list {
     margin: 0;
-    padding-left: 16px;
+    padding-left: 15px;
     color: #334155;
-    font-size: 11px;
-    line-height: 1.45;
+    font-size: 10px;
+    line-height: 1.35;
 }
 
 .advice-list li {
-    margin-bottom: 4px;
+    margin-bottom: 3px;
 }
 
 .ad-box {
     border-left: 3px solid #0f172a;
     white-space: pre-line;
     color: #334155;
-    font-size: 11px;
+    font-size: 10px;
 }
 
 /* SIGNATURE */
 
+.signature-spacer {
+    height: 6px;
+}
+
 .signature-table {
     width: 100%;
-    margin-top: 18px;
+    margin-top: 8px;
     border-collapse: collapse;
     page-break-inside: avoid;
 }
 
-.signature-spacer {
-    height: 18px;
-}
-
 .signature-card {
     width: 100%;
-    padding: 16px;
+    padding: 10px;
     vertical-align: top;
-    border-radius: 14px;
+    border-radius: 13px;
     background: #ffffff;
     border: 1px solid #e2e8f0;
 }
 
 .signature-label {
     color: #64748b;
-    font-size: 9px;
+    font-size: 8px;
     text-transform: uppercase;
     letter-spacing: 0.9px;
-    margin-bottom: 5px;
+    margin-bottom: 4px;
     font-weight: 700;
 }
 
 .signature-name {
-    font-size: 18px;
+    font-size: 16px;
     font-weight: 700;
     color: #0f172a;
-    margin-bottom: 5px;
+    margin-bottom: 4px;
 }
 
 .signature-line {
-    width: 170px;
-    margin-top: 12px;
-    border-top: 1px solid #cbd5e1;
-}
-
-/* FOOTER */
-
-.footer {
+    width: 150px;
     margin-top: 10px;
-    padding-top: 8px;
-    border-top: 1px solid #e2e8f0;
-    text-align: center;
-    font-size: 10px;
-    line-height: 1.4;
-    color: #94a3b8;
+    border-top: 1px solid #cbd5e1;
 }
 
 .signature-inner-table {
@@ -653,30 +655,42 @@ img {
 
 .signature-info-cell {
     vertical-align: top;
-    padding-right: 24px;
+    padding-right: 18px;
 }
 
 .signature-qr-cell {
-    width: 190px;
+    width: 160px;
     text-align: center;
     vertical-align: middle;
     border-left: 1px solid #e2e8f0;
-    padding-left: 24px;
+    padding-left: 18px;
 }
 
 .signature-qr {
-    width: 155px;
-    height: 155px;
+    width: 110px;
+    height: 110px;
     object-fit: contain;
 }
 
 .signature-qr-label {
-    margin-top: 10px;
-    padding: 10px;
-    border-radius: 10px;
+    margin-top: 7px;
+    padding: 8px;
+    border-radius: 9px;
     background: #0f172a;
     color: #ffffff;
-    font-size: 10px;
+    font-size: 9px;
     font-weight: 600;
     text-align: center;
+}
+
+/* FOOTER */
+
+.footer {
+    margin-top: 4px;
+    padding-top: 4px;
+    border-top: 1px solid #e2e8f0;
+    text-align: center;
+    font-size: 8px;
+    line-height: 1.3;
+    color: #94a3b8;
 }
