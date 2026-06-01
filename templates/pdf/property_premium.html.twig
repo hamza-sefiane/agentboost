@@ -9,7 +9,6 @@
 	</head>
 
 	<body>
-
 		{% set currentUser = app.user %}
 		{% set agencyName = currentUser.companyName|default('') ?: 'AgentBoost Immobilier' %}
 		{% set agencyPhone = currentUser.companyPhone|default(null) %}
@@ -23,13 +22,6 @@
 		{% set photos = photoDataUris is defined and photoDataUris is iterable ? photoDataUris : [] %}
 		{% set surface = property.surface > 0 ? property.surface : 1 %}
 
-		{% set propertyTypeLabels = {
-			'Appartement': 'types.apartment',
-			'Maison': 'types.house',
-			'Terrain': 'types.land',
-			'Parking': 'types.parking'
-		} %}
-
 		<div class="premium-cover">
 			{% if photos|length > 0 %}
 				<img src="{{ photos[0] }}" class="premium-cover-image" alt="{{ 'property.title'|trans({}, 'pdf') }}">
@@ -37,14 +29,14 @@
 
 			<div class="premium-cover-overlay"></div>
 
-			<div class="premium-cover-content">
+			<div class="premium-cover-content premium-cover-content-clean">
 				<div class="premium-cover-top">
 					{% if logoDataUri is defined and logoDataUri %}
 						<img src="{{ logoDataUri }}" class="premium-cover-logo" alt="{{ 'company.label'|trans({}, 'pdf') }}">
 					{% endif %}
 				</div>
 
-				<div class="premium-cover-center">
+				<div class="premium-cover-card">
 					<div class="premium-cover-badge">
 						{{ 'cover.badge'|trans({}, 'pdf') }}
 					</div>
@@ -66,31 +58,29 @@
 						{{ property.city|upper }}
 					</div>
 
-					<div class="premium-cover-price-card">
-						<div class="premium-cover-price-label">
-							{{ 'cover.estimated_value'|trans({}, 'pdf') }}
-						</div>
+					<div class="premium-cover-price-label">
+						{{ 'cover.estimated_value'|trans({}, 'pdf') }}
+					</div>
 
-						<div class="premium-cover-price">
-							{{ property.estimate|number_format(0, ',', ' ') }}
+					<div class="premium-cover-price">
+						{{ property.estimate|number_format(0, ',', ' ') }}
+						€
+					</div>
+
+					{% if property.lowEstimate and property.highEstimate %}
+						<div class="premium-cover-range">
+							{{ property.lowEstimate|number_format(0, ',', ' ') }}
+							€
+																																																																													—
+							{{ property.highEstimate|number_format(0, ',', ' ') }}
 							€
 						</div>
+					{% endif %}
 
-						{% if property.lowEstimate and property.highEstimate %}
-							<div class="premium-cover-range">
-								{{ property.lowEstimate|number_format(0, ',', ' ') }}
-								€
-																—
-								{{ property.highEstimate|number_format(0, ',', ' ') }}
-								€
-							</div>
-						{% endif %}
-
-						<div class="premium-cover-score">
-							{{ 'cover.ai_score'|trans({}, 'pdf') }}
-							:
-							{{ confidenceScore|default(92) }}%
-						</div>
+					<div class="premium-cover-score">
+						{{ 'cover.ai_score'|trans({}, 'pdf') }}
+						:
+						{{ confidenceScore|default(92) }}%
 					</div>
 				</div>
 
@@ -106,13 +96,8 @@
 
 		<div class="page">
 			<div class="header">
-				<div class="company-label">
-					{{ 'company.label'|trans({}, 'pdf') }}
-				</div>
-
-				<div class="company-name">
-					{{ agencyName }}
-				</div>
+				<div class="company-label">{{ 'company.label'|trans({}, 'pdf') }}</div>
+				<div class="company-name">{{ agencyName }}</div>
 
 				<div class="company-info">
 					{% if agencyStreet %}
@@ -131,7 +116,7 @@
 					{% elseif agencyLegacyAddress %}
 						{{ agencyLegacyAddress|nl2br }}<br>
 					{% else %}
-						{{ 'company.address_missing'|trans({}, 'pdf') }}<br>
+						Adresse non renseignée<br>
 					{% endif %}
 
 					{% if agencyPhone %}
@@ -151,9 +136,7 @@
 
 			{% if photos|length > 0 %}
 				<div class="section">
-					<div class="section-title">
-						{{ 'gallery.title'|trans({}, 'pdf') }}
-					</div>
+					<div class="section-title">{{ 'gallery.title'|trans({}, 'pdf') }}</div>
 
 					<div class="photo-hero-wrapper">
 						<img src="{{ photos[0] }}" class="photo-hero" alt="{{ 'gallery.title'|trans({}, 'pdf') }}">
@@ -182,10 +165,7 @@
 				<table class="estimate-summary-table">
 					<tr>
 						<td>
-							<div class="estimate-main-label">
-								{{ 'estimate.target'|trans({}, 'pdf') }}
-							</div>
-
+							<div class="estimate-main-label">{{ 'estimate.target'|trans({}, 'pdf') }}</div>
 							<div class="estimate-main-value">
 								{{ property.estimate|number_format(0, ',', ' ') }}
 								€
@@ -198,7 +178,7 @@
 								<strong>
 									{{ property.lowEstimate|number_format(0, ',', ' ') }}
 									€
-																		—
+																																																																																																			—
 									{{ property.highEstimate|number_format(0, ',', ' ') }}
 									€
 								</strong>
@@ -211,25 +191,19 @@
 			</div>
 
 			<div class="section">
-				<div class="section-title">
-					{{ 'property.title'|trans({}, 'pdf') }}
-				</div>
+				<div class="section-title">{{ 'property.title'|trans({}, 'pdf') }}</div>
 
 				<table class="property-grid-table">
 					<tr>
 						<td class="property-card">
 							<div class="property-card-label">{{ 'property.type'|trans({}, 'pdf') }}</div>
-							<div class="property-card-value">
-								{{ propertyTypeLabels[property.type]|default(property.type)|trans({}, 'pdf') }}
-							</div>
+							<div class="property-card-value">{{ property.type }}</div>
 						</td>
 
 						<td class="property-card">
 							<div class="property-card-label">{{ 'property.surface'|trans({}, 'pdf') }}</div>
-							<div class="property-card-value">
-								{{ property.surface }}
-								m²
-							</div>
+							<div class="property-card-value">{{ property.surface }}
+								m²</div>
 						</td>
 					</tr>
 
@@ -252,7 +226,6 @@
 					<tr>
 						<td colspan="2" class="property-card property-card-full">
 							<div class="property-card-label">{{ 'property.location'|trans({}, 'pdf') }}</div>
-
 							<div class="property-card-value">
 								{% if property.address %}
 									{{ property.address }}<br>
@@ -266,41 +239,29 @@
 			</div>
 
 			<div class="section no-break">
-				<div class="section-title">
-					{{ 'summary.title'|trans({}, 'pdf') }}
-				</div>
+				<div class="section-title">{{ 'summary.title'|trans({}, 'pdf') }}</div>
 
 				<table class="market-table">
 					<tr>
 						<td class="market-card">
 							<div class="market-title">{{ 'summary.estimated_price_m2'|trans({}, 'pdf') }}</div>
-
 							<div class="market-value">
 								{{ (property.estimate / surface)|round(0, 'floor')|number_format(0, ',', ' ') }}
 								€/m²
 							</div>
-
 							<div class="market-sub">{{ 'summary.based_on_target'|trans({}, 'pdf') }}</div>
 						</td>
 
 						<td class="market-card">
 							<div class="market-title">{{ 'summary.reliability'|trans({}, 'pdf') }}</div>
-
-							<div class="market-value">
-								{{ confidenceScore|default(80) }}
-								%
-							</div>
-
+							<div class="market-value">{{ confidenceScore|default(80) }}
+								%</div>
 							<div class="market-sub">{{ 'summary.reliability_index'|trans({}, 'pdf') }}</div>
 						</td>
 
 						<td class="market-card">
 							<div class="market-title">{{ 'summary.estimated_delay'|trans({}, 'pdf') }}</div>
-
-							<div class="market-value">
-								{{ estimatedSaleDelay|default('45 à 60 jours') }}
-							</div>
-
+							<div class="market-value">{{ estimatedSaleDelay|default('45 à 60 jours') }}</div>
 							<div class="market-sub">{{ 'summary.indicative_projection'|trans({}, 'pdf') }}</div>
 						</td>
 					</tr>
@@ -309,41 +270,47 @@
 
 			{% if comparables is defined and comparables is iterable and comparables is not empty %}
 				<div class="section no-break comparable-section comparable-page-start">
-					<div class="section-title">
-						{{ 'comparables.title'|trans({}, 'pdf') }}
+					<div class="section-title">{{ 'comparables.title'|trans({}, 'pdf') }}</div>
+					<div class="comparable-note">
+						Analyse réalisée à partir de 10 ventes DVF comparables sélectionnées selon la localisation, le type de bien et la surface.
+						
+						Les ventes présentées ci-dessous constituent un échantillon représentatif des références utilisées pour l'évaluation.
 					</div>
-
 					<table class="comparable-table">
 						<tr>
 							{% for comparable in comparables %}
-								{% set comparableType = comparable.type|default(property.type) %}
-
 								<td class="comparable-card">
 									<div class="comparable-label">
 										{{ 'comparables.comparable'|trans({}, 'pdf') }}
 										{{ loop.index }}
 									</div>
 
-									<div class="comparable-type">
-										{{ propertyTypeLabels[comparableType]|default(comparableType)|trans({}, 'pdf') }}
-									</div>
-
-									<div class="comparable-location">
-										{{ comparable.city|default(property.city)|upper }}
-									</div>
-
-									<div class="comparable-surface">
-										{{ comparable.surface|default(property.surface) }}
-										m²
-									</div>
+									<div class="comparable-type">{{ comparable.type|default(property.type) }}</div>
+									<div class="comparable-location">{{ comparable.city|default(property.city)|upper }}</div>
+									{% if comparable.address %}
+										<div class="comparable-address">
+											{{ comparable.address }}
+										</div>
+									{% endif %}
+									<div class="comparable-surface">{{ comparable.surface|default(property.surface) }}
+										m²</div>
 
 									<div class="comparable-price">
-										{{ comparable.lowPrice|default(property.lowEstimate)|number_format(0, ',', ' ') }}
-										€
-																				—
-										{{ comparable.highPrice|default(property.highEstimate)|number_format(0, ',', ' ') }}
+										{{ comparable.price|number_format(0, ',', ' ') }}
 										€
 									</div>
+
+									<div class="comparable-price-m2">
+										{{ comparable.pricePerSqm|number_format(0, ',', ' ') }}
+										€/m²
+									</div>
+
+									{% if comparable.saleDate %}
+										<div class="comparable-date">
+											Vente :
+											{{ comparable.saleDate }}
+										</div>
+									{% endif %}
 								</td>
 							{% endfor %}
 						</tr>
@@ -363,27 +330,19 @@
 
 			<div class="section no-break">
 				<div class="strategy-card">
-					<div class="strategy-title">
-						{{ 'strategy.title'|trans({}, 'pdf') }}
-					</div>
+					<div class="strategy-title">{{ 'strategy.title'|trans({}, 'pdf') }}</div>
 
 					<table class="strategy-metrics">
 						<tr>
 							<td class="strategy-metric">
-								<div class="strategy-metric-label">
-									{{ 'strategy.recommended_price'|trans({}, 'pdf') }}
-								</div>
-
+								<div class="strategy-metric-label">{{ 'strategy.recommended_price'|trans({}, 'pdf') }}</div>
 								<div class="strategy-metric-value">
 									{{ property.highEstimate ? property.highEstimate|number_format(0, ',', ' ') ~ ' €' : property.estimate|number_format(0, ',', ' ') ~ ' €' }}
 								</div>
 							</td>
 
 							<td class="strategy-metric">
-								<div class="strategy-metric-label">
-									{{ 'strategy.negotiation_threshold'|trans({}, 'pdf') }}
-								</div>
-
+								<div class="strategy-metric-label">{{ 'strategy.negotiation_threshold'|trans({}, 'pdf') }}</div>
 								<div class="strategy-metric-value">
 									{{ property.lowEstimate ? property.lowEstimate|number_format(0, ',', ' ') ~ ' €' : property.estimate|number_format(0, ',', ' ') ~ ' €' }}
 								</div>
@@ -407,9 +366,7 @@
 						{% if sellingAdvices is defined and sellingAdvices is iterable and sellingAdvices is not empty %}
 							<td class="two-column-cell">
 								<div class="section">
-									<div class="section-title">
-										{{ 'advices.title'|trans({}, 'pdf') }}
-									</div>
+									<div class="section-title">{{ 'advices.title'|trans({}, 'pdf') }}</div>
 
 									<div class="advice-box">
 										<ul class="advice-list">
@@ -425,9 +382,7 @@
 						{% if property.adText %}
 							<td class="two-column-cell">
 								<div class="section">
-									<div class="section-title">
-										{{ 'ad.title'|trans({}, 'pdf') }}
-									</div>
+									<div class="section-title">{{ 'ad.title'|trans({}, 'pdf') }}</div>
 
 									<div class="ad-box">
 										{{ property.adText|nl2br }}
@@ -441,50 +396,61 @@
 
 			<div class="signature-spacer"></div>
 
-			<table class="signature-table">
+			<table class="signature-table no-break">
 				<tr>
 					<td class="signature-card">
-						<div class="signature-label">
-							{{ 'signature.presented_by'|trans({}, 'pdf') }}
-						</div>
+						<table class="signature-inner-table">
+							<tr>
+								<td class="signature-info-cell">
+									<div class="signature-label">{{ 'signature.presented_by'|trans({}, 'pdf') }}</div>
+									<div class="signature-name">{{ agencyName }}</div>
 
-						<div class="signature-name">
-							{{ agencyName }}
-						</div>
+									<div class="company-info">
+										{% if agencyStreet %}
+											{{ agencyStreet }}
+											{% if agencyAddressComplement %}
+												—
+												{{ agencyAddressComplement }}
+											{% endif %}<br>
+										{% elseif agencyAddressComplement %}
+											{{ agencyAddressComplement }}<br>
+										{% endif %}
 
-						<div class="company-info">
-							{% if agencyStreet %}
-								{{ agencyStreet }}
-								{% if agencyAddressComplement %}
-									—
-									{{ agencyAddressComplement }}
-								{% endif %}<br>
-							{% elseif agencyAddressComplement %}
-								{{ agencyAddressComplement }}<br>
-							{% endif %}
+										{% if agencyPostalCode or agencyCity %}
+											{{ agencyPostalCode }}
+											{{ agencyCity }}<br>
+										{% elseif agencyLegacyAddress %}
+											{{ agencyLegacyAddress|nl2br }}<br>
+										{% endif %}
 
-							{% if agencyPostalCode or agencyCity %}
-								{{ agencyPostalCode }}
-								{{ agencyCity }}<br>
-							{% elseif agencyLegacyAddress %}
-								{{ agencyLegacyAddress|nl2br }}<br>
-							{% endif %}
+										{% if agencyPhone %}
+											Tél :
+											{{ agencyPhone }}<br>
+										{% endif %}
 
-							{% if agencyPhone %}
-								Tél :
-								{{ agencyPhone }}<br>
-							{% endif %}
+										{% if agencyEmail %}
+											{{ agencyEmail }}<br>
+										{% endif %}
 
-							{% if agencyEmail %}
-								{{ agencyEmail }}<br>
-							{% endif %}
+										{% if agencyWebsite %}
+											{{ agencyWebsite }}
+										{% endif %}
+									</div>
 
-							{% if agencyWebsite %}
-								{{ agencyWebsite }}
-							{% endif %}
-						</div>
+									<div class="signature-line"></div>
+								</td>
 
-						<div class="signature-line"></div>
+								{% if qrCodeDataUri is defined and qrCodeDataUri %}
+									<td class="signature-qr-cell">
+										<img src="{{ qrCodeDataUri }}" class="signature-qr" alt="QR Code">
+
+										<div class="signature-qr-label">
+											Scanner pour voir le bien
+										</div>
+									</td>
+								{% endif %}
+							</tr>
+						</table>
 					</td>
 				</tr>
 			</table>
@@ -495,6 +461,5 @@
 				AB-{{ property.id }}-{{ "now"|date('Ymd') }}
 			</div>
 		</div>
-
 	</body>
 </html>

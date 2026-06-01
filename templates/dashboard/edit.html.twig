@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-	{{ 'edit.meta.title'|trans({}, 'dashboard') }}
+	Modifier estimation
 {% endblock %}
 
 {% block stylesheets %}
@@ -15,107 +15,82 @@
 {% endblock %}
 
 {% block body %}
-	<h1 class="mb-4">
-		{{ 'edit.title'|trans({}, 'dashboard') }}
-	</h1>
+	<h1 class="mb-4">Modifier l’estimation</h1>
 
 	<form method="post" enctype="multipart/form-data" class="row g-3 mb-4">
 		<div class="col-md-3">
 			<select name="type" class="form-control" required>
 				{% for type in ['Appartement', 'Maison', 'Terrain', 'Parking'] %}
 					<option value="{{ type }}" {{ property.type == type ? 'selected' : '' }}>
-						{{ ('edit.property_type.' ~ type|lower)|trans({}, 'dashboard') }}
+						{{ type }}
 					</option>
 				{% endfor %}
 			</select>
 		</div>
 
 		<div class="col-md-3 address-autocomplete-wrapper">
-			<input name="address" id="address-input" class="form-control" placeholder="{{ 'edit.form.address'|trans({}, 'dashboard') }}" maxlength="255" value="{{ property.address|default('') }}" autocomplete="off">
-
+			<input name="address" id="address-input" class="form-control" placeholder="Adresse du bien" maxlength="255" value="{{ property.address|default('') }}" autocomplete="off">
 			<div id="address-results" class="address-results"></div>
 		</div>
 
 		<div class="col-md-3">
-			<input name="postalCode" id="postal-code-input" class="form-control" placeholder="{{ 'edit.form.postal_code'|trans({}, 'dashboard') }}" value="{{ property.postalCode|default('') }}" maxlength="5" pattern="[0-9]{5}" inputmode="numeric" required>
+			<input name="postalCode" id="postal-code-input" class="form-control" value="{{ property.postalCode|default('') }}" maxlength="5" pattern="[0-9]{5}" inputmode="numeric" required>
 		</div>
 
 		<div class="col-md-3">
-			<input name="city" id="city-input" class="form-control" placeholder="{{ 'edit.form.city'|trans({}, 'dashboard') }}" value="{{ property.city|default('') }}" required>
+			<input name="city" id="city-input" class="form-control" value="{{ property.city|default('') }}" required>
 		</div>
 
 		<div class="col-md-2">
-			<input name="surface" type="number" min="1" class="form-control" placeholder="{{ 'edit.form.surface'|trans({}, 'dashboard') }}" value="{{ property.surface }}" required>
+			<input name="surface" type="number" min="1" class="form-control" value="{{ property.surface }}" required>
 		</div>
 
 		<div class="col-md-2">
-			<input name="rooms" type="number" min="0" class="form-control" placeholder="{{ 'edit.form.rooms'|trans({}, 'dashboard') }}" value="{{ property.rooms }}">
+			<input name="rooms" type="number" min="0" class="form-control" value="{{ property.rooms }}">
 		</div>
 
 		<div class="col-md-2">
 			<select name="parking" class="form-control">
-				<option value="0" {{ not property.parking ? 'selected' : '' }}>
-					{{ 'edit.form.parking.no'|trans({}, 'dashboard') }}
-				</option>
-
-				<option value="1" {{ property.parking ? 'selected' : '' }}>
-					{{ 'edit.form.parking.yes'|trans({}, 'dashboard') }}
-				</option>
+				<option value="0" {{ not property.parking ? 'selected' : '' }}>Sans parking</option>
+				<option value="1" {{ property.parking ? 'selected' : '' }}>Avec parking</option>
 			</select>
 		</div>
 
 		<div class="col-12">
-			<textarea name="extraDetails" class="form-control" rows="4" placeholder="{{ 'edit.form.extra_details_placeholder'|trans({}, 'dashboard') }}">{{ property.extraDetails|default('') }}</textarea>
+			<textarea name="extraDetails" class="form-control" rows="4" placeholder="Détails supplémentaires : balcon, vue dégagée, cuisine équipée, proche gare, lumineux...">{{ property.extraDetails|default('') }}</textarea>
 		</div>
 
 		<div class="col-12">
-			<label class="form-label fw-semibold">
-				{{ 'edit.photos.add'|trans({}, 'dashboard') }}
-			</label>
-
+			<label class="form-label fw-semibold">Ajouter des photos</label>
 			<input type="file" name="photos[]" class="form-control" accept="image/jpeg,image/png,image/webp" multiple>
-
 			<small class="text-muted">
-				{{ 'edit.photos.help'|trans({}, 'dashboard') }}
+				Maximum 5 photos au total. Formats acceptés : JPG, PNG ou WEBP.
 			</small>
 		</div>
 
 		<div class="col-12">
-			<button type="submit" class="btn btn-success">
-				{{ 'edit.actions.save'|trans({}, 'dashboard') }}
-			</button>
-
-			<a href="{{ path('dashboard') }}" class="btn btn-secondary">
-				{{ 'edit.actions.back'|trans({}, 'dashboard') }}
-			</a>
+			<button type="submit" class="btn btn-success">Enregistrer</button>
+			<a href="{{ path('dashboard') }}" class="btn btn-secondary">Retour</a>
 		</div>
 	</form>
 
-	<h2 class="mb-3">
-		{{ 'edit.photos.current'|trans({}, 'dashboard') }}
-	</h2>
+	<h2 class="mb-3">Photos actuelles</h2>
 
 	<div class="d-flex flex-wrap gap-3">
 		{% for photo in property.photos %}
 			<div>
-				<img src="{{ asset('uploads/properties/' ~ photo.filename) }}" alt="{{ 'edit.photos.alt'|trans({}, 'dashboard') }}" class="property-photo-preview" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
-
+				<img src="{{ photo.displayUrl }}" alt="Photo du bien" class="property-photo-preview" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
 				<div class="text-muted small border rounded p-2 bg-light" style="display: none; width: 140px;">
-					{{ 'edit.photos.unavailable'|trans({}, 'dashboard') }}
+					Photo indisponible
 				</div>
 
-				<form method="post" action="{{ path('property_photo_delete', { id: photo.id }) }}" onsubmit="return confirm('{{ 'edit.photos.delete_confirm'|trans({}, 'dashboard')|e('js') }}');" class="mt-2">
+				<form method="post" action="{{ path('property_photo_delete', { id: photo.id }) }}" onsubmit="return confirm('Supprimer cette photo ?');" class="mt-2">
 					<input type="hidden" name="_token" value="{{ csrf_token('delete_property_photo_' ~ photo.id) }}">
-
-					<button type="submit" class="btn btn-sm btn-danger w-100">
-						{{ 'edit.actions.delete'|trans({}, 'dashboard') }}
-					</button>
+					<button type="submit" class="btn btn-sm btn-danger w-100">Supprimer</button>
 				</form>
 			</div>
 		{% else %}
-			<p class="text-muted">
-				{{ 'edit.photos.empty'|trans({}, 'dashboard') }}
-			</p>
+			<p class="text-muted">Aucune photo.</p>
 		{% endfor %}
 	</div>
 {% endblock %}

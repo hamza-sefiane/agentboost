@@ -20,7 +20,7 @@ class OpenAiClient implements AiClientInterface
                     'content' => $prompt,
                 ],
             ],
-            'temperature' => 0.3,
+            'temperature' => 0.5,
         ]);
 
         return trim($response->choices[0]->message->content ?? '');

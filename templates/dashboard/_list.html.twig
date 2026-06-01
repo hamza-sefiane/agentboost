@@ -4,14 +4,8 @@
 {% if properties is empty %}
 	<div class="property-empty-state">
 		<div class="property-empty-icon">🏠</div>
-
-		<div class="property-empty-title">
-			{{ 'properties.empty.title'|trans({}, 'dashboard') }}
-		</div>
-
-		<p class="property-empty-text">
-			{{ 'properties.empty.text'|trans({}, 'dashboard') }}
-		</p>
+		<div class="property-empty-title">Aucune estimation pour le moment</div>
+		<p class="property-empty-text">Ajoutez votre premier bien pour générer une estimation.</p>
 	</div>
 {% else %}
 	{% set properties = properties|sort((a, b) => b.estimate <=> a.estimate) %}
@@ -22,11 +16,11 @@
 		<div class="property-list-toolbar">
 			<div class="property-count">
 				{{ properties|length }}
-				{{ 'properties.count'|trans({}, 'dashboard') }}
+				estimation(s)
 			</div>
 
 			<button type="submit" class="btn btn-outline-danger btn-sm bulk-delete-btn d-none" id="bulk-delete-btn">
-				{{ 'properties.actions.delete_selection'|trans({}, 'dashboard') }}
+				Supprimer la sélection
 			</button>
 		</div>
 
@@ -36,102 +30,84 @@
 
 				<article class="property-card">
 					<div class="property-card-top">
-
 						{% if firstPhoto %}
-							<img src="{{ asset('uploads/properties/' ~ firstPhoto.filename) }}" alt="{{ 'properties.photo_alt'|trans({}, 'dashboard') }}" class="property-photo" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-
-							<div class="property-photo-placeholder" style="display:none;">⌂</div>
+							<img src="{{ firstPhoto.displayUrl }}" alt="Photo du bien" class="property-photo" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+							<div class="property-photo-placeholder" style="display: none;">⌂</div>
 						{% else %}
 							<div class="property-photo-placeholder">⌂</div>
 						{% endif %}
 
 						<div>
 							<div class="property-card-head">
-
-								<span class="property-type">
-									{{ p.type }}
-								</span>
+								<span class="property-type">{{ p.type }}</span>
 
 								<div class="dropup">
-
-									<button class="property-menu-btn" type="button" data-bs-toggle="dropdown" data-bs-boundary="viewport" aria-expanded="false" aria-label="{{ 'properties.actions.label'|trans({}, 'dashboard') }}">
+									<button class="property-menu-btn" type="button" data-bs-toggle="dropdown" data-bs-boundary="viewport" aria-expanded="false" aria-label="Actions">
 										⋯
 									</button>
 
 									<ul class="dropdown-menu dropdown-menu-end property-card-menu">
-
 										<li>
 											<button type="submit" form="generate-ad-form-{{ p.id }}" class="dropdown-item">
-												{{ 'properties.actions.generate_ad'|trans({}, 'dashboard') }}
+												Générer une annonce
 											</button>
 										</li>
 
 										{% if p.adText %}
-
 											<li>
 												<button type="button" class="dropdown-item" data-ad="{{ p.adText|e('html_attr') }}" onclick="copyAd(this.dataset.ad)">
-													{{ 'properties.actions.copy_ad'|trans({}, 'dashboard') }}
+													Copier l’annonce
 												</button>
 											</li>
 
 											{% if isYearlyPremium %}
-
 												<li>
 													<button type="button" class="dropdown-item" data-ad="{{ p.adText|e('html_attr') }}" onclick="copyLeboncoin(this.dataset.ad)">
-														{{ 'properties.actions.leboncoin_format'|trans({}, 'dashboard') }}
+														Format Leboncoin
 													</button>
 												</li>
 
 												<li>
 													<button type="button" class="dropdown-item" data-ad="{{ p.adText|e('html_attr') }}" onclick="shareFacebook(this.dataset.ad)">
-														{{ 'properties.actions.facebook_publish'|trans({}, 'dashboard') }}
+														Publier sur Facebook
 													</button>
 												</li>
-
 											{% else %}
-
 												<li>
-													<span class="dropdown-item premium-locked-item">
-														{{ 'properties.premium.leboncoin_locked'|trans({}, 'dashboard') }}
-													</span>
+													<span class="dropdown-item premium-locked-item">Leboncoin — Premium annuel</span>
 												</li>
 
 												<li>
-													<span class="dropdown-item premium-locked-item">
-														{{ 'properties.premium.facebook_locked'|trans({}, 'dashboard') }}
-													</span>
+													<span class="dropdown-item premium-locked-item">Facebook — Premium annuel</span>
 												</li>
 
 												<li>
 													<div class="premium-locked-note">
-														{{ 'properties.premium.note'|trans({}, 'dashboard') }}
+														Passez à l’annuel pour débloquer les outils de diffusion.
 													</div>
 												</li>
-
 											{% endif %}
-
 										{% endif %}
 
 										<li>
 											<a href="{{ path('property_pdf', { id: p.id }) }}" target="_blank" rel="noopener noreferrer" class="dropdown-item">
-												{{ 'properties.actions.pdf_classic'|trans({}, 'dashboard') }}
+												PDF classique
 											</a>
 										</li>
 
 										<li>
 											<a href="{{ path('property_edit', { id: p.id }) }}" class="dropdown-item">
-												{{ 'properties.actions.edit'|trans({}, 'dashboard') }}
+												Modifier
 											</a>
 										</li>
 
 										<li><hr class="dropdown-divider"></li>
 
 										<li>
-											<button type="submit" form="delete-property-form-{{ p.id }}" class="dropdown-item text-danger" onclick="return confirm('{{ 'properties.confirm.delete_one'|trans({}, 'dashboard')|e('js') }}');">
-												{{ 'properties.actions.delete'|trans({}, 'dashboard') }}
+											<button type="submit" form="delete-property-form-{{ p.id }}" class="dropdown-item text-danger" onclick="return confirm('Supprimer cette estimation ?');">
+												Supprimer
 											</button>
 										</li>
-
 									</ul>
 								</div>
 							</div>
@@ -142,30 +118,20 @@
 							</div>
 
 							<div class="property-meta">
-
 								{{ p.surface }}
 								m²
-
 								{% if p.type|lower != 'parking' %}
 									·
 									{{ p.rooms }}
-									{{ 'properties.meta.rooms'|trans({}, 'dashboard') }}
+									pièces
 								{% endif %}
-
-								·
-								{{ 'properties.meta.parking'|trans({}, 'dashboard') }}
-								:
-								{{ p.parking
-									? 'properties.meta.yes'|trans({}, 'dashboard')
-									: 'properties.meta.no'|trans({}, 'dashboard')
-								}}
-
+								· Parking :
+								{{ p.parking ? 'Oui' : 'Non' }}
 							</div>
 						</div>
 					</div>
 
 					<div class="property-address">
-
 						{% if p.address %}
 							<strong>{{ p.address }}</strong><br>
 						{% endif %}
@@ -175,82 +141,55 @@
 
 						{% if p.photos|length > 0 %}
 							<br>
-
-							<span class="text-muted">
-								{{ p.photos|length }}
-								{{ 'properties.meta.photos'|trans({}, 'dashboard') }}
-							</span>
+							<span class="text-muted">{{ p.photos|length }}
+								photo(s)</span>
 						{% endif %}
-
 					</div>
 
 					<div class="property-footer">
-
 						<label class="property-checkbox-wrap">
-
-							<input type="checkbox" name="property_ids[]" value="{{ p.id }}" class="property-checkbox" aria-label="{{ 'properties.actions.select_aria'|trans({}, 'dashboard') }}">
-
-							{{ 'properties.actions.select'|trans({}, 'dashboard') }}
-
+							<input type="checkbox" name="property_ids[]" value="{{ p.id }}" class="property-checkbox" aria-label="Sélectionner cette estimation">
+							Sélectionner
 						</label>
 
 						<div class="property-main-actions">
-
 							{% if p.adText %}
-
 								<button type="button" class="property-secondary-btn" data-ad="{{ p.adText|e('html_attr') }}" onclick="openAdModal(this.dataset.ad)">
-									{{ 'properties.actions.view_ad'|trans({}, 'dashboard') }}
+									Voir annonce
 								</button>
 
 								{% if isYearlyPremium %}
-
 									<a href="{{ path('property_pdf_premium', { id: p.id }) }}" target="_blank" rel="noopener noreferrer" class="property-primary-btn">
-										{{ 'properties.actions.pdf_premium'|trans({}, 'dashboard') }}
+										PDF Premium
 									</a>
-
 								{% else %}
-
 									<a href="{{ path('property_pdf', { id: p.id }) }}" target="_blank" rel="noopener noreferrer" class="property-primary-btn">
-										{{ 'properties.actions.pdf'|trans({}, 'dashboard') }}
+										PDF
 									</a>
-
 								{% endif %}
-
 							{% else %}
-
-								<span class="property-muted-pill">
-									{{ 'properties.ad.none'|trans({}, 'dashboard') }}
-								</span>
+								<span class="property-muted-pill">Aucune annonce</span>
 
 								<button type="submit" form="generate-ad-form-{{ p.id }}" class="property-primary-btn">
-									{{ 'properties.actions.generate'|trans({}, 'dashboard') }}
+									Générer
 								</button>
-
 							{% endif %}
-
 						</div>
 					</div>
 				</article>
-
 			{% endfor %}
 		</div>
 
 		<div class="bulk-mobile-bar" id="bulk-mobile-bar">
-
-			<span id="bulk-mobile-count">
-				0
-				{{ 'properties.actions.selection'|trans({}, 'dashboard') }}
-			</span>
+			<span id="bulk-mobile-count">0 sélection</span>
 
 			<button type="submit" class="btn btn-danger btn-sm">
-				{{ 'properties.actions.delete'|trans({}, 'dashboard') }}
+				Supprimer
 			</button>
-
 		</div>
 	</form>
 
 	{% for p in properties %}
-
 		<form id="generate-ad-form-{{ p.id }}" method="post" action="{{ path('property_generate_ad', { id: p.id }) }}" class="d-none">
 			<input type="hidden" name="_token" value="{{ csrf_token('generate_ad_' ~ p.id) }}">
 		</form>
@@ -258,23 +197,14 @@
 		<form id="delete-property-form-{{ p.id }}" method="post" action="{{ path('property_delete', { id: p.id }) }}" class="d-none">
 			<input type="hidden" name="_token" value="{{ csrf_token('delete_property_' ~ p.id) }}">
 		</form>
-
 	{% endfor %}
 
 	<div class="modal fade" id="adModal" tabindex="-1" aria-hidden="true">
-
 		<div class="modal-dialog modal-lg modal-dialog-centered">
-
 			<div class="modal-content shadow">
-
 				<div class="modal-header">
-
-					<h5 class="modal-title">
-						{{ 'properties.modal.title'|trans({}, 'dashboard') }}
-					</h5>
-
-					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{ 'properties.modal.close'|trans({}, 'dashboard') }}"></button>
-
+					<h5 class="modal-title">Annonce générée</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
 				</div>
 
 				<div class="modal-body">
@@ -282,19 +212,15 @@
 				</div>
 
 				<div class="modal-footer">
-
 					<button type="button" class="btn btn-success" onclick="copyFromModal()">
-						{{ 'properties.actions.copy'|trans({}, 'dashboard') }}
+						Copier
 					</button>
 
 					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-						{{ 'properties.modal.close'|trans({}, 'dashboard') }}
+						Fermer
 					</button>
-
 				</div>
-
 			</div>
 		</div>
 	</div>
-
 {% endif %}

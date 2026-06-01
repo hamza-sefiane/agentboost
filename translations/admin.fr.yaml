@@ -1,0 +1,139 @@
+stats:
+    meta:
+        title: "Statistiques admin"
+
+    title: "Statistiques admin"
+
+    cards:
+        users: "Utilisateurs"
+        active_subscriptions: "Abonnements actifs"
+        properties: "Biens estimés"
+        estimated_revenue: "Revenu estimé"
+        conversion_rate: "Taux de conversion"
+        free_users: "Utilisateurs gratuits"
+
+    charts:
+        users_split: "Répartition utilisateurs"
+        global_view: "Vue globale"
+        top_cities: "Top villes estimées"
+
+    tables:
+        latest_users: "Derniers utilisateurs"
+        latest_stripe_events: "Derniers événements Stripe"
+        email: "Email"
+        status: "Statut"
+        plan: "Plan"
+        event: "Événement"
+        date: "Date"
+
+    empty:
+        users: "Aucun utilisateur."
+        stripe_events: "Aucun événement Stripe."
+
+users:
+    meta:
+        title: "Gestion utilisateurs"
+
+    title: "Utilisateurs"
+
+    dashboard: "Dashboard admin"
+
+    search:
+        placeholder: "Rechercher par email"
+        button: "Rechercher"
+        reset: "Réinitialiser"
+
+    filters:
+        all: "Tous les statuts"
+
+    actions:
+        show: "Voir"
+        enable: "Activer"
+        disable: "Désactiver"
+        reset_quotas: "Reset quotas"
+        verify_email: "Vérifier email"
+        unverify_email: "Dévérifier email"
+        monthly: "Mensuel"
+        yearly: "Annuel"
+        delete: "Supprimer"
+        manage: "Gérer"    
+
+    total: "%count% utilisateur(s) trouvé(s)"
+
+    table:
+        id: "ID"
+        email: "Email"
+        plan: "Plan"
+        subscription: "Abonnement"
+        verified: "Vérifié"
+        active: "Actif"
+        next_billing: "Prochaine facturation"
+        created: "Créé le"
+        actions: "Actions"
+
+    status:
+        yes: "Oui"
+        no: "Non"
+        active: "Actif"
+        inactive: "Inactif"
+
+    confirm:
+        delete: "Supprimer cet utilisateur ?"
+
+    empty: "Aucun utilisateur."
+
+    pagination:
+        previous: "Précédent"
+        next: "Suivant"
+
+user_show:
+    meta:
+        title: "Détail utilisateur"
+
+    title: "Détail utilisateur"
+
+    back: "Retour"
+
+    account_information: "Informations du compte"
+
+    fields:
+        email: "Email"
+        plan: "Plan"
+        subscription: "Abonnement"
+        verified: "Vérifié"
+        monthly_estimations: "Estimations mensuelles"
+        ai_generations: "Générations IA"
+        created_at: "Créé le"
+        next_billing: "Prochaine facturation"
+
+    values:
+        yes: "Oui"
+        no: "Non"
+
+    properties:
+        title: "Biens créés"
+
+        type: "Type"
+        city: "Ville"
+        estimate: "Estimation"
+        created_at: "Créé le"
+
+        empty: "Aucun bien."
+
+logs:
+    meta:
+        title: "Logs admin"
+
+    title: "Logs admin"
+
+    back: "Retour dashboard"
+
+    table:
+        id: "ID"
+        date: "Date"
+        actor: "Admin"
+        target_user: "Utilisateur cible"
+        action: "Action"
+        ip: "IP"
+
+    empty: "Aucun log."        

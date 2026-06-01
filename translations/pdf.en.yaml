@@ -12,13 +12,12 @@ cover:
 
     estimated_value: "Estimated value"
 
-    ai_score: "Confidence index"
+    ai_score: "Estimation reliability"
 
     generated_on: "Generated on"
 
 company:
     label: "Real estate agency"
-    address_missing: "Address not provided"
 
 gallery:
     title: "Property gallery"
@@ -63,12 +62,7 @@ comparables:
 
     comparable: "Comparable"
 
-    note: "Comparative data generated for informational purposes based on the characteristics of the estimated property."
-
-    market:
-        small: "The property is positioned in a dynamic segment with generally strong demand."
-        medium: "The property falls within a consistent range compared to observed values for similar surfaces."
-        large: "The property is positioned in a more selective market requiring an adapted sales strategy."
+    note: "Comparable properties sourced from the DVF+ database (Cerema / DGFiP), selected according to the location and characteristics of the appraised property."
 
 strategy:
     title: "Recommended selling strategy"
@@ -81,7 +75,7 @@ advices:
     title: "Advice before listing"
 
 ad:
-    title: "Property presentation"
+    title: "Property listing"
 
 signature:
     presented_by: "Document presented by"
@@ -90,9 +84,3 @@ footer:
     confidential: "Confidential real estate valuation — Generated with AgentBoost."
 
     non_contractual: "Non-contractual document — Reference:"
-
-types:
-    apartment: "Apartment"
-    house: "House"
-    land: "Land"
-    parking: "Parking"

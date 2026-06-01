@@ -17,6 +17,12 @@ class PropertyPhoto
     #[ORM\Column(length: 255)]
     private string $filename = '';
 
+    #[ORM\Column(length: 500, nullable: true)]
+    private ?string $cloudinaryUrl = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $cloudinaryPublicId = null;
+
     #[ORM\Column]
     private int $position = 0;
 
@@ -61,6 +67,35 @@ class PropertyPhoto
         $this->filename = $filename;
 
         return $this;
+    }
+
+    public function getCloudinaryUrl(): ?string
+    {
+        return $this->cloudinaryUrl;
+    }
+
+    public function setCloudinaryUrl(?string $cloudinaryUrl): self
+    {
+        $this->cloudinaryUrl = $cloudinaryUrl !== null ? trim($cloudinaryUrl) : null;
+
+        return $this;
+    }
+
+    public function getCloudinaryPublicId(): ?string
+    {
+        return $this->cloudinaryPublicId;
+    }
+
+    public function setCloudinaryPublicId(?string $cloudinaryPublicId): self
+    {
+        $this->cloudinaryPublicId = $cloudinaryPublicId !== null ? trim($cloudinaryPublicId) : null;
+
+        return $this;
+    }
+
+    public function getDisplayUrl(): string
+    {
+        return $this->cloudinaryUrl ?: '/uploads/properties/' . $this->filename;
     }
 
     public function getPosition(): int
