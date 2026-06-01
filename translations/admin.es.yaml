@@ -1,0 +1,139 @@
+stats:
+    meta:
+        title: "Estadísticas admin"
+
+    title: "Estadísticas admin"
+
+    cards:
+        users: "Usuarios"
+        active_subscriptions: "Suscripciones activas"
+        properties: "Propiedades estimadas"
+        estimated_revenue: "Ingresos estimados"
+        conversion_rate: "Tasa de conversión"
+        free_users: "Usuarios gratuitos"
+
+    charts:
+        users_split: "Distribución de usuarios"
+        global_view: "Vista global"
+        top_cities: "Ciudades más estimadas"
+
+    tables:
+        latest_users: "Últimos usuarios"
+        latest_stripe_events: "Últimos eventos Stripe"
+        email: "Correo"
+        status: "Estado"
+        plan: "Plan"
+        event: "Evento"
+        date: "Fecha"
+
+    empty:
+        users: "Ningún usuario."
+        stripe_events: "Ningún evento Stripe."
+
+users:
+    meta:
+        title: "Gestión de usuarios"
+
+    title: "Usuarios"
+
+    dashboard: "Dashboard admin"
+
+    search:
+        placeholder: "Buscar por correo"
+        button: "Buscar"
+        reset: "Restablecer"
+
+    filters:
+        all: "Todos los estados"
+
+    actions:
+        show: "Ver"
+        enable: "Activar"
+        disable: "Desactivar"
+        reset_quotas: "Reset cuotas"
+        verify_email: "Verificar email"
+        unverify_email: "Desverificar email"
+        monthly: "Mensual"
+        yearly: "Anual"
+        delete: "Eliminar"
+        manage: "Gestionar"
+
+    total: "%count% usuario(s) encontrado(s)"
+
+    table:
+        id: "ID"
+        email: "Correo"
+        plan: "Plan"
+        subscription: "Suscripción"
+        verified: "Verificado"
+        active: "Activo"
+        next_billing: "Próxima facturación"
+        created: "Creado el"
+        actions: "Acciones"
+
+    status:
+        yes: "Sí"
+        no: "No"
+        active: "Activo"
+        inactive: "Inactivo"
+
+    confirm:
+        delete: "¿Eliminar este usuario?"
+
+    empty: "Ningún usuario."
+
+    pagination:
+        previous: "Anterior"
+        next: "Siguiente"
+
+user_show:
+    meta:
+        title: "Detalle usuario"
+
+    title: "Detalle usuario"
+
+    back: "Volver"
+
+    account_information: "Información de la cuenta"
+
+    fields:
+        email: "Correo"
+        plan: "Plan"
+        subscription: "Suscripción"
+        verified: "Verificado"
+        monthly_estimations: "Estimaciones mensuales"
+        ai_generations: "Generaciones IA"
+        created_at: "Creado el"
+        next_billing: "Próxima facturación"
+
+    values:
+        yes: "Sí"
+        no: "No"
+
+    properties:
+        title: "Propiedades creadas"
+
+        type: "Tipo"
+        city: "Ciudad"
+        estimate: "Estimación"
+        created_at: "Creado el"
+
+        empty: "Ninguna propiedad."
+
+logs:
+    meta:
+        title: "Logs admin"
+
+    title: "Logs admin"
+
+    back: "Volver al dashboard"
+
+    table:
+        id: "ID"
+        date: "Fecha"
+        actor: "Admin"
+        target_user: "Usuario objetivo"
+        action: "Acción"
+        ip: "IP"
+
+    empty: "Ningún log."        

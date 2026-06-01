@@ -14,14 +14,10 @@ final class OpenAiPropertyAdGenerator
         'charme exceptionnel',
         'magnifique',
         'superbe',
-        'cadre de vie agréable',
         'prestations de qualité',
         'divers aménagements',
-        'cadre de vie',
         'clientèle variée',
-        'surface généreuse',
         'selon vos besoins',
-        'lieu de vie confortable',
         'saura répondre aux attentes',
         'ville dynamique',
         'bien d’exception',
@@ -30,6 +26,13 @@ final class OpenAiPropertyAdGenerator
         'idéalement situé',
         'vous serez séduit',
         'parfait pour',
+        'répondre à vos besoins',
+        'selon vos préférences',
+        'de nombreuses possibilités',
+        'saura répondre aux besoins',
+        'idéal pour',
+        'ideal pour',
+        'vie familiale',
     ];
 
     private const SENSITIVE_TERMS = [
@@ -47,8 +50,6 @@ final class OpenAiPropertyAdGenerator
         'centre ville',
         'parc',
         'espaces verts',
-        'résidence',
-        'residence',
         'vidéo-surveillance',
         'video-surveillance',
         'surveillance',
@@ -58,8 +59,6 @@ final class OpenAiPropertyAdGenerator
         'cave',
         'ascenseur',
         'vue',
-        'lumineux',
-        'lumineuse',
         'travaux',
         'cuisine équipée',
         'cuisine equipee',
@@ -85,15 +84,14 @@ final class OpenAiPropertyAdGenerator
     private function buildPrompt(Property $property, string $locale): string
     {
         $lang = $this->getLanguageConfig($locale);
-        $propertyType = $lang['property_types'][$property->getType()] ?? $property->getType();
 
         return sprintf(
             <<<PROMPT
-You are a senior real estate copywriter.
+You are an experienced real estate copywriter.
 
 Generate the response ONLY in %s.
 
-Write a short, professional real estate listing.
+Write a concise, professional real estate listing intended for publication on a real estate portal.
 
 Allowed data:
 - Property type: %s
@@ -105,27 +103,33 @@ Allowed data:
 - Parking: %s
 - User details: %s
 
-Absolute rules:
-- Use ONLY the allowed data.
-- Never invent missing information.
-- If information is not explicitly provided, do not mention it.
-- Do not mention the price or valuation.
-- Do not write a list.
-- Do not use emojis.
-- Do not use superlatives.
-- Do not use cliché sales phrases.
-- Use short sentences.
-- Keep a professional, sober and credible tone.
-- Maximum 480 characters including spaces.
-- Maximum 3 short paragraphs.
-- End with a simple contact sentence.
+Writing rules:
+- Use a professional real estate agency tone.
+- Describe the property naturally and factually.
+- Use only the information provided.
+- Do not invent features or characteristics.
+- Do not mention unavailable information.
+- Do not mention the valuation or estimated price.
+- Avoid exaggerated marketing language.
+- Avoid superlatives.
+- Write between 380 and 500 characters.
+- Use 2 short paragraphs.
+- End with a simple invitation to contact the agency.
+- Avoid assumptions about the future buyer.
+- Avoid expressions such as:
+  "espace de vie agréable",
+  "idéal pour",
+  "projet de vie",
+  "famille",
+  "répondre à vos besoins".
 
 Important:
-Avoid mentioning neighborhood, school, shops, station, transport, balcony, terrace, garden, cellar, elevator, residence, view, brightness, renovation work or fitted kitchen unless explicitly present in the user details.
+You may mention the property type, address, city, postal code, surface, number of rooms and parking.
+Do not mention school, shops, transport, balcony, terrace, garden, cellar, elevator, view, renovation work or fitted kitchen unless explicitly present in the user details.
 
 PROMPT,
             $lang['language'],
-            $propertyType,
+            $property->getType(),
             $property->getAddress() ?: $lang['not_provided'],
             $property->getCity(),
             $property->getPostalCode(),
@@ -137,7 +141,7 @@ PROMPT,
     }
 
     /**
-     * @return array<string, mixed>
+     * @return array<string, string>
      */
     private function getLanguageConfig(string $locale): array
     {
@@ -148,19 +152,13 @@ PROMPT,
                 'no' => 'No',
                 'not_provided' => 'Not provided',
                 'no_details' => 'No additional details',
-                'fallback_parking' => 'The property includes a parking space.',
-                'fallback_summary' => 'This property offers a simple residential layout.',
-                'fallback_contact' => 'Contact our agency for more information.',
+                'fallback_parking' => 'A parking space is included.',
+                'fallback_summary' => 'The property is described according to the information provided.',
+                'fallback_contact' => 'Contact our agency for more information or to arrange a viewing.',
                 'fallback_location_at' => 'located at',
                 'fallback_location_in' => 'located in',
                 'rooms' => 'rooms',
                 'sqm' => 'sqm',
-                'property_types' => [
-                    'Appartement' => 'Apartment',
-                    'Maison' => 'House',
-                    'Terrain' => 'Land',
-                    'Parking' => 'Parking',
-                ],
             ],
 
             'es' => [
@@ -170,18 +168,12 @@ PROMPT,
                 'not_provided' => 'No especificado',
                 'no_details' => 'Sin detalles adicionales',
                 'fallback_parking' => 'El inmueble dispone de una plaza de aparcamiento.',
-                'fallback_summary' => 'Este inmueble ofrece una distribución residencial sencilla.',
-                'fallback_contact' => 'Contacte con nuestra agencia para más información.',
+                'fallback_summary' => 'El inmueble se describe según la información indicada.',
+                'fallback_contact' => 'Contacte con nuestra agencia para más información o para organizar una visita.',
                 'fallback_location_at' => 'situado en',
                 'fallback_location_in' => 'situado en',
                 'rooms' => 'habitaciones',
                 'sqm' => 'm²',
-                'property_types' => [
-                    'Appartement' => 'Apartamento',
-                    'Maison' => 'Casa',
-                    'Terrain' => 'Terreno',
-                    'Parking' => 'Parking',
-                ],
             ],
 
             default => [
@@ -191,18 +183,12 @@ PROMPT,
                 'not_provided' => 'Non renseignée',
                 'no_details' => 'Aucun détail supplémentaire',
                 'fallback_parking' => 'Le bien dispose d’un stationnement.',
-                'fallback_summary' => 'Ce bien présente une configuration simple à présenter et adaptée à un usage résidentiel.',
-                'fallback_contact' => 'Contactez notre agence pour plus d’informations.',
+                'fallback_summary' => 'Le bien est présenté selon les informations renseignées.',
+                'fallback_contact' => 'Contactez notre agence pour plus d’informations ou pour organiser une visite.',
                 'fallback_location_at' => 'situé au',
                 'fallback_location_in' => 'situé à',
                 'rooms' => 'pièces',
                 'sqm' => 'm²',
-                'property_types' => [
-                    'Appartement' => 'Appartement',
-                    'Maison' => 'Maison',
-                    'Terrain' => 'Terrain',
-                    'Parking' => 'Parking',
-                ],
             ],
         };
     }
@@ -211,17 +197,15 @@ PROMPT,
     {
         $text = trim(strip_tags($text));
         $text = str_replace(["\r\n", "\r"], "\n", $text);
-        $text = preg_replace("/[ \t]+/", ' ', $text) ?? $text;
-        $text = preg_replace("/\n{3,}/", "\n\n", $text) ?? $text;
+        $text = preg_replace('/[ \t]+/', ' ', $text) ?? $text;
+        $text = preg_replace('/\n{3,}/', "\n\n", $text) ?? $text;
         $text = preg_replace('/^\s*[-•]\s*/m', '', $text) ?? $text;
         $text = preg_replace('/\s+([,.!?;:])/', '$1', $text) ?? $text;
         $text = preg_replace('/ {2,}/', ' ', $text) ?? $text;
-        $text = preg_replace("/\n[ \t]+/", "\n", $text) ?? $text;
+        $text = preg_replace('/\n[ \t]+/', "\n", $text) ?? $text;
 
-        foreach (self::FORBIDDEN_TERMS as $term) {
-            if (stripos($text, $term) !== false) {
-                return '';
-            }
+        if ($this->containsForbiddenTerm($text)) {
+            return '';
         }
 
         $text = trim($text);
@@ -236,6 +220,17 @@ PROMPT,
         }
 
         return trim($text);
+    }
+
+    private function containsForbiddenTerm(string $text): bool
+    {
+        foreach (self::FORBIDDEN_TERMS as $term) {
+            if (stripos($text, $term) !== false) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private function isSafeGeneratedText(string $text, Property $property): bool
@@ -262,7 +257,6 @@ PROMPT,
     private function buildFallbackAd(Property $property, string $locale): string
     {
         $lang = $this->getLanguageConfig($locale);
-        $propertyType = $lang['property_types'][$property->getType()] ?? $property->getType();
 
         $location = trim(sprintf(
             '%s %s',
@@ -280,7 +274,7 @@ PROMPT,
 
         return sprintf(
             "%s %d %s de %d %s %s%s\n\n%s\n\n%s",
-            $propertyType,
+            $property->getType(),
             $property->getRooms(),
             $lang['rooms'],
             $property->getSurface(),

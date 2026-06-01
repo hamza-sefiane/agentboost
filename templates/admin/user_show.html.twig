@@ -1,0 +1,204 @@
+{% extends 'base.html.twig' %}
+
+{% trans_default_domain 'admin' %}
+
+{% block title %}
+	{{ 'user_show.meta.title'|trans }}
+{% endblock %}
+
+{% block body %}
+	<div class="container py-5">
+
+		<div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+			<h1 class="mb-0">
+				{{ 'user_show.title'|trans }}
+			</h1>
+
+			<div class="d-flex gap-2">
+				<a href="{{ path('admin_logs') }}" class="btn btn-outline-dark">
+					Logs admin
+				</a>
+
+				<a href="{{ path('admin_users') }}" class="btn btn-outline-secondary">
+					{{ 'user_show.back'|trans }}
+				</a>
+			</div>
+		</div>
+
+		<div class="card mb-4">
+			<div class="card-header">
+				{{ 'user_show.account_information'|trans }}
+			</div>
+
+			<div class="card-body">
+				<div class="row g-4">
+					<div class="col-md-4">
+						<strong>{{ 'user_show.fields.email'|trans }}</strong><br>
+						{{ userData.email }}
+					</div>
+
+					<div class="col-md-4">
+						<strong>{{ 'user_show.fields.plan'|trans }}</strong><br>
+						{{ userData.currentPlan ?: '—' }}
+					</div>
+
+					<div class="col-md-4">
+						<strong>{{ 'user_show.fields.subscription'|trans }}</strong><br>
+						{{ userData.subscriptionStatus }}
+					</div>
+
+					<div class="col-md-4">
+						<strong>{{ 'user_show.fields.verified'|trans }}</strong><br>
+
+						{% if userData.isVerified %}
+							<span class="badge bg-success">
+								{{ 'user_show.values.yes'|trans }}
+							</span>
+						{% else %}
+							<span class="badge bg-danger">
+								{{ 'user_show.values.no'|trans }}
+							</span>
+						{% endif %}
+					</div>
+
+					<div class="col-md-4">
+						<strong>{{ 'user_show.fields.monthly_estimations'|trans }}</strong><br>
+						{{ userData.monthlyEstimations }}
+					</div>
+
+					<div class="col-md-4">
+						<strong>{{ 'user_show.fields.ai_generations'|trans }}</strong><br>
+						{{ userData.monthlyAiGenerations }}
+					</div>
+
+					<div class="col-md-4">
+						<strong>{{ 'user_show.fields.created_at'|trans }}</strong><br>
+
+						{% if userData.createdAt %}
+							{{ userData.createdAt|date('d/m/Y H:i') }}
+						{% else %}
+							—
+						{% endif %}
+					</div>
+
+					<div class="col-md-4">
+						<strong>{{ 'user_show.fields.next_billing'|trans }}</strong><br>
+
+						{% if userData.nextBillingDate %}
+							{{ userData.nextBillingDate|date('d/m/Y H:i') }}
+						{% else %}
+							—
+						{% endif %}
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="card mb-4">
+			<div class="card-header">
+				{{ 'users.table.actions'|trans }}
+			</div>
+
+			<div class="card-body">
+				<div class="d-flex flex-wrap gap-2">
+
+					<form method="post" action="{{ path('admin_user_toggle_subscription', { id: userData.id }) }}">
+						<input type="hidden" name="_token" value="{{ csrf_token('admin_toggle_subscription_' ~ userData.id) }}">
+
+						<button type="submit" class="btn btn-outline-warning">
+							{% if userData.nextBillingDate %}
+								{{ 'users.actions.disable'|trans }}
+							{% else %}
+								{{ 'users.actions.enable'|trans }}
+							{% endif %}
+						</button>
+					</form>
+
+					<form method="post" action="{{ path('admin_user_reset_usage', { id: userData.id }) }}">
+						<input type="hidden" name="_token" value="{{ csrf_token('admin_reset_usage_' ~ userData.id) }}">
+
+						<button type="submit" class="btn btn-outline-secondary">
+							{{ 'users.actions.reset_quotas'|trans }}
+						</button>
+					</form>
+
+					<form method="post" action="{{ path('admin_user_toggle_verified', { id: userData.id }) }}">
+						<input type="hidden" name="_token" value="{{ csrf_token('admin_toggle_verified_' ~ userData.id) }}">
+
+						<button type="submit" class="btn btn-outline-info">
+							{% if userData.isVerified %}
+								{{ 'users.actions.unverify_email'|trans }}
+							{% else %}
+								{{ 'users.actions.verify_email'|trans }}
+							{% endif %}
+						</button>
+					</form>
+
+					<form method="post" action="{{ path('admin_user_change_plan', { id: userData.id, plan: 'monthly' }) }}">
+						<input type="hidden" name="_token" value="{{ csrf_token('admin_change_plan_' ~ userData.id ~ '_monthly') }}">
+
+						<button type="submit" class="btn btn-outline-dark">
+							{{ 'users.actions.monthly'|trans }}
+						</button>
+					</form>
+
+					<form method="post" action="{{ path('admin_user_change_plan', { id: userData.id, plan: 'yearly' }) }}">
+						<input type="hidden" name="_token" value="{{ csrf_token('admin_change_plan_' ~ userData.id ~ '_yearly') }}">
+
+						<button type="submit" class="btn btn-outline-dark">
+							{{ 'users.actions.yearly'|trans }}
+						</button>
+					</form>
+
+					<form method="post" action="{{ path('admin_user_delete', { id: userData.id }) }}" onsubmit="return confirm('{{ 'users.confirm.delete'|trans|e('js') }}')">
+						<input type="hidden" name="_token" value="{{ csrf_token('admin_delete_user_' ~ userData.id) }}">
+
+						<button type="submit" class="btn btn-outline-danger">
+							{{ 'users.actions.delete'|trans }}
+						</button>
+					</form>
+
+				</div>
+			</div>
+		</div>
+
+		<div class="card">
+			<div class="card-header">
+				{{ 'user_show.properties.title'|trans }}
+			</div>
+
+			<div class="card-body">
+				{% if properties is not empty %}
+					<div class="table-responsive">
+						<table class="table align-middle">
+							<thead>
+								<tr>
+									<th>{{ 'users.table.id'|trans }}</th>
+									<th>{{ 'user_show.properties.type'|trans }}</th>
+									<th>{{ 'user_show.properties.city'|trans }}</th>
+									<th>{{ 'user_show.properties.estimate'|trans }}</th>
+								</tr>
+							</thead>
+
+							<tbody>
+								{% for property in properties %}
+									<tr>
+										<td>{{ property.id }}</td>
+										<td>{{ property.type }}</td>
+										<td>{{ property.city }}</td>
+										<td>{{ property.estimate ?: '—' }}</td>
+									</tr>
+								{% endfor %}
+							</tbody>
+						</table>
+					</div>
+				{% else %}
+					<p class="text-muted mb-0">
+						{{ 'user_show.properties.empty'|trans }}
+					</p>
+				{% endif %}
+			</div>
+		</div>
+
+	</div>
+{% endblock %}

@@ -2,17 +2,43 @@
     margin: 0;
 }
 
+@font-face {
+    font-family: "Inter";
+    src: url("/fonts/Inter-Regular.ttf") format("truetype");
+    font-weight: 400;
+}
+
+@font-face {
+    font-family: "Inter";
+    src: url("/fonts/Inter-SemiBold.ttf") format("truetype");
+    font-weight: 600;
+}
+
+@font-face {
+    font-family: "Inter";
+    src: url("/fonts/Inter-Bold.ttf") format("truetype");
+    font-weight: 700;
+}
+
 * {
     box-sizing: border-box;
 }
 
+html,
 body {
     margin: 0;
-    font-family: DejaVu Sans, sans-serif;
-    color: #1f2937;
+    padding: 0;
+}
+
+body {
+    font-family:
+        "Inter",
+        DejaVu Sans,
+        sans-serif;
+    color: #0f172a;
     background: #ffffff;
-    font-size: 12px;
-    line-height: 1.45;
+    font-size: 11px;
+    line-height: 1.38;
 }
 
 img {
@@ -23,485 +49,44 @@ img {
     page-break-inside: avoid;
 }
 
-/* COVER SIMPLE */
-
-.cover {
-    height: 100vh;
-    position: relative;
-    padding: 65px 60px;
-    background: #0f172a;
-    color: #ffffff;
-}
-
-.cover-logo {
-    text-align: right;
-    margin-bottom: 75px;
-}
-
-.cover-logo img {
-    max-width: 170px;
-    max-height: 95px;
-}
-
-.cover-title {
-    font-size: 40px;
-    font-weight: bold;
-    line-height: 1.12;
-    margin-bottom: 24px;
-    text-transform: uppercase;
-}
-
-.cover-city {
-    font-size: 21px;
-    opacity: 0.9;
-    margin-bottom: 60px;
-}
-
-.cover-price-box {
-    width: 410px;
-    padding: 28px;
-    border-radius: 18px;
-    background: rgba(255, 255, 255, 0.08);
-    border: 1px solid rgba(255, 255, 255, 0.16);
-}
-
-.cover-price-label {
-    font-size: 11px;
-    text-transform: uppercase;
-    letter-spacing: 1.8px;
-    opacity: 0.75;
-    margin-bottom: 10px;
-}
-
-.cover-price {
-    font-size: 40px;
-    font-weight: bold;
-    margin-bottom: 10px;
-}
-
-.cover-range {
-    margin-top: 12px;
-    padding-top: 12px;
-    border-top: 1px solid rgba(255, 255, 255, 0.15);
-    font-size: 12px;
-    line-height: 1.45;
-    color: #cbd5e1;
-}
-
-.cover-range strong {
-    color: #ffffff;
-    font-size: 14px;
-}
-
-.cover-footer {
-    position: absolute;
-    bottom: 45px;
-    left: 60px;
-    right: 60px;
-    font-size: 11px;
-    opacity: 0.75;
-}
-
-.cover-footer-table {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-.cover-footer-table td:last-child {
-    text-align: right;
-}
-
-/* PAGE SIMPLE */
-
 .page {
-    padding: 32px 40px;
+    padding: 24px 30px 18px 30px;
 }
 
 .header {
-    margin-bottom: 18px;
+    margin-bottom: 10px;
 }
 
 .company-label,
 .section-title {
-    font-size: 16px;
-    font-weight: bold;
+    font-size: 14px;
+    font-weight: 700;
     color: #0f172a;
-    margin-bottom: 9px;
+    margin-top: 12px;
+    margin-bottom: 8px;
     padding-bottom: 6px;
-    border-bottom: 1px solid #e5e7eb;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.header .company-label {
+    margin-top: 0;
 }
 
 .company-name {
-    font-size: 23px;
-    font-weight: bold;
-    color: #111827;
-    margin-bottom: 6px;
-}
-
-.company-info {
-    color: #6b7280;
-    font-size: 11px;
-    line-height: 1.4;
-}
-
-.section {
-    margin-bottom: 32px;
-}
-
-/* GALLERY SIMPLE */
-
-.photo-hero-wrapper {
-    width: 100%;
-    height: 210px;
-    overflow: hidden;
-    border-radius: 14px;
-    border: 1px solid #e5e7eb;
-    background: #f8fafc;
-    margin-bottom: 18px;
-}
-
-.photo-hero {
-    width: 100%;
-    height: 210px;
-    object-fit: cover;
-}
-
-.photo-thumb-cell {
-    width: 25%;
-    height: 52px;
-    overflow: hidden;
-    border-radius: 8px;
-    border: 1px solid #e5e7eb;
-    background: #f8fafc;
-}
-
-.photo-thumb {
-    width: 100%;
-    height: 52px;
-    object-fit: cover;
-}
-
-.photo-hero,
-.photo-thumb {
-    image-rendering: auto;
-    image-rendering: crisp-edges;
-}
-
-.photo-table {
-    width: 100%;
-    border-collapse: separate;
-    border-spacing: 8px 0;
-    table-layout: fixed;
-}
-
-.gallery-count {
-    margin-top: 8px;
-    margin-bottom: 22px;
-    text-align: right;
-    color: #64748b;
-    font-size: 9px;
-}
-
-/* ESTIMATE */
-
-.estimate-summary {
-    padding: 13px;
-    margin-bottom: 15px;
-    border-radius: 12px;
-    background: #f8fafc;
-    border: 1px solid #e5e7eb;
-}
-
-.estimate-summary-table {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-.estimate-main-label {
-    color: #64748b;
-    font-size: 9px;
-    text-transform: uppercase;
-    letter-spacing: 0.8px;
-    margin-bottom: 5px;
-}
-
-.estimate-main-value {
-    font-size: 29px;
-    font-weight: bold;
+    font-size: 20px;
+    font-weight: 700;
     color: #0f172a;
-}
-
-.estimate-range-box {
-    text-align: right;
-    color: #475569;
-    font-size: 11px;
-    line-height: 1.3;
-}
-
-.estimate-range-box strong {
-    color: #0f172a;
-    font-size: 13px;
-}
-
-/* PROPERTY */
-
-.property-grid-table {
-    width: 100%;
-    border-collapse: separate;
-    border-spacing: 5px;
-    table-layout: fixed;
-}
-
-.property-card {
-    width: 50%;
-    vertical-align: top;
-    padding: 7px;
-    border-radius: 10px;
-    background: #f8fafc;
-    border: 1px solid #e5e7eb;
-}
-
-.property-card-full {
-    width: 100%;
-}
-
-.property-card-label {
-    font-size: 9px;
-    text-transform: uppercase;
-    letter-spacing: 0.8px;
-    color: #64748b;
-    margin-bottom: 4px;
-}
-
-.property-card-value {
-    font-size: 16px;
-    font-weight: bold;
-    color: #0f172a;
-}
-
-/* MARKET */
-
-.market-table {
-    width: 100%;
-    border-collapse: separate;
-    border-spacing: 9px 0;
-    table-layout: fixed;
-    page-break-inside: avoid;
-}
-
-.market-card {
-    width: 33.33%;
-    padding: 11px;
-    vertical-align: top;
-    border-radius: 10px;
-    background: #f8fafc;
-    border: 1px solid #e5e7eb;
-    page-break-inside: avoid;
-
-}
-
-.market-title {
-    font-size: 9px;
-    text-transform: uppercase;
-    color: #64748b;
-    margin-bottom: 5px;
-}
-
-.market-value {
-    font-size: 18px;
-    font-weight: bold;
-    color: #0f172a;
-    margin-bottom: 4px;
-}
-
-.market-sub {
-    color: #6b7280;
-    font-size: 9px;
-    line-height: 1.25;
-}
-
-/* STRATEGY SIMPLE */
-
-.strategy-card {
-    background: #0f172a;
-    color: #ffffff;
-    border-radius: 14px;
-    padding: 17px;
-    margin: 28px 0 0 0;
-}
-
-.strategy-title {
-    font-size: 16px;
-    font-weight: bold;
-    margin-bottom: 11px;
-}
-
-.strategy-metrics {
-    width: 100%;
-    border-collapse: separate;
-    border-spacing: 9px 0;
-    margin-bottom: 11px;
-}
-
-.strategy-metric {
-    width: 50%;
-    padding: 11px;
-    vertical-align: top;
-    border-radius: 10px;
-    background: rgba(255, 255, 255, 0.08);
-}
-
-.strategy-metric-label {
-    font-size: 9px;
-    text-transform: uppercase;
-    color: #cbd5e1;
-    margin-bottom: 4px;
-}
-
-.strategy-metric-value {
-    font-size: 18px;
-    font-weight: bold;
-}
-
-.strategy-list {
-    margin: 0;
-    padding-left: 17px;
-    color: #e5e7eb;
-    font-size: 11px;
-    line-height: 1.45;
-}
-
-.strategy-list li {
     margin-bottom: 3px;
 }
 
-/* ADVICE SIMPLE */
-
-.two-column-table {
-    width: 100%;
-    table-layout: fixed;
-    border-collapse: separate;
-    border-spacing: 12px 0;
-    margin-top: 40px;
-    
-}
-
-.two-column-cell {
-    width: 50%;
-    vertical-align: top;
-}
-
-.advice-box,
-.ad-box {
-    min-height: 320px;
-    padding: 26px;
-    border-radius: 10px;
-    background: #f8fafc;
-    border: 1px solid #e5e7eb;
-    line-height: 1.7;
-}
-
-.advice-list {
-    margin: 0;
-    padding-left: 16px;
-    color: #374151;
-    font-size: 11px;
-    line-height: 1.45;
-}
-
-.advice-list li {
-    margin-bottom: 4px;
-}
-
-.ad-box {
-    border-left: 3px solid #0f172a;
-    white-space: pre-line;
-    color: #374151;
-    font-size: 11px;
-    line-height: 1.45;
-}
-
-/* SIGNATURE SIMPLE */
-
-.signature-table {
-    width: 100%;
-    margin-top: 30px;
-    border-collapse: collapse;
-    page-break-inside: avoid;
-}
-
-.signature-spacer {
-    height: 90px;
-}
-
-.signature-card {
-    width: 74%;
-    padding: 14px;
-    vertical-align: top;
-    border-radius: 10px;
-    background: #f8fafc;
-    border: 1px solid #e5e7eb;
-}
-
-.signature-label {
+.company-info {
     color: #64748b;
     font-size: 9px;
-    text-transform: uppercase;
-    letter-spacing: 0.8px;
-    margin-bottom: 5px;
+    line-height: 1.3;
 }
 
-.signature-name {
-    font-size: 18px;
-    font-weight: bold;
-    color: #111827;
-    margin-bottom: 5px;
-}
-
-.signature-line {
-    width: 170px;
-    margin-top: 12px;
-    border-top: 1px solid #cbd5e1;
-}
-
-.qr-card {
-    width: 26%;
-    text-align: center;
-    vertical-align: middle;
-    padding-left: 10px;
-}
-
-.qr-box {
-    display: inline-block;
-    width: 120px;
-    height: 120px;
-    padding: 4px;
-    background: #ffffff;
-}
-
-.qr-box img {
-    width: 120px;
-    height: 120px;
-    image-rendering: crisp-edges;
-}
-
-.qr-text {
-    margin-top: 5px;
-    color: #64748b;
-    font-size: 10px;
-    line-height: 1.25;
-}
-
-/* FOOTER SIMPLE */
-
-.footer {
-    margin-top: 14px;
-    padding-top: 8px;
-    border-top: 1px solid #e5e7eb;
-    text-align: center;
-    font-size: 10px;
-    line-height: 1.5;
-    color: #9ca3af;
+.section {
+    margin-bottom: 12px;
 }
 
 /* PREMIUM COVER */
@@ -516,12 +101,6 @@ img {
     page-break-after: always;
 }
 
-html,
-body {
-    margin: 0;
-    padding: 0;
-}
-
 .premium-cover-image {
     position: absolute;
     inset: 0;
@@ -534,21 +113,24 @@ body {
     position: absolute;
     inset: 0;
     background: linear-gradient(
-        180deg,
-        rgba(15, 23, 42, 0.45) 0%,
-        rgba(15, 23, 42, 0.88) 100%
+        90deg,
+        rgba(0, 0, 0, 0.72) 0%,
+        rgba(0, 0, 0, 0.42) 46%,
+        rgba(0, 0, 0, 0.1) 100%
     );
 }
 
-.premium-cover-content {
-    position: relative;
-    z-index: 2;
-    height: 100%;
-    padding: 55px;
+.premium-cover-content-clean {
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    padding: 42px;
 }
 
 .premium-cover-top {
-    text-align: right;
+    position: absolute;
+    top: 34px;
+    left: 42px;
 }
 
 .premium-cover-logo {
@@ -556,84 +138,101 @@ body {
     max-height: 75px;
     padding: 10px;
     border-radius: 14px;
-    background: rgba(255, 255, 255, 0.10);
+    background: rgba(255, 255, 255, 0.14);
 }
 
-.premium-cover-center {
-    margin-top: 110px;
+.premium-cover-card {
+    width: 42%;
+    margin: 660px 0 0 52px;
+    padding: 26px 30px 28px 30px;
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.88);
+    backdrop-filter: blur(18px);
+    box-shadow: 0 18px 60px rgba(0, 0, 0, 0.26);
+    text-align: left;
 }
 
 .premium-cover-badge {
     display: inline-block;
-    padding: 8px 16px;
+    margin-bottom: 12px;
+    padding: 6px 12px;
     border-radius: 999px;
-    background: rgba(255, 255, 255, 0.14);
-    font-size: 11px;
-    font-weight: bold;
+    background: #0f172a;
+    color: #ffffff;
+    font-size: 8px;
+    font-weight: 700;
     letter-spacing: 2px;
-    margin-bottom: 24px;
+    text-transform: uppercase;
+}
+
+.premium-cover-document-type {
+    margin-bottom: 8px;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 1.8px;
+    text-transform: uppercase;
+    color: #64748b;
 }
 
 .premium-cover-title {
-    margin: 0;
-    font-size: 44px;
-    line-height: 1.05;
-    font-weight: bold;
+    margin: 0 0 16px 0;
+    font-size: 22px;
+    line-height: 1.08;
+    font-weight: 700;
     letter-spacing: -1px;
+    color: #0f172a;
 }
 
 .premium-cover-location {
-    margin-top: 22px;
-    font-size: 21px;
-    color: rgba(255, 255, 255, 0.88);
-}
-
-.premium-cover-price-card {
-    width: 410px;
-    margin-top: 42px;
-    padding: 26px;
-    border-radius: 22px;
-    background: rgba(255, 255, 255, 0.12);
-    border: 1px solid rgba(255, 255, 255, 0.20);
+    margin-bottom: 18px;
+    font-size: 12px;
+    line-height: 1.45;
+    color: #475569;
 }
 
 .premium-cover-price-label {
-    font-size: 11px;
+    margin-bottom: 7px;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 1.8px;
     text-transform: uppercase;
-    letter-spacing: 2px;
-    color: rgba(255, 255, 255, 0.75);
-    margin-bottom: 12px;
+    color: #64748b;
 }
 
 .premium-cover-price {
-    font-size: 42px;
-    font-weight: bold;
+    font-size: 34px;
     line-height: 1;
+    font-weight: 700;
+    color: #0f172a;
 }
 
 .premium-cover-range {
-    margin-top: 16px;
-    font-size: 14px;
-    color: rgba(255, 255, 255, 0.85);
+    margin-top: 11px;
+    font-size: 12px;
+    font-weight: 700;
+    color: #334155;
 }
 
 .premium-cover-score {
-    margin-top: 18px;
-    padding-top: 18px;
-    border-top: 1px solid rgba(255, 255, 255, 0.18);
-    font-size: 14px;
-    font-weight: bold;
+    display: inline-block;
+    margin-top: 16px;
+    padding: 8px 13px;
+    border-radius: 999px;
+    background: #f1f5f9;
+    color: #0f172a;
+    font-size: 10px;
+    font-weight: 700;
 }
 
 .premium-cover-footer {
     position: absolute;
-    left: 55px;
-    right: 55px;
-    bottom: 40px;
+    left: 42px;
+    right: 42px;
+    bottom: 32px;
     display: table;
-    width: calc(100% - 110px);
-    font-size: 11px;
-    color: rgba(255, 255, 255, 0.78);
+    width: calc(100% - 84px);
+    font-size: 10px;
+    color: rgba(255, 255, 255, 0.45);
 }
 
 .premium-cover-footer div {
@@ -644,73 +243,454 @@ body {
     text-align: right;
 }
 
-/* COMPARABLES PREMIUM */
+/* GALLERY */
+
+.photo-hero-wrapper {
+    width: 100%;
+    height: 170px;
+    overflow: hidden;
+    border-radius: 14px;
+    border: 1px solid #e2e8f0;
+    background: #f8fafc;
+    margin-bottom: 8px;
+}
+
+.photo-hero {
+    width: 100%;
+    height: 170px;
+    object-fit: cover;
+}
+
+.photo-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 7px 0;
+    table-layout: fixed;
+}
+
+.photo-thumb-cell {
+    width: 25%;
+    height: 46px;
+    overflow: hidden;
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+    background: #f8fafc;
+}
+
+.photo-thumb {
+    width: 100%;
+    height: 46px;
+    object-fit: cover;
+}
+
+.gallery-count {
+    margin-top: 5px;
+    margin-bottom: 8px;
+    text-align: right;
+    color: #64748b;
+    font-size: 8px;
+}
+
+/* ESTIMATE */
+
+.estimate-summary {
+    padding: 11px 13px;
+    margin-bottom: 10px;
+    border-radius: 13px;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+}
+
+.estimate-summary-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.estimate-main-label {
+    color: #64748b;
+    font-size: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.9px;
+    margin-bottom: 4px;
+    font-weight: 700;
+}
+
+.estimate-main-value {
+    font-size: 26px;
+    font-weight: 700;
+    color: #0f172a;
+}
+
+.estimate-range-box {
+    text-align: right;
+    color: #475569;
+    font-size: 10px;
+    line-height: 1.3;
+}
+
+.estimate-range-box strong {
+    color: #0f172a;
+    font-size: 12px;
+}
+
+/* PROPERTY */
+
+.property-grid-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 6px;
+    table-layout: fixed;
+}
+
+.property-card {
+    width: 50%;
+    vertical-align: top;
+    padding: 10px 12px;
+    border-radius: 13px;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+}
+
+.property-card-full {
+    width: 100%;
+}
+
+.property-card-label {
+    font-size: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.9px;
+    color: #64748b;
+    margin-bottom: 4px;
+    font-weight: 700;
+}
+
+.property-card-value {
+    font-size: 15px;
+    font-weight: 700;
+    color: #0f172a;
+}
+
+/* MARKET */
+
+.market-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 8px 0;
+    table-layout: fixed;
+}
+
+.market-card {
+    width: 33.33%;
+    padding: 12px;
+    vertical-align: top;
+    border-radius: 13px;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+}
+
+.market-title {
+    font-size: 8px;
+    text-transform: uppercase;
+    color: #64748b;
+    margin-bottom: 5px;
+    font-weight: 700;
+}
+
+.market-value {
+    font-size: 17px;
+    font-weight: 700;
+    color: #0f172a;
+    margin-bottom: 3px;
+}
+
+.market-sub {
+    color: #64748b;
+    font-size: 8px;
+    line-height: 1.25;
+}
+
+/* COMPARABLES */
+
+.comparable-section {
+    margin-top: 12px;
+    page-break-inside: avoid;
+}
+
+.comparable-page-start {
+    margin-top: 30px;
+    padding-top: 15px;
+}
 
 .comparable-page-start .section-title {
-    margin-top: 55px;
-    margin-bottom: 18px;
+    margin-top: 0;
+    margin-bottom: 10px;
 }
 
 .comparable-table {
     width: 100%;
     border-collapse: separate;
-    border-spacing: 9px 0;
+    border-spacing: 8px 0;
     table-layout: fixed;
-    page-break-inside: avoid;
 }
 
 .comparable-card {
     width: 33.33%;
     padding: 12px;
     vertical-align: top;
-    border-radius: 10px;
-    background: #f8fafc;
-    border: 1px solid #e5e7eb;
+    border-radius: 14px;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
 }
 
 .comparable-label {
     font-size: 8px;
     text-transform: uppercase;
-    letter-spacing: 0.8px;
+    letter-spacing: 1px;
     color: #64748b;
     margin-bottom: 5px;
+    font-weight: 700;
 }
 
 .comparable-type {
-    font-size: 15px;
-    font-weight: bold;
+    font-size: 14px;
+    font-weight: 700;
     color: #0f172a;
     margin-bottom: 3px;
 }
 
 .comparable-location,
 .comparable-surface {
-    font-size: 10px;
+    font-size: 9px;
     color: #475569;
-    margin-bottom: 3px;
+    margin-bottom: 2px;
 }
 
 .comparable-price {
-    margin-top: 6px;
+    margin-top: 7px;
     font-size: 12px;
-    font-weight: bold;
-    color: #111827;
+    font-weight: 700;
+    color: #0f172a;
     line-height: 1.3;
 }
 
+.comparable-price-m2,
+.comparable-date,
+.comparable-address {
+    font-size: 9px;
+    color: #475569;
+    line-height: 1.25;
+}
+
 .market-position-box {
-    margin-top: 12px;
-    padding: 13px 15px;
-    border-radius: 10px;
+    margin-top: 10px;
+    padding: 12px;
+    border-radius: 13px;
     background: #0f172a;
     color: #ffffff;
-    font-size: 11px;
-    line-height: 1.45;
+    font-size: 10px;
+    line-height: 1.4;
 }
 
 .comparable-note {
-    margin-top: 7px;
+    margin: 8px 0 16px 0;
+    padding: 10px 14px;
+    border-left: 4px solid #0f172a;
+    background: #f8fafc;
+
+    font-size: 10px;
+    font-weight: 500;
+    color: #334155;
+    line-height: 1.5;
+}
+
+/* STRATEGY */
+
+.strategy-card {
+    background: #0f172a;
+    color: #ffffff;
+    border-radius: 15px;
+    padding: 14px;
+    margin: 10px 0 0 0;
+    page-break-inside: avoid;
+}
+
+.strategy-title {
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 9px;
+}
+
+.strategy-metrics {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 8px 0;
+    margin-bottom: 9px;
+}
+
+.strategy-metric {
+    width: 50%;
+    padding: 10px;
+    vertical-align: top;
+    border-radius: 11px;
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.strategy-metric-label {
     font-size: 8px;
+    text-transform: uppercase;
+    color: #cbd5e1;
+    margin-bottom: 4px;
+    font-weight: 700;
+}
+
+.strategy-metric-value {
+    font-size: 17px;
+    font-weight: 700;
+}
+
+.strategy-list {
+    margin: 0;
+    padding-left: 15px;
+    color: #e5e7eb;
+    font-size: 10px;
+    line-height: 1.35;
+}
+
+.strategy-list li {
+    margin-bottom: 2px;
+}
+
+/* ADVICE / AD */
+
+.two-column-table {
+    width: 100%;
+    table-layout: fixed;
+    border-collapse: separate;
+    border-spacing: 10px 0;
+    margin-top: 10px;
+}
+
+.two-column-cell {
+    width: 50%;
+    vertical-align: top;
+}
+
+.advice-box,
+.ad-box {
+    min-height: 190px;
+    padding: 12px;
+    border-radius: 13px;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    line-height: 1.42;
+}
+
+.advice-list {
+    margin: 0;
+    padding-left: 15px;
+    color: #334155;
+    font-size: 10px;
+    line-height: 1.35;
+}
+
+.advice-list li {
+    margin-bottom: 3px;
+}
+
+.ad-box {
+    border-left: 3px solid #0f172a;
+    white-space: pre-line;
+    color: #334155;
+    font-size: 10px;
+}
+
+/* SIGNATURE */
+
+.signature-spacer {
+    height: 6px;
+}
+
+.signature-table {
+    width: 100%;
+    margin-top: 8px;
+    border-collapse: collapse;
+    page-break-inside: avoid;
+}
+
+.signature-card {
+    width: 100%;
+    padding: 10px;
+    vertical-align: top;
+    border-radius: 13px;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+}
+
+.signature-label {
+    color: #64748b;
+    font-size: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.9px;
+    margin-bottom: 4px;
+    font-weight: 700;
+}
+
+.signature-name {
+    font-size: 16px;
+    font-weight: 700;
+    color: #0f172a;
+    margin-bottom: 4px;
+}
+
+.signature-line {
+    width: 150px;
+    margin-top: 10px;
+    border-top: 1px solid #cbd5e1;
+}
+
+.signature-inner-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.signature-info-cell {
+    vertical-align: top;
+    padding-right: 18px;
+}
+
+.signature-qr-cell {
+    width: 160px;
+    text-align: center;
+    vertical-align: middle;
+    border-left: 1px solid #e2e8f0;
+    padding-left: 18px;
+}
+
+.signature-qr {
+    width: 110px;
+    height: 110px;
+    object-fit: contain;
+}
+
+.signature-qr-label {
+    margin-top: 7px;
+    padding: 8px;
+    border-radius: 9px;
+    background: #0f172a;
+    color: #ffffff;
+    font-size: 9px;
+    font-weight: 600;
+    text-align: center;
+}
+
+/* FOOTER */
+
+.footer {
+    margin-top: 4px;
+    padding-top: 4px;
+    border-top: 1px solid #e2e8f0;
+    text-align: center;
+    font-size: 8px;
+    line-height: 1.3;
     color: #94a3b8;
-    text-align: right;
 }

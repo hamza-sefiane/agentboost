@@ -30,6 +30,10 @@ final class PropertyEstimator
         '06' => 5200,
     ];
 
+    public function __construct(
+        private readonly DvfMarketService $dvfMarketService,
+    ) {}
+
     public function estimate(array $data): array
     {
         $validated = $this->validate($data);
@@ -93,10 +97,8 @@ final class PropertyEstimator
     private function calculateEstimate(array $data): int
     {
         $pricePerM2 = $this->resolvePricePerM2($data);
-
         $estimate = $data['surface'] * $pricePerM2;
 
-        $estimate *= $this->typeCoefficient($data['type']);
         $estimate *= $this->surfaceCoefficient($data['surface']);
         $estimate *= $this->roomsCoefficient($data['type'], $data['rooms'], $data['surface']);
 
@@ -119,6 +121,22 @@ final class PropertyEstimator
 
     private function resolvePricePerM2(array $data): int
     {
+        $dvfPrice = $this->dvfMarketService->getAveragePricePerSqmForLocation(
+            $data['city'],
+            $data['postalCode'],
+            $data['type'],
+            $data['surface']
+        );
+
+        if ($dvfPrice !== null) {
+            return $dvfPrice;
+        }
+
+        return $this->fallbackPricePerM2($data);
+    }
+
+    private function fallbackPricePerM2(array $data): int
+    {
         $prefix = substr($data['postalCode'], 0, 2);
 
         $localPrice = self::POSTAL_PRICE_BY_PREFIX[$prefix]
@@ -129,17 +147,6 @@ final class PropertyEstimator
             'terrain' => (int) round($localPrice * 0.28),
             'parking' => self::BASE_PRICE_BY_TYPE['parking'],
             default => $localPrice,
-        };
-    }
-
-    private function typeCoefficient(string $type): float
-    {
-        return match ($type) {
-            'appartement' => 1.00,
-            'maison' => 1.06,
-            'terrain' => 1.00,
-            'parking' => 1.00,
-            default => 1.00,
         };
     }
 

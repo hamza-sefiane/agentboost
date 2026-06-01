@@ -1,0 +1,139 @@
+stats:
+    meta:
+        title: "Admin statistics"
+
+    title: "Admin statistics"
+
+    cards:
+        users: "Users"
+        active_subscriptions: "Active subscriptions"
+        properties: "Estimated properties"
+        estimated_revenue: "Estimated revenue"
+        conversion_rate: "Conversion rate"
+        free_users: "Free users"
+
+    charts:
+        users_split: "Users distribution"
+        global_view: "Global overview"
+        top_cities: "Top estimated cities"
+
+    tables:
+        latest_users: "Latest users"
+        latest_stripe_events: "Latest Stripe events"
+        email: "Email"
+        status: "Status"
+        plan: "Plan"
+        event: "Event"
+        date: "Date"
+
+    empty:
+        users: "No users."
+        stripe_events: "No Stripe events."
+
+users:
+    meta:
+        title: "User management"
+
+    title: "Users"
+
+    dashboard: "Admin dashboard"
+
+    search:
+        placeholder: "Search by email"
+        button: "Search"
+        reset: "Reset"
+
+    filters:
+        all: "All statuses"
+
+    actions:
+        show: "View"
+        enable: "Enable"
+        disable: "Disable"
+        reset_quotas: "Reset quotas"
+        verify_email: "Verify email"
+        unverify_email: "Unverify email"
+        monthly: "Monthly"
+        yearly: "Yearly"
+        delete: "Delete"
+        manage: "Manage"
+
+    total: "%count% user(s) found"
+
+    table:
+        id: "ID"
+        email: "Email"
+        plan: "Plan"
+        subscription: "Subscription"
+        verified: "Verified"
+        active: "Active"
+        next_billing: "Next billing"
+        created: "Created"
+        actions: "Actions"
+
+    status:
+        yes: "Yes"
+        no: "No"
+        active: "Active"
+        inactive: "Inactive"
+
+    confirm:
+        delete: "Delete this user?"
+
+    empty: "No users."
+
+    pagination:
+        previous: "Previous"
+        next: "Next"
+
+user_show:
+    meta:
+        title: "User details"
+
+    title: "User details"
+
+    back: "Back"
+
+    account_information: "Account information"
+
+    fields:
+        email: "Email"
+        plan: "Plan"
+        subscription: "Subscription"
+        verified: "Verified"
+        monthly_estimations: "Monthly estimations"
+        ai_generations: "AI generations"
+        created_at: "Created at"
+        next_billing: "Next billing"
+
+    values:
+        yes: "Yes"
+        no: "No"
+
+    properties:
+        title: "Created properties"
+
+        type: "Type"
+        city: "City"
+        estimate: "Estimate"
+        created_at: "Created at"
+
+        empty: "No properties."
+
+logs:
+    meta:
+        title: "Admin logs"
+
+    title: "Admin logs"
+
+    back: "Back to dashboard"
+
+    table:
+        id: "ID"
+        date: "Date"
+        actor: "Admin"
+        target_user: "Target user"
+        action: "Action"
+        ip: "IP"
+
+    empty: "No logs."        
