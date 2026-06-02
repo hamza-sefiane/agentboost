@@ -80,9 +80,27 @@
 		{% for photo in property.photos %}
 			<div>
 				<img src="{{ photo.displayUrl }}" alt="Photo du bien" class="property-photo-preview" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+
 				<div class="text-muted small border rounded p-2 bg-light" style="display: none; width: 140px;">
 					Photo indisponible
 				</div>
+
+				{% if photo.premiumCover %}
+					<div class="alert alert-warning py-1 px-2 mt-2 mb-2 text-center small">
+						⭐ Couverture PDF Premium
+					</div>
+				{% endif %}
+
+				<form method="post" action="{{ path('property_photo_cover', { id: photo.id }) }}" class="mt-2">
+					<input type="hidden" name="_token" value="{{ csrf_token('property_photo_cover_' ~ photo.id) }}">
+					<button type="submit" class="btn btn-sm btn-warning w-100">
+						{% if photo.premiumCover %}
+							Photo de couverture
+						{% else %}
+							Définir comme couverture
+						{% endif %}
+					</button>
+				</form>
 
 				<form method="post" action="{{ path('property_photo_delete', { id: photo.id }) }}" onsubmit="return confirm('Supprimer cette photo ?');" class="mt-2">
 					<input type="hidden" name="_token" value="{{ csrf_token('delete_property_photo_' ~ photo.id) }}">

@@ -343,6 +343,41 @@ final class DashboardController extends AbstractController
         ]);
     }
 
+    #[Route('/property-photo/{id}/cover', name: 'property_photo_cover', methods: ['POST'])]
+    public function setPremiumCover(
+        PropertyPhoto $photo,
+        Request $request,
+    ): Response {
+        $property = $photo->getProperty();
+
+        if (!$property instanceof Property) {
+            throw $this->createNotFoundException();
+        }
+
+        $this->denyAccessUnlessGranted('OWNER', $property);
+
+        if (!$this->isCsrfTokenValid(
+            'property_photo_cover_' . $photo->getId(),
+            (string) $request->request->get('_token')
+        )) {
+            throw $this->createAccessDeniedException();
+        }
+
+        foreach ($property->getPhotos() as $propertyPhoto) {
+            $propertyPhoto->setPremiumCover(false);
+        }
+
+        $photo->setPremiumCover(true);
+
+        $this->em->flush();
+
+        $this->addFlash('success', 'Photo de couverture PDF Premium mise à jour.');
+
+        return $this->redirectToRoute('property_edit', [
+            'id' => $property->getId(),
+        ]);
+    }
+
     #[Route('/delete/{id}', name: 'property_delete', methods: ['POST'])]
     public function delete(Property $property, Request $request): Response
     {
@@ -600,9 +635,23 @@ final class DashboardController extends AbstractController
      */
     private function getPhotoDataUris(Property $property): array
     {
+        $photos = $property->getPhotos()->toArray();
+
+        usort($photos, static function (PropertyPhoto $a, PropertyPhoto $b): int {
+            if ($a->isPremiumCover() && !$b->isPremiumCover()) {
+                return -1;
+            }
+
+            if (!$a->isPremiumCover() && $b->isPremiumCover()) {
+                return 1;
+            }
+
+            return $a->getPosition() <=> $b->getPosition();
+        });
+
         $photoUrls = [];
 
-        foreach ($property->getPhotos() as $photo) {
+        foreach ($photos as $photo) {
             $url = $photo->getCloudinaryUrl();
 
             if ($url) {
