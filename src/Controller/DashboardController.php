@@ -120,6 +120,43 @@ final class DashboardController extends AbstractController
         ]);
     }
 
+    #[Route('/property/{id}/recalculate', name: 'property_recalculate', methods: ['POST'])]
+    public function recalculate(
+        Property $property,
+        Request $request,
+        PropertyEstimator $estimator,
+    ): Response {
+        $this->denyAccessUnlessGranted('OWNER', $property);
+
+        if (!$this->isCsrfTokenValid(
+            'recalculate_property_' . $property->getId(),
+            (string) $request->request->get('_token')
+        )) {
+            throw $this->createAccessDeniedException();
+        }
+
+        $result = $estimator->estimate([
+            'type' => $property->getType(),
+            'address' => $property->getAddress(),
+            'postalCode' => $property->getPostalCode(),
+            'city' => $property->getCity(),
+            'surface' => $property->getSurface(),
+            'rooms' => $property->getRooms(),
+            'parking' => $property->hasParking(),
+        ]);
+
+        $property
+            ->setEstimate((int) $result['estimate'])
+            ->setLowEstimate((int) $result['lowEstimate'])
+            ->setHighEstimate((int) $result['highEstimate']);
+
+        $this->em->flush();
+
+        $this->addFlash('success', 'Estimation recalculée.');
+
+        return $this->redirectToRoute('dashboard');
+    }
+
     #[Route('/property/{id}/generate-ad', name: 'property_generate_ad', methods: ['POST'])]
     public function generateAd(
         Property $property,

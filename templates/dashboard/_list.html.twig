@@ -101,6 +101,12 @@
 											</a>
 										</li>
 
+										<li>
+											<button type="submit" form="recalculate-property-form-{{ p.id }}" class="dropdown-item" onclick="return confirm('Recalculer cette estimation ?');">
+												Recalculer l’estimation
+											</button>
+										</li>
+
 										<li><hr class="dropdown-divider"></li>
 
 										<li>
@@ -192,6 +198,10 @@
 	{% for p in properties %}
 		<form id="generate-ad-form-{{ p.id }}" method="post" action="{{ path('property_generate_ad', { id: p.id }) }}" class="d-none">
 			<input type="hidden" name="_token" value="{{ csrf_token('generate_ad_' ~ p.id) }}">
+		</form>
+
+		<form id="recalculate-property-form-{{ p.id }}" method="post" action="{{ path('property_recalculate', { id: p.id }) }}" class="d-none">
+			<input type="hidden" name="_token" value="{{ csrf_token('recalculate_property_' ~ p.id) }}">
 		</form>
 
 		<form id="delete-property-form-{{ p.id }}" method="post" action="{{ path('property_delete', { id: p.id }) }}" class="d-none">
