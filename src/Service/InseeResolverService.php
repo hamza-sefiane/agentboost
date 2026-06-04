@@ -2,16 +2,16 @@
 
 namespace App\Service;
 
+use App\Repository\CityReferenceRepository;
+
 final class InseeResolverService
 {
+    public function __construct(
+        private readonly CityReferenceRepository $cityReferenceRepository,
+    ) {}
+
     public function resolve(string $city, string $postalCode): ?string
     {
-        $city = mb_strtolower(trim($city));
-        $postalCode = trim($postalCode);
-
-        return match (true) {
-            $city === 'yerres' && $postalCode === '91330' => '91691',
-            default => null,
-        };
+        return $this->cityReferenceRepository->findInseeCode($city, $postalCode);
     }
 }
