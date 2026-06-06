@@ -1,4 +1,4 @@
-meta:
+﻿meta:
     title: "Informe de valoración inmobiliaria"
 
 premium:
@@ -7,13 +7,10 @@ premium:
 
 cover:
     badge: "VALORACIÓN PREMIUM"
-    title_line_1: "INFORME DE VALORACIÓN"
-    title_line_2: "INMOBILIARIA"
-
+    title_line_1: "INFORME DE"
+    title_line_2: "VALORACIÓN INMOBILIARIA"
     estimated_value: "Valor estimado"
-
-    ai_score: "Fiabilidad de la estimación"
-
+    ai_score: "Nivel de confianza"
     generated_on: "Generado el"
 
 company:
@@ -24,63 +21,62 @@ gallery:
     attached_photos: "foto(s) adjunta(s)"
 
 estimate:
-    target: "Valoración objetivo"
-
+    target: "Valor estimado"
     range:
-        available: "Rango bajo / alto"
-        unavailable: "Rango no disponible"
+        available: "Rango de valoración"
+        unavailable: "Rango de valoración no disponible"
 
 property:
-    title: "Inmueble valorado"
-
-    type: "Tipo"
+    title: "Detalles del inmueble"
+    type: "Tipo de inmueble"
     surface: "Superficie"
     rooms: "Habitaciones"
-    parking: "Parking"
+    parking: "Aparcamiento"
     location: "Ubicación"
-
     yes: "Sí"
     no: "No"
 
 summary:
     title: "Resumen de la valoración"
-
     estimated_price_m2: "Precio estimado por m²"
-
-    reliability: "Fiabilidad"
-
+    reliability: "Nivel de confianza"
     estimated_delay: "Plazo estimado de venta"
-
-    based_on_target: "Calculado a partir de la valoración objetivo"
-
-    reliability_index: "Índice basado en la información proporcionada"
-
-    indicative_projection: "Proyección indicativa de venta"
+    based_on_target: "Calculado a partir del valor estimado"
+    reliability_index: "Calculado a partir de la información disponible"
+    indicative_projection: "Proyección indicativa del mercado"
 
 comparables:
     title: "Análisis comparativo del mercado"
-
     comparable: "Comparable"
-
-    note: "Comparables procedentes de la base DVF+ (Cerema / DGFiP), seleccionados según la ubicación y las características de la propiedad valorada."
+    intro: "Esta valoración se basa en %count% ventas comparables seleccionadas según la ubicación, el tipo de inmueble y la superficie."
+    intro_details: "Los inmuebles presentados a continuación representan una muestra de las referencias de mercado utilizadas para determinar el valor estimado."
+    note: "Comparables procedentes de la base de datos DVF+ (Cerema / DGFiP), seleccionados según la ubicación y las características del inmueble valorado."
+    sale_date: "Fecha de venta:"
+    market:
+        low: "El inmueble se sitúa por debajo de la media del mercado observado."
+        medium: "El inmueble se sitúa en línea con la media actual del mercado."
+        high: "El inmueble se sitúa por encima de la media del mercado observado."
+    stats:
+        analyzed_sales: "Ventas comparables analizadas"
+        average_price_m2: "Precio medio por m²"
+        median_price_m2: "Precio mediano por m²"
+        estimate_gap: "Diferencia respecto a la valoración"
 
 strategy:
     title: "Estrategia de venta recomendada"
-
     recommended_price: "Precio de publicación recomendado"
-
     negotiation_threshold: "Margen de negociación"
 
 advices:
-    title: "Consejos antes de la venta"
+    title: "Recomendaciones antes de la venta"
 
 ad:
-    title: "Anuncio inmobiliario"
+    title: "Descripción del inmueble"
 
 signature:
-    presented_by: "Documento presentado por"
+    presented_by: "Preparado por"
+    qr_label: "Escanee para ver el inmueble"
 
 footer:
-    confidential: "Valoración inmobiliaria confidencial — Generada con AgentBoost."
-
+    confidential: "Informe confidencial de valoración inmobiliaria — Generado por AgentBoost."
     non_contractual: "Documento no contractual — Referencia:"

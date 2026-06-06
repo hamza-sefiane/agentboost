@@ -15,12 +15,33 @@ class CityReferenceRepository extends ServiceEntityRepository
 
     public function findInseeCode(string $city, string $postalCode): ?string
     {
-        $result = $this->createQueryBuilder('c')
+        $postalCode = trim($postalCode);
+        $normalizedCity = $this->normalizeCity($city);
+
+        $exact = $this->createQueryBuilder('c')
             ->select('c.inseeCode')
             ->andWhere('c.postalCode = :postalCode')
             ->andWhere('c.normalizedCity = :normalizedCity')
-            ->setParameter('postalCode', trim($postalCode))
-            ->setParameter('normalizedCity', $this->normalizeCity($city))
+            ->setParameter('postalCode', $postalCode)
+            ->setParameter('normalizedCity', $normalizedCity)
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult();
+
+        if (isset($exact['inseeCode'])) {
+            return $exact['inseeCode'];
+        }
+
+        return $this->findInseeCodeByPostalCode($postalCode);
+    }
+
+    private function findInseeCodeByPostalCode(string $postalCode): ?string
+    {
+        $result = $this->createQueryBuilder('c')
+            ->select('c.inseeCode')
+            ->andWhere('c.postalCode = :postalCode')
+            ->setParameter('postalCode', $postalCode)
+            ->orderBy('c.id', 'ASC')
             ->setMaxResults(1)
             ->getQuery()
             ->getOneOrNullResult();
@@ -33,8 +54,8 @@ class CityReferenceRepository extends ServiceEntityRepository
         $city = mb_strtolower(trim($city));
 
         $city = str_replace(
-            ['à', 'â', 'ä', 'ç', 'é', 'è', 'ê', 'ë', 'î', 'ï', 'ô', 'ö', 'ù', 'û', 'ü', 'ÿ'],
-            ['a', 'a', 'a', 'c', 'e', 'e', 'e', 'e', 'i', 'i', 'o', 'o', 'u', 'u', 'u', 'y'],
+            ['à', 'â', 'ä', 'ç', 'é', 'è', 'ê', 'ë', 'î', 'ï', 'ô', 'ö', 'ù', 'û', 'ü', 'ÿ', 'œ'],
+            ['a', 'a', 'a', 'c', 'e', 'e', 'e', 'e', 'i', 'i', 'o', 'o', 'u', 'u', 'u', 'y', 'oe'],
             $city
         );
 

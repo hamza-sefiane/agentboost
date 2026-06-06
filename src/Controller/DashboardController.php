@@ -288,6 +288,8 @@ final class DashboardController extends AbstractController
             return $this->redirectToRoute('dashboard');
         }
 
+        $comparableAnalysis = $dvfComparableService->analyze($property);
+
         $html = $this->renderView('pdf/property_premium.html.twig', [
             'property' => $property,
             'logoDataUri' => $this->getLogoDataUri($user),
@@ -297,7 +299,8 @@ final class DashboardController extends AbstractController
             'confidenceScore' => $adviceGenerator->generateConfidenceScore($property),
             'estimatedSaleDelay' => $adviceGenerator->generateEstimatedSaleDelay($property, $locale),
             'qrCodeDataUri' => $qrCodeDataUri,
-            'comparables' => $dvfComparableService->findComparables($property),
+            'comparables' => $comparableAnalysis['comparables'],
+            'comparableStats' => $comparableAnalysis['stats'],
             'marketPosition' => $comparableGenerator->generateMarketPosition($property),
         ]);
 
