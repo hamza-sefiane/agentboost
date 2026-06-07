@@ -10,7 +10,6 @@
 {% else %}
 	{% set properties = properties|sort((a, b) => b.estimate <=> a.estimate) %}
 
-	```
 	<form method="post" action="{{ path('property_bulk_delete') }}" id="bulk-delete-form" onsubmit="return confirmBulkDelete();">
 		<input type="hidden" name="_token" value="{{ csrf_token('bulk_delete_properties') }}">
 
@@ -234,6 +233,5 @@
 			</div>
 		</div>
 	</div>
-	```
 
 {% endif %}
