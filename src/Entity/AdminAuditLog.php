@@ -27,6 +27,7 @@ class AdminAuditLog
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\ManyToOne(inversedBy: 'adminAuditLogs')]
+    #[ORM\JoinColumn(onDelete: 'SET NULL')]
     private ?User $targetUser = null;
 
     public function getId(): ?int
