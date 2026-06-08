@@ -74,6 +74,98 @@
 		</div>
 	</form>
 
+	{% if comparableAnalysis.stats %}
+		<div class="card border-primary mb-4">
+			<div class="card-header bg-primary text-white">
+				Analyse du marché DVF
+			</div>
+
+			<div class="card-body">
+				<div class="row text-center">
+
+					<div class="col-md-2">
+						<h5>{{ comparableAnalysis.stats.count }}</h5>
+						<small>Ventes</small>
+					</div>
+
+					<div class="col-md-2">
+						<h5>{{ comparableAnalysis.stats.medianPricePerSqm|number_format(0, ',', ' ') }}
+							€/m²</h5>
+						<small>Médiane</small>
+					</div>
+
+					<div class="col-md-2">
+						<h5>{{ comparableAnalysis.stats.averagePricePerSqm|number_format(0, ',', ' ') }}
+							€/m²</h5>
+						<small>Moyenne</small>
+					</div>
+
+					<div class="col-md-2">
+						<h5>{{ comparableAnalysis.stats.minPricePerSqm|number_format(0, ',', ' ') }}
+							€/m²</h5>
+						<small>Minimum</small>
+					</div>
+
+					<div class="col-md-2">
+						<h5>{{ comparableAnalysis.stats.maxPricePerSqm|number_format(0, ',', ' ') }}
+							€/m²</h5>
+						<small>Maximum</small>
+					</div>
+
+					<div class="col-md-2">
+						<h5>
+							{% if comparableAnalysis.stats.gapPercent is not null %}
+								{{ comparableAnalysis.stats.gapPercent }}
+								%
+							{% else %}
+								—
+							{% endif %}
+						</h5>
+						<small>Écart marché</small>
+					</div>
+
+				</div>
+			</div>
+		</div>
+	{% endif %}
+
+	{% if comparableAnalysis.comparables is not empty %}
+		<div class="card mb-4">
+			<div class="card-header">
+				Dernières ventes comparables DVF
+			</div>
+
+			<div class="table-responsive">
+				<table class="table mb-0">
+					<thead>
+						<tr>
+							<th>Date</th>
+							<th>Type</th>
+							<th>Surface</th>
+							<th>Prix</th>
+							<th>Prix/m²</th>
+						</tr>
+					</thead>
+
+					<tbody>
+						{% for comparable in comparableAnalysis.comparables %}
+							<tr>
+								<td>{{ comparable.saleDate }}</td>
+								<td>{{ comparable.type }}</td>
+								<td>{{ comparable.surface }}
+									m²</td>
+								<td>{{ comparable.price|number_format(0, ',', ' ') }}
+									€</td>
+								<td>{{ comparable.pricePerSqm|number_format(0, ',', ' ') }}
+									€/m²</td>
+							</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
+		</div>
+	{% endif %}
+
 	<h2 class="mb-3">Photos actuelles</h2>
 
 	<div class="d-flex flex-wrap gap-3">

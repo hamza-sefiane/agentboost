@@ -95,8 +95,12 @@ final class DashboardController extends AbstractController
     }
 
     #[Route('/property/{id}/edit', name: 'property_edit', methods: ['GET', 'POST'])]
-    public function edit(Property $property, Request $request, PropertyEstimator $estimator): Response
-    {
+    public function edit(
+        Property $property,
+        Request $request,
+        PropertyEstimator $estimator,
+        DvfComparableService $dvfComparableService,
+    ): Response {
         $this->denyAccessUnlessGranted('OWNER', $property);
 
         $user = $this->getAuthenticatedUser();
@@ -117,6 +121,7 @@ final class DashboardController extends AbstractController
 
         return $this->render('dashboard/edit.html.twig', [
             'property' => $property,
+            'comparableAnalysis' => $dvfComparableService->analyze($property),
         ]);
     }
 
