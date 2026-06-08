@@ -62,13 +62,13 @@
 
 											{% if isYearlyPremium %}
 												<li>
-													<button type="button" class="dropdown-item" data-ad="{{ p.adText|e('html_attr') }}" onclick="copyLeboncoin(this.dataset.ad)">
+													<button type="button" class="dropdown-item" data-ad="{{ p.adText|e('html_attr') }}" data-type="{{ p.type|e('html_attr') }}" data-price="{{ p.estimate }}" data-surface="{{ p.surface }}" data-rooms="{{ p.rooms }}" data-parking="{{ p.parking ? 'Oui' : 'Non' }}" data-address="{{ p.address|default('')|e('html_attr') }}" data-postal-code="{{ p.postalCode|e('html_attr') }}" data-city="{{ p.city|e('html_attr') }}" onclick="copyLeboncoin(this.dataset)">
 														Format Leboncoin
 													</button>
 												</li>
 
 												<li>
-													<button type="button" class="dropdown-item" data-ad="{{ p.adText|e('html_attr') }}" onclick="shareFacebook(this.dataset.ad)">
+													<button type="button" class="dropdown-item" data-ad="{{ p.adText|e('html_attr') }}" data-type="{{ p.type|e('html_attr') }}" data-price="{{ p.estimate }}" data-surface="{{ p.surface }}" data-rooms="{{ p.rooms }}" data-parking="{{ p.parking ? 'Oui' : 'Non' }}" data-address="{{ p.address|default('')|e('html_attr') }}" data-postal-code="{{ p.postalCode|e('html_attr') }}" data-city="{{ p.city|e('html_attr') }}" onclick="shareFacebook(this.dataset)">
 														Publier sur Facebook
 													</button>
 												</li>
@@ -99,6 +99,12 @@
 											<a href="{{ path('property_edit', { id: p.id }) }}" class="dropdown-item">
 												Modifier
 											</a>
+										</li>
+
+										<li>
+											<button type="submit" form="recalculate-property-form-{{ p.id }}" class="dropdown-item" onclick="return confirm('Recalculer cette estimation ?');">
+												Recalculer l’estimation
+											</button>
 										</li>
 
 										<li><hr class="dropdown-divider"></li>
@@ -194,6 +200,10 @@
 			<input type="hidden" name="_token" value="{{ csrf_token('generate_ad_' ~ p.id) }}">
 		</form>
 
+		<form id="recalculate-property-form-{{ p.id }}" method="post" action="{{ path('property_recalculate', { id: p.id }) }}" class="d-none">
+			<input type="hidden" name="_token" value="{{ csrf_token('recalculate_property_' ~ p.id) }}">
+		</form>
+
 		<form id="delete-property-form-{{ p.id }}" method="post" action="{{ path('property_delete', { id: p.id }) }}" class="d-none">
 			<input type="hidden" name="_token" value="{{ csrf_token('delete_property_' ~ p.id) }}">
 		</form>
@@ -223,4 +233,5 @@
 			</div>
 		</div>
 	</div>
+
 {% endif %}

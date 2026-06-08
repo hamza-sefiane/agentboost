@@ -20,7 +20,8 @@
 		{% set agencyCity = currentUser.agencyCity|default(null) %}
 		{% set agencyLegacyAddress = currentUser.companyAddress|default(null) %}
 		{% set photos = photoDataUris is defined and photoDataUris is iterable ? photoDataUris : [] %}
-		{% set surface = property.surface > 0 ? property.surface : 1 %}
+		{% set hasSurface = property.surface is defined and property.surface > 0 %}
+		{% set isSpecialAsset = property.type is defined and property.type|lower in ['parking', 'terrain'] %}
 
 		<div class="premium-cover">
 			{% if photos|length > 0 %}
@@ -71,7 +72,7 @@
 						<div class="premium-cover-range">
 							{{ property.lowEstimate|number_format(0, ',', ' ') }}
 							€
-																																																																													—
+																																																																																																																																					—
 							{{ property.highEstimate|number_format(0, ',', ' ') }}
 							€
 						</div>
@@ -178,7 +179,7 @@
 								<strong>
 									{{ property.lowEstimate|number_format(0, ',', ' ') }}
 									€
-																																																																																																			—
+																																																																																																																																																																											—
 									{{ property.highEstimate|number_format(0, ',', ' ') }}
 									€
 								</strong>
@@ -202,8 +203,12 @@
 
 						<td class="property-card">
 							<div class="property-card-label">{{ 'property.surface'|trans({}, 'pdf') }}</div>
-							<div class="property-card-value">{{ property.surface }}
-								m²</div>
+							<div class="property-card-value">
+								{% if hasSurface %}
+									{{ property.surface }}
+									m²{% else %}—
+								{% endif %}
+							</div>
 						</td>
 					</tr>
 
@@ -211,7 +216,7 @@
 						<td class="property-card">
 							<div class="property-card-label">{{ 'property.rooms'|trans({}, 'pdf') }}</div>
 							<div class="property-card-value">
-								{{ property.type|lower == 'parking' or property.type|lower == 'terrain' ? '—' : property.rooms }}
+								{{ isSpecialAsset ? '—' : property.rooms|default('—') }}
 							</div>
 						</td>
 
@@ -246,8 +251,12 @@
 						<td class="market-card">
 							<div class="market-title">{{ 'summary.estimated_price_m2'|trans({}, 'pdf') }}</div>
 							<div class="market-value">
-								{{ (property.estimate / surface)|round(0, 'floor')|number_format(0, ',', ' ') }}
-								€/m²
+								{% if hasSurface %}
+									{{ (property.estimate / property.surface)|round(0, 'floor')|number_format(0, ',', ' ') }}
+									€/m²
+								{% else %}
+									—
+								{% endif %}
 							</div>
 							<div class="market-sub">{{ 'summary.based_on_target'|trans({}, 'pdf') }}</div>
 						</td>
@@ -269,56 +278,122 @@
 			</div>
 
 			{% if comparables is defined and comparables is iterable and comparables is not empty %}
+				{% set displayedComparables = comparables|slice(0, 10) %}
 				<div class="section no-break comparable-section comparable-page-start">
 					<div class="section-title">{{ 'comparables.title'|trans({}, 'pdf') }}</div>
+
 					<div class="comparable-note">
-						Analyse réalisée à partir de 10 ventes DVF comparables sélectionnées selon la localisation, le type de bien et la surface.
-						
-						Les ventes présentées ci-dessous constituent un échantillon représentatif des références utilisées pour l'évaluation.
+						{{ 'comparables.intro'|trans({
+							'%count%': comparableStats.count|default(displayedComparables|length)
+						}, 'pdf') }}
+
+						{{ 'comparables.intro_details'|trans({}, 'pdf') }}
 					</div>
-					<table class="comparable-table">
-						<tr>
-							{% for comparable in comparables %}
-								<td class="comparable-card">
-									<div class="comparable-label">
-										{{ 'comparables.comparable'|trans({}, 'pdf') }}
-										{{ loop.index }}
+
+					{% if comparableStats is defined and comparableStats %}
+						<table class="comparable-stats-table">
+							<tr>
+								<td class="comparable-stat-card">
+									<div class="comparable-stat-label">
+										{{ 'comparables.stats.analyzed_sales'|trans({}, 'pdf') }}
 									</div>
-
-									<div class="comparable-type">{{ comparable.type|default(property.type) }}</div>
-									<div class="comparable-location">{{ comparable.city|default(property.city)|upper }}</div>
-									{% if comparable.address %}
-										<div class="comparable-address">
-											{{ comparable.address }}
-										</div>
-									{% endif %}
-									<div class="comparable-surface">{{ comparable.surface|default(property.surface) }}
-										m²</div>
-
-									<div class="comparable-price">
-										{{ comparable.price|number_format(0, ',', ' ') }}
-										€
+									<div class="comparable-stat-value">
+										{{ comparableStats.count }}
 									</div>
+								</td>
 
-									<div class="comparable-price-m2">
-										{{ comparable.pricePerSqm|number_format(0, ',', ' ') }}
+								<td class="comparable-stat-card">
+									<div class="comparable-stat-label">
+										{{ 'comparables.stats.average_price_m2'|trans({}, 'pdf') }}
+									</div>
+									<div class="comparable-stat-value">
+										{{ comparableStats.averagePricePerSqm|number_format(0, ',', ' ') }}
 										€/m²
 									</div>
-
-									{% if comparable.saleDate %}
-										<div class="comparable-date">
-											Vente :
-											{{ comparable.saleDate }}
-										</div>
-									{% endif %}
 								</td>
-							{% endfor %}
-						</tr>
+
+								<td class="comparable-stat-card">
+									<div class="comparable-stat-label">
+										{{ 'comparables.stats.median_price_m2'|trans({}, 'pdf') }}
+									</div>
+									<div class="comparable-stat-value">
+										{{ comparableStats.medianPricePerSqm|number_format(0, ',', ' ') }}
+										€/m²
+									</div>
+								</td>
+
+								<td class="comparable-stat-card">
+									<div class="comparable-stat-label">
+										{{ 'comparables.stats.estimate_gap'|trans({}, 'pdf') }}
+									</div>
+									<div class="comparable-stat-value">
+										{% if comparableStats.gapPercent is not null %}
+											{{ comparableStats.gapPercent > 0 ? '+' : '' }}{{ comparableStats.gapPercent }}
+											%
+										{% else %}
+											—
+										{% endif %}
+									</div>
+								</td>
+							</tr>
+						</table>
+					{% endif %}
+
+					<table class="comparable-table">
+						{% for row in displayedComparables|batch(2) %}
+							{% set rowOffset = loop.index0 * 2 %}
+							<tr>
+								{% for comparable in row %}
+									<td class="comparable-card">
+										<div class="comparable-label">
+											{{ 'comparables.comparable'|trans({}, 'pdf') }}
+											{{ rowOffset + loop.index }}
+										</div>
+
+										<div class="comparable-type">{{ comparable.type|default(property.type) }}</div>
+										<div class="comparable-location">{{ comparable.city|default(property.city)|upper }}</div>
+
+										{% if comparable.address is defined and comparable.address %}
+											<div class="comparable-address">{{ comparable.address }}</div>
+										{% endif %}
+
+										<div class="comparable-surface">
+											{{ comparable.surface|default(property.surface) }}
+											m²
+										</div>
+
+										<div class="comparable-price">
+											{{ comparable.price|default(0)|number_format(0, ',', ' ') }}
+											€
+										</div>
+
+										{% if comparable.pricePerSqm is defined and comparable.pricePerSqm %}
+											<div class="comparable-price-m2">
+												{{ comparable.pricePerSqm|number_format(0, ',', ' ') }}
+												€/m²
+											</div>
+										{% endif %}
+
+										{% if comparable.distance is defined and comparable.distance %}
+											<div class="comparable-date">Distance :
+												{{ comparable.distance }}</div>
+										{% endif %}
+
+										{% if comparable.saleDate is defined and comparable.saleDate %}
+											<div class="comparable-date">
+												Vente :
+												{{ comparable.saleDate }}
+											</div>
+										{% endif %}
+									</td>
+								{% endfor %}
+							</tr>
+						{% endfor %}
 					</table>
 
 					{% if marketPosition is defined and marketPosition %}
 						<div class="market-position-box">
-							{{ marketPosition }}
+							{{ marketPosition|trans({}, 'pdf') }}
 						</div>
 					{% endif %}
 
@@ -328,7 +403,7 @@
 				</div>
 			{% endif %}
 
-			<div class="section no-break">
+			<div class="section">
 				<div class="strategy-card">
 					<div class="strategy-title">{{ 'strategy.title'|trans({}, 'pdf') }}</div>
 
@@ -361,7 +436,7 @@
 			</div>
 
 			{% if (sellingAdvices is defined and sellingAdvices is iterable and sellingAdvices is not empty) or property.adText %}
-				<table class="two-column-table no-break">
+				<table class="two-column-table">
 					<tr>
 						{% if sellingAdvices is defined and sellingAdvices is iterable and sellingAdvices is not empty %}
 							<td class="two-column-cell">
@@ -393,67 +468,6 @@
 					</tr>
 				</table>
 			{% endif %}
-
-			<div class="signature-spacer"></div>
-
-			<table class="signature-table no-break">
-				<tr>
-					<td class="signature-card">
-						<table class="signature-inner-table">
-							<tr>
-								<td class="signature-info-cell">
-									<div class="signature-label">{{ 'signature.presented_by'|trans({}, 'pdf') }}</div>
-									<div class="signature-name">{{ agencyName }}</div>
-
-									<div class="company-info">
-										{% if agencyStreet %}
-											{{ agencyStreet }}
-											{% if agencyAddressComplement %}
-												—
-												{{ agencyAddressComplement }}
-											{% endif %}<br>
-										{% elseif agencyAddressComplement %}
-											{{ agencyAddressComplement }}<br>
-										{% endif %}
-
-										{% if agencyPostalCode or agencyCity %}
-											{{ agencyPostalCode }}
-											{{ agencyCity }}<br>
-										{% elseif agencyLegacyAddress %}
-											{{ agencyLegacyAddress|nl2br }}<br>
-										{% endif %}
-
-										{% if agencyPhone %}
-											Tél :
-											{{ agencyPhone }}<br>
-										{% endif %}
-
-										{% if agencyEmail %}
-											{{ agencyEmail }}<br>
-										{% endif %}
-
-										{% if agencyWebsite %}
-											{{ agencyWebsite }}
-										{% endif %}
-									</div>
-
-									<div class="signature-line"></div>
-								</td>
-
-								{% if qrCodeDataUri is defined and qrCodeDataUri %}
-									<td class="signature-qr-cell">
-										<img src="{{ qrCodeDataUri }}" class="signature-qr" alt="QR Code">
-
-										<div class="signature-qr-label">
-											Scanner pour voir le bien
-										</div>
-									</td>
-								{% endif %}
-							</tr>
-						</table>
-					</td>
-				</tr>
-			</table>
 
 			<div class="footer">
 				{{ 'footer.confidential'|trans({}, 'pdf') }}<br>

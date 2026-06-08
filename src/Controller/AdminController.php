@@ -5,6 +5,8 @@ namespace App\Controller;
 use App\Entity\Property;
 use App\Entity\User;
 use Doctrine\DBAL\Connection;
+use App\Entity\AdminAuditLog;
+use App\Repository\AdminAuditLogRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -337,32 +339,36 @@ final class AdminController extends AbstractController
             return;
         }
 
-        $this->connection->insert('admin_audit_log', [
-            'actor_email' => $user->getEmail(),
-            'target_user_id' => $targetUserId,
-            'action' => $action,
-            'ip_address' => $request->getClientIp(),
-            'created_at' => (new \DateTimeImmutable())->format('Y-m-d H:i:s'),
-        ]);
+        $targetUser = null;
+
+        if ($targetUserId !== null) {
+            $targetUser = $this->em
+                ->getRepository(User::class)
+                ->find($targetUserId);
+        }
+
+        $log = new AdminAuditLog();
+
+        $log
+            ->setActorEmail($user->getEmail())
+            ->setEvent($action)
+            ->setIpAddress($request->getClientIp())
+            ->setCreatedAt(new \DateTimeImmutable())
+            ->setTargetUser($targetUser);
+
+        $this->em->persist($log);
     }
 
     #[Route('/logs', name: 'admin_logs', methods: ['GET'])]
-    public function logs(): Response
+    public function logs(AdminAuditLogRepository $repository): Response
     {
         $this->denyUnlessOwnerAdmin();
 
-        $logs = $this->connection->fetchAllAssociative('
-        SELECT
-            id,
-            actor_email,
-            target_user_id,
-            action,
-            ip_address,
-            created_at
-        FROM admin_audit_log
-        ORDER BY id DESC
-        LIMIT 100
-    ');
+        $logs = $repository->findBy(
+            [],
+            ['id' => 'DESC'],
+            100
+        );
 
         return $this->render('admin/logs.html.twig', [
             'logs' => $logs,

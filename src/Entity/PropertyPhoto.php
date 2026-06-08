@@ -26,6 +26,9 @@ class PropertyPhoto
     #[ORM\Column]
     private int $position = 0;
 
+    #[ORM\Column(options: ['default' => false])]
+    private bool $premiumCover = false;
+
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
 
@@ -106,6 +109,18 @@ class PropertyPhoto
     public function setPosition(?int $position): self
     {
         $this->position = max(0, (int) $position);
+
+        return $this;
+    }
+
+    public function isPremiumCover(): bool
+    {
+        return $this->premiumCover;
+    }
+
+    public function setPremiumCover(bool $premiumCover): self
+    {
+        $this->premiumCover = $premiumCover;
 
         return $this;
     }

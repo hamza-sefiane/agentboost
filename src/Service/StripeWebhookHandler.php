@@ -18,8 +18,8 @@ final class StripeWebhookHandler
         private readonly SubscriptionMailerInterface $mailer,
         private readonly ParameterBagInterface $params,
         private readonly LoggerInterface $logger,
-    ) {
-    }
+        private readonly NotificationService $notificationService,
+    ) {}
 
     public function handle(Event $event): void
     {
@@ -52,6 +52,7 @@ final class StripeWebhookHandler
 
         match ($event->type) {
             'invoice.payment_succeeded' => $this->handleInvoicePaid($event->data->object),
+            'invoice.payment_failed' => $this->handleInvoiceFailed($event->data->object),
             'customer.subscription.updated' => $this->handleSubscriptionUpdated($event->data->object),
             'customer.subscription.deleted' => $this->handleSubscriptionDeleted($event->data->object),
             default => null,
@@ -105,7 +106,43 @@ final class StripeWebhookHandler
                 'Utilisateur',
                 $user->getCurrentPlan()
             );
+
+            $this->notificationService->success(
+                $user,
+                'Abonnement activé',
+                sprintf(
+                    'Votre abonnement %s est maintenant actif.',
+                    $user->getCurrentPlan() === User::PLAN_YEARLY ? 'annuel' : 'mensuel'
+                )
+            );
+
+            return;
         }
+
+        $this->notificationService->success(
+            $user,
+            'Paiement confirmé',
+            'Votre paiement a été validé et votre accès reste actif.'
+        );
+    }
+
+    private function handleInvoiceFailed(Invoice $invoice): void
+    {
+        if (!$invoice->customer) {
+            return;
+        }
+
+        $user = $this->findUser((string) $invoice->customer);
+
+        if (!$user) {
+            return;
+        }
+
+        $this->notificationService->warning(
+            $user,
+            'Paiement échoué',
+            'Votre dernier paiement n’a pas abouti. Vérifiez votre moyen de paiement pour éviter une interruption.'
+        );
     }
 
     private function handleSubscriptionUpdated(Subscription $sub): void
@@ -134,6 +171,15 @@ final class StripeWebhookHandler
                         'Utilisateur',
                         $endDate
                     );
+
+                    $this->notificationService->warning(
+                        $user,
+                        'Résiliation programmée',
+                        sprintf(
+                            'Votre abonnement restera actif jusqu’au %s.',
+                            $endDate->format('d/m/Y')
+                        )
+                    );
                 }
             }
 
@@ -146,6 +192,12 @@ final class StripeWebhookHandler
             if ($periodEnd) {
                 $user->activateSubscription(
                     (new \DateTimeImmutable())->setTimestamp((int) $periodEnd)
+                );
+
+                $this->notificationService->success(
+                    $user,
+                    'Résiliation annulée',
+                    'Votre abonnement est de nouveau actif.'
                 );
             }
         }
@@ -168,6 +220,12 @@ final class StripeWebhookHandler
         }
 
         $user->deactivateSubscription();
+
+        $this->notificationService->info(
+            $user,
+            'Abonnement terminé',
+            'Votre abonnement est terminé. Vous pouvez le réactiver à tout moment.'
+        );
     }
 
     private function findUser(string $stripeCustomerId): ?User

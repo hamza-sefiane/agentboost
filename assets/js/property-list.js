@@ -25,16 +25,124 @@ function copyFromModal() {
     copyToClipboard(currentAd || "", "Annonce copiée");
 }
 
-function copyLeboncoin(text) {
-    const formatted = (text || "").replace(/\n/g, "\n\n").toUpperCase();
+function copyLeboncoin(data) {
+    const property = normalizePropertyData(data);
+
+    const title = [
+        property.type,
+        property.surface ? `${property.surface} m²` : null,
+        property.city ? property.city.toUpperCase() : null,
+    ]
+        .filter(Boolean)
+        .join(" - ");
+
+    const formatted = [
+        title,
+        "",
+        `Prix : ${formatPrice(property.price)} €`,
+        property.address ? `Adresse : ${property.address}` : null,
+        property.postalCode || property.city
+            ? `Localisation : ${[property.postalCode, property.city].filter(Boolean).join(" ")}`
+            : null,
+        property.surface ? `Surface : ${property.surface} m²` : null,
+        property.rooms && property.type.toLowerCase() !== "parking"
+            ? `Pièces : ${property.rooms}`
+            : null,
+        `Parking : ${property.parking || "Non"}`,
+        "",
+        "Description",
+        property.ad,
+        "",
+        "Contactez l’agence pour plus d’informations ou pour organiser une visite.",
+    ]
+        .filter((line) => line !== null && line !== undefined && line !== "")
+        .join("\n");
 
     copyToClipboard(formatted, "Format Leboncoin copié");
 }
 
-function shareFacebook(text) {
-    copyToClipboard(text || "", "Annonce copiée pour Facebook");
+function shareFacebook(data) {
+    const property = normalizePropertyData(data);
+
+    const formatted = [
+        `🏡 ${property.type} à ${property.city || "découvrir"}`,
+        "",
+        property.price ? `💰 ${formatPrice(property.price)} €` : null,
+        property.surface ? `📐 ${property.surface} m²` : null,
+        property.rooms && property.type.toLowerCase() !== "parking"
+            ? `🛋️ ${property.rooms} pièce${Number(property.rooms) > 1 ? "s" : ""}`
+            : null,
+        property.parking === "Oui" ? "🚗 Parking inclus" : null,
+        property.city || property.postalCode
+            ? `📍 ${[property.postalCode, property.city].filter(Boolean).join(" ")}`
+            : null,
+        "",
+        property.ad,
+        "",
+        "📩 Contactez-nous pour plus d’informations ou pour organiser une visite.",
+        "",
+        buildHashtags(property),
+    ]
+        .filter((line) => line !== null && line !== undefined && line !== "")
+        .join("\n");
+
+    copyToClipboard(formatted, "Post Facebook copié");
 
     window.open("https://www.facebook.com/", "_blank", "noopener,noreferrer");
+}
+
+function normalizePropertyData(data) {
+    if (typeof data === "string") {
+        return {
+            ad: data,
+            type: "Bien immobilier",
+            price: "",
+            surface: "",
+            rooms: "",
+            parking: "",
+            address: "",
+            postalCode: "",
+            city: "",
+        };
+    }
+
+    return {
+        ad: data.ad || "",
+        type: data.type || "Bien immobilier",
+        price: data.price || "",
+        surface: data.surface || "",
+        rooms: data.rooms || "",
+        parking: data.parking || "",
+        address: data.address || "",
+        postalCode: data.postalCode || "",
+        city: data.city || "",
+    };
+}
+
+function formatPrice(value) {
+    const number = Number(value);
+
+    if (!Number.isFinite(number) || number <= 0) {
+        return "";
+    }
+
+    return new Intl.NumberFormat("fr-FR").format(number);
+}
+
+function buildHashtags(property) {
+    const city = (property.city || "")
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/[^a-zA-Z0-9]/g, "");
+
+    return [
+        "#Immobilier",
+        "#VenteImmobiliere",
+        city ? `#${city}` : null,
+        property.type ? `#${property.type.replace(/\s+/g, "")}` : null,
+    ]
+        .filter(Boolean)
+        .join(" ");
 }
 
 function copyToClipboard(text, successMessage) {

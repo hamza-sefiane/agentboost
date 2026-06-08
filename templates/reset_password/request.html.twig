@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-	{{ 'forgot_password.meta.title'|trans }}
+	{{ 'meta.title'|trans({}, 'reset_password') }}
 {% endblock %}
 
 {% block stylesheets %}
@@ -14,7 +14,7 @@
 		<div class="auth-card">
 
 			<h1 class="auth-title">
-				{{ 'forgot_password.title'|trans }}
+				{{ 'title'|trans({}, 'reset_password') }}
 			</h1>
 
 			{% for flash_error in app.flashes('reset_password_error') %}
@@ -24,43 +24,41 @@
 			{% endfor %}
 
 			<p class="auth-helper text-center mb-4">
-				{{ 'forgot_password.helper'|trans }}
+				{{ 'helper'|trans({}, 'reset_password') }}
 			</p>
 
 			{{ form_start(requestForm, {
-				attr: {
-					class: 'auth-form'
-				}
-			}) }}
+                attr: {
+                    class: 'auth-form'
+                }
+            }) }}
 
 			<div class="auth-field">
-
-				{{ form_label(requestForm.email, 'forgot_password.form.email'|trans, {
-					label_attr: {
-						class: 'auth-label'
-					}
-				}) }}
+				{{ form_label(requestForm.email, 'form.email'|trans({}, 'reset_password'), {
+                    label_attr: {
+                        class: 'auth-label'
+                    }
+                }) }}
 
 				{{ form_widget(requestForm.email, {
-					attr: {
-						class: 'auth-input',
-						autocomplete: 'email'
-					}
-				}) }}
+                    attr: {
+                        class: 'auth-input',
+                        autocomplete: 'email'
+                    }
+                }) }}
 
 				{{ form_errors(requestForm.email) }}
-
 			</div>
 
 			<button type="submit" class="auth-submit">
-				{{ 'forgot_password.form.submit'|trans }}
+				{{ 'form.submit'|trans({}, 'reset_password') }}
 			</button>
 
 			{{ form_end(requestForm) }}
 
 			<div class="auth-link">
 				<a href="{{ path('app_login') }}">
-					{{ 'forgot_password.back_login'|trans }}
+					{{ 'back_login'|trans({}, 'reset_password') }}
 				</a>
 			</div>
 

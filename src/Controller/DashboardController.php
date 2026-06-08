@@ -120,6 +120,43 @@ final class DashboardController extends AbstractController
         ]);
     }
 
+    #[Route('/property/{id}/recalculate', name: 'property_recalculate', methods: ['POST'])]
+    public function recalculate(
+        Property $property,
+        Request $request,
+        PropertyEstimator $estimator,
+    ): Response {
+        $this->denyAccessUnlessGranted('OWNER', $property);
+
+        if (!$this->isCsrfTokenValid(
+            'recalculate_property_' . $property->getId(),
+            (string) $request->request->get('_token')
+        )) {
+            throw $this->createAccessDeniedException();
+        }
+
+        $result = $estimator->estimate([
+            'type' => $property->getType(),
+            'address' => $property->getAddress(),
+            'postalCode' => $property->getPostalCode(),
+            'city' => $property->getCity(),
+            'surface' => $property->getSurface(),
+            'rooms' => $property->getRooms(),
+            'parking' => $property->hasParking(),
+        ]);
+
+        $property
+            ->setEstimate((int) $result['estimate'])
+            ->setLowEstimate((int) $result['lowEstimate'])
+            ->setHighEstimate((int) $result['highEstimate']);
+
+        $this->em->flush();
+
+        $this->addFlash('success', 'Estimation recalculée.');
+
+        return $this->redirectToRoute('dashboard');
+    }
+
     #[Route('/property/{id}/generate-ad', name: 'property_generate_ad', methods: ['POST'])]
     public function generateAd(
         Property $property,
@@ -251,6 +288,8 @@ final class DashboardController extends AbstractController
             return $this->redirectToRoute('dashboard');
         }
 
+        $comparableAnalysis = $dvfComparableService->analyze($property);
+
         $html = $this->renderView('pdf/property_premium.html.twig', [
             'property' => $property,
             'logoDataUri' => $this->getLogoDataUri($user),
@@ -260,7 +299,8 @@ final class DashboardController extends AbstractController
             'confidenceScore' => $adviceGenerator->generateConfidenceScore($property),
             'estimatedSaleDelay' => $adviceGenerator->generateEstimatedSaleDelay($property, $locale),
             'qrCodeDataUri' => $qrCodeDataUri,
-            'comparables' => $dvfComparableService->findComparables($property),
+            'comparables' => $comparableAnalysis['comparables'],
+            'comparableStats' => $comparableAnalysis['stats'],
             'marketPosition' => $comparableGenerator->generateMarketPosition($property),
         ]);
 
@@ -300,6 +340,41 @@ final class DashboardController extends AbstractController
         $this->em->flush();
 
         $this->addFlash('success', 'Photo supprimée.');
+
+        return $this->redirectToRoute('property_edit', [
+            'id' => $property->getId(),
+        ]);
+    }
+
+    #[Route('/property-photo/{id}/cover', name: 'property_photo_cover', methods: ['POST'])]
+    public function setPremiumCover(
+        PropertyPhoto $photo,
+        Request $request,
+    ): Response {
+        $property = $photo->getProperty();
+
+        if (!$property instanceof Property) {
+            throw $this->createNotFoundException();
+        }
+
+        $this->denyAccessUnlessGranted('OWNER', $property);
+
+        if (!$this->isCsrfTokenValid(
+            'property_photo_cover_' . $photo->getId(),
+            (string) $request->request->get('_token')
+        )) {
+            throw $this->createAccessDeniedException();
+        }
+
+        foreach ($property->getPhotos() as $propertyPhoto) {
+            $propertyPhoto->setPremiumCover(false);
+        }
+
+        $photo->setPremiumCover(true);
+
+        $this->em->flush();
+
+        $this->addFlash('success', 'Photo de couverture PDF Premium mise à jour.');
 
         return $this->redirectToRoute('property_edit', [
             'id' => $property->getId(),
@@ -563,9 +638,23 @@ final class DashboardController extends AbstractController
      */
     private function getPhotoDataUris(Property $property): array
     {
+        $photos = $property->getPhotos()->toArray();
+
+        usort($photos, static function (PropertyPhoto $a, PropertyPhoto $b): int {
+            if ($a->isPremiumCover() && !$b->isPremiumCover()) {
+                return -1;
+            }
+
+            if (!$a->isPremiumCover() && $b->isPremiumCover()) {
+                return 1;
+            }
+
+            return $a->getPosition() <=> $b->getPosition();
+        });
+
         $photoUrls = [];
 
-        foreach ($property->getPhotos() as $photo) {
+        foreach ($photos as $photo) {
             $url = $photo->getCloudinaryUrl();
 
             if ($url) {

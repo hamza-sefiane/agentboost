@@ -9,11 +9,8 @@ cover:
     badge: "ESTIMATION PREMIUM"
     title_line_1: "DOSSIER D’ESTIMATION"
     title_line_2: "IMMOBILIÈRE"
-
     estimated_value: "Valeur estimée"
-
     ai_score: "Fiabilité de l’estimation"
-
     generated_on: "Généré le"
 
 company:
@@ -32,43 +29,51 @@ estimate:
 
 property:
     title: "Bien estimé"
-
     type: "Type"
     surface: "Surface"
     rooms: "Pièces"
     parking: "Parking"
     location: "Localisation"
-
     yes: "Oui"
     no: "Non"
+    not_available: "Non renseigné"
+    address_not_provided: "Adresse non renseignée"
 
 summary:
     title: "Synthèse de l’estimation"
-
     estimated_price_m2: "Prix estimé au m²"
-
     reliability: "Fiabilité"
-
     estimated_delay: "Délai estimé"
-
     based_on_target: "Calculé à partir de l’estimation cible"
-
     reliability_index: "Indice basé sur les informations renseignées"
-
     indicative_projection: "Projection indicative de mise en vente"
 
 comparables:
     title: "Analyse comparative du marché"
-
     comparable: "Comparable"
+
+    intro: "Analyse réalisée à partir de %count% ventes DVF comparables sélectionnées selon la localisation, le type de bien et la surface."
+    intro_details: "Les ventes présentées ci-dessous constituent un échantillon représentatif des références utilisées pour l’évaluation."
 
     note: "Comparables issus de la base DVF+ (Cerema / DGFiP), sélectionnés selon la localisation et les caractéristiques du bien estimé."
 
+    sale_date: "Vente :"
+    no_result: "Aucune vente DVF comparable suffisamment pertinente n’a été trouvée pour ce bien."
+
+    market:
+        low: "Le bien est positionné sous la moyenne du marché observé."
+        medium: "Le bien se situe dans la moyenne du marché observé."
+        high: "Le bien est positionné au-dessus de la moyenne du marché observé."
+
+    stats:
+        average_price_m2: "Prix moyen au m²"
+        median_price_m2: "Prix médian au m²"
+        analyzed_sales: "Ventes analysées"
+        estimate_gap: "Écart avec l’estimation"
+
 strategy:
     title: "Stratégie de mise en vente recommandée"
-
     recommended_price: "Prix d’affichage conseillé"
-
     negotiation_threshold: "Seuil de négociation"
 
 advices:
@@ -79,8 +84,8 @@ ad:
 
 signature:
     presented_by: "Document présenté par"
+    qr_label: "Scanner pour voir le bien"
 
 footer:
     confidential: "Estimation immobilière confidentielle — Générée via AgentBoost."
-
     non_contractual: "Document non contractuel — Référence :"
