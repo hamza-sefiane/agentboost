@@ -111,10 +111,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Notification::class, orphanRemoval: true)]
     private Collection $notifications;
 
+    /**
+     * @var Collection<int, AdminAuditLog>
+     */
+    #[ORM\OneToMany(targetEntity: AdminAuditLog::class, mappedBy: 'targetUser')]
+    private Collection $adminAuditLogs;
+
     public function __construct()
     {
         $this->createdAt = new \DateTimeImmutable();
         $this->notifications = new ArrayCollection();
+        $this->adminAuditLogs = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -592,5 +599,35 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $value = trim($value);
 
         return $value !== '' ? $value : null;
+    }
+
+    /**
+     * @return Collection<int, AdminAuditLog>
+     */
+    public function getAdminAuditLogs(): Collection
+    {
+        return $this->adminAuditLogs;
+    }
+
+    public function addAdminAuditLog(AdminAuditLog $adminAuditLog): static
+    {
+        if (!$this->adminAuditLogs->contains($adminAuditLog)) {
+            $this->adminAuditLogs->add($adminAuditLog);
+            $adminAuditLog->setTargetUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAdminAuditLog(AdminAuditLog $adminAuditLog): static
+    {
+        if ($this->adminAuditLogs->removeElement($adminAuditLog)) {
+            // set the owning side to null (unless already changed)
+            if ($adminAuditLog->getTargetUser() === $this) {
+                $adminAuditLog->setTargetUser(null);
+            }
+        }
+
+        return $this;
     }
 }
