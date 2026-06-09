@@ -4,7 +4,6 @@
 {% endblock %}
 
 {% block body %}
-
 	<div class="container py-4">
 
 		<div class="d-flex justify-content-between align-items-center mb-4">
@@ -14,6 +13,8 @@
 
 			{% if notifications|length > 0 %}
 				<form method="post" action="{{ path('notifications_read_all') }}">
+					<input type="hidden" name="_token" value="{{ csrf_token('notifications_read_all') }}">
+
 					<button type="submit" class="btn btn-outline-success">
 						Tout marquer comme lu
 					</button>
@@ -34,16 +35,11 @@
 				</div>
 			</div>
 		{% else %}
-
 			<div class="d-flex flex-column gap-3">
-
 				{% for notification in notifications %}
 					<div class="card border-0 shadow-sm rounded-4">
-
 						<div class="card-body">
-
-							<div class="d-flex justify-content-between align-items-start mb-2">
-
+							<div class="d-flex justify-content-between align-items-start gap-3 mb-2">
 								<div>
 									<h5 class="fw-bold mb-1">
 										{{ notification.title }}
@@ -54,25 +50,31 @@
 									</div>
 								</div>
 
-								{% if not notification.isRead %}
-									<span class="badge bg-success">
-										Nouveau
-									</span>
-								{% endif %}
+								<div class="d-flex align-items-center gap-2">
+									{% if not notification.isRead %}
+										<span class="badge bg-success">
+											Nouveau
+										</span>
+									{% endif %}
 
+									<form method="post" action="{{ path('notifications_delete', { id: notification.id }) }}" onsubmit="return confirm('Supprimer cette notification ?');">
+										<input type="hidden" name="_token" value="{{ csrf_token('delete_notification_' ~ notification.id) }}">
+
+										<button type="submit" class="btn btn-sm btn-outline-danger">
+											Supprimer
+										</button>
+									</form>
+								</div>
 							</div>
 
 							<p class="mb-0">
 								{{ notification.message }}
 							</p>
-
 						</div>
-
 					</div>
 				{% endfor %}
-
 			</div>
-
 		{% endif %}
+
 	</div>
 {% endblock %}
