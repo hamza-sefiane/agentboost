@@ -19,7 +19,6 @@
 
 {% block body %}
 	<div class="container py-4">
-
 		<div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
 			<h1 class="mb-0">
 				{{ 'stats.title'|trans }}
@@ -35,11 +34,9 @@
 				</a>
 			</div>
 		</div>
-
 	</div>
 
 	<div class="admin-stats-page">
-
 		<div class="admin-stats-grid">
 			<div class="admin-card">
 				<span>{{ 'stats.cards.users'|trans }}</span>
@@ -70,6 +67,41 @@
 			<div class="admin-card">
 				<span>{{ 'stats.cards.free_users'|trans }}</span>
 				<strong>{{ stats.freeUsers }}</strong>
+			</div>
+
+			<div class="admin-card">
+				<span>Utilisateurs vérifiés</span>
+				<strong>{{ stats.verifiedUsers }}</strong>
+			</div>
+
+			<div class="admin-card">
+				<span>Non vérifiés</span>
+				<strong>{{ stats.unverifiedUsers }}</strong>
+			</div>
+
+			<div class="admin-card">
+				<span>Plans mensuels</span>
+				<strong>{{ stats.monthlyPlans }}</strong>
+			</div>
+
+			<div class="admin-card">
+				<span>Plans annuels</span>
+				<strong>{{ stats.yearlyPlans }}</strong>
+			</div>
+
+			<div class="admin-card">
+				<span>Estimations ce mois</span>
+				<strong>{{ stats.monthlyEstimations }}</strong>
+			</div>
+
+			<div class="admin-card">
+				<span>Générations IA ce mois</span>
+				<strong>{{ stats.monthlyAiGenerations }}</strong>
+			</div>
+
+			<div class="admin-card">
+				<span>Notifications non lues</span>
+				<strong>{{ stats.unreadNotifications }}</strong>
 			</div>
 		</div>
 
@@ -158,14 +190,13 @@
 				</table>
 			</div>
 		</div>
-
 	</div>
 
 	 <script type="application/json" id="admin-stats-data">
-			{{ stats|json_encode|raw }}
-		</script>
+				{{ stats|json_encode|raw }}
+			</script>
 
 	 <script type="application/json" id="admin-cities-data">
-			{{ topCities|json_encode|raw }}
-		</script>
+				{{ topCities|json_encode|raw }}
+			</script>
 {% endblock %}
