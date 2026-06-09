@@ -13,6 +13,7 @@ use App\Service\PropertyEstimator;
 use App\Service\PropertySellingAdviceGenerator;
 use App\Service\SubscriptionLimiter;
 use Doctrine\ORM\EntityManagerInterface;
+use App\Service\NotificationService;
 use Dompdf\Dompdf;
 use Dompdf\Options;
 use Endroid\QrCode\Builder\Builder;
@@ -45,8 +46,11 @@ final class DashboardController extends AbstractController
     ) {}
 
     #[Route('', name: 'dashboard', methods: ['GET', 'POST'])]
-    public function index(Request $request, PropertyEstimator $estimator): Response
-    {
+    public function index(
+        Request $request,
+        PropertyEstimator $estimator,
+        NotificationService $notificationService,
+    ): Response {
         $user = $this->getAuthenticatedUser();
         $this->denyAccessUnlessGranted('ACCESS_DASHBOARD');
 
@@ -70,6 +74,15 @@ final class DashboardController extends AbstractController
             $this->em->persist($property);
             $this->em->flush();
 
+            $notificationService->success(
+                $user,
+                'Estimation créée',
+                sprintf(
+                    'Votre estimation pour %s à %s a été générée avec succès.',
+                    $property->getType(),
+                    $property->getCity()
+                )
+            );
             $this->addFlash('success', 'Estimation enregistrée.');
 
             return $this->redirectToRoute('dashboard');
