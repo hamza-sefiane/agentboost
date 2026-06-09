@@ -39,6 +39,31 @@ final class AdminController extends AbstractController
 
         $propertyCount = $this->em->getRepository(Property::class)->count([]);
 
+        $verifiedUsers = $this->em->getRepository(User::class)->count([
+            'isVerified' => true,
+        ]);
+
+        $unverifiedUsers = max(0, $userCount - $verifiedUsers);
+
+        $monthlyPlans = $this->em->getRepository(User::class)->count([
+            'currentPlan' => User::PLAN_MONTHLY,
+        ]);
+
+        $yearlyPlans = $this->em->getRepository(User::class)->count([
+            'currentPlan' => User::PLAN_YEARLY,
+        ]);
+
+        $usageTotals = $this->connection->fetchAssociative('
+    SELECT
+        COALESCE(SUM(monthly_estimations), 0) AS estimations,
+        COALESCE(SUM(monthly_ai_generations), 0) AS ai_generations
+    FROM app_user
+');
+
+        $unreadNotifications = (int) $this->connection->fetchOne('
+    SELECT COUNT(*) FROM notification WHERE is_read = 0
+');
+
         $freeUsers = max(0, $userCount - $activeSubscriptions);
         $conversionRate = $userCount > 0 ? round(($activeSubscriptions / $userCount) * 100, 1) : 0;
         $estimatedRevenue = $activeSubscriptions * 29;
@@ -73,7 +98,19 @@ final class AdminController extends AbstractController
                 'properties' => $propertyCount,
                 'estimatedRevenue' => $estimatedRevenue,
                 'conversionRate' => $conversionRate,
+
+                'verifiedUsers' => $verifiedUsers,
+                'unverifiedUsers' => $unverifiedUsers,
+
+                'monthlyPlans' => $monthlyPlans,
+                'yearlyPlans' => $yearlyPlans,
+
+                'monthlyEstimations' => (int) $usageTotals['estimations'],
+                'monthlyAiGenerations' => (int) $usageTotals['ai_generations'],
+
+                'unreadNotifications' => $unreadNotifications,
             ],
+
             'topCities' => $topCities,
             'latestUsers' => $latestUsers,
             'latestStripeEvents' => $latestStripeEvents,
