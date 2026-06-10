@@ -34,10 +34,10 @@ final class NotificationController extends AbstractController
     ): Response {
         $user = $this->getAuthenticatedUser();
 
-        if (!$request->isXmlHttpRequest()) {
-            if (!$this->isCsrfTokenValid('notifications_read_all', (string) $request->request->get('_token'))) {
-                throw $this->createAccessDeniedException();
-            }
+        $csrfToken = (string) ($request->request->get('_token') ?? $request->headers->get('X-CSRF-TOKEN'));
+
+        if (!$this->isCsrfTokenValid('notifications_read_all', $csrfToken)) {
+            throw $this->createAccessDeniedException();
         }
 
         $notifications = $notificationRepository->findUnreadForUser($user, 100);
