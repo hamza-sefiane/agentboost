@@ -26,6 +26,6 @@ final class ActiveSubscriberVoter extends Voter
             return false;
         }
 
-        return $user->isActive();
+        return $user->isVerified();
     }
 }
