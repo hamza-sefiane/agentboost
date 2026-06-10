@@ -9,6 +9,7 @@ use Stripe\Customer;
 use Stripe\Stripe;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
@@ -27,10 +28,15 @@ final class SubscriptionController extends AbstractController
     )]
     public function checkout(
         string $plan,
+        Request $request,
         #[Autowire('%env(STRIPE_PRICE_MONTHLY)%')] string $priceMonthly,
         #[Autowire('%env(STRIPE_PRICE_YEARLY)%')] string $priceYearly,
         #[Autowire('%env(STRIPE_SECRET_KEY)%')] string $stripeSecretKey
     ): JsonResponse {
+        if (!$this->isCsrfTokenValid('create_checkout_session_' . $plan, (string) $request->headers->get('X-CSRF-TOKEN'))) {
+            return new JsonResponse(['error' => 'Invalid CSRF token'], 403);
+        }
+
         /** @var User $user */
         $user = $this->getUser();
 

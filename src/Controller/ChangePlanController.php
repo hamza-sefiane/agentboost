@@ -10,6 +10,7 @@ use Stripe\Subscription;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
@@ -24,11 +25,16 @@ final class ChangePlanController extends AbstractController
     )]
     public function __invoke(
         string $plan,
+        Request $request,
         EntityManagerInterface $em,
         #[Autowire('%env(STRIPE_PRICE_MONTHLY)%')] string $priceMonthly,
         #[Autowire('%env(STRIPE_PRICE_YEARLY)%')] string $priceYearly,
         #[Autowire('%env(STRIPE_SECRET_KEY)%')] string $stripeSecretKey
     ): RedirectResponse {
+        if (!$this->isCsrfTokenValid('subscription_change_plan_' . $plan, (string) $request->request->get('_token'))) {
+            throw $this->createAccessDeniedException();
+        }
+
         $user = $this->getUser();
 
         if (!$user instanceof User || !$user->getStripeSubscriptionId()) {

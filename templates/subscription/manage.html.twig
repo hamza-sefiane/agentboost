@@ -142,6 +142,8 @@
 					</p>
 
 					<form method="post" action="{{ path('subscription_cancel_pending_plan') }}">
+						<input type="hidden" name="_token" value="{{ csrf_token('subscription_cancel_pending_plan') }}">
+
 						<button type="submit" class="btn btn-sm btn-outline-secondary">
 							{{ 'manage.pending_change.cancel'|trans({}, 'subscription') }}
 						</button>
@@ -159,12 +161,16 @@
 				<div class="border rounded-3 p-4 bg-white">
 					{% if user.currentPlan == 'yearly' %}
 						<form method="post" action="{{ path('subscription_change_plan', { plan: 'monthly' }) }}">
+							<input type="hidden" name="_token" value="{{ csrf_token('subscription_change_plan_monthly') }}">
+
 							<button type="submit" class="btn btn-outline-secondary">
 								{{ 'manage.change_plan.monthly'|trans({}, 'subscription') }}
 							</button>
 						</form>
 					{% else %}
 						<form method="post" action="{{ path('subscription_change_plan', { plan: 'yearly' }) }}">
+							<input type="hidden" name="_token" value="{{ csrf_token('subscription_change_plan_yearly') }}">
+
 							<button type="submit" class="btn btn-primary">
 								{{ 'manage.change_plan.yearly'|trans({}, 'subscription') }}
 							</button>
@@ -186,6 +192,8 @@
 					</p>
 
 					<form method="post" action="{{ path('subscription_cancel_cancellation') }}">
+						<input type="hidden" name="_token" value="{{ csrf_token('subscription_cancel_cancellation') }}">
+
 						<button type="submit" class="btn btn-success">
 							{{ 'manage.cancelled.cancel'|trans({}, 'subscription') }}
 						</button>
@@ -205,6 +213,8 @@
 					</p>
 
 					<form method="post" action="{{ path('subscription_cancel') }}">
+						<input type="hidden" name="_token" value="{{ csrf_token('subscription_cancel') }}">
+
 						<button type="submit" class="btn btn-danger">
 							{{ 'manage.danger_zone.button'|trans({}, 'subscription') }}
 						</button>

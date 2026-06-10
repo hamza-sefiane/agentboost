@@ -6,6 +6,7 @@ use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
@@ -17,8 +18,12 @@ final class CancelPendingPlanController extends AbstractController
         name: 'subscription_cancel_pending_plan',
         methods: ['POST']
     )]
-    public function __invoke(EntityManagerInterface $em): RedirectResponse
+    public function __invoke(Request $request, EntityManagerInterface $em): RedirectResponse
     {
+        if (!$this->isCsrfTokenValid('subscription_cancel_pending_plan', (string) $request->request->get('_token'))) {
+            throw $this->createAccessDeniedException();
+        }
+
         /** @var User $user */
         $user = $this->getUser();
 

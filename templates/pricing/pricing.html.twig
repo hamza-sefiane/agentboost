@@ -117,7 +117,10 @@
 							const response = await fetch(`/subscribe/${plan}/checkout`, {
 								method: 'POST',
 								headers: {
-									'Accept': 'application/json'
+									'Accept': 'application/json',
+									'X-CSRF-TOKEN': plan === 'monthly'
+										? '{{ csrf_token('create_checkout_session_monthly') }}'
+										: '{{ csrf_token('create_checkout_session_yearly') }}'
 								}
 							});
 		

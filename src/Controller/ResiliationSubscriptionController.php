@@ -11,6 +11,7 @@ use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\Routing\Attribute\Route;
@@ -26,8 +27,12 @@ final class ResiliationSubscriptionController extends AbstractController
     ) {}
 
     #[Route('/subscription/cancel', name: 'subscription_cancel', methods: ['POST'])]
-    public function __invoke(): RedirectResponse
+    public function __invoke(Request $request): RedirectResponse
     {
+        if (!$this->isCsrfTokenValid('subscription_cancel', (string) $request->request->get('_token'))) {
+            throw $this->createAccessDeniedException();
+        }
+
         $user = $this->getUser();
 
         if (
