@@ -354,6 +354,7 @@ final class DashboardController extends AbstractController
             throw $this->createAccessDeniedException('Token CSRF invalide.');
         }
 
+        $this->deleteCloudinaryPropertyPhoto($photo);
         $this->em->remove($photo);
         $this->em->flush();
 
@@ -623,7 +624,23 @@ final class DashboardController extends AbstractController
     private function deletePropertyPhotos(Property $property): void
     {
         foreach ($property->getPhotos() as $photo) {
+            $this->deleteCloudinaryPropertyPhoto($photo);
             $this->em->remove($photo);
+        }
+    }
+
+    private function deleteCloudinaryPropertyPhoto(PropertyPhoto $photo): void
+    {
+        $publicId = $photo->getCloudinaryPublicId();
+
+        if ($publicId === null || $publicId === '') {
+            return;
+        }
+
+        try {
+            $this->cloudinaryUploader->deletePropertyPhoto($publicId);
+        } catch (\Throwable) {
+            // Do not block local deletion if Cloudinary cleanup fails.
         }
     }
 
