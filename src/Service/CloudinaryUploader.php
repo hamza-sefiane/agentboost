@@ -46,4 +46,11 @@ final class CloudinaryUploader
             'publicId' => $publicId,
         ];
     }
+
+    public function deletePropertyPhoto(string $publicId): void
+    {
+        $this->cloudinary->uploadApi()->destroy($publicId, [
+            'resource_type' => 'image',
+        ]);
+    }
 }
