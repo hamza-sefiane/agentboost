@@ -22,9 +22,12 @@ use Endroid\QrCode\ErrorCorrectionLevel;
 use Endroid\QrCode\RoundBlockSizeMode;
 use Endroid\QrCode\Writer\PngWriter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\TooManyRequestsHttpException;
+use Symfony\Component\RateLimiter\RateLimiterFactory;
 use Symfony\Component\Routing\Attribute\Route;
 
 #[Route('/dashboard')]
@@ -180,6 +183,7 @@ final class DashboardController extends AbstractController
         Property $property,
         Request $request,
         OpenAiPropertyAdGenerator $adGenerator,
+        #[Autowire(service: 'limiter.ai_generation')] RateLimiterFactory $aiGenerationLimiter,
     ): Response {
         $this->denyAccessUnlessGranted('OWNER', $property);
 
@@ -188,6 +192,14 @@ final class DashboardController extends AbstractController
         }
 
         $user = $this->getAuthenticatedUser();
+
+        $limit = $aiGenerationLimiter
+            ->create((string) $user->getId())
+            ->consume();
+
+        if (!$limit->isAccepted()) {
+            throw new TooManyRequestsHttpException(null, 'Trop de tentatives. Réessayez plus tard.');
+        }
 
         if (!$this->subscriptionLimiter->canGenerateAd($user)) {
             $this->addFlash('error', 'Vous avez atteint la limite gratuite de génération IA ce mois-ci. Passez à une offre premium pour continuer.');
