@@ -9,9 +9,11 @@ use Doctrine\ORM\EntityManagerInterface;
 use Stripe\Customer;
 use Stripe\Stripe;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\RateLimiter\RateLimiterFactory;
 use Symfony\Component\Routing\Attribute\Route;
 use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
 
@@ -22,13 +24,23 @@ final class RegistrationController extends AbstractController
         Request $request,
         EntityManagerInterface $em,
         UserPasswordHasherInterface $passwordHasher,
-        EmailVerifier $emailVerifier
+        EmailVerifier $emailVerifier,
+        #[Autowire(service: 'limiter.registration')] RateLimiterFactory $registrationLimiter,
     ): Response {
         if ($this->getUser()) {
             return $this->redirectToRoute('pricing');
         }
 
         if ($request->isMethod('POST')) {
+            $limit = $registrationLimiter
+                ->create($request->getClientIp() ?? 'unknown')
+                ->consume();
+
+            if (!$limit->isAccepted()) {
+                $this->addFlash('error', 'Trop de tentatives. Réessayez plus tard.');
+                return $this->redirectToRoute('app_register');
+            }
+
             $email = strtolower(trim((string) $request->request->get('email')));
             $password = trim((string) $request->request->get('password'));
             $confirmPassword = trim((string) $request->request->get('confirm_password'));
