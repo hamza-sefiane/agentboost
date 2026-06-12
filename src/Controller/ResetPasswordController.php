@@ -8,12 +8,14 @@ use App\Form\ResetPasswordRequestFormType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\RateLimiter\RateLimiterFactory;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use SymfonyCasts\Bundle\ResetPassword\Exception\ResetPasswordExceptionInterface;
@@ -32,11 +34,21 @@ class ResetPasswordController extends AbstractController
         Request $request,
         MailerInterface $mailer,
         TranslatorInterface $translator,
+        #[Autowire(service: 'limiter.password_reset')] RateLimiterFactory $passwordResetLimiter,
     ): Response {
         $form = $this->createForm(ResetPasswordRequestFormType::class);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $limit = $passwordResetLimiter
+                ->create($request->getClientIp() ?? 'unknown')
+                ->consume();
+
+            if (!$limit->isAccepted()) {
+                $this->addFlash('reset_password_error', 'Trop de demandes. Réessayez plus tard.');
+                return $this->redirectToRoute('app_forgot_password_request');
+            }
+
             $email = (string) $form->get('email')->getData();
 
             return $this->processSendingPasswordResetEmail($email, $mailer, $translator);
