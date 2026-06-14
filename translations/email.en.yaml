@@ -1,9 +1,7 @@
-email.verify.header.subtitle: "Email address verification"
-email.verify.meta.title: "Confirm your email address"
+email.verify.header.sous-titre: "Email address verification"
 email.verify.title: "Confirm your email address"
 email.verify.text.line_1: "Thank you for creating your AgentBoost account."
 email.verify.text.line_2: "Click the button below to verify your email address."
-email.verify.button: "Verify my email address"
 email.verify.notice: "If you did not create this account, you can safely ignore this email."
 email.verify.footer: "This email was sent automatically by AgentBoost."
 
