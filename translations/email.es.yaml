@@ -1,3 +1,10 @@
+email.verify.header.sous-titre: "Verificación de tu dirección de correo"
+email.verify.title: "Confirma tu dirección de correo"
+email.verify.text.line_1: "Gracias por crear tu cuenta de AgentBoost."
+email.verify.text.line_2: "Haz clic en el botón siguiente para verificar tu dirección de correo."
+email.verify.notice: "Si no creaste esta cuenta, puedes ignorar este correo."
+email.verify.footer: "Correo enviado automáticamente por AgentBoost."
+
 reset_password:
     header:
         subtitle: "Restablecimiento de contraseña"
