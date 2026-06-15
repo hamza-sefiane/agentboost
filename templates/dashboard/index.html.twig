@@ -163,6 +163,62 @@
 			</div>
 		{% endif %}
 
+		{% if latestProperty %}
+			<div class="dashboard-card mb-4">
+				<div class="row g-3 align-items-center">
+					<div class="col-lg-5">
+						<div class="text-muted small">Prochaine action</div>
+						<h2 class="h5 mb-1">
+							Continuez avec {{ latestProperty.type }} à {{ latestProperty.city }}
+						</h2>
+						<p class="mb-0 text-muted">
+							Suivez le tunnel AgentBoost jusqu’au rapport PDF.
+						</p>
+					</div>
+
+					<div class="col-lg-7">
+						<div class="d-flex flex-wrap gap-2 justify-content-lg-end">
+							{% if not latestProperty.adText %}
+								<form method="post" action="{{ path('property_generate_ad', { id: latestProperty.id }) }}">
+									<input type="hidden" name="_token" value="{{ csrf_token('generate_ad_' ~ latestProperty.id) }}">
+									<button type="submit" class="btn btn-sm btn-success">
+										Générer l’annonce IA
+									</button>
+								</form>
+							{% else %}
+								<a href="{{ path('property_pdf', { id: latestProperty.id }) }}" class="btn btn-sm btn-primary">
+									Télécharger le PDF
+								</a>
+							{% endif %}
+
+							{% if app.user.subscriptionStatus == 'active' and app.user.currentPlan == 'yearly' %}
+								<a href="{{ path('property_pdf_premium', { id: latestProperty.id }) }}" class="btn btn-sm btn-warning">
+									PDF premium
+								</a>
+							{% else %}
+								<a href="{{ path('pricing') }}" class="btn btn-sm btn-outline-warning">
+									Passer à l’offre annuelle
+								</a>
+							{% endif %}
+						</div>
+
+						<div class="d-flex flex-wrap gap-3 mt-3 small text-muted justify-content-lg-end">
+							<span>1. Estimation créée</span>
+							<span>
+								2.
+								{% if latestProperty.adText %}
+									Annonce IA prête
+								{% else %}
+									Annonce IA à générer
+								{% endif %}
+							</span>
+							<span>3. Rapport PDF</span>
+						</div>
+					</div>
+				</div>
+			</div>
+		{% endif %}
+
 		<div class="dashboard-card mb-4">
 			<div class="row g-3">
 				<div class="col-md-3">
