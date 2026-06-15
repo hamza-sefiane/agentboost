@@ -43,7 +43,8 @@
 					const response = await fetch(checkoutUrl, {
 						method: 'POST',
 						headers: {
-							'Accept': 'application/json'
+							'Accept': 'application/json',
+							'X-CSRF-TOKEN': '{{ csrf_token('create_checkout_session_' ~ plan) }}'
 						}
 					});
 	
