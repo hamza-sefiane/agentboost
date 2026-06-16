@@ -8,7 +8,7 @@ use App\Repository\ComparableSaleRepository;
 final class DvfComparableService
 {
     private const ANALYZED_LIMIT = 10;
-    private const DISPLAY_LIMIT = 3;
+    private const DISPLAY_LIMIT = 6;
 
     public function __construct(
         private readonly ComparableSaleRepository $comparableSaleRepository,
