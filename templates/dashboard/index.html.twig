@@ -69,6 +69,12 @@
 						<div class="usage-progress">
 							<div class="usage-progress-fill" style="width: {{ min(100, (usage.estimationsUsed / usage.estimationsLimit * 100)|round) }}%;"></div>
 						</div>
+
+						{% if not usage.isPremium and usage.estimationsRemaining == 0 %}
+							<a href="{{ path('pricing') }}" class="usage-upgrade">
+								Débloquer les estimations
+							</a>
+						{% endif %}
 					{% endif %}
 				</div>
 			</div>
@@ -93,6 +99,12 @@
 						<div class="usage-progress">
 							<div class="usage-progress-fill" style="width: {{ min(100, (usage.aiUsed / usage.aiLimit * 100)|round) }}%;"></div>
 						</div>
+
+						{% if not usage.isPremium and usage.aiRemaining == 0 %}
+							<a href="{{ path('pricing') }}" class="usage-upgrade">
+								Débloquer l'IA
+							</a>
+						{% endif %}
 					{% endif %}
 				</div>
 			</div>
