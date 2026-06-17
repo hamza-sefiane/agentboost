@@ -337,6 +337,33 @@
 								</td>
 							</tr>
 						</table>
+
+						<div class="section no-break">
+							<div class="section-title">Analyse du marché local</div>
+
+							<div class="comparable-note">
+								Les ventes comparables analysées dans le secteur affichent une médiane de
+								<strong>{{ comparableStats.medianPricePerSqm|number_format(0, ',', ' ') }} €/m²</strong>.
+
+								{% if comparableStats.estimatedPricePerSqm %}
+									Le bien est estimé autour de
+									<strong>{{ comparableStats.estimatedPricePerSqm|number_format(0, ',', ' ') }} €/m²</strong>.
+								{% endif %}
+
+								{% if comparableStats.gapPercent is not null %}
+									L’écart avec la médiane locale est de
+									<strong>{{ comparableStats.gapPercent > 0 ? '+' : '' }}{{ comparableStats.gapPercent }} %</strong>.
+
+									{% if comparableStats.gapPercent < -5 %}
+										Le bien est positionné sous la médiane observée sur les ventes comparables du secteur. Ce positionnement peut renforcer l’attractivité et générer plus rapidement des contacts qualifiés.
+									{% elseif comparableStats.gapPercent > 5 %}
+										Le bien est positionné au-dessus de la médiane observée. Ce choix peut se justifier par ses atouts, mais il nécessite une présentation soignée et un suivi attentif des premiers retours acheteurs.
+									{% else %}
+										Le bien est positionné dans une zone cohérente avec la médiane locale. Ce niveau de prix permet de rester lisible pour les acquéreurs tout en conservant une marge de négociation raisonnable.
+									{% endif %}
+								{% endif %}
+							</div>
+						</div>
 					{% endif %}
 
 					<table class="comparable-table">
