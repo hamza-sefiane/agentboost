@@ -279,7 +279,7 @@
 
 			{% if comparables is defined and comparables is iterable and comparables is not empty %}
 				{% set displayedComparables = comparables|slice(0, 10) %}
-				<div class="section no-break comparable-section comparable-page-start">
+				<div class="section comparable-section">
 					<div class="section-title">{{ 'comparables.title'|trans({}, 'pdf') }}</div>
 
 					<div class="comparable-note">
@@ -338,7 +338,7 @@
 							</tr>
 						</table>
 
-						<div class="section no-break">
+						<div class="section">
 							<div class="section-title">Analyse du marché local</div>
 
 							<div class="comparable-note">
@@ -418,7 +418,7 @@
 						{% endfor %}
 					</table>
 
-					{% if marketPosition is defined and marketPosition %}
+					{% if marketPosition is defined and marketPosition and (comparableStats is not defined or not comparableStats or comparableStats.gapPercent is null) %}
 						<div class="market-position-box">
 							{{ marketPosition|trans({}, 'pdf') }}
 						</div>
@@ -462,7 +462,7 @@
 				</div>
 			</div>
 
-			<div class="section" style="page-break-before: always;">
+			<div class="section no-break">
 				<div class="section-title">Plan d’action vendeur</div>
 
 				<table class="property-grid-table">
@@ -529,6 +529,45 @@
 					</tr>
 				</table>
 			{% endif %}
+
+			<div class="section no-break">
+				<div class="section-title">Repères de commercialisation</div>
+
+				<table class="market-table">
+					<tr>
+						<td class="market-card">
+							<div class="market-title">Prix cible</div>
+							<div class="market-value">{{ property.estimate|number_format(0, ',', ' ') }} €</div>
+							<div class="market-sub">Prix de référence</div>
+						</td>
+
+						<td class="market-card">
+							<div class="market-title">Fourchette</div>
+							<div class="market-value">
+								{% if property.lowEstimate and property.highEstimate %}
+									{{ property.lowEstimate|number_format(0, ',', ' ')|replace({' ': '&nbsp;'})|raw }}&nbsp;€<br>
+									{{ property.highEstimate|number_format(0, ',', ' ')|replace({' ': '&nbsp;'})|raw }}&nbsp;€
+								{% else %}
+									—
+								{% endif %}
+							</div>
+							<div class="market-sub">Zone de négociation</div>
+						</td>
+
+						<td class="market-card">
+							<div class="market-title">Délai estimé</div>
+							<div class="market-value">{{ estimatedSaleDelay|default('45 à 60 jours') }}</div>
+							<div class="market-sub">Projection indicative</div>
+						</td>
+
+						<td class="market-card">
+							<div class="market-title">Fiabilité</div>
+							<div class="market-value">{{ confidenceScore|default(80) }} %</div>
+							<div class="market-sub">Indice de complétude</div>
+						</td>
+					</tr>
+				</table>
+			</div>
 
 			<div class="footer">
 				{{ 'footer.confidential'|trans({}, 'pdf') }}<br>
