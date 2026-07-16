@@ -237,7 +237,7 @@
 					<div class="border rounded p-3 h-100">
 						<div class="text-muted small">Abonnement actuel</div>
 						<div class="fw-bold fs-5">
-							{% if app.user.subscriptionStatus == 'active' %}
+							{% if app.user.isActive %}
 								{{ app.user.currentPlan == 'yearly' ? 'Annuel' : 'Mensuel' }}
 							{% elseif app.user.subscriptionStatus == 'grace' %}
 								Annulation programmée
@@ -247,7 +247,7 @@
 						</div>
 
 						<div class="small text-muted mt-2">
-							{% if app.user.nextBillingDate %}
+							{% if app.user.isActive and app.user.nextBillingDate %}
 								Prochaine échéance :
 								{{ app.user.nextBillingDate|date('d/m/Y') }}
 							{% else %}

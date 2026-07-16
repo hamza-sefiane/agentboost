@@ -75,7 +75,7 @@
 						{{ user.nextBillingDate|date('d/m/Y') }}.
 					</small>
 
-				{% elseif user.subscriptionStatus == 'active' %}
+				{% elseif user.isActive %}
 					<p class="mb-1">
 						<strong class="text-success">
 							{{ 'manage.status.active'|trans({}, 'subscription') }}
