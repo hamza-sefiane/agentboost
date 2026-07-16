@@ -54,6 +54,6 @@ class SubscriptionLimiter
 
     private function isPremium(User $user): bool
     {
-        return $user->getSubscriptionStatus() === User::STATUS_ACTIVE;
+        return $user->isActive();
     }
 }
