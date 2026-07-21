@@ -191,12 +191,18 @@
 					<div class="col-lg-7">
 						<div class="d-flex flex-wrap gap-2 justify-content-lg-end">
 							{% if not latestProperty.adText %}
-								<form method="post" action="{{ path('property_generate_ad', { id: latestProperty.id }) }}">
-									<input type="hidden" name="_token" value="{{ csrf_token('generate_ad_' ~ latestProperty.id) }}">
-									<button type="submit" class="btn btn-sm btn-success">
-										Générer l’annonce IA
-									</button>
-								</form>
+								{% if usage.isPremium or usage.aiRemaining > 0 %}
+									<form method="post" action="{{ path('property_generate_ad', { id: latestProperty.id }) }}">
+										<input type="hidden" name="_token" value="{{ csrf_token('generate_ad_' ~ latestProperty.id) }}">
+										<button type="submit" class="btn btn-sm btn-success">
+											Générer l’annonce IA
+										</button>
+									</form>
+								{% else %}
+									<a href="{{ path('pricing') }}" class="btn btn-sm btn-success">
+										Débloquer l’IA
+									</a>
+								{% endif %}
 							{% else %}
 								<a href="{{ path('property_pdf', { id: latestProperty.id }) }}" class="btn btn-sm btn-primary">
 									Télécharger le PDF
