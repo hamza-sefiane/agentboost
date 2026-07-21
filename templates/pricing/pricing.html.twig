@@ -76,9 +76,15 @@
 								{{ 'pricing.features.instant_saving'|trans }}</li>
 							<li>✔️
 								{{ 'pricing.features.yearly_billing'|trans }}</li>
+							<li>✔️
+								PDF premium annuel inclus</li>
 						</ul>
 
-						{% if app.user and app.user.isActive %}
+						{% if app.user and app.user.isActive and app.user.currentPlan == 'monthly' %}
+							<a href="{{ path('subscription_manage') }}" class="btn btn-success w-100">
+								Passer à l’offre annuelle
+							</a>
+						{% elseif app.user and app.user.isActive %}
 							<a href="{{ path('dashboard') }}" class="btn btn-secondary w-100">
 								{{ 'pricing.actions.dashboard'|trans }}
 							</a>
