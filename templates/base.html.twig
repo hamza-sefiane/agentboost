@@ -171,7 +171,7 @@
 											{{ 'navbar.subscription_manage'|trans }}
 										</a>
 									</li>
-									{% if app.user.userIdentifier == 'hamza95340@hotmail.fr' %}
+									{% if is_granted('ROLE_ADMIN') %}
 										<li><hr class="dropdown-divider"></li>
 
 										<li>
