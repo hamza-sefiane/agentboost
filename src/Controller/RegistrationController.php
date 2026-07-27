@@ -91,13 +91,13 @@ final class RegistrationController extends AbstractController
 
             $this->addFlash('success', 'Compte créé. Vérifiez votre email.');
 
-            return $this->redirectToRoute('app_check_email');
+            return $this->redirectToRoute('app_registration_check_email');
         }
 
         return $this->render('registration/register.html.twig');
     }
 
-    #[Route('/check-email', name: 'app_check_email', methods: ['GET'])]
+    #[Route('/check-email', name: 'app_registration_check_email', methods: ['GET'])]
     public function checkEmail(): Response
     {
         return $this->render('registration/check_email.html.twig');

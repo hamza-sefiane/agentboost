@@ -7,6 +7,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Address;
 use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
 use SymfonyCasts\Bundle\VerifyEmail\VerifyEmailHelperInterface;
 
@@ -28,7 +29,7 @@ final class EmailVerifier
         );
 
         $email = (new TemplatedEmail())
-            ->from('support@agentboost.app')
+            ->from(new Address('contact@agentboost-immo.fr', 'AgentBoost'))
             ->to($user->getEmail())
             ->subject('Confirmez votre email')
             ->htmlTemplate('registration/confirmation_email.html.twig')
