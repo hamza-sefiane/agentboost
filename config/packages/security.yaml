@@ -41,6 +41,7 @@ security:
         - { path: ^/pricing, roles: PUBLIC_ACCESS }
         - { path: ^/login, roles: PUBLIC_ACCESS }
         - { path: ^/register, roles: PUBLIC_ACCESS }
+        - { path: ^/check-email, roles: PUBLIC_ACCESS }
         - { path: ^/verify/email, roles: PUBLIC_ACCESS }
         - { path: ^/reset-password, roles: PUBLIC_ACCESS }
         - { path: ^/contact, roles: PUBLIC_ACCESS }
