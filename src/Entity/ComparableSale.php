@@ -26,7 +26,7 @@ class ComparableSale
     #[ORM\Column]
     private ?int $surface = null;
 
-    #[ORM\Column]
+    #[ORM\Column(type: Types::BIGINT)]
     private ?int $price = null;
 
     #[ORM\Column]
