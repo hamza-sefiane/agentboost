@@ -239,19 +239,23 @@ final class DashboardController extends AbstractController
             'id' => $property->getId(),
         ]);
 
-        $qrCodeResult = (new Builder(
-            writer: new PngWriter(),
-            writerOptions: [],
-            validateResult: false,
-            data: $propertyUrl,
-            encoding: new Encoding('UTF-8'),
-            errorCorrectionLevel: ErrorCorrectionLevel::High,
-            size: 180,
-            margin: 10,
-            roundBlockSizeMode: RoundBlockSizeMode::Margin,
-        ))->build();
+        $qrCodeDataUri = null;
 
-        $qrCodeDataUri = $qrCodeResult->getDataUri();
+        if (extension_loaded('gd')) {
+            $qrCodeResult = (new Builder(
+                writer: new PngWriter(),
+                writerOptions: [],
+                validateResult: false,
+                data: $propertyUrl,
+                encoding: new Encoding('UTF-8'),
+                errorCorrectionLevel: ErrorCorrectionLevel::High,
+                size: 180,
+                margin: 10,
+                roundBlockSizeMode: RoundBlockSizeMode::Margin,
+            ))->build();
+
+            $qrCodeDataUri = $qrCodeResult->getDataUri();
+        }
 
         $html = $this->renderView('pdf/property.html.twig', [
             'property' => $property,
@@ -298,19 +302,23 @@ final class DashboardController extends AbstractController
             'id' => $property->getId(),
         ]);
 
-        $qrCodeResult = (new Builder(
-            writer: new PngWriter(),
-            writerOptions: [],
-            validateResult: false,
-            data: $propertyUrl,
-            encoding: new Encoding('UTF-8'),
-            errorCorrectionLevel: ErrorCorrectionLevel::High,
-            size: 180,
-            margin: 10,
-            roundBlockSizeMode: RoundBlockSizeMode::Margin,
-        ))->build();
+        $qrCodeDataUri = null;
 
-        $qrCodeDataUri = $qrCodeResult->getDataUri();
+        if (extension_loaded('gd')) {
+            $qrCodeResult = (new Builder(
+                writer: new PngWriter(),
+                writerOptions: [],
+                validateResult: false,
+                data: $propertyUrl,
+                encoding: new Encoding('UTF-8'),
+                errorCorrectionLevel: ErrorCorrectionLevel::High,
+                size: 180,
+                margin: 10,
+                roundBlockSizeMode: RoundBlockSizeMode::Margin,
+            ))->build();
+
+            $qrCodeDataUri = $qrCodeResult->getDataUri();
+        }
 
         if ($user->getSubscriptionStatus() !== User::STATUS_ACTIVE || $user->getCurrentPlan() !== User::PLAN_YEARLY) {
             $this->addFlash('error', 'Le PDF premium est réservé aux abonnements annuels.');
