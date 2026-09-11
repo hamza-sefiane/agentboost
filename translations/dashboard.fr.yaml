@@ -97,6 +97,40 @@ dashboard:
 
     help: "Besoin d’aide ?"
 
+    onboarding:
+        kicker: "Démarrage"
+        title: "Bienvenue sur AgentBoost"
+        subtitle: "3 étapes pour obtenir votre première estimation immobilière"
+        steps:
+            create_valuation: "Créez votre première estimation"
+            generate_listing: "Générez une annonce IA"
+            download_pdf: "Téléchargez votre rapport PDF"
+
+    progress:
+        valuation_created: "Estimation créée"
+
+    status:
+        subscription:
+            title: "Abonnement actuel"
+            yearly: "Annuel"
+            monthly: "Mensuel"
+            cancellation_scheduled: "Annulation programmée"
+            next_billing_date: "Prochaine échéance"
+            no_active_billing: "Aucune échéance active"
+        credits:
+            title: "Crédits disponibles"
+            valuations: "Estimations"
+            unlimited: "Illimitées"
+            ai_generations: "Générations IA"
+            remaining_one: "restante"
+            remaining_many: "restantes"
+        last_property:
+            title: "Dernier bien estimé"
+            empty: "Aucune estimation pour le moment."
+        notifications:
+            title: "Dernières notifications"
+            empty: "Aucune notification."
+
     stats:
         estimated_properties: "Biens estimés"
         current_total: "Total actuel"
@@ -150,4 +184,4 @@ dashboard:
         button: "Passer à l’annuel"
 
     properties:
-        title: "Mes biens estimés"                
+        title: "Mes biens estimés"

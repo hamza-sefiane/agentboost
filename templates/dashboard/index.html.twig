@@ -143,10 +143,10 @@
 			<div class="dashboard-card mb-4">
 				<div class="row g-3 align-items-center">
 					<div class="col-lg-5">
-						<div class="text-muted small">Démarrage</div>
-						<h2 class="h4 mb-2">Bienvenue sur AgentBoost</h2>
+						<div class="text-muted small">{{ 'dashboard.onboarding.kicker'|trans({}, 'dashboard') }}</div>
+						<h2 class="h4 mb-2">{{ 'dashboard.onboarding.title'|trans({}, 'dashboard') }}</h2>
 						<p class="mb-0 text-muted">
-							3 étapes pour obtenir votre première estimation immobilière
+							{{ 'dashboard.onboarding.subtitle'|trans({}, 'dashboard') }}
 						</p>
 					</div>
 
@@ -154,19 +154,19 @@
 						<div class="row g-3">
 							<div class="col-md-4">
 								<div class="border rounded p-3 h-100">
-									<div class="fw-semibold">1. Créez votre première estimation</div>
+									<div class="fw-semibold">1. {{ 'dashboard.onboarding.steps.create_valuation'|trans({}, 'dashboard') }}</div>
 								</div>
 							</div>
 
 							<div class="col-md-4">
 								<div class="border rounded p-3 h-100">
-									<div class="fw-semibold">2. Générez une annonce IA</div>
+									<div class="fw-semibold">2. {{ 'dashboard.onboarding.steps.generate_listing'|trans({}, 'dashboard') }}</div>
 								</div>
 							</div>
 
 							<div class="col-md-4">
 								<div class="border rounded p-3 h-100">
-									<div class="fw-semibold">3. Téléchargez votre rapport PDF</div>
+									<div class="fw-semibold">3. {{ 'dashboard.onboarding.steps.download_pdf'|trans({}, 'dashboard') }}</div>
 								</div>
 							</div>
 						</div>
@@ -221,7 +221,7 @@
 						</div>
 
 						<div class="d-flex flex-wrap gap-3 mt-3 small text-muted justify-content-lg-end">
-							<span>1. Estimation créée</span>
+							<span>1. {{ 'dashboard.progress.valuation_created'|trans({}, 'dashboard') }}</span>
 							<span>
 								2.
 								{% if latestProperty.adText %}
@@ -241,12 +241,12 @@
 			<div class="row g-3">
 				<div class="col-md-3">
 					<div class="border rounded p-3 h-100">
-						<div class="text-muted small">Abonnement actuel</div>
+						<div class="text-muted small">{{ 'dashboard.status.subscription.title'|trans({}, 'dashboard') }}</div>
 						<div class="fw-bold fs-5">
 							{% if app.user.isActive %}
-								{{ app.user.currentPlan == 'yearly' ? 'Annuel' : 'Mensuel' }}
+								{{ (app.user.currentPlan == 'yearly' ? 'dashboard.status.subscription.yearly' : 'dashboard.status.subscription.monthly')|trans({}, 'dashboard') }}
 							{% elseif app.user.subscriptionStatus == 'grace' %}
-								Annulation programmée
+								{{ 'dashboard.status.subscription.cancellation_scheduled'|trans({}, 'dashboard') }}
 							{% else %}
 								Free
 							{% endif %}
@@ -254,10 +254,10 @@
 
 						<div class="small text-muted mt-2">
 							{% if app.user.isActive and app.user.nextBillingDate %}
-								Prochaine échéance :
+								{{ 'dashboard.status.subscription.next_billing_date'|trans({}, 'dashboard') }} :
 								{{ app.user.nextBillingDate|date('d/m/Y') }}
 							{% else %}
-								Aucune échéance active
+								{{ 'dashboard.status.subscription.no_active_billing'|trans({}, 'dashboard') }}
 							{% endif %}
 						</div>
 					</div>
@@ -265,26 +265,26 @@
 
 				<div class="col-md-3">
 					<div class="border rounded p-3 h-100">
-						<div class="text-muted small">Crédits disponibles</div>
+						<div class="text-muted small">{{ 'dashboard.status.credits.title'|trans({}, 'dashboard') }}</div>
 
 						<div class="mt-2">
-							<div class="fw-semibold">Estimations</div>
+							<div class="fw-semibold">{{ 'dashboard.status.credits.valuations'|trans({}, 'dashboard') }}</div>
 							<div>
 								{% if usage.isPremium %}
-									Illimitées
+									{{ 'dashboard.status.credits.unlimited'|trans({}, 'dashboard') }}
 								{% else %}
-									{{ usage.estimationsRemaining }} restantes
+									{{ usage.estimationsRemaining }} {{ (usage.estimationsRemaining == 1 ? 'dashboard.status.credits.remaining_one' : 'dashboard.status.credits.remaining_many')|trans({}, 'dashboard') }}
 								{% endif %}
 							</div>
 						</div>
 
 						<div class="mt-2">
-							<div class="fw-semibold">Générations IA</div>
+							<div class="fw-semibold">{{ 'dashboard.status.credits.ai_generations'|trans({}, 'dashboard') }}</div>
 							<div>
 								{% if usage.isPremium %}
-									Illimitées
+									{{ 'dashboard.status.credits.unlimited'|trans({}, 'dashboard') }}
 								{% else %}
-									{{ usage.aiRemaining }} restante{{ usage.aiRemaining > 1 ? 's' : '' }}
+									{{ usage.aiRemaining }} {{ (usage.aiRemaining == 1 ? 'dashboard.status.credits.remaining_one' : 'dashboard.status.credits.remaining_many')|trans({}, 'dashboard') }}
 								{% endif %}
 							</div>
 						</div>
@@ -293,7 +293,7 @@
 
 				<div class="col-md-3">
 					<div class="border rounded p-3 h-100">
-						<div class="text-muted small">Dernier bien estimé</div>
+						<div class="text-muted small">{{ 'dashboard.status.last_property.title'|trans({}, 'dashboard') }}</div>
 
 						{% if latestProperty %}
 							<div class="fw-bold mt-1">
@@ -317,7 +317,7 @@
 							</div>
 						{% else %}
 							<div class="text-muted mt-2">
-								Aucune estimation pour le moment.
+								{{ 'dashboard.status.last_property.empty'|trans({}, 'dashboard') }}
 							</div>
 						{% endif %}
 					</div>
@@ -325,11 +325,11 @@
 
 				<div class="col-md-3">
 					<div class="border rounded p-3 h-100">
-						<div class="text-muted small">Dernières notifications</div>
+						<div class="text-muted small">{{ 'dashboard.status.notifications.title'|trans({}, 'dashboard') }}</div>
 
 						{% if dashboardNotifications is empty %}
 							<div class="text-muted mt-2">
-								Aucune notification.
+								{{ 'dashboard.status.notifications.empty'|trans({}, 'dashboard') }}
 							</div>
 						{% else %}
 							<div class="mt-2 d-flex flex-column gap-2">
