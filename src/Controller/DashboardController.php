@@ -713,11 +713,27 @@ final class DashboardController extends AbstractController
             $url = $photo->getCloudinaryUrl();
 
             if ($url) {
-                $photoUrls[] = $url;
+                $photoUrls[] = $this->getCloudinaryJpegUrl($url);
             }
         }
 
         return $photoUrls;
+    }
+
+    private function getCloudinaryJpegUrl(string $url): string
+    {
+        $host = parse_url($url, PHP_URL_HOST);
+
+        if (!is_string($host) || !str_ends_with(strtolower($host), '.cloudinary.com')) {
+            return $url;
+        }
+
+        return preg_replace(
+            '#(/image/upload/)(?!f_jpg(?:[,/]))#',
+            '$1f_jpg/',
+            $url,
+            1,
+        ) ?? $url;
     }
 
     private function getProjectDir(): string
