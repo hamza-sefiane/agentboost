@@ -367,6 +367,19 @@
 						</div>
 					{% endif %}
 
+					{% set comparableTypeKeys = {
+						'appartement': 'property.types.appartement',
+						'un appartement': 'property.types.appartement',
+						'maison': 'property.types.maison',
+						'une maison': 'property.types.maison',
+						'terrain': 'property.types.terrain',
+						'un terrain': 'property.types.terrain',
+						'parking': 'property.types.parking',
+						'un parking': 'property.types.parking',
+						'place de parking': 'property.types.parking',
+						'une place de parking': 'property.types.parking'
+					} %}
+
 					<table class="comparable-table">
 						{% for row in displayedComparables|batch(2) %}
 							{% set rowOffset = loop.index0 * 2 %}
@@ -378,8 +391,9 @@
 											{{ rowOffset + loop.index }}
 										</div>
 
-										{% set comparableTypeKey = 'property.types.' ~ (comparable.type|default(property.type)|lower) %}
-										<div class="comparable-type">{{ comparableTypeKey|trans({}, 'pdf') }}</div>
+										{% set comparableType = comparable.type|default(property.type) %}
+										{% set comparableTypeKey = comparableTypeKeys[comparableType|trim|lower]|default(null) %}
+										<div class="comparable-type">{{ comparableTypeKey ? comparableTypeKey|trans({}, 'pdf') : comparableType }}</div>
 										<div class="comparable-location">{{ comparable.city|default(property.city)|upper }}</div>
 
 										{% if comparable.address is defined and comparable.address %}
