@@ -32,6 +32,12 @@ services:
     App\Service\AiClientInterface:
         alias: App\Service\OpenAiClient
 
+    Symfony\Component\HttpFoundation\Session\Storage\Handler\PdoSessionHandler:
+        arguments:
+            $pdoOrDsn: '%env(DATABASE_URL)%'
+            $options:
+                db_table: sessions
+
     App\Controller\ContactController:
         arguments:
             $contactEmail: '%app.contact_email%'

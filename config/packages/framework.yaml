@@ -3,7 +3,8 @@ framework:
     secret: '%env(APP_SECRET)%'
 
     # La session sera démarrée uniquement si nécessaire
-    session: true
+    session:
+        handler_id: Symfony\Component\HttpFoundation\Session\Storage\Handler\PdoSessionHandler
 
     # Router configuration pour supporter les attributs PHP 8
     router:
