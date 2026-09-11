@@ -204,7 +204,7 @@
 									</a>
 								{% endif %}
 							{% else %}
-								<a href="{{ path('property_pdf', { id: latestProperty.id }) }}" class="btn btn-sm btn-primary">
+								<a href="{{ path(app.user.subscriptionStatus == 'active' and app.user.currentPlan == 'yearly' ? 'property_pdf_premium' : 'property_pdf', { id: latestProperty.id }) }}" class="btn btn-sm btn-primary">
 									Télécharger le PDF
 								</a>
 							{% endif %}
@@ -305,7 +305,7 @@
 							</div>
 
 							<div class="d-flex flex-wrap gap-2 mt-3">
-								<a href="{{ path('property_pdf', { id: latestProperty.id }) }}" class="btn btn-sm btn-outline-primary">
+								<a href="{{ path(app.user.subscriptionStatus == 'active' and app.user.currentPlan == 'yearly' ? 'property_pdf_premium' : 'property_pdf', { id: latestProperty.id }) }}" class="btn btn-sm btn-outline-primary">
 									PDF
 								</a>
 

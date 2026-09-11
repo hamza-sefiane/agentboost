@@ -47,7 +47,7 @@ final class PropertyComparableGenerator
 
         if ($surface <= 45) {
             return $this->translator->trans(
-                'comparables.market.small',
+                'comparables.market.low',
                 [],
                 'pdf'
             );
@@ -62,7 +62,7 @@ final class PropertyComparableGenerator
         }
 
         return $this->translator->trans(
-            'comparables.market.large',
+            'comparables.market.high',
             [],
             'pdf'
         );

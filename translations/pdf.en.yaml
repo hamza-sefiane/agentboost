@@ -1,4 +1,4 @@
-﻿meta:
+meta:
     title: "Property Valuation Report"
 
 premium:
@@ -15,6 +15,10 @@ cover:
 
 company:
     label: "Real Estate Agency"
+
+common:
+    phone: "Phone"
+    distance: "Distance"
 
 gallery:
     title: "Property Gallery"
@@ -35,6 +39,13 @@ property:
     location: "Location"
     yes: "Yes"
     no: "No"
+    not_available: "Not provided"
+    address_not_provided: "Address not provided"
+    types:
+        appartement: "Apartment"
+        maison: "House"
+        terrain: "Land"
+        parking: "Parking"
 
 summary:
     title: "Valuation Summary"
@@ -44,6 +55,7 @@ summary:
     based_on_target: "Based on the estimated value"
     reliability_index: "Calculated from the available property data"
     indicative_projection: "Indicative Market Projection"
+    default_delay: "45 to 60 days"
 
 comparables:
     title: "Comparable Market Analysis"
@@ -52,6 +64,7 @@ comparables:
     intro_details: "The properties presented below represent a sample of the market references used to determine the estimated value."
     note: "Comparable sales sourced from the DVF+ database (Cerema / DGFiP) and selected based on location, property type, and similar characteristics."
     sale_date: "Sale Date:"
+    no_result: "No usable comparable sale was found for this property."
     market:
         low: "The property is positioned below the average market level."
         medium: "The property is aligned with the current market average."
@@ -61,6 +74,42 @@ comparables:
         average_price_m2: "Average Price per m²"
         median_price_m2: "Median Price per m²"
         estimate_gap: "Difference from Valuation"
+
+market_analysis:
+    title: "Local Market Analysis"
+    median_intro: "Comparable sales analyzed in the area show a median of"
+    estimated_intro: "The property is valued at approximately"
+    gap_intro: "The difference from the local median is"
+    position:
+        below: "The property is positioned below the median observed for comparable sales in the area. This positioning may improve its appeal and generate qualified enquiries more quickly."
+        above: "The property is positioned above the observed median. Its features may justify this choice, but it requires careful presentation and close monitoring of initial buyer feedback."
+        aligned: "The property is positioned consistently with the local median. This price level remains clear to buyers while retaining reasonable room for negotiation."
+
+action_plan:
+    title: "Seller Action Plan"
+    step_1:
+        label: "Step 1"
+        title: "Prepare the property"
+        description: "Finalize the photos, declutter the main rooms, and clarify the key strengths to highlight."
+    step_2:
+        label: "Step 2"
+        title: "Launch the listing"
+        description: "Publish at a price consistent with the upper valuation range, then monitor buyer feedback for the first 10 to 15 days."
+    step_3:
+        label: "Step 3"
+        title: "Adjust if necessary"
+        description: "If enquiries are limited or viewings are poorly qualified, reassess the price positioning using the lower range and local comparables."
+
+commercialization:
+    title: "Marketing Benchmarks"
+    target_price: "Target Price"
+    reference_price: "Reference Price"
+    range: "Range"
+    negotiation_zone: "Negotiation Range"
+    estimated_delay: "Estimated Time to Sell"
+    indicative_projection: "Indicative Projection"
+    reliability: "Confidence"
+    completeness_index: "Completeness Score"
 
 strategy:
     title: "Recommended Selling Strategy"

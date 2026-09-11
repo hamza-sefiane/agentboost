@@ -21,6 +21,7 @@
 		{% set agencyLegacyAddress = currentUser.companyAddress|default(null) %}
 		{% set photos = photoDataUris is defined and photoDataUris is iterable ? photoDataUris : [] %}
 		{% set surface = property.surface > 0 ? property.surface : 1 %}
+		{% set propertyTypeKey = 'property.types.' ~ property.type|lower %}
 
 		<div class="cover">
 			<div class="cover-logo">
@@ -70,7 +71,7 @@
 					<tr>
 						<td>
 							{{ 'cover.generated_on'|trans({}, 'pdf') }}
-							{{ "now"|date('d/m/Y à H:i') }}
+							{{ "now"|date('d/m/Y H:i') }}
 						</td>
 						<td>{{ agencyName }}</td>
 					</tr>
@@ -107,11 +108,11 @@
 					{% elseif agencyLegacyAddress %}
 						{{ agencyLegacyAddress|nl2br }}<br>
 					{% else %}
-						Adresse non renseignée<br>
+						{{ 'property.address_not_provided'|trans({}, 'pdf') }}<br>
 					{% endif %}
 
 					{% if agencyPhone %}
-						Tél :
+						{{ 'common.phone'|trans({}, 'pdf') }} :
 						{{ agencyPhone }}<br>
 					{% endif %}
 
@@ -195,7 +196,7 @@
 					<tr>
 						<td class="property-card">
 							<div class="property-card-label">{{ 'property.type'|trans({}, 'pdf') }}</div>
-							<div class="property-card-value">{{ property.type }}</div>
+							<div class="property-card-value">{{ propertyTypeKey|trans({}, 'pdf') }}</div>
 						</td>
 
 						<td class="property-card">
@@ -264,7 +265,7 @@
 						<td class="market-card">
 							<div class="market-title">{{ 'summary.estimated_delay'|trans({}, 'pdf') }}</div>
 							<div class="market-value">
-								{{ estimatedSaleDelay|default('45 à 60 jours') }}
+								{{ estimatedSaleDelay|default('summary.default_delay'|trans({}, 'pdf')) }}
 							</div>
 							<div class="market-sub">{{ 'summary.indicative_projection'|trans({}, 'pdf') }}</div>
 						</td>
@@ -381,7 +382,7 @@
 										{% endif %}
 
 										{% if agencyPhone %}
-											Tél :
+											{{ 'common.phone'|trans({}, 'pdf') }} :
 											{{ agencyPhone }}<br>
 										{% endif %}
 
