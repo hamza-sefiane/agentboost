@@ -97,6 +97,40 @@ dashboard:
 
     help: "Need help?"
 
+    onboarding:
+        kicker: "Getting started"
+        title: "Welcome to AgentBoost"
+        subtitle: "3 steps to get your first property valuation"
+        steps:
+            create_valuation: "Create your first valuation"
+            generate_listing: "Generate an AI listing"
+            download_pdf: "Download your PDF report"
+
+    progress:
+        valuation_created: "Valuation created"
+
+    status:
+        subscription:
+            title: "Current subscription"
+            yearly: "Annual"
+            monthly: "Monthly"
+            cancellation_scheduled: "Cancellation scheduled"
+            next_billing_date: "Next billing date"
+            no_active_billing: "No active billing date"
+        credits:
+            title: "Available credits"
+            valuations: "Valuations"
+            unlimited: "Unlimited"
+            ai_generations: "AI generations"
+            remaining_one: "remaining"
+            remaining_many: "remaining"
+        last_property:
+            title: "Last valued property"
+            empty: "No valuation yet."
+        notifications:
+            title: "Latest notifications"
+            empty: "No notifications."
+
     stats:
         estimated_properties: "Estimated properties"
         current_total: "Current total"
@@ -150,4 +184,4 @@ dashboard:
         button: "Switch to yearly"
 
     properties:
-        title: "My estimated properties"                
+        title: "My estimated properties"
