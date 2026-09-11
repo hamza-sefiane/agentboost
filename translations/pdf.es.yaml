@@ -1,4 +1,4 @@
-﻿meta:
+meta:
     title: "Informe de valoración inmobiliaria"
 
 premium:
@@ -15,6 +15,10 @@ cover:
 
 company:
     label: "Agencia inmobiliaria"
+
+common:
+    phone: "Tel."
+    distance: "Distancia"
 
 gallery:
     title: "Galería del inmueble"
@@ -35,6 +39,13 @@ property:
     location: "Ubicación"
     yes: "Sí"
     no: "No"
+    not_available: "No especificado"
+    address_not_provided: "Dirección no especificada"
+    types:
+        appartement: "Apartamento"
+        maison: "Casa"
+        terrain: "Terreno"
+        parking: "Aparcamiento"
 
 summary:
     title: "Resumen de la valoración"
@@ -44,6 +55,7 @@ summary:
     based_on_target: "Calculado a partir del valor estimado"
     reliability_index: "Calculado a partir de la información disponible"
     indicative_projection: "Proyección indicativa del mercado"
+    default_delay: "45 a 60 días"
 
 comparables:
     title: "Análisis comparativo del mercado"
@@ -52,6 +64,7 @@ comparables:
     intro_details: "Los inmuebles presentados a continuación representan una muestra de las referencias de mercado utilizadas para determinar el valor estimado."
     note: "Comparables procedentes de la base de datos DVF+ (Cerema / DGFiP), seleccionados según la ubicación y las características del inmueble valorado."
     sale_date: "Fecha de venta:"
+    no_result: "No se ha encontrado ninguna venta comparable aprovechable para este inmueble."
     market:
         low: "El inmueble se sitúa por debajo de la media del mercado observado."
         medium: "El inmueble se sitúa en línea con la media actual del mercado."
@@ -61,6 +74,42 @@ comparables:
         average_price_m2: "Precio medio por m²"
         median_price_m2: "Precio mediano por m²"
         estimate_gap: "Diferencia respecto a la valoración"
+
+market_analysis:
+    title: "Análisis del mercado local"
+    median_intro: "Las ventas comparables analizadas en la zona muestran una mediana de"
+    estimated_intro: "El inmueble se valora aproximadamente en"
+    gap_intro: "La diferencia respecto a la mediana local es de"
+    position:
+        below: "El inmueble se sitúa por debajo de la mediana observada en las ventas comparables de la zona. Este posicionamiento puede aumentar su atractivo y generar contactos cualificados con mayor rapidez."
+        above: "El inmueble se sitúa por encima de la mediana observada. Sus características pueden justificar esta elección, pero requiere una presentación cuidada y un seguimiento atento de las primeras reacciones de los compradores."
+        aligned: "El inmueble se sitúa en una zona coherente con la mediana local. Este nivel de precio resulta claro para los compradores y mantiene un margen razonable de negociación."
+
+action_plan:
+    title: "Plan de acción del vendedor"
+    step_1:
+        label: "Paso 1"
+        title: "Preparar el inmueble"
+        description: "Finalizar las fotos, despejar las estancias principales y definir los puntos fuertes que se deben destacar."
+    step_2:
+        label: "Paso 2"
+        title: "Publicar el anuncio"
+        description: "Publicar con un precio coherente con el rango superior y supervisar las reacciones de los compradores durante los primeros 10 a 15 días."
+    step_3:
+        label: "Paso 3"
+        title: "Ajustar si es necesario"
+        description: "Si hay pocos contactos o las visitas son poco cualificadas, revisar el posicionamiento del precio a partir del rango inferior y de los comparables locales."
+
+commercialization:
+    title: "Referencias de comercialización"
+    target_price: "Precio objetivo"
+    reference_price: "Precio de referencia"
+    range: "Rango"
+    negotiation_zone: "Zona de negociación"
+    estimated_delay: "Plazo estimado"
+    indicative_projection: "Proyección indicativa"
+    reliability: "Fiabilidad"
+    completeness_index: "Índice de integridad"
 
 strategy:
     title: "Estrategia de venta recomendada"

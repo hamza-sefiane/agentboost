@@ -16,6 +16,10 @@ cover:
 company:
     label: "Agence immobilière"
 
+common:
+    phone: "Tél."
+    distance: "Distance"
+
 gallery:
     title: "Galerie du bien"
     attached_photos: "photo(s) jointe(s)"
@@ -38,6 +42,11 @@ property:
     no: "Non"
     not_available: "Non renseigné"
     address_not_provided: "Adresse non renseignée"
+    types:
+        appartement: "Appartement"
+        maison: "Maison"
+        terrain: "Terrain"
+        parking: "Parking"
 
 summary:
     title: "Synthèse de l’estimation"
@@ -47,6 +56,7 @@ summary:
     based_on_target: "Calculé à partir de l’estimation cible"
     reliability_index: "Indice basé sur les informations renseignées"
     indicative_projection: "Projection indicative de mise en vente"
+    default_delay: "45 à 60 jours"
 
 comparables:
     title: "Analyse comparative du marché"
@@ -70,6 +80,42 @@ comparables:
         median_price_m2: "Prix médian au m²"
         analyzed_sales: "Ventes analysées"
         estimate_gap: "Écart avec l’estimation"
+
+market_analysis:
+    title: "Analyse du marché local"
+    median_intro: "Les ventes comparables analysées dans le secteur affichent une médiane de"
+    estimated_intro: "Le bien est estimé autour de"
+    gap_intro: "L’écart avec la médiane locale est de"
+    position:
+        below: "Le bien est positionné sous la médiane observée sur les ventes comparables du secteur. Ce positionnement peut renforcer l’attractivité et générer plus rapidement des contacts qualifiés."
+        above: "Le bien est positionné au-dessus de la médiane observée. Ce choix peut se justifier par ses atouts, mais il nécessite une présentation soignée et un suivi attentif des premiers retours acheteurs."
+        aligned: "Le bien est positionné dans une zone cohérente avec la médiane locale. Ce niveau de prix permet de rester lisible pour les acquéreurs tout en conservant une marge de négociation raisonnable."
+
+action_plan:
+    title: "Plan d’action vendeur"
+    step_1:
+        label: "Étape 1"
+        title: "Préparer le bien"
+        description: "Finaliser les photos, désencombrer les pièces principales et clarifier les points forts à mettre en avant."
+    step_2:
+        label: "Étape 2"
+        title: "Lancer la diffusion"
+        description: "Publier avec un prix cohérent avec la fourchette haute, puis suivre les retours acheteurs pendant 10 à 15 jours."
+    step_3:
+        label: "Étape 3"
+        title: "Ajuster si nécessaire"
+        description: "Si les contacts sont faibles ou les visites peu qualifiées, réévaluer le positionnement prix à partir de la fourchette basse et des comparables locaux."
+
+commercialization:
+    title: "Repères de commercialisation"
+    target_price: "Prix cible"
+    reference_price: "Prix de référence"
+    range: "Fourchette"
+    negotiation_zone: "Zone de négociation"
+    estimated_delay: "Délai estimé"
+    indicative_projection: "Projection indicative"
+    reliability: "Fiabilité"
+    completeness_index: "Indice de complétude"
 
 strategy:
     title: "Stratégie de mise en vente recommandée"

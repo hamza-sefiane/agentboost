@@ -22,6 +22,7 @@
 		{% set photos = photoDataUris is defined and photoDataUris is iterable ? photoDataUris : [] %}
 		{% set hasSurface = property.surface is defined and property.surface > 0 %}
 		{% set isSpecialAsset = property.type is defined and property.type|lower in ['parking', 'terrain'] %}
+		{% set propertyTypeKey = 'property.types.' ~ property.type|lower %}
 
 		<div class="premium-cover">
 			{% if photos|length > 0 %}
@@ -117,11 +118,11 @@
 					{% elseif agencyLegacyAddress %}
 						{{ agencyLegacyAddress|nl2br }}<br>
 					{% else %}
-						Adresse non renseignée<br>
+						{{ 'property.address_not_provided'|trans({}, 'pdf') }}<br>
 					{% endif %}
 
 					{% if agencyPhone %}
-						Tél :
+						{{ 'common.phone'|trans({}, 'pdf') }} :
 						{{ agencyPhone }}<br>
 					{% endif %}
 
@@ -198,7 +199,7 @@
 					<tr>
 						<td class="property-card">
 							<div class="property-card-label">{{ 'property.type'|trans({}, 'pdf') }}</div>
-							<div class="property-card-value">{{ property.type }}</div>
+							<div class="property-card-value">{{ propertyTypeKey|trans({}, 'pdf') }}</div>
 						</td>
 
 						<td class="property-card">
@@ -270,7 +271,7 @@
 
 						<td class="market-card">
 							<div class="market-title">{{ 'summary.estimated_delay'|trans({}, 'pdf') }}</div>
-							<div class="market-value">{{ estimatedSaleDelay|default('45 à 60 jours') }}</div>
+							<div class="market-value">{{ estimatedSaleDelay|default('summary.default_delay'|trans({}, 'pdf')) }}</div>
 							<div class="market-sub">{{ 'summary.indicative_projection'|trans({}, 'pdf') }}</div>
 						</td>
 					</tr>
@@ -339,27 +340,27 @@
 						</table>
 
 						<div class="section">
-							<div class="section-title">Analyse du marché local</div>
+							<div class="section-title">{{ 'market_analysis.title'|trans({}, 'pdf') }}</div>
 
 							<div class="comparable-note">
-								Les ventes comparables analysées dans le secteur affichent une médiane de
+								{{ 'market_analysis.median_intro'|trans({}, 'pdf') }}
 								<strong>{{ comparableStats.medianPricePerSqm|number_format(0, ',', ' ') }} €/m²</strong>.
 
 								{% if comparableStats.estimatedPricePerSqm %}
-									Le bien est estimé autour de
+									{{ 'market_analysis.estimated_intro'|trans({}, 'pdf') }}
 									<strong>{{ comparableStats.estimatedPricePerSqm|number_format(0, ',', ' ') }} €/m²</strong>.
 								{% endif %}
 
 								{% if comparableStats.gapPercent is not null %}
-									L’écart avec la médiane locale est de
+									{{ 'market_analysis.gap_intro'|trans({}, 'pdf') }}
 									<strong>{{ comparableStats.gapPercent > 0 ? '+' : '' }}{{ comparableStats.gapPercent }} %</strong>.
 
 									{% if comparableStats.gapPercent < -5 %}
-										Le bien est positionné sous la médiane observée sur les ventes comparables du secteur. Ce positionnement peut renforcer l’attractivité et générer plus rapidement des contacts qualifiés.
+										{{ 'market_analysis.position.below'|trans({}, 'pdf') }}
 									{% elseif comparableStats.gapPercent > 5 %}
-										Le bien est positionné au-dessus de la médiane observée. Ce choix peut se justifier par ses atouts, mais il nécessite une présentation soignée et un suivi attentif des premiers retours acheteurs.
+										{{ 'market_analysis.position.above'|trans({}, 'pdf') }}
 									{% else %}
-										Le bien est positionné dans une zone cohérente avec la médiane locale. Ce niveau de prix permet de rester lisible pour les acquéreurs tout en conservant une marge de négociation raisonnable.
+										{{ 'market_analysis.position.aligned'|trans({}, 'pdf') }}
 									{% endif %}
 								{% endif %}
 							</div>
@@ -377,7 +378,8 @@
 											{{ rowOffset + loop.index }}
 										</div>
 
-										<div class="comparable-type">{{ comparable.type|default(property.type) }}</div>
+										{% set comparableTypeKey = 'property.types.' ~ (comparable.type|default(property.type)|lower) %}
+										<div class="comparable-type">{{ comparableTypeKey|trans({}, 'pdf') }}</div>
 										<div class="comparable-location">{{ comparable.city|default(property.city)|upper }}</div>
 
 										{% if comparable.address is defined and comparable.address %}
@@ -402,13 +404,13 @@
 										{% endif %}
 
 										{% if comparable.distance is defined and comparable.distance %}
-											<div class="comparable-date">Distance :
+											<div class="comparable-date">{{ 'common.distance'|trans({}, 'pdf') }} :
 												{{ comparable.distance }}</div>
 										{% endif %}
 
 										{% if comparable.saleDate is defined and comparable.saleDate %}
 											<div class="comparable-date">
-												Vente :
+												{{ 'comparables.sale_date'|trans({}, 'pdf') }}
 												{{ comparable.saleDate }}
 											</div>
 										{% endif %}
@@ -420,13 +422,18 @@
 
 					{% if marketPosition is defined and marketPosition and (comparableStats is not defined or not comparableStats or comparableStats.gapPercent is null) %}
 						<div class="market-position-box">
-							{{ marketPosition|trans({}, 'pdf') }}
+							{{ marketPosition }}
 						</div>
 					{% endif %}
 
 					<div class="comparable-note">
 						{{ 'comparables.note'|trans({}, 'pdf') }}
 					</div>
+				</div>
+			{% else %}
+				<div class="section comparable-section">
+					<div class="section-title">{{ 'comparables.title'|trans({}, 'pdf') }}</div>
+					<div class="comparable-note">{{ 'comparables.no_result'|trans({}, 'pdf') }}</div>
 				</div>
 			{% endif %}
 
@@ -463,33 +470,33 @@
 			</div>
 
 			<div class="section no-break">
-				<div class="section-title">Plan d’action vendeur</div>
+				<div class="section-title">{{ 'action_plan.title'|trans({}, 'pdf') }}</div>
 
 				<table class="property-grid-table">
 					<tr>
 						<td class="property-card">
-							<div class="property-card-label">Étape 1</div>
-							<div class="property-card-value">Préparer le bien</div>
+							<div class="property-card-label">{{ 'action_plan.step_1.label'|trans({}, 'pdf') }}</div>
+							<div class="property-card-value">{{ 'action_plan.step_1.title'|trans({}, 'pdf') }}</div>
 							<div class="comparable-note">
-								Finaliser les photos, désencombrer les pièces principales et clarifier les points forts à mettre en avant.
+								{{ 'action_plan.step_1.description'|trans({}, 'pdf') }}
 							</div>
 						</td>
 
 						<td class="property-card">
-							<div class="property-card-label">Étape 2</div>
-							<div class="property-card-value">Lancer la diffusion</div>
+							<div class="property-card-label">{{ 'action_plan.step_2.label'|trans({}, 'pdf') }}</div>
+							<div class="property-card-value">{{ 'action_plan.step_2.title'|trans({}, 'pdf') }}</div>
 							<div class="comparable-note">
-								Publier avec un prix cohérent avec la fourchette haute, puis suivre les retours acheteurs pendant 10 à 15 jours.
+								{{ 'action_plan.step_2.description'|trans({}, 'pdf') }}
 							</div>
 						</td>
 					</tr>
 
 					<tr>
 						<td colspan="2" class="property-card property-card-full">
-							<div class="property-card-label">Étape 3</div>
-							<div class="property-card-value">Ajuster si nécessaire</div>
+							<div class="property-card-label">{{ 'action_plan.step_3.label'|trans({}, 'pdf') }}</div>
+							<div class="property-card-value">{{ 'action_plan.step_3.title'|trans({}, 'pdf') }}</div>
 							<div class="comparable-note">
-								Si les contacts sont faibles ou les visites peu qualifiées, réévaluer le positionnement prix à partir de la fourchette basse et des comparables locaux.
+								{{ 'action_plan.step_3.description'|trans({}, 'pdf') }}
 							</div>
 						</td>
 					</tr>
@@ -531,18 +538,18 @@
 			{% endif %}
 
 			<div class="section no-break">
-				<div class="section-title">Repères de commercialisation</div>
+				<div class="section-title">{{ 'commercialization.title'|trans({}, 'pdf') }}</div>
 
 				<table class="market-table">
 					<tr>
 						<td class="market-card">
-							<div class="market-title">Prix cible</div>
+							<div class="market-title">{{ 'commercialization.target_price'|trans({}, 'pdf') }}</div>
 							<div class="market-value">{{ property.estimate|number_format(0, ',', ' ') }} €</div>
-							<div class="market-sub">Prix de référence</div>
+							<div class="market-sub">{{ 'commercialization.reference_price'|trans({}, 'pdf') }}</div>
 						</td>
 
 						<td class="market-card">
-							<div class="market-title">Fourchette</div>
+							<div class="market-title">{{ 'commercialization.range'|trans({}, 'pdf') }}</div>
 							<div class="market-value">
 								{% if property.lowEstimate and property.highEstimate %}
 									{{ property.lowEstimate|number_format(0, ',', ' ')|replace({' ': '&nbsp;'})|raw }}&nbsp;€<br>
@@ -551,19 +558,19 @@
 									—
 								{% endif %}
 							</div>
-							<div class="market-sub">Zone de négociation</div>
+							<div class="market-sub">{{ 'commercialization.negotiation_zone'|trans({}, 'pdf') }}</div>
 						</td>
 
 						<td class="market-card">
-							<div class="market-title">Délai estimé</div>
-							<div class="market-value">{{ estimatedSaleDelay|default('45 à 60 jours') }}</div>
-							<div class="market-sub">Projection indicative</div>
+							<div class="market-title">{{ 'commercialization.estimated_delay'|trans({}, 'pdf') }}</div>
+							<div class="market-value">{{ estimatedSaleDelay|default('summary.default_delay'|trans({}, 'pdf')) }}</div>
+							<div class="market-sub">{{ 'commercialization.indicative_projection'|trans({}, 'pdf') }}</div>
 						</td>
 
 						<td class="market-card">
-							<div class="market-title">Fiabilité</div>
+							<div class="market-title">{{ 'commercialization.reliability'|trans({}, 'pdf') }}</div>
 							<div class="market-value">{{ confidenceScore|default(80) }} %</div>
-							<div class="market-sub">Indice de complétude</div>
+							<div class="market-sub">{{ 'commercialization.completeness_index'|trans({}, 'pdf') }}</div>
 						</td>
 					</tr>
 				</table>
