@@ -41,3 +41,12 @@ services:
     App\Controller\ContactController:
         arguments:
             $contactEmail: '%app.contact_email%'
+
+when@prod:
+    services:
+        Symfony\Component\HttpFoundation\Session\Storage\Handler\PdoSessionHandler:
+            arguments:
+                $pdoOrDsn: '%env(DATABASE_URL)%'
+                $options:
+                    db_table: sessions
+                    lock_mode: !php/const Symfony\Component\HttpFoundation\Session\Storage\Handler\PdoSessionHandler::LOCK_ADVISORY
