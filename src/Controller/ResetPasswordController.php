@@ -51,7 +51,12 @@ class ResetPasswordController extends AbstractController
 
             $email = (string) $form->get('email')->getData();
 
-            return $this->processSendingPasswordResetEmail($email, $mailer, $translator);
+            return $this->processSendingPasswordResetEmail(
+                $email,
+                $mailer,
+                $translator,
+                $request->getLocale(),
+            );
         }
 
         return $this->render('reset_password/request.html.twig', [
@@ -105,7 +110,7 @@ class ResetPasswordController extends AbstractController
             $this->resetPasswordHelper->removeResetRequest($token);
             $this->entityManager->flush();
 
-            $this->sendPasswordChangedEmail($user, $mailer);
+            $this->sendPasswordChangedEmail($user, $mailer, $translator, $request->getLocale());
 
             $this->addFlash(
                 'success',
@@ -124,7 +129,9 @@ class ResetPasswordController extends AbstractController
         string $emailFormData,
         MailerInterface $mailer,
         TranslatorInterface $translator,
+        string $locale,
     ): RedirectResponse {
+        $locale = $this->validateLocale($locale);
         $user = $this->entityManager->getRepository(User::class)->findOneBy([
             'email' => $emailFormData,
         ]);
@@ -142,10 +149,12 @@ class ResetPasswordController extends AbstractController
         $email = (new TemplatedEmail())
             ->from(new Address('contact@agentboost-immo.fr', 'AgentBoost'))
             ->to((string) $user->getEmail())
-            ->subject('Réinitialisation de votre mot de passe')
+            ->subject($translator->trans('reset_password.subject', [], 'email', $locale))
+            ->locale($locale)
             ->htmlTemplate('reset_password/email.html.twig')
             ->context([
                 'resetToken' => $resetToken,
+                'locale' => $locale,
             ]);
 
         $mailer->send($email);
@@ -153,17 +162,29 @@ class ResetPasswordController extends AbstractController
         return $this->redirectToRoute('app_check_email');
     }
 
-    private function sendPasswordChangedEmail(User $user, MailerInterface $mailer): void
-    {
+    private function sendPasswordChangedEmail(
+        User $user,
+        MailerInterface $mailer,
+        TranslatorInterface $translator,
+        string $locale,
+    ): void {
+        $locale = $this->validateLocale($locale);
         $email = (new TemplatedEmail())
             ->from(new Address('contact@agentboost-immo.fr', 'AgentBoost'))
             ->to((string) $user->getEmail())
-            ->subject('Votre mot de passe a été modifié')
+            ->subject($translator->trans('password_changed.subject', [], 'email', $locale))
+            ->locale($locale)
             ->htmlTemplate('reset_password/password_changed_email.html.twig')
             ->context([
                 'user' => $user,
+                'locale' => $locale,
             ]);
 
         $mailer->send($email);
+    }
+
+    private function validateLocale(string $locale): string
+    {
+        return in_array($locale, ['fr', 'en', 'es'], true) ? $locale : 'fr';
     }
 }
