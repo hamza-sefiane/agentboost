@@ -3,17 +3,16 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Service\SubscriptionMailerInterface;
 use Doctrine\ORM\EntityManagerInterface;
+use Psr\Log\LoggerInterface;
 use Stripe\Exception\ApiErrorException;
 use Stripe\Stripe;
 use Stripe\Subscription;
-use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Mailer\MailerInterface;
-use Symfony\Component\Mime\Address;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
@@ -23,7 +22,8 @@ final class ResiliationSubscriptionController extends AbstractController
     public function __construct(
         private readonly ParameterBagInterface $params,
         private readonly EntityManagerInterface $entityManager,
-        private readonly MailerInterface $mailer,
+        private readonly SubscriptionMailerInterface $mailer,
+        private readonly LoggerInterface $logger,
     ) {}
 
     #[Route('/subscription/cancel', name: 'subscription_cancel', methods: ['POST'])]
@@ -76,7 +76,15 @@ final class ResiliationSubscriptionController extends AbstractController
             $this->entityManager->persist($user);
             $this->entityManager->flush();
 
-            $this->sendCancellationEmail($user, $periodEndDate);
+            try {
+                $this->mailer->sendCancellationEmail($user, $periodEndDate);
+            } catch (\Throwable $exception) {
+                $this->logger->error('Customer lifecycle email failed.', [
+                    'flow' => 'subscription_cancellation',
+                    'user_id' => $user->getId(),
+                    'exception' => $exception,
+                ]);
+            }
         } catch (ApiErrorException) {
             $this->addFlash('error', 'Impossible de résilier l’abonnement. Réessayez.');
 
@@ -91,27 +99,4 @@ final class ResiliationSubscriptionController extends AbstractController
         return $this->redirectToRoute('subscription_manage');
     }
 
-    private function sendCancellationEmail(User $user, \DateTimeImmutable $periodEndDate): void
-    {
-        try {
-            $this->mailer->send(
-                (new TemplatedEmail())
-                    ->from(new Address('contact@agentboost-immo.fr', 'AgentBoost'))
-                    ->to((string) $user->getEmail())
-                    ->subject('Résiliation de votre abonnement AgentBoost')
-                    ->htmlTemplate('emails/subscription_cancelled.html.twig')
-                    ->context([
-                        'user' => $user,
-                        'periodEndDate' => $periodEndDate,
-                        'manageSubscriptionUrl' => $this->generateUrl(
-                            'subscription_manage',
-                            [],
-                            \Symfony\Component\Routing\Generator\UrlGeneratorInterface::ABSOLUTE_URL
-                        ),
-                    ])
-            );
-        } catch (\Throwable) {
-            // Ne bloque pas la résiliation si l’email échoue.
-        }
-    }
 }

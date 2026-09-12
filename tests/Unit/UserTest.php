@@ -16,6 +16,18 @@ class UserTest extends TestCase
         $this->assertNull($user->getNextBillingDate());
         $this->assertFalse($user->isCancelAtPeriodEnd());
         $this->assertSame('monthly', $user->getCurrentPlan());
+        $this->assertSame('fr', $user->getLocale());
+    }
+
+    public function testLocaleAcceptsSupportedValuesAndFallsBackToFrench(): void
+    {
+        $user = new User();
+
+        foreach (['fr', 'en', 'es'] as $locale) {
+            $this->assertSame($locale, $user->setLocale($locale)->getLocale());
+        }
+
+        $this->assertSame('fr', $user->setLocale('de')->getLocale());
     }
 
     public function testActivateSubscriptionMakesUserActive(): void

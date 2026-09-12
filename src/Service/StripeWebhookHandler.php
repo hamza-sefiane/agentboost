@@ -102,9 +102,8 @@ final class StripeWebhookHandler
 
         if ($wasInactive) {
             $this->mailer->sendActivationEmail(
-                $user->getEmail(),
-                'Utilisateur',
-                $user->getCurrentPlan()
+                $user,
+                (new \DateTimeImmutable())->setTimestamp((int) $periodEnd),
             );
 
             $this->notificationService->success(
@@ -167,8 +166,7 @@ final class StripeWebhookHandler
 
                 if (!$user->isDeleteAtPeriodEnd()) {
                     $this->mailer->sendCancellationEmail(
-                        $user->getEmail(),
-                        'Utilisateur',
+                        $user,
                         $endDate
                     );
 

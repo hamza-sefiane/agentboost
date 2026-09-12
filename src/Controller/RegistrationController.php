@@ -78,6 +78,7 @@ final class RegistrationController extends AbstractController
             $user = new User();
 
             $user->setEmail($email);
+            $user->setLocale($request->getLocale());
             $user->setPassword(
                 $passwordHasher->hashPassword($user, $password)
             );

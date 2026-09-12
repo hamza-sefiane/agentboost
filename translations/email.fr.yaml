@@ -28,6 +28,82 @@ reset_password:
     notice: "Si vous n’êtes pas à l’origine de cette demande, vous pouvez ignorer cet email."
     footer: "Email envoyé automatiquement par AgentBoost."
 
+"email.subscription":
+        activation:
+            subject: "Votre abonnement AgentBoost est actif"
+            header: "Votre abonnement est actif"
+            title: "Bienvenue sur AgentBoost"
+            text: "Votre abonnement est maintenant actif."
+            access_until: "Vous avez accès à toutes les fonctionnalités AgentBoost jusqu’au %date%."
+            features: "Vous pouvez maintenant générer vos estimations, automatiser vos documents et exploiter les outils IA AgentBoost."
+            button: "Accéder à mon compte"
+            footer: "AgentBoost — estimations immobilières, génération de documents et automatisation IA pour les professionnels de l’immobilier."
+        cancellation:
+            subject: "Résiliation de votre abonnement AgentBoost"
+            header: "Gestion de votre abonnement"
+            title: "Résiliation programmée"
+            greeting: "Bonjour,"
+            text: "Votre abonnement AgentBoost a bien été programmé pour résiliation."
+            access_until: "Vous conservez l’accès à vos fonctionnalités jusqu’au %date%."
+            notice: "Vous pouvez encore annuler cette résiliation depuis votre espace client tant que cette date n’est pas passée."
+            button: "Gérer mon abonnement"
+            footer: "AgentBoost — estimations, annonces et documents immobiliers."
+        cancellation_cancelled:
+            subject: "Résiliation annulée — AgentBoost"
+            header: "Gestion de votre abonnement"
+            title: "Résiliation annulée"
+            greeting: "Bonjour,"
+            text: "Votre demande de résiliation a bien été annulée."
+            notice: "Votre abonnement AgentBoost reste actif et vos accès premium sont conservés."
+            button: "Accéder au dashboard"
+            manage: "Vous pouvez gérer votre abonnement à tout moment depuis votre espace client."
+            footer: "AgentBoost — estimations, annonces et documents immobiliers."
+"email.account_deletion":
+        scheduled:
+            subject: "Suppression de compte programmée — AgentBoost"
+            header: "Gestion de votre compte"
+            title: "Suppression programmée"
+            greeting: "Bonjour,"
+            text: "Votre demande de suppression de compte a bien été prise en compte."
+            deletion_date: "Votre compte sera supprimé automatiquement à la fin de votre période d’abonnement, le %date%."
+            deletion_end: "Votre compte sera supprimé automatiquement à la fin de votre période d’abonnement."
+            notice: "Vous pouvez encore annuler cette demande depuis votre espace client avant cette date."
+            button: "Gérer mon abonnement"
+            footer: "AgentBoost — estimation immobilière rapide et exploitable."
+
+"email.date":
+    long: "%day% %month% %year%"
+    months:
+        1: "janvier"
+        2: "février"
+        3: "mars"
+        4: "avril"
+        5: "mai"
+        6: "juin"
+        7: "juillet"
+        8: "août"
+        9: "septembre"
+        10: "octobre"
+        11: "novembre"
+        12: "décembre"
+"email.account_deletion.cancelled":
+            subject: "Suppression de compte annulée — AgentBoost"
+            header: "Gestion de votre compte"
+            title: "Suppression annulée"
+            greeting: "Bonjour,"
+            text: "Votre demande de suppression de compte a bien été annulée."
+            notice: "Votre abonnement reste actif et vos accès AgentBoost sont conservés."
+            button: "Accéder au dashboard"
+            footer: "AgentBoost — estimation immobilière rapide et exploitable."
+"email.account_deletion.deleted":
+            subject: "Compte supprimé — AgentBoost"
+            header: "Confirmation de suppression de compte"
+            title: "Votre compte a été supprimé"
+            greeting: "Bonjour,"
+            text: "Votre compte AgentBoost a été supprimé avec succès."
+            notice: "Toutes les fonctionnalités associées à votre abonnement sont désormais désactivées."
+            footer: "AgentBoost — estimation immobilière rapide et exploitable."
+
 password_changed:
     subject: "Votre mot de passe a été modifié"
     meta:

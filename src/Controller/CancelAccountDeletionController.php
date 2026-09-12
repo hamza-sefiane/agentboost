@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
+use Psr\Log\LoggerInterface;
 use Stripe\Exception\ApiErrorException;
 use Stripe\StripeClient;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
@@ -16,6 +17,7 @@ use Symfony\Component\Mime\Address;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 #[IsGranted('ROLE_USER')]
 final class CancelAccountDeletionController extends AbstractController
@@ -27,6 +29,8 @@ final class CancelAccountDeletionController extends AbstractController
         Security $security,
         StripeClient $stripe,
         MailerInterface $mailer,
+        TranslatorInterface $translator,
+        LoggerInterface $logger,
     ): RedirectResponse {
         $user = $security->getUser();
 
@@ -67,7 +71,7 @@ final class CancelAccountDeletionController extends AbstractController
 
         $em->flush();
 
-        $this->sendAccountDeletionCancelledEmail($mailer, $user);
+        $this->sendAccountDeletionCancelledEmail($mailer, $translator, $logger, $user);
 
         $this->addFlash(
             'success',
@@ -77,17 +81,24 @@ final class CancelAccountDeletionController extends AbstractController
         return $this->redirectToRoute('subscription_manage');
     }
 
-    private function sendAccountDeletionCancelledEmail(MailerInterface $mailer, User $user): void
-    {
+    private function sendAccountDeletionCancelledEmail(
+        MailerInterface $mailer,
+        TranslatorInterface $translator,
+        LoggerInterface $logger,
+        User $user,
+    ): void {
+        $locale = $user->getLocale();
         try {
             $mailer->send(
                 (new TemplatedEmail())
                     ->from(new Address('contact@agentboost-immo.fr', 'AgentBoost'))
                     ->to((string) $user->getEmail())
-                    ->subject('Suppression de compte annulée — AgentBoost')
+                    ->subject($translator->trans('email.account_deletion.cancelled.subject', [], 'email', $locale))
+                    ->locale($locale)
                     ->htmlTemplate('emails/account_deletion_cancelled.html.twig')
                     ->context([
                         'user' => $user,
+                        'locale' => $locale,
                         'dashboardUrl' => $this->generateUrl(
                             'dashboard',
                             [],
@@ -100,8 +111,12 @@ final class CancelAccountDeletionController extends AbstractController
                         ),
                     ])
             );
-        } catch (\Throwable) {
-            // Ne bloque pas l’annulation de suppression si l’email échoue.
+        } catch (\Throwable $exception) {
+            $logger->error('Customer lifecycle email failed.', [
+                'flow' => 'account_deletion_cancelled',
+                'user_id' => $user->getId(),
+                'exception' => $exception,
+            ]);
         }
     }
 }

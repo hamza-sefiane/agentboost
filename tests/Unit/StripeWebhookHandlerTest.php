@@ -6,6 +6,7 @@ use App\Entity\StripeEvent;
 use App\Entity\User;
 use App\Repository\UserRepository;
 use App\Service\StripeWebhookHandler;
+use App\Service\NotificationService;
 use App\Service\SubscriptionMailerInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
@@ -73,7 +74,7 @@ class StripeWebhookHandlerTest extends TestCase
 
         $params = $this->createMock(ParameterBagInterface::class);
 
-        $handler = new StripeWebhookHandler($entityManager, $mailer, $params, new NullLogger());
+        $handler = new StripeWebhookHandler($entityManager, $mailer, $params, new NullLogger(), $this->notificationService());
 
         $subscription = Subscription::constructFrom([
             'customer' => 'cus_123',
@@ -115,8 +116,7 @@ class StripeWebhookHandlerTest extends TestCase
             ->expects($this->once())
             ->method('sendCancellationEmail')
             ->with(
-                'test@example.com',
-                'Utilisateur',
+                $user,
                 $this->isInstanceOf(\DateTimeInterface::class)
             );
 
@@ -125,7 +125,7 @@ class StripeWebhookHandlerTest extends TestCase
 
         $params = $this->createMock(ParameterBagInterface::class);
 
-        $handler = new StripeWebhookHandler($entityManager, $mailer, $params, new NullLogger());
+        $handler = new StripeWebhookHandler($entityManager, $mailer, $params, new NullLogger(), $this->notificationService());
 
         $periodEnd = time() + 3600;
 
@@ -179,7 +179,7 @@ class StripeWebhookHandlerTest extends TestCase
 
         $params = $this->createMock(ParameterBagInterface::class);
 
-        $handler = new StripeWebhookHandler($entityManager, $mailer, $params, new NullLogger());
+        $handler = new StripeWebhookHandler($entityManager, $mailer, $params, new NullLogger(), $this->notificationService());
 
         $subscription = Subscription::constructFrom([
             'customer' => 'cus_789',
@@ -199,5 +199,10 @@ class StripeWebhookHandlerTest extends TestCase
         $this->assertSame('grace', $user->getSubscriptionStatus());
         $this->assertTrue($user->isCancelAtPeriodEnd());
         $this->assertEquals($periodEnd, $user->getNextBillingDate());
+    }
+
+    private function notificationService(): NotificationService
+    {
+        return new NotificationService($this->createStub(EntityManagerInterface::class));
     }
 }
