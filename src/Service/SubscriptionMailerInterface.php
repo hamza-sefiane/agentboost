@@ -2,6 +2,8 @@
 
 namespace App\Service;
 
+use App\Entity\User;
+
 interface SubscriptionMailerInterface
 {
     public function sendWelcomeEmail(
@@ -10,14 +12,12 @@ interface SubscriptionMailerInterface
     ): void;
 
     public function sendActivationEmail(
-        string $to,
-        string $prenom,
-        string $plan
+        User $user,
+        \DateTimeInterface $endDate,
     ): void;
 
     public function sendCancellationEmail(
-        string $to,
-        string $prenom,
-        \DateTimeInterface $endDate
+        User $user,
+        \DateTimeInterface $endDate,
     ): void;
 }

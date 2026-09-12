@@ -5,7 +5,7 @@
 				AgentBoost
 			</div>
 			<div style="color:#cfe8f3; font-size:14px; margin-top:6px;">
-				Gestion de votre abonnement
+                {{ 'email.subscription.cancellation.header'|trans({}, 'email') }}
 			</div>
 		</div>
 
@@ -15,38 +15,37 @@
 			</div>
 
 			<h1 style="margin:0 0 14px; color:#0f172a; font-size:28px; line-height:1.2; font-weight:900; letter-spacing:-0.6px;">
-				Résiliation programmée
+                {{ 'email.subscription.cancellation.title'|trans({}, 'email') }}
 			</h1>
 
 			<p style="margin:0 0 18px; color:#475569; font-size:15px; line-height:1.7;">
-				Bonjour,
+                {{ 'email.subscription.cancellation.greeting'|trans({}, 'email') }}
 			</p>
 
 			<p style="margin:0 0 18px; color:#475569; font-size:15px; line-height:1.7;">
-				Votre abonnement AgentBoost a bien été programmé pour résiliation.
+                {{ 'email.subscription.cancellation.text'|trans({}, 'email') }}
 			</p>
 
 			<div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:16px; padding:18px; margin:28px 0;">
 				<p style="margin:0; color:#64748b; font-size:14px; line-height:1.6;">
-					Vous conservez l’accès à vos fonctionnalités jusqu’au
-					<strong style="color:#0f172a;">{{ periodEndDate|date('d/m/Y') }}</strong>.
+                    {{ 'email.subscription.cancellation.access_until'|trans({'%date%': formattedEndDate}, 'email') }}
 				</p>
 			</div>
 
 			<p style="margin:0 0 28px; color:#475569; font-size:15px; line-height:1.7;">
-				Vous pouvez encore annuler cette résiliation depuis votre espace client tant que cette date n’est pas passée.
+                {{ 'email.subscription.cancellation.notice'|trans({}, 'email') }}
 			</p>
 
 			<div style="text-align:center; margin:34px 0;">
 				<a href="{{ manageSubscriptionUrl }}" style="display:inline-block; background:#198754; color:#ffffff; text-decoration:none; padding:16px 30px; border-radius:14px; font-size:15px; font-weight:900;">
-					Gérer mon abonnement
+                    {{ 'email.subscription.cancellation.button'|trans({}, 'email') }}
 				</a>
 			</div>
 
 			<div style="height:1px; background:#e5e7eb; margin:28px 0;"></div>
 
 			<p style="margin:0; color:#94a3b8; font-size:13px; line-height:1.6;">
-				AgentBoost — estimations, annonces et documents immobiliers.
+                {{ 'email.subscription.cancellation.footer'|trans({}, 'email') }}
 			</p>
 		</div>
 	</div>

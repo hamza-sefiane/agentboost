@@ -22,6 +22,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public const STATUS_ACTIVE = 'active';
     public const STATUS_GRACE = 'grace';
 
+    public const LOCALE_FR = 'fr';
+    public const LOCALE_EN = 'en';
+    public const LOCALE_ES = 'es';
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -29,6 +33,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(length: 180, unique: true)]
     private string $email = '';
+
+    #[ORM\Column(length: 5, options: ['default' => self::LOCALE_FR])]
+    private string $locale = self::LOCALE_FR;
 
     #[ORM\Column]
     private array $roles = ['ROLE_USER'];
@@ -149,6 +156,20 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getUserIdentifier(): string
     {
         return $this->email;
+    }
+
+    public function getLocale(): string
+    {
+        return $this->locale;
+    }
+
+    public function setLocale(string $locale): self
+    {
+        $this->locale = in_array($locale, [self::LOCALE_FR, self::LOCALE_EN, self::LOCALE_ES], true)
+            ? $locale
+            : self::LOCALE_FR;
+
+        return $this;
     }
 
     public function getRoles(): array

@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
+use Psr\Log\LoggerInterface;
 use Stripe\Exception\ApiErrorException;
 use Stripe\Stripe;
 use Stripe\Subscription;
@@ -17,6 +18,7 @@ use Symfony\Component\Mime\Address;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 #[IsGranted('ROLE_USER')]
 final class CancelSubscriptionController extends AbstractController
@@ -25,6 +27,8 @@ final class CancelSubscriptionController extends AbstractController
         private readonly ParameterBagInterface $params,
         private readonly EntityManagerInterface $em,
         private readonly MailerInterface $mailer,
+        private readonly TranslatorInterface $translator,
+        private readonly LoggerInterface $logger,
     ) {}
 
     #[Route('/subscription/cancel-cancellation', name: 'subscription_cancel_cancellation', methods: ['POST'])]
@@ -83,15 +87,18 @@ final class CancelSubscriptionController extends AbstractController
 
     private function sendCancellationCancelledEmail(User $user): void
     {
+        $locale = $user->getLocale();
         try {
             $this->mailer->send(
                 (new TemplatedEmail())
                     ->from(new Address('contact@agentboost-immo.fr', 'AgentBoost'))
                     ->to((string) $user->getEmail())
-                    ->subject('Résiliation annulée — AgentBoost')
+                    ->subject($this->translator->trans('email.subscription.cancellation_cancelled.subject', [], 'email', $locale))
+                    ->locale($locale)
                     ->htmlTemplate('emails/subscription_cancellation_cancelled.html.twig')
                     ->context([
                         'user' => $user,
+                        'locale' => $locale,
                         'dashboardUrl' => $this->generateUrl(
                             'dashboard',
                             [],
@@ -104,8 +111,12 @@ final class CancelSubscriptionController extends AbstractController
                         ),
                     ])
             );
-        } catch (\Throwable) {
-            // Ne bloque pas l’annulation si l’email échoue.
+        } catch (\Throwable $exception) {
+            $this->logger->error('Customer lifecycle email failed.', [
+                'flow' => 'subscription_cancellation_cancelled',
+                'user_id' => $user->getId(),
+                'exception' => $exception,
+            ]);
         }
     }
 }

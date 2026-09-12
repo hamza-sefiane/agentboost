@@ -28,6 +28,82 @@ reset_password:
     notice: "If you did not request this, you can safely ignore this email."
     footer: "This email was sent automatically by AgentBoost."
 
+"email.subscription":
+        activation:
+            subject: "Your AgentBoost subscription is active"
+            header: "Your subscription is active"
+            title: "Welcome to AgentBoost"
+            text: "Your subscription is now active."
+            access_until: "You have access to all AgentBoost features until %date%."
+            features: "You can now create valuations, automate your documents and use AgentBoost AI tools."
+            button: "Access my account"
+            footer: "AgentBoost — property valuations, document generation and AI automation for real estate professionals."
+        cancellation:
+            subject: "Cancellation of your AgentBoost subscription"
+            header: "Manage your subscription"
+            title: "Cancellation scheduled"
+            greeting: "Hello,"
+            text: "Your AgentBoost subscription has been scheduled for cancellation."
+            access_until: "You will retain access to your features until %date%."
+            notice: "You can still cancel this request from your account before that date."
+            button: "Manage my subscription"
+            footer: "AgentBoost — property valuations, listings and documents."
+        cancellation_cancelled:
+            subject: "Subscription cancellation revoked — AgentBoost"
+            header: "Manage your subscription"
+            title: "Cancellation revoked"
+            greeting: "Hello,"
+            text: "Your subscription cancellation request has been revoked."
+            notice: "Your AgentBoost subscription remains active and your premium access is preserved."
+            button: "Go to the dashboard"
+            manage: "You can manage your subscription at any time from your account."
+            footer: "AgentBoost — property valuations, listings and documents."
+"email.account_deletion":
+        scheduled:
+            subject: "Account deletion scheduled — AgentBoost"
+            header: "Manage your account"
+            title: "Deletion scheduled"
+            greeting: "Hello,"
+            text: "Your account deletion request has been recorded."
+            deletion_date: "Your account will be deleted automatically at the end of your subscription period, on %date%."
+            deletion_end: "Your account will be deleted automatically at the end of your subscription period."
+            notice: "You can still cancel this request from your account before that date."
+            button: "Manage my subscription"
+            footer: "AgentBoost — fast, actionable property valuations."
+
+"email.date":
+    long: "%month% %day%, %year%"
+    months:
+        1: "January"
+        2: "February"
+        3: "March"
+        4: "April"
+        5: "May"
+        6: "June"
+        7: "July"
+        8: "August"
+        9: "September"
+        10: "October"
+        11: "November"
+        12: "December"
+"email.account_deletion.cancelled":
+            subject: "Account deletion cancelled — AgentBoost"
+            header: "Manage your account"
+            title: "Deletion cancelled"
+            greeting: "Hello,"
+            text: "Your account deletion request has been cancelled."
+            notice: "Your subscription remains active and your AgentBoost access is preserved."
+            button: "Go to the dashboard"
+            footer: "AgentBoost — fast, actionable property valuations."
+"email.account_deletion.deleted":
+            subject: "Account deleted — AgentBoost"
+            header: "Account deletion confirmation"
+            title: "Your account has been deleted"
+            greeting: "Hello,"
+            text: "Your AgentBoost account has been successfully deleted."
+            notice: "All features associated with your subscription are now disabled."
+            footer: "AgentBoost — fast, actionable property valuations."
+
 password_changed:
     subject: "Your password has been changed"
     meta:

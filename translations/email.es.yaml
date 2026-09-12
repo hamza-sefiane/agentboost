@@ -28,6 +28,82 @@ reset_password:
     notice: "Si no solicitaste esto, puedes ignorar este correo."
     footer: "Correo enviado automáticamente por AgentBoost."
 
+"email.subscription":
+        activation:
+            subject: "Tu suscripción a AgentBoost está activa"
+            header: "Tu suscripción está activa"
+            title: "Bienvenido a AgentBoost"
+            text: "Tu suscripción ya está activa."
+            access_until: "Tienes acceso a todas las funciones de AgentBoost hasta el %date%."
+            features: "Ya puedes crear valoraciones, automatizar tus documentos y utilizar las herramientas de IA de AgentBoost."
+            button: "Acceder a mi cuenta"
+            footer: "AgentBoost — valoraciones inmobiliarias, generación de documentos y automatización con IA para profesionales inmobiliarios."
+        cancellation:
+            subject: "Cancelación de tu suscripción a AgentBoost"
+            header: "Gestiona tu suscripción"
+            title: "Cancelación programada"
+            greeting: "Hola,"
+            text: "La cancelación de tu suscripción a AgentBoost ha sido programada."
+            access_until: "Conservarás el acceso a tus funciones hasta el %date%."
+            notice: "Puedes anular esta solicitud desde tu cuenta antes de esa fecha."
+            button: "Gestionar mi suscripción"
+            footer: "AgentBoost — valoraciones, anuncios y documentos inmobiliarios."
+        cancellation_cancelled:
+            subject: "Cancelación de suscripción anulada — AgentBoost"
+            header: "Gestiona tu suscripción"
+            title: "Cancelación anulada"
+            greeting: "Hola,"
+            text: "Tu solicitud de cancelación de suscripción ha sido anulada."
+            notice: "Tu suscripción a AgentBoost sigue activa y conservas tu acceso prémium."
+            button: "Ir al panel"
+            manage: "Puedes gestionar tu suscripción en cualquier momento desde tu cuenta."
+            footer: "AgentBoost — valoraciones, anuncios y documentos inmobiliarios."
+"email.account_deletion":
+        scheduled:
+            subject: "Eliminación de cuenta programada — AgentBoost"
+            header: "Gestiona tu cuenta"
+            title: "Eliminación programada"
+            greeting: "Hola,"
+            text: "Tu solicitud de eliminación de cuenta ha sido registrada."
+            deletion_date: "Tu cuenta se eliminará automáticamente al final de tu periodo de suscripción, el %date%."
+            deletion_end: "Tu cuenta se eliminará automáticamente al final de tu periodo de suscripción."
+            notice: "Puedes anular esta solicitud desde tu cuenta antes de esa fecha."
+            button: "Gestionar mi suscripción"
+            footer: "AgentBoost — valoraciones inmobiliarias rápidas y prácticas."
+
+"email.date":
+    long: "%day% de %month% de %year%"
+    months:
+        1: "enero"
+        2: "febrero"
+        3: "marzo"
+        4: "abril"
+        5: "mayo"
+        6: "junio"
+        7: "julio"
+        8: "agosto"
+        9: "septiembre"
+        10: "octubre"
+        11: "noviembre"
+        12: "diciembre"
+"email.account_deletion.cancelled":
+            subject: "Eliminación de cuenta anulada — AgentBoost"
+            header: "Gestiona tu cuenta"
+            title: "Eliminación anulada"
+            greeting: "Hola,"
+            text: "Tu solicitud de eliminación de cuenta ha sido anulada."
+            notice: "Tu suscripción sigue activa y conservas tu acceso a AgentBoost."
+            button: "Ir al panel"
+            footer: "AgentBoost — valoraciones inmobiliarias rápidas y prácticas."
+"email.account_deletion.deleted":
+            subject: "Cuenta eliminada — AgentBoost"
+            header: "Confirmación de eliminación de cuenta"
+            title: "Tu cuenta ha sido eliminada"
+            greeting: "Hola,"
+            text: "Tu cuenta de AgentBoost ha sido eliminada correctamente."
+            notice: "Todas las funciones asociadas a tu suscripción están ahora desactivadas."
+            footer: "AgentBoost — valoraciones inmobiliarias rápidas y prácticas."
+
 password_changed:
     subject: "Tu contraseña ha sido modificada"
     meta:

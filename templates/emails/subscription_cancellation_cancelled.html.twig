@@ -5,7 +5,7 @@
 				AgentBoost
 			</div>
 			<div style="color:#cfe8f3; font-size:14px; margin-top:6px;">
-				Gestion de votre abonnement
+                {{ 'email.subscription.cancellation_cancelled.header'|trans({}, 'email') }}
 			</div>
 		</div>
 
@@ -15,37 +15,37 @@
 			</div>
 
 			<h1 style="margin:0 0 14px; color:#0f172a; font-size:28px; line-height:1.2; font-weight:900; letter-spacing:-0.6px;">
-				Résiliation annulée
+                {{ 'email.subscription.cancellation_cancelled.title'|trans({}, 'email') }}
 			</h1>
 
 			<p style="margin:0 0 18px; color:#475569; font-size:15px; line-height:1.7;">
-				Bonjour,
+                {{ 'email.subscription.cancellation_cancelled.greeting'|trans({}, 'email') }}
 			</p>
 
 			<p style="margin:0 0 18px; color:#475569; font-size:15px; line-height:1.7;">
-				Votre demande de résiliation a bien été annulée.
+                {{ 'email.subscription.cancellation_cancelled.text'|trans({}, 'email') }}
 			</p>
 
 			<div style="background:#f0fdf4; border:1px solid #bbf7d0; border-radius:16px; padding:18px; margin:28px 0;">
 				<p style="margin:0; color:#166534; font-size:14px; line-height:1.6;">
-					Votre abonnement AgentBoost reste actif et vos accès premium sont conservés.
+                    {{ 'email.subscription.cancellation_cancelled.notice'|trans({}, 'email') }}
 				</p>
 			</div>
 
 			<div style="text-align:center; margin:34px 0;">
 				<a href="{{ dashboardUrl }}" style="display:inline-block; background:#198754; color:#ffffff; text-decoration:none; padding:16px 30px; border-radius:14px; font-size:15px; font-weight:900;">
-					Accéder au dashboard
+                    {{ 'email.subscription.cancellation_cancelled.button'|trans({}, 'email') }}
 				</a>
 			</div>
 
 			<p style="margin:0; color:#64748b; font-size:13px; line-height:1.6;">
-				Vous pouvez gérer votre abonnement à tout moment depuis votre espace client.
+                {{ 'email.subscription.cancellation_cancelled.manage'|trans({}, 'email') }}
 			</p>
 
 			<div style="height:1px; background:#e5e7eb; margin:28px 0;"></div>
 
 			<p style="margin:0; color:#94a3b8; font-size:13px; line-height:1.6;">
-				AgentBoost — estimations, annonces et documents immobiliers.
+                {{ 'email.subscription.cancellation_cancelled.footer'|trans({}, 'email') }}
 			</p>
 		</div>
 	</div>

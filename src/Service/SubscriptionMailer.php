@@ -2,30 +2,27 @@
 
 namespace App\Service;
 
+use App\Entity\User;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Environment;
 
 final class SubscriptionMailer implements SubscriptionMailerInterface
 {
     public function __construct(
         private MailerInterface $mailer,
-        private Environment $twig
+        private Environment $twig,
+        private TranslatorInterface $translator,
+        private UrlGeneratorInterface $urlGenerator,
+        private LocalizedDateFormatter $dateFormatter,
     ) {}
 
-    /**
-     * 📧 Email de bienvenue à l’inscription
-     */
-    public function sendWelcomeEmail(
-        string $to,
-        string $prenom
-    ): void {
-        $html = $this->twig->render(
-            'emails/welcome.html.twig',
-            [
-                'prenom' => $prenom,
-            ]
-        );
+    public function sendWelcomeEmail(string $to, string $prenom): void
+    {
+        $html = $this->twig->render('emails/welcome.html.twig', ['prenom' => $prenom]);
 
         $email = (new Email())
             ->from('support@agentboost.app')
@@ -36,65 +33,46 @@ final class SubscriptionMailer implements SubscriptionMailerInterface
         $this->mailer->send($email);
     }
 
-    /**
-     * 📧 Email d’activation de l’abonnement
-     * ➜ Envoyé UNE SEULE FOIS lors de la première activation
-     */
-    public function sendActivationEmail(
-        string $to,
-        string $prenom,
-        string $plan
-    ): void {
-        $html = $this->twig->render(
-            'emails/subscription_activated.html.twig',
-            [
-                'prenom' => $prenom,
-                'plan' => $plan,
-            ]
-        );
-
-        $email = (new Email())
+    public function sendActivationEmail(User $user, \DateTimeInterface $endDate): void
+    {
+        $locale = $user->getLocale();
+        $email = (new TemplatedEmail())
             ->from('support@agentboost.app')
-            ->to($to)
-            ->subject('Votre abonnement AgentBoost est actif')
-            ->html($html);
+            ->to((string) $user->getEmail())
+            ->subject($this->translator->trans('email.subscription.activation.subject', [], 'email', $locale))
+            ->locale($locale)
+            ->htmlTemplate('emails/subscription_activated.html.twig')
+            ->context([
+                'locale' => $locale,
+                'formattedEndDate' => $this->dateFormatter->formatLong($endDate, $locale),
+                'accountUrl' => $this->urlGenerator->generate(
+                    'app_login',
+                    [],
+                    UrlGeneratorInterface::ABSOLUTE_URL,
+                ),
+            ]);
 
         $this->mailer->send($email);
     }
 
-    /**
-     * 📧 Email de résiliation programmée
-     * ➜ Envoyé UNE SEULE FOIS quand cancel_at_period_end = true
-     */
-    public function sendCancellationEmail(
-        string $to,
-        string $prenom,
-        \DateTimeInterface $endDate
-    ): void {
-        file_put_contents(
-            dirname(__DIR__, 2) . '/var/log/mail.log',
-            sprintf(
-                "[%s] sendCancellationEmail → %s | end=%s\n",
-                date('Y-m-d H:i:s'),
-                $to,
-                $endDate->format('Y-m-d H:i:s')
-            ),
-            FILE_APPEND
-        );
-
-        $html = $this->twig->render(
-            'emails/subscription_cancelled.html.twig',
-            [
-                'prenom' => $prenom,
-                'subscription_end_date' => $endDate,
-            ]
-        );
-
-        $email = (new Email())
+    public function sendCancellationEmail(User $user, \DateTimeInterface $endDate): void
+    {
+        $locale = $user->getLocale();
+        $email = (new TemplatedEmail())
             ->from('support@agentboost.app')
-            ->to($to)
-            ->subject('Confirmation de résiliation de votre abonnement')
-            ->html($html);
+            ->to((string) $user->getEmail())
+            ->subject($this->translator->trans('email.subscription.cancellation.subject', [], 'email', $locale))
+            ->locale($locale)
+            ->htmlTemplate('emails/subscription_cancelled.html.twig')
+            ->context([
+                'locale' => $locale,
+                'formattedEndDate' => $this->dateFormatter->formatLong($endDate, $locale),
+                'manageSubscriptionUrl' => $this->urlGenerator->generate(
+                    'subscription_manage',
+                    [],
+                    UrlGeneratorInterface::ABSOLUTE_URL,
+                ),
+            ]);
 
         $this->mailer->send($email);
     }

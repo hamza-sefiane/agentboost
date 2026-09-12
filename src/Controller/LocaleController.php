@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use App\Entity\User;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -14,7 +16,8 @@ final class LocaleController extends AbstractController
     public function changeLocale(
         string $locale,
         Request $request,
-        SessionInterface $session
+        SessionInterface $session,
+        EntityManagerInterface $entityManager,
     ): RedirectResponse {
 
         $allowedLocales = ['fr', 'en', 'es'];
@@ -24,6 +27,12 @@ final class LocaleController extends AbstractController
         }
 
         $session->set('_locale', $locale);
+
+        $user = $this->getUser();
+        if ($user instanceof User) {
+            $user->setLocale($locale);
+            $entityManager->flush();
+        }
 
         $referer = $request->headers->get('referer');
 
