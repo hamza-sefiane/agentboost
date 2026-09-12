@@ -1,40 +1,42 @@
-email.verify.header.sous-titre: "Vérification de votre adresse email"
-email.verify.title: "Confirmez votre adresse email"
-email.verify.text.line_1: "Merci de créer votre compte AgentBoost."
-email.verify.text.line_2: "Cliquez sur le bouton ci-dessous pour vérifier votre adresse email."
-email.verify.notice: "Si vous n’êtes pas à l’origine de cette inscription, vous pouvez ignorer cet email."
-email.verify.footer: "Email envoyé automatiquement par AgentBoost."
+email:
+    verify:
+        subject: "Confirmez votre adresse email"
+        meta:
+            title: "Confirmez votre adresse email"
+        header:
+            subtitle: "Vérification de votre adresse email"
+        title: "Confirmez votre adresse email"
+        text:
+            line_1: "Merci d’avoir créé votre compte AgentBoost."
+            line_2: "Cliquez sur le bouton ci-dessous pour vérifier votre adresse email."
+        button: "Vérifier mon adresse email"
+        notice: "Si vous n’êtes pas à l’origine de cette inscription, vous pouvez ignorer cet email."
+        footer: "Email envoyé automatiquement par AgentBoost."
 
 reset_password:
+    subject: "Réinitialisation de votre mot de passe"
+    meta:
+        title: "Réinitialisation de votre mot de passe"
     header:
         subtitle: "Réinitialisation de votre mot de passe"
-
     title: "Réinitialiser votre mot de passe"
-
     text:
         line_1: "Vous avez demandé la réinitialisation de votre mot de passe."
         line_2: "Cliquez sur le bouton ci-dessous pour choisir un nouveau mot de passe."
-
     button: "Réinitialiser mon mot de passe"
-
     expiration: "Ce lien expirera dans"
-
     notice: "Si vous n’êtes pas à l’origine de cette demande, vous pouvez ignorer cet email."
-
     footer: "Email envoyé automatiquement par AgentBoost."
 
 password_changed:
+    subject: "Votre mot de passe a été modifié"
+    meta:
+        title: "Mot de passe modifié"
     header:
         subtitle: "Sécurité du compte"
-
     title: "Mot de passe modifié"
-
     greeting: "Bonjour,"
-
     text: "Votre mot de passe AgentBoost vient d’être modifié."
-
     success_notice: "Si vous êtes à l’origine de cette modification, aucune action n’est nécessaire."
-
     security_notice: "Si vous n’avez pas effectué cette modification, contactez immédiatement le support."
-
     footer: "Email envoyé automatiquement par AgentBoost."

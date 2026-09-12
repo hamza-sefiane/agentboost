@@ -87,7 +87,7 @@ final class RegistrationController extends AbstractController
             $em->persist($user);
             $em->flush();
 
-            $emailVerifier->sendEmailConfirmation('app_verify_email', $user);
+            $emailVerifier->sendEmailConfirmation('app_verify_email', $user, $request->getLocale());
 
             $this->addFlash('success', 'Compte créé. Vérifiez votre email.');
 
