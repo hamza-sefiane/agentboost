@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Property;
 use App\Entity\User;
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\ParameterType;
 use App\Entity\AdminAuditLog;
 use App\Repository\AdminAuditLogRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -60,9 +61,11 @@ final class AdminController extends AbstractController
     FROM app_user
 ');
 
-        $unreadNotifications = (int) $this->connection->fetchOne('
-    SELECT COUNT(*) FROM notification WHERE is_read = 0
-');
+        $unreadNotifications = (int) $this->connection->fetchOne(
+            'SELECT COUNT(*) FROM notification WHERE is_read = :isRead',
+            ['isRead' => false],
+            ['isRead' => ParameterType::BOOLEAN],
+        );
 
         $freeUsers = max(0, $userCount - $activeSubscriptions);
         $conversionRate = $userCount > 0 ? round(($activeSubscriptions / $userCount) * 100, 1) : 0;
