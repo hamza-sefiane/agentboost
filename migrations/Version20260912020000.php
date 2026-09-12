@@ -20,7 +20,13 @@ final class Version20260912020000 extends AbstractMigration
     {
         $platform = $this->connection->getDatabasePlatform();
 
-        if ($platform instanceof PostgreSQLPlatform || $platform instanceof SQLitePlatform) {
+        if ($platform instanceof PostgreSQLPlatform) {
+            $this->addSql("ALTER TABLE app_user ADD COLUMN IF NOT EXISTS locale VARCHAR(5) DEFAULT 'fr' NOT NULL");
+
+            return;
+        }
+
+        if ($platform instanceof SQLitePlatform) {
             $this->addSql("ALTER TABLE app_user ADD COLUMN locale VARCHAR(5) DEFAULT 'fr' NOT NULL");
 
             return;
