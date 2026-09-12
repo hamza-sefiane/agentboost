@@ -21,15 +21,15 @@ final class Version20260912000000 extends AbstractMigration
         $platform = $this->connection->getDatabasePlatform();
 
         if ($platform instanceof PostgreSQLPlatform) {
-            $this->addSql('CREATE TABLE sessions (sess_id VARCHAR(128) NOT NULL, sess_data BYTEA NOT NULL, sess_lifetime INTEGER NOT NULL, sess_time INTEGER NOT NULL, PRIMARY KEY (sess_id))');
-            $this->addSql('CREATE INDEX IDX_SESSIONS_LIFETIME ON sessions (sess_lifetime)');
+            $this->addSql('CREATE TABLE IF NOT EXISTS sessions (sess_id VARCHAR(128) NOT NULL, sess_data BYTEA NOT NULL, sess_lifetime INTEGER NOT NULL, sess_time INTEGER NOT NULL, PRIMARY KEY (sess_id))');
+            $this->addSql('CREATE INDEX IF NOT EXISTS IDX_SESSIONS_LIFETIME ON sessions (sess_lifetime)');
 
             return;
         }
 
         if ($platform instanceof SQLitePlatform) {
-            $this->addSql('CREATE TABLE sessions (sess_id VARCHAR(128) NOT NULL PRIMARY KEY, sess_data BLOB NOT NULL, sess_lifetime INTEGER NOT NULL, sess_time INTEGER NOT NULL)');
-            $this->addSql('CREATE INDEX IDX_SESSIONS_LIFETIME ON sessions (sess_lifetime)');
+            $this->addSql('CREATE TABLE IF NOT EXISTS sessions (sess_id VARCHAR(128) NOT NULL PRIMARY KEY, sess_data BLOB NOT NULL, sess_lifetime INTEGER NOT NULL, sess_time INTEGER NOT NULL)');
+            $this->addSql('CREATE INDEX IF NOT EXISTS IDX_SESSIONS_LIFETIME ON sessions (sess_lifetime)');
 
             return;
         }
