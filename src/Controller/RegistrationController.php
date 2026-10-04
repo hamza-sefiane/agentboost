@@ -15,6 +15,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\RateLimiter\RateLimiterFactory;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Contracts\Translation\TranslatorInterface;
 use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
 
 final class RegistrationController extends AbstractController
@@ -25,6 +26,7 @@ final class RegistrationController extends AbstractController
         EntityManagerInterface $em,
         UserPasswordHasherInterface $passwordHasher,
         EmailVerifier $emailVerifier,
+        TranslatorInterface $translator,
         #[Autowire(service: 'limiter.registration')] RateLimiterFactory $registrationLimiter,
     ): Response {
         if ($this->getUser()) {
@@ -91,7 +93,7 @@ final class RegistrationController extends AbstractController
 
             $emailVerifier->sendEmailConfirmation('app_verify_email', $user, $locale);
 
-            $this->addFlash('success', 'Compte créé. Vérifiez votre email.');
+            $this->addFlash('success', $translator->trans('verify_email.flash.created'));
 
             return $this->redirectToRoute('app_registration_check_email');
         }
