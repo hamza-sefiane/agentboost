@@ -39,7 +39,7 @@ final class RegistrationController extends AbstractController
                 ->consume();
 
             if (!$limit->isAccepted()) {
-                $this->addFlash('error', 'register.validation.rate_limited');
+                $this->addFlash('error', $translator->trans('register.validation.rate_limited'));
                 return $this->redirectToRoute('app_register');
             }
 
@@ -48,25 +48,25 @@ final class RegistrationController extends AbstractController
             $confirmPassword = trim((string) $request->request->get('confirm_password'));
 
             if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                $this->addFlash('error', 'register.validation.invalid_email');
+                $this->addFlash('error', $translator->trans('register.validation.invalid_email'));
 
                 return $this->redirectToRoute('app_register');
             }
 
             if (strlen($password) < 8) {
-                $this->addFlash('error', 'register.validation.password_too_short');
+                $this->addFlash('error', $translator->trans('register.validation.password_too_short'));
 
                 return $this->redirectToRoute('app_register');
             }
 
             if ($password !== $confirmPassword) {
-                $this->addFlash('error', 'register.validation.password_mismatch');
+                $this->addFlash('error', $translator->trans('register.validation.password_mismatch'));
 
                 return $this->redirectToRoute('app_register');
             }
 
             if ($em->getRepository(User::class)->findOneBy(['email' => $email])) {
-                $this->addFlash('error', 'register.validation.email_already_used');
+                $this->addFlash('error', $translator->trans('register.validation.email_already_used'));
 
                 return $this->redirectToRoute('app_register');
             }
