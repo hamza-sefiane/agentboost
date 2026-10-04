@@ -37,6 +37,47 @@ final class RegistrationInternationalizationTest extends WebTestCase
         yield 'Spanish' => ['es', 'Crear una cuenta', 'Correo electrónico', 'Crear mi cuenta'];
     }
 
+    #[DataProvider('verificationPageLocaleProvider')]
+    public function testVerificationPendingPageUsesAnonymousVisitorLocale(
+        string $locale,
+        string $title,
+        string $lineOne,
+        string $lineTwo,
+    ): void {
+        $client = static::createClient();
+        $client->request('GET', '/change-locale/'.$locale);
+
+        $crawler = $client->request('GET', '/check-email');
+
+        self::assertResponseIsSuccessful();
+        self::assertSame($locale, $crawler->filter('html')->attr('lang'));
+        self::assertSame($title, trim($crawler->filter('h1')->text()));
+        self::assertSame($lineOne, trim($crawler->filter('main p')->eq(0)->text()));
+        self::assertSame($lineTwo, trim($crawler->filter('main p')->eq(1)->text()));
+    }
+
+    public static function verificationPageLocaleProvider(): iterable
+    {
+        yield 'French' => [
+            'fr',
+            'Vérifiez votre adresse email',
+            'Un email de vérification vous a été envoyé.',
+            'Cliquez sur le lien contenu dans cet email pour activer votre compte.',
+        ];
+        yield 'English' => [
+            'en',
+            'Check your email address',
+            'A verification email has been sent to you.',
+            'Click the link in that email to activate your account.',
+        ];
+        yield 'Spanish' => [
+            'es',
+            'Compruebe su correo electrónico',
+            'Le hemos enviado un correo electrónico de verificación.',
+            'Haga clic en el enlace del correo para activar su cuenta.',
+        ];
+    }
+
     public function testChangingLanguageImmediatelyTranslatesRegistrationForm(): void
     {
         $client = static::createClient();

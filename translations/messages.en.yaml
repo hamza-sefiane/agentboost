@@ -46,6 +46,19 @@ register:
         already_registered: "Already registered?"
         login: "Log in"
 
+verify_email:
+    meta:
+        title: "Check your email address"
+
+    title: "Check your email address"
+
+    text:
+        line_1: "A verification email has been sent to you."
+        line_2: "Click the link in that email to activate your account."
+
+    flash:
+        created: "Account created. Check your email."
+
 home:
     meta:
         title: "AgentBoost — Real estate valuations and professional documents"

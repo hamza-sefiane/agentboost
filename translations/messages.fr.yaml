@@ -63,6 +63,19 @@ register:
         already_registered: "Déjà inscrit ?"
         login: "Se connecter"
 
+verify_email:
+    meta:
+        title: "Vérifiez votre adresse email"
+
+    title: "Vérifiez votre adresse email"
+
+    text:
+        line_1: "Un email de vérification vous a été envoyé."
+        line_2: "Cliquez sur le lien contenu dans cet email pour activer votre compte."
+
+    flash:
+        created: "Compte créé. Vérifiez votre email."
+
 home:
     meta:
         title: "AgentBoost — Estimations immobilières et documents professionnels"

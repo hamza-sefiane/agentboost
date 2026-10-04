@@ -46,6 +46,19 @@ register:
         already_registered: "¿Ya tiene una cuenta?"
         login: "Iniciar sesión"
 
+verify_email:
+    meta:
+        title: "Compruebe su correo electrónico"
+
+    title: "Compruebe su correo electrónico"
+
+    text:
+        line_1: "Le hemos enviado un correo electrónico de verificación."
+        line_2: "Haga clic en el enlace del correo para activar su cuenta."
+
+    flash:
+        created: "Cuenta creada. Compruebe su correo electrónico."
+
 home:
     meta:
         title: "AgentBoost — Valoraciones inmobiliarias y documentos profesionales"
