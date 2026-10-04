@@ -19,6 +19,33 @@ footer:
     privacy: "Privacidad"
     contact: "Contacto"
 
+register:
+    meta:
+        title: "Registro"
+
+    title: "Crear una cuenta"
+
+    form:
+        email: "Correo electrónico"
+        password: "Contraseña"
+        password_helper: "Mínimo 8 caracteres."
+        confirm_password: "Confirmar la contraseña"
+        confirm_password_helper: "Repita la misma contraseña."
+        show_password: "Mostrar contraseña"
+        submit: "Crear mi cuenta"
+        submitting: "Creando la cuenta..."
+
+    validation:
+        invalid_email: "Introduzca una dirección de correo electrónico válida."
+        password_too_short: "La contraseña debe contener al menos 8 caracteres."
+        password_mismatch: "Las contraseñas no coinciden."
+        email_already_used: "Ya existe una cuenta con esta dirección de correo electrónico."
+        rate_limited: "Demasiados intentos. Inténtelo de nuevo más tarde."
+
+    footer:
+        already_registered: "¿Ya tiene una cuenta?"
+        login: "Iniciar sesión"
+
 home:
     meta:
         title: "AgentBoost — Valoraciones inmobiliarias y documentos profesionales"
@@ -87,4 +114,4 @@ subscription:
     monthly: "mensual"
     next_renewal: "en la próxima renovación"
     cancel_scheduled: "Cancelación programada para"
-    ended: "Acceso finalizado"    
+    ended: "Acceso finalizado"

@@ -37,7 +37,7 @@ final class RegistrationController extends AbstractController
                 ->consume();
 
             if (!$limit->isAccepted()) {
-                $this->addFlash('error', 'Trop de tentatives. Réessayez plus tard.');
+                $this->addFlash('error', 'register.validation.rate_limited');
                 return $this->redirectToRoute('app_register');
             }
 
@@ -46,25 +46,25 @@ final class RegistrationController extends AbstractController
             $confirmPassword = trim((string) $request->request->get('confirm_password'));
 
             if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                $this->addFlash('error', 'Adresse email invalide.');
+                $this->addFlash('error', 'register.validation.invalid_email');
 
                 return $this->redirectToRoute('app_register');
             }
 
             if (strlen($password) < 8) {
-                $this->addFlash('error', 'Le mot de passe doit contenir au moins 8 caractères.');
+                $this->addFlash('error', 'register.validation.password_too_short');
 
                 return $this->redirectToRoute('app_register');
             }
 
             if ($password !== $confirmPassword) {
-                $this->addFlash('error', 'Les mots de passe ne correspondent pas.');
+                $this->addFlash('error', 'register.validation.password_mismatch');
 
                 return $this->redirectToRoute('app_register');
             }
 
             if ($em->getRepository(User::class)->findOneBy(['email' => $email])) {
-                $this->addFlash('error', 'Un compte existe déjà avec cet email.');
+                $this->addFlash('error', 'register.validation.email_already_used');
 
                 return $this->redirectToRoute('app_register');
             }
@@ -75,10 +75,11 @@ final class RegistrationController extends AbstractController
                 'email' => $email,
             ]);
 
+            $locale = $request->getLocale();
             $user = new User();
 
             $user->setEmail($email);
-            $user->setLocale($request->getLocale());
+            $user->setLocale($locale);
             $user->setPassword(
                 $passwordHasher->hashPassword($user, $password)
             );
@@ -88,7 +89,7 @@ final class RegistrationController extends AbstractController
             $em->persist($user);
             $em->flush();
 
-            $emailVerifier->sendEmailConfirmation('app_verify_email', $user, $request->getLocale());
+            $emailVerifier->sendEmailConfirmation('app_verify_email', $user, $locale);
 
             $this->addFlash('success', 'Compte créé. Vérifiez votre email.');
 
