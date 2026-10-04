@@ -37,6 +37,33 @@ final class RegistrationInternationalizationTest extends WebTestCase
         yield 'Spanish' => ['es', 'Crear una cuenta', 'Correo electrónico', 'Crear mi cuenta'];
     }
 
+    #[DataProvider('validationLocaleProvider')]
+    public function testServerValidationMessageUsesAnonymousVisitorLocale(
+        string $locale,
+        string $expectedMessage,
+    ): void {
+        $client = static::createClient();
+        $client->request('GET', '/change-locale/'.$locale);
+
+        $client->request('POST', '/register', [
+            'email' => 'invalid-email',
+            'password' => 'password',
+            'confirm_password' => 'password',
+        ]);
+
+        self::assertResponseRedirects('/register');
+        $crawler = $client->followRedirect();
+
+        self::assertSame($expectedMessage, trim($crawler->filter('.alert-danger')->text()));
+    }
+
+    public static function validationLocaleProvider(): iterable
+    {
+        yield 'French' => ['fr', 'Veuillez saisir une adresse email valide.'];
+        yield 'English' => ['en', 'Please enter a valid email address.'];
+        yield 'Spanish' => ['es', 'Introduzca una dirección de correo electrónico válida.'];
+    }
+
     #[DataProvider('verificationPageLocaleProvider')]
     public function testVerificationPendingPageUsesAnonymousVisitorLocale(
         string $locale,
