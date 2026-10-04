@@ -23,11 +23,15 @@
 
 			{% for message in app.flashes('error') %}
 				<div class="auth-flash">
-					{{ message }}
+					{{ message|trans }}
 				</div>
 			{% endfor %}
 
-			<form method="post" action="{{ path('app_register') }}" id="registerForm" novalidate>
+			<form method="post" action="{{ path('app_register') }}" id="registerForm" novalidate
+				data-email-error="{{ 'register.validation.invalid_email'|trans }}"
+				data-password-error="{{ 'register.validation.password_too_short'|trans }}"
+				data-confirm-password-error="{{ 'register.validation.password_mismatch'|trans }}"
+				data-submitting-label="{{ 'register.form.submitting'|trans }}">
 				<div class="auth-field">
 					<label for="email" class="auth-label">
 						{{ 'register.form.email'|trans }}

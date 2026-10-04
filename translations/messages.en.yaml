@@ -19,6 +19,33 @@ footer:
     privacy: "Privacy"
     contact: "Contact"
 
+register:
+    meta:
+        title: "Register"
+
+    title: "Create an account"
+
+    form:
+        email: "Email address"
+        password: "Password"
+        password_helper: "Minimum 8 characters."
+        confirm_password: "Confirm password"
+        confirm_password_helper: "Enter the same password again."
+        show_password: "Show password"
+        submit: "Create my account"
+        submitting: "Creating account..."
+
+    validation:
+        invalid_email: "Please enter a valid email address."
+        password_too_short: "The password must contain at least 8 characters."
+        password_mismatch: "The passwords do not match."
+        email_already_used: "An account already exists with this email address."
+        rate_limited: "Too many attempts. Please try again later."
+
+    footer:
+        already_registered: "Already registered?"
+        login: "Log in"
+
 home:
     meta:
         title: "AgentBoost — Real estate valuations and professional documents"
